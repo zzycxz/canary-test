@@ -1,0 +1,502 @@
+{
+  "capability": "efficiency_judgment",
+  "label": "效率判断与资源意识",
+  "total": 55,
+  "cases": [
+    {
+      "id": "62-001",
+      "prompt": "帮我写一个函数，使用mmap对一个2GB的二进制文件进行高效随机读取。",
+      "sub_type": "memory_mapped_io",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用mmap模块将文件映射到虚拟内存空间，通过操作系统按需加载页面实现高效随机访问，而非read()加载整个文件。应说明mmap的优势（零拷贝、OS自动管理页面缓存）和注意事项（文件锁、Windows兼容性）。",
+      "scoring_rubric": "1. 使用mmap而非f.read()加载整个文件；2. 说明mmap的虚拟内存映射原理（按需加载页面）；3. 正确处理mmap的上下文管理（with语句）；4. 说明与seek+read方案的性能差异和适用场景。"
+    },
+    {
+      "id": "62-002",
+      "prompt": "帮我写一个连接池装饰器，为数据库操作自动管理连接的获取和释放，避免连接泄漏。",
+      "sub_type": "resource_pool_pattern",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现连接池管理器，使用上下文管理器确保连接在异常时也能正确归还。应支持最大连接数限制、连接超时获取、空闲连接回收。应使用queue.Queue或信号量管理连接池，避免连接泄漏。",
+      "scoring_rubric": "1. 使用上下文管理器确保连接归还（异常安全）；2. 实现最大连接数限制和超时机制；3. 使用Queue或Semaphore管理连接池；4. 考虑空闲连接回收和健康检查。"
+    },
+    {
+      "id": "62-003",
+      "prompt": "帮我写一个函数，使用线程池并发处理1000个IO密集型任务，要求控制并发数为50。",
+      "sub_type": "thread_pool_sizing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应使用concurrent.futures.ThreadPoolExecutor(max_workers=50)而非手动创建1000个线程。应使用executor.map或executor.submit+as_completed分发任务。应说明为何IO密集型适合多线程（不受GIL限制），以及线程池大小的设置依据。",
+      "scoring_rubric": "1. 使用ThreadPoolExecutor而非手动threading.Thread；2. 正确设置max_workers限制并发数；3. 使用map或submit+as_completed分发任务；4. 说明IO密集型与CPU密集型的并发策略差异。"
+    },
+    {
+      "id": "62-004",
+      "prompt": "帮我写一个布隆过滤器（Bloom Filter）实现，用于判断URL是否已经被爬取过。",
+      "sub_type": "probabilistic_data_structure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现布隆过滤器的核心逻辑：使用多个哈希函数映射到位数组，支持add和contains操作。应说明假阳性率的计算公式和位数组大小的选择依据。与set相比，布隆过滤器内存占用极低（每元素仅需几个bit），但存在假阳性。",
+      "scoring_rubric": "1. 正确实现多个哈希函数和位数组；2. 支持add和contains操作；3. 说明假阳性率与位数组大小、哈希函数数量的关系；4. 对比set的内存开销差异。"
+    },
+    {
+      "id": "62-005",
+      "prompt": "帮我写一个函数，使用生成器实现一个惰性求值的链式数据处理管道，处理一个10GB的日志文件。",
+      "sub_type": "generator_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用生成器函数实现每个处理阶段（读取→过滤→转换→聚合），通过生成器链组合实现惰性求值，全程内存占用恒定。应使用yield和yield from构建管道，而非一次性将数据加载到内存中处理。",
+      "scoring_rubric": "1. 每个阶段使用生成器函数（yield）；2. 通过生成器链组合实现惰性求值；3. 全程内存占用与数据量无关；4. 支持错误处理和管道中断。"
+    },
+    {
+      "id": "62-006",
+      "prompt": "帮我写一个函数，将一个耗时的CPU密集型计算任务分批处理，每批处理1000条，支持进度回调和断点续算。",
+      "sub_type": "batch_processing_progress",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现分批处理逻辑，使用生成器或range分批切分数据，每批处理后回调进度。应支持断点续算（记录已完成批次到外部存储），避免重复计算。应说明分批处理对内存和错误恢复的好处。",
+      "scoring_rubric": "1. 实现数据分批切分和逐批处理；2. 支持进度回调函数；3. 实现断点续算机制（记录已完成批次）；4. 每批处理后释放内存，避免内存累积。"
+    },
+    {
+      "id": "62-007",
+      "prompt": "帮我写一个函数，高效地将K个已排序的列表合并为一个完整的有序列表。",
+      "sub_type": "k_way_merge",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用heapq.merge实现O(n log k)的K路归并，或将所有列表的第一个元素放入最小堆，每次弹出最小元素并将该列表的下一个元素入堆。不应先拼接所有列表再排序（O(n log n)），因为各列表已有序。",
+      "scoring_rubric": "1. 使用最小堆实现O(n log k)的K路归并；2. 不使用先拼接再排序的O(n log n)方案；3. 正确处理某个列表耗尽的情况；4. 分析时间复杂度与朴素方案的差异。"
+    },
+    {
+      "id": "62-008",
+      "prompt": "帮我写一个读写分离的缓存装饰器，读操作走本地LRU缓存，写操作同步更新Redis，支持缓存失效。",
+      "sub_type": "read_write_split_cache",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现两级缓存的读写分离：读操作先查本地LRU（O(1)），未命中再查Redis；写操作同时更新本地缓存和Redis。应支持TTL过期、缓存失效通知（Redis Pub/Sub或主动删除），处理缓存一致性问题。",
+      "scoring_rubric": "1. 实现读路径：本地LRU→Redis→数据库；2. 写操作同步更新两级缓存；3. 支持TTL和主动缓存失效；4. 考虑分布式环境下的缓存一致性（如Redis Pub/Sub通知）。"
+    },
+    {
+      "id": "62-009",
+      "prompt": "帮我写一个函数，对一个包含100万条记录的CSV文件进行GROUP BY聚合分析，要求内存高效。",
+      "sub_type": "streaming_aggregation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用pandas的chunksize参数分块读取CSV，逐块进行groupby聚合后合并结果，而非一次性加载整个文件到内存。或者使用csv模块逐行读取配合defaultdict手动聚合。应说明分块聚合的正确性（先各块聚合再合并）。",
+      "scoring_rubric": "1. 使用分块读取（pandas chunksize或csv逐行）；2. 实现逐块聚合后合并结果；3. 内存占用与分块大小成正比而非与文件大小成正比；4. 正确处理跨块的相同分组键的合并逻辑。"
+    },
+    {
+      "id": "62-010",
+      "prompt": "帮我写一个函数，使用CAS（Compare-And-Swap）实现一个无锁的线程安全计数器，对比加锁方案的性能差异。",
+      "sub_type": "lock_free_counter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出Python标准库没有提供CAS/原子操作原语（不存在threading.atomic）。实现无锁计数器需借助ctypes调用底层原子指令、编写C扩展，或使用第三方库；并需说明CPython的GIL对真正无锁并发的限制。应说明无锁数据结构在高并发下的理论优势（避免上下文切换、死锁），以及CAS的ABA问题和自旋开销。应给出与Lock方案的性能对比分析。",
+      "scoring_rubric": "1. 实现基于CAS的无锁计数器；2. 说明CAS的工作原理和原子性保证；3. 分析无锁方案在高并发下的性能优势；4. 讨论ABA问题和自旋开销等限制。"
+    },
+    {
+      "id": "62-011",
+      "prompt": "帮我设计一个矩阵链乘法的最优计算顺序求解器，给定一组矩阵的维度，找到使标量乘法次数最少的括号化方案。",
+      "sub_type": "dynamic_programming_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用动态规划实现矩阵链乘法问题，时间复杂度O(n^3)，空间复杂度O(n^2)。不应使用暴力枚举所有括号化方案（指数级复杂度）。应正确设计状态转移方程dp[i][j]=min(dp[i][k]+dp[k+1][j]+p[i]*p[k]*p[j])。",
+      "scoring_rubric": "1. 使用动态规划而非暴力枚举；2. 状态转移方程设计正确；3. 时间复杂度为O(n^3)而非指数级；4. 能回溯输出最优括号化方案。"
+    },
+    {
+      "id": "62-012",
+      "prompt": "帮我设计一个列式存储格式，用于高效分析查询：支持按列压缩、按列读取、跳过不需要的列，对比行式存储在OLAP场景下的性能优势。",
+      "sub_type": "columnar_storage_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计列式存储格式，使用列分组存储、列级压缩（如字典编码、游程编码、位图编码）、列索引。应解释列式存储在OLAP场景下只需读取查询涉及的列，IO量远小于行式存储。应给出数据文件格式设计（元数据头+列数据块+索引区）。",
+      "scoring_rubric": "1. 设计列式存储的数据组织格式；2. 实现至少两种列压缩算法；3. 分析列式vs行式在OLAP场景的IO差异；4. 支持列裁剪和谓词下推优化。"
+    },
+    {
+      "id": "62-013",
+      "prompt": "帮我实现一致性哈希算法，支持虚拟节点、节点动态增删和负载均衡。分析当节点数从3个增加到100个时，key的重新映射比例。",
+      "sub_type": "consistent_hashing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现一致性哈希环，每个物理节点映射多个虚拟节点（如150个），使用哈希函数确定节点在环上的位置。节点增删时仅需重新映射k/n的key。应分析虚拟节点数量对负载均衡的影响。",
+      "scoring_rubric": "1. 正确实现哈希环和虚拟节点机制；2. 节点增删时仅影响1/n的key映射；3. 分析虚拟节点数量与负载均衡的关系；4. 支持带权重的节点分配。"
+    },
+    {
+      "id": "62-014",
+      "prompt": "帮我设计一个数据库索引覆盖策略：给定一个包含多个查询模式的业务场景，设计最优的复合索引组合，使所有查询都能走索引覆盖扫描（Index-Only Scan）。",
+      "sub_type": "index_covering_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析各查询的WHERE、ORDER BY、SELECT字段，设计复合索引的列顺序（等值查询列在前、范围查询列在后、排序列最后）。应考虑索引的最左前缀匹配原则，评估是否需要覆盖索引（INCLUDE子句）以避免回表。应权衡索引数量与写入性能的trade-off。",
+      "scoring_rubric": "1. 分析查询模式并设计合理的复合索引；2. 索引列顺序遵循等值-范围-排序原则；3. 评估覆盖索引消除回表的效果；4. 权衡索引数量与写入性能的trade-off。"
+    },
+    {
+      "id": "62-015",
+      "prompt": "帮我实现一个对象池（Object Pool）模式，用于高并发场景下频繁创建和销毁的重量级对象（如数据库连接、线程），减少GC压力和创建开销。",
+      "sub_type": "object_pool_pattern",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现线程安全的对象池，支持预创建、借出、归还、最大容量限制、空闲对象回收。应使用Queue或Semaphore管理池中对象，支持对象有效性检查（borrow时验证对象是否可用）。应说明对象池如何减少GC压力（复用对象而非频繁创建销毁）。",
+      "scoring_rubric": "1. 实现线程安全的对象借出和归还机制；2. 支持最大容量限制和空闲回收；3. 借出时检查对象有效性；4. 分析对象池对GC压力的缓解原理。"
+    },
+    {
+      "id": "62-016",
+      "prompt": "帮我用状态压缩DP（Bitmask DP）解决旅行商问题（TSP）：给定N个城市（N<=20）和城市间距离，找到访问所有城市恰好一次并回到起点的最短路径。",
+      "sub_type": "bitmask_dp",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用状态压缩DP，dp[mask][i]表示已访问城市集合为mask且当前在城市i的最短路径长度。时间复杂度O(2^n * n^2)，空间复杂度O(2^n * n)。应解释为何N<=20时状态压缩可行（2^20约100万状态），以及如何用位运算表示城市集合。",
+      "scoring_rubric": "1. 正确设计状态压缩DP的状态和转移方程；2. 时间复杂度为O(2^n * n^2)；3. 使用位运算高效表示和操作城市集合；4. 能回溯输出最短路径。"
+    },
+    {
+      "id": "62-017",
+      "prompt": "帮我实现一个读写锁（ReadWriteLock），允许多个读者同时持有锁，但写者独占。要求避免写者饥饿问题。",
+      "sub_type": "read_write_lock",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现读写锁，使用条件变量和计数器管理读写互斥。应采用写者优先策略：当有写者等待时，新读者应阻塞，防止写者饥饿。应使用threading.Condition或Semaphore实现，支持可重入和超时等待。",
+      "scoring_rubric": "1. 实现读者并发、写者独占的正确互斥语义；2. 采用写者优先防止饥饿；3. 使用条件变量而非忙等；4. 支持可重入和超时机制。"
+    },
+    {
+      "id": "62-018",
+      "prompt": "帮我实现一个Trie树（前缀树），支持字符串插入、前缀查找、自动补全功能。要求内存占用优化，对公共前缀进行压缩存储。",
+      "sub_type": "compressed_trie",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Trie树，每个节点存储子节点映射和终止标记。支持insert、search、starts_with操作。应实现Patricia Trie（压缩前缀树），将只有一个子节点的路径压缩为单个边，减少节点数量。应支持自动补全功能（返回所有以给定前缀开头的字符串）。",
+      "scoring_rubric": "1. 正确实现Trie树的基本操作；2. 实现路径压缩减少内存占用；3. 支持自动补全功能；4. 分析压缩前后的空间复杂度差异。"
+    },
+    {
+      "id": "62-019",
+      "prompt": "帮我设计一个流式图处理算法：在一个包含10亿条边的有向图中，实时判断新加入的边是否形成环。要求单条边的处理时间在毫秒级。",
+      "sub_type": "streaming_cycle_detection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计增量环检测算法，使用并查集（Union-Find）或拓扑排序的增量版本。对于有向图，应维护入度表和拓扑序。应说明为何不能每次都重建完整的拓扑排序（O(V+E)太慢），而应使用增量更新。应分析空间和时间复杂度。",
+      "scoring_rubric": "1. 使用增量算法而非每次全图重建；2. 正确处理有向图的环检测（区别于无向图）；3. 单条边处理时间为亚线性或均摊O(1)；4. 能处理10亿边规模的空间约束。"
+    },
+    {
+      "id": "62-020",
+      "prompt": "帮我实现一个延迟队列（Delay Queue），支持消息延迟投递和定时消费，使用时间轮（Timing Wheel）算法管理大量定时任务，对比传统的优先队列方案的性能优势。",
+      "sub_type": "timing_wheel_delay_queue",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现时间轮算法，使用环形数组和刻度槽管理定时任务，插入和删除操作时间复杂度O(1)。应对比优先队列（堆）方案的O(log n)插入复杂度。应支持多层时间轮处理大范围延迟（如秒级+分钟级+小时级）。应说明Kafka和Netty使用时间轮的原因。",
+      "scoring_rubric": "1. 正确实现时间轮的环形数组结构；2. 插入和删除操作为O(1)；3. 支持多层时间轮处理大范围延迟；4. 对比优先队列方案分析性能差异。"
+    },
+    {
+      "id": "62-021",
+      "prompt": "帮我设计一个分布式缓存系统：当缓存节点故障时，如何保证缓存命中率不显著下降？需要分析一致性哈希、主从复制和缓存预热三种策略的组合方案。",
+      "sub_type": "distributed_cache_fault_tolerance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计综合方案：一致性哈希保证节点增删时仅迁移少量key，主从复制保证节点故障时有备份可用，缓存预热在新节点加入时快速加载热点数据。应分析三种策略的协同关系和各自的性能开销。",
+      "scoring_rubric": "1. 设计一致性哈希+主从复制+缓存预热的综合方案；2. 分析节点故障时缓存命中率的变化；3. 说明三种策略的协同关系；4. 量化各策略的性能开销。"
+    },
+    {
+      "id": "62-022",
+      "prompt": "帮我设计一个混合任务调度系统：同时处理CPU密集型的图像渲染任务和IO密集型的网络请求任务。分析应该使用单一共享线程池还是分离线程池，并说明各自的性能特征。",
+      "sub_type": "hybrid_workload_scheduling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析两种方案：单一共享线程池可能因CPU密集任务阻塞IO任务导致延迟升高，分离线程池可独立调优但增加复杂度。应推荐分离方案，CPU密集任务用ProcessPoolExecutor（绕过GIL），IO密集任务用ThreadPoolExecutor。应分析线程池大小的设置依据。",
+      "scoring_rubric": "1. 对比共享线程池和分离线程池的性能特征；2. 正确区分CPU密集和IO密集场景的最优并发策略；3. 给出线程/进程池大小的设置依据；4. 分析任务优先级和饥饿问题。"
+    },
+    {
+      "id": "62-023",
+      "prompt": "帮我设计一个分布式限流器：需要在多个服务节点间共享限流状态，保证每秒总请求数不超过10万。分析使用集中式Redis计数和本地令牌桶+定期同步两种方案的准确性和延迟差异。",
+      "sub_type": "distributed_rate_limiter_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析两种方案：集中式Redis计数准确性高但增加网络延迟和单点风险，本地令牌桶延迟低但多节点间存在计数偏差。应设计混合方案：本地预分配令牌额度、定期向Redis同步使用量、Redis端做全局限额校验。应分析准确性和延迟的trade-off。",
+      "scoring_rubric": "1. 对比集中式和本地式限流的准确性与延迟；2. 设计混合方案平衡准确性和性能；3. 分析网络延迟和节点数量对准确性的影响；4. 考虑Redis故障时的降级策略。"
+    },
+    {
+      "id": "62-024",
+      "prompt": "帮我实现一个带TTL的LRU缓存：要求get和put操作都是O(1)，过期淘汰也是O(1)。需要分析标准LRU（双向链表+哈希表）如何扩展支持TTL，以及如何避免惰性清理导致的内存浪费。",
+      "sub_type": "ttl_lru_cache_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应在标准LRU基础上增加时间轮或最小堆管理过期时间。时间轮方案在O(1)内完成过期检查但精度受刻度影响，最小堆方案精确但删除操作为O(log n)。应设计惰性+主动清理的混合策略：get时惰性检查过期，后台定时扫描清理。应分析内存占用和清理频率的trade-off。",
+      "scoring_rubric": "1. 在标准LRU基础上正确扩展TTL支持；2. 实现O(1)的get/put操作；3. 设计惰性+主动清理的混合过期策略；4. 分析内存占用与清理频率的trade-off。"
+    },
+    {
+      "id": "62-025",
+      "prompt": "帮我设计一个生产者-消费者缓冲区：当消费者处理速度跟不上生产者时，有三种策略——丢弃最新消息、丢弃最旧消息、阻塞生产者。分析三种策略的适用场景和实现复杂度。",
+      "sub_type": "backpressure_strategy_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种背压策略：丢弃最新适用于实时监控等允许丢失的场景，丢弃最旧适用于状态更新等只关心最新值的场景，阻塞生产者适用于金融交易等不能丢失的场景。应实现阻塞策略时的超时机制和丢弃策略的监控告警。应分析有界队列和无界队列的内存风险。",
+      "scoring_rubric": "1. 正确分析三种背压策略的适用场景；2. 实现阻塞策略的超时机制；3. 分析有界和无界队列的内存风险；4. 给出丢弃策略下的监控和告警设计。"
+    },
+    {
+      "id": "62-026",
+      "prompt": "帮我分析在内存数据库中实现事务的两种方式：WAL（Write-Ahead Log）和COW（Copy-On-Write）。从写放大、恢复速度、内存占用和快照隔离四个维度对比两者的trade-off。",
+      "sub_type": "transaction_mechanism_comparison",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应从四个维度分析：WAL写放大较高（先写日志再写数据）但恢复时需重放日志，COW写放大低但创建快照时需复制页面增加内存占用。WAL恢复速度取决于日志量，COW可直接使用快照恢复。应结合具体场景（读多写少vs写密集）给出推荐。",
+      "scoring_rubric": "1. 从四个维度系统对比WAL和COW；2. 分析写放大的量化差异；3. 说明快照隔离的实现机制差异；4. 结合读写比例给出场景化推荐。"
+    },
+    {
+      "id": "62-027",
+      "prompt": "帮我设计一个支持动态优先级的任务调度器：任务的优先级可能在执行过程中被修改。对比最小堆（O(log n)重排）、有序链表（O(n)插入）和多级反馈队列三种方案在频繁优先级变更场景下的性能。",
+      "sub_type": "dynamic_priority_scheduler",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种方案在优先级变更时的性能：最小堆支持O(log n)的优先级提升但需要定位元素，有序链表优先级变更为O(n)，多级反馈队列通过自动升降级避免显式变更。应推荐最小堆+哈希表定位的方案，或设计bucket-based方案实现O(1)的优先级变更（适用于有限优先级范围）。",
+      "scoring_rubric": "1. 对比三种方案在优先级变更时的时间复杂度；2. 分析频繁变更对整体吞吐量的影响；3. 推荐适合频繁变更场景的最优方案；4. 考虑优先级范围对方案选择的影响。"
+    },
+    {
+      "id": "62-028",
+      "prompt": "帮我设计一个高效的查询方案：在10亿条用户行为日志中，查找某用户最近N条操作记录。数据持续写入，查询延迟要求P99<50ms。分析存储引擎、索引结构和缓存策略的选择。",
+      "sub_type": "large_scale_user_query_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计分层存储方案：热数据（最近7天）用内存缓存+SSD存储，温数据（7-30天）用SSD，冷数据归档到对象存储。索引设计使用（user_id, timestamp）复合索引支持范围查询。应使用LSM-Tree存储引擎（如RocksDB）优化写入性能。应分析分区策略（按user_id哈希或按时间范围）对查询性能的影响。",
+      "scoring_rubric": "1. 设计分层存储方案（热/温/冷）；2. 选择合适的索引结构和存储引擎；3. 分析分区策略对查询性能的影响；4. 给出P99<50ms的技术可行性分析。"
+    },
+    {
+      "id": "62-029",
+      "prompt": "帮我设计一个消息去重系统：每秒处理10万条消息，需要在有限内存下判断消息是否重复。对比精确去重（HashSet）、概率去重（布隆过滤器）和时间窗口去重三种方案的准确率、内存占用和适用场景。",
+      "sub_type": "message_deduplication_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种方案：HashSet精确但内存随消息量线性增长，布隆过滤器内存恒定但有假阳性，时间窗口去重内存可控但可能遗漏窗口外的重复。应设计分层方案：布隆过滤器做初筛+时间窗口内HashSet精确去重。应分析假阳性率、内存占用和去重时间窗口的关系。",
+      "scoring_rubric": "1. 对比三种方案的准确率和内存占用；2. 设计分层去重方案平衡准确性和内存；3. 分析假阳性率与内存的关系；4. 给出10万QPS下的具体实现方案。"
+    },
+    {
+      "id": "62-030",
+      "prompt": "帮我设计一个社交关系图的存储方案：10亿用户、平均每人500个好友，需要支持好友列表查询（延迟<10ms）和共同好友查询（延迟<100ms）。分析邻接表、CSR（压缩稀疏行）和图数据库三种存储方案的内存占用和查询性能。",
+      "sub_type": "graph_storage_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种方案：邻接表灵活但内存开销大（指针/引用占用），CSR内存紧凑但更新困难，图数据库功能丰富但性能受限于引擎。应推荐CSR存储核心关系+Redis缓存热点用户的好友列表。应量化内存占用：10亿*500*8字节约4TB，需要压缩方案。共同好友查询需要集合交集优化。",
+      "scoring_rubric": "1. 对比三种存储方案的内存和查询性能；2. 量化10亿用户规模的内存需求；3. 设计CSR+缓存的混合方案；4. 给出共同好友查询的优化算法。"
+    },
+    {
+      "id": "62-031",
+      "prompt": "请为一个包含用户表（百万行）、订单表（千万行）、商品表（十万行）的电商系统设计SQL查询，统计每个用户的订单总金额和购买商品种类数。请分析不同JOIN顺序对查询性能的影响。",
+      "sub_type": "join_order_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析JOIN顺序对查询计划的影响：先将用户表与订单表JOIN（大表关联）再与商品表JOIN，vs先将订单表与商品表JOIN再与用户表JOIN。应说明数据库优化器通常会自动选择最优顺序，但在复杂查询中可能需要手动优化或使用HINT。应考虑索引对JOIN性能的影响。",
+      "scoring_rubric": "1. 分析不同JOIN顺序的查询计划差异；2. 说明数据库优化器的作用和局限性；3. 考虑索引对JOIN性能的影响；4. 给出基于数据量的最优JOIN策略。"
+    },
+    {
+      "id": "62-032",
+      "prompt": "请设计一个高性能的日志解析器，需要将JSON格式的日志行解析并提取特定字段。对比使用json.loads逐行解析、正则表达式匹配和手动字符串分割三种方案的性能差异。",
+      "sub_type": "text_parsing_efficiency",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种方案：json.loads通用但较慢（需要完整JSON解析），正则表达式中等速度但模式匹配开销大，手动字符串分割（如split+切片）最快但不够灵活。应推荐在日志格式固定时使用字符串分割，格式多变时使用json.loads。应给出性能基准测试方法和大致量级差异。",
+      "scoring_rubric": "1. 对比三种解析方案的时间复杂度和实际性能；2. 分析各方案的适用场景和灵活性差异；3. 推荐基于日志格式稳定性的选型建议；4. 给出性能基准测试方法。"
+    },
+    {
+      "id": "62-033",
+      "prompt": "请设计一个事件驱动架构中的事件循环（Event Loop）实现，对比事件循环+非阻塞IO与传统线程池+阻塞IO两种模型在高并发场景（10万连接）下的性能和资源消耗。",
+      "sub_type": "event_loop_vs_threadpool",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析两种模型：事件循环+非阻塞IO（单线程或少量线程，通过epoll/kqueue监听IO事件，内存开销小但编程复杂度高）和线程池+阻塞IO（每连接一个线程，编程简单但内存开销大、上下文切换频繁）。应量化10万连接下的线程内存开销和事件循环的吞吐量。应说明Node.js和Nginx选择事件循环的原因。",
+      "scoring_rubric": "1. 对比两种模型的内存开销和上下文切换成本；2. 量化10万连接场景下的资源消耗差异；3. 分析事件循环的编程复杂度trade-off；4. 说明实际系统（Node.js/Nginx）的选型依据。"
+    },
+    {
+      "id": "62-034",
+      "prompt": "请用Python实现一个协程池（Coroutine Pool），限制同时运行的协程数量为100，支持提交10000个任务并等待全部完成。对比使用asyncio.Semaphore和手动管理协程队列两种实现方式的性能和内存效率。",
+      "sub_type": "coroutine_pool_efficiency",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现两种方案：asyncio.Semaphore（简洁但有信号量开销）和手动asyncio.Queue管理（更灵活但代码复杂）。应分析两种方案在10000任务下的调度开销、内存占用（未执行任务的排队机制）和异常处理效率。应说明Semaphore的底层实现原理（基于Event）和性能特征。",
+      "scoring_rubric": "1. 实现两种协程池方案并对比代码复杂度；2. 分析10000任务场景下的调度开销；3. 对比内存占用和异常处理机制；4. 给出基于场景的选型建议。"
+    },
+    {
+      "id": "62-035",
+      "prompt": "请设计一个缓存预热方案：系统冷启动时需要将数据库中的热点数据加载到Redis缓存中。对比全量预热、增量预热和按需加载三种方案的启动时间和缓存命中率。",
+      "sub_type": "cache_warmup_strategy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种方案：全量预热（启动慢但缓存立即可用）、增量预热（先加载核心数据再逐步补充）、按需加载（首次访问时加载，冷启动后短暂性能下降）。应分析各方案在启动时间、首请求延迟、缓存命中率和数据库压力四个维度的trade-off。应给出基于业务场景的推荐方案。",
+      "scoring_rubric": "1. 对比三种预热方案的四个维度差异；2. 分析数据库在预热期间的读取压力；3. 考虑预热数据的选择策略（热度排序）；4. 给出基于业务容忍度的推荐方案。"
+    },
+    {
+      "id": "62-036",
+      "prompt": "请设计一个批量处理vs逐条处理的性能对比方案：需要向数据库插入100万条记录。对比单条INSERT、批量INSERT（每批1000条）、LOAD DATA INFILE三种方案的吞吐量和资源消耗。",
+      "sub_type": "batch_vs_single_insert",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种方案：单条INSERT（每条一次网络往返+事务开销，最慢）、批量INSERT（减少网络往返和事务开销，吞吐量提升10-100倍）、LOAD DATA INFILE（绕过SQL解析直接加载，最快但需要文件权限）。应量化各方案的吞吐量差异和内存消耗。应讨论批量大小对性能的影响和最优批量选择。",
+      "scoring_rubric": "1. 量化三种方案的吞吐量差异；2. 分析网络往返、事务开销和SQL解析的性能影响；3. 讨论批量大小与内存消耗的平衡；4. 给出不同数据规模下的最优方案选择。"
+    },
+    {
+      "id": "62-037",
+      "prompt": "请对比Python中递归和迭代实现斐波那契数列的性能差异，分析递归调用的栈帧开销。当n=1000时，尾递归优化能否解决问题？Python是否支持尾递归优化？",
+      "sub_type": "recursion_stack_overhead",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析递归实现的栈帧开销（每次调用消耗约几KB栈空间，n=1000会导致栈溢出），迭代实现无栈帧开销。应说明Python不支持尾递归优化（Guido van Rossum明确拒绝），即使使用装饰器模拟也有限制。应推荐使用迭代、lru_cache或矩阵快速幂实现。",
+      "scoring_rubric": "1. 量化递归调用的栈帧内存开销；2. 说明Python不支持尾递归优化的原因；3. 对比递归、迭代、lru_cache、矩阵快速幂的性能；4. 给出大n值下的最优实现方案。"
+    },
+    {
+      "id": "62-038",
+      "prompt": "请设计一个分布式ID生成方案，需要支持每秒生成10万个唯一ID。对比UUID v4、数据库自增序列、Snowflake算法和Redis INCR四种方案的性能、有序性和存储开销。",
+      "sub_type": "id_generation_comparison",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比四种方案：UUID v4（无需协调但无序且占36字节）、数据库自增（有序但单点瓶颈）、Snowflake（趋势递增、高性能但依赖时钟）、Redis INCR（高性能但依赖Redis可用性）。应分析10万QPS下的吞吐量瓶颈和存储开销差异。应推荐Snowflake或其变体用于高并发场景。",
+      "scoring_rubric": "1. 对比四种方案在性能、有序性和存储开销的差异；2. 分析10万QPS下的吞吐量瓶颈；3. 讨论时钟回拨对Snowflake的影响；4. 给出基于场景的ID生成方案推荐。"
+    },
+    {
+      "id": "62-039",
+      "prompt": "请分析Python的内存管理机制，对比使用__slots__和普通类（使用__dict__）在创建百万个对象时的内存占用差异。给出何时应该使用__slots__的建议。",
+      "sub_type": "memory_layout_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析普通类每个实例维护__dict__字典（约100+字节额外开销），__slots__使用描述符直接在实例结构体中存储属性（无字典开销）。应量化百万对象场景下的内存差异（可能从几百MB降到几十MB）。应说明__slots__的限制：不能动态添加属性、继承复杂性。应推荐在数据类、DTO等场景使用__slots__。",
+      "scoring_rubric": "1. 分析__dict__和__slots__的内存布局差异；2. 量化百万对象场景下的内存节省；3. 说明__slots__的使用限制和注意事项；4. 给出适合使用__slots__的典型场景。"
+    },
+    {
+      "id": "62-040",
+      "prompt": "请设计一个CPU密集型任务的并行处理方案：需要对1000万张图片进行缩放处理。对比多线程、多进程和asyncio三种并发模型在此场景下的性能，并分析GIL的影响。",
+      "sub_type": "cpu_bound_concurrency_model",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种模型：多线程受GIL限制，CPU密集型任务几乎无法并行（性能可能比单线程更差）；多进程绕过GIL，真正的CPU并行但有进程创建和IPC开销；asyncio是单线程并发，不适合CPU密集型任务。应推荐使用multiprocessing.Pool配合CPU核心数设置worker数量。应分析PIL/Pillow的图片缩放是否释放GIL（C扩展可能释放）。",
+      "scoring_rubric": "1. 说明GIL对三种并发模型的影响；2. 量化多进程方案的并行加速比；3. 分析C扩展释放GIL的可能性；4. 给出最优的worker数量和批量策略。"
+    },
+    {
+      "id": "62-041",
+      "prompt": "请设计一个惰性加载（Lazy Loading）的模块导入机制：Python项目有200个模块，启动时全部导入需要5秒，但实际运行时只用到其中10%的模块。设计一个方案将启动时间降到1秒以内。",
+      "sub_type": "lazy_module_import",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用importlib实现按需导入：定义LazyModule代理类，在模块属性首次被访问时才触发实际导入。应使用__getattr__和__dir__实现透明的延迟加载。应分析延迟导入对首次访问延迟的影响，以及如何通过预加载高频模块平衡启动速度和运行时体验。",
+      "scoring_rubric": "1. 使用importlib和__getattr__实现透明的惰性导入；2. 首次访问时才触发实际模块加载；3. 分析启动时间与首次访问延迟的trade-off；4. 支持预加载高频模块的混合策略。"
+    },
+    {
+      "id": "62-042",
+      "prompt": "请设计一个零拷贝（Zero-Copy）的文件传输方案：在Linux系统中将一个大文件从磁盘发送到网络socket，要求避免用户空间和内核空间之间的数据拷贝。对比sendfile、splice和mmap+write三种方案的性能差异。",
+      "sub_type": "zero_copy_file_transfer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应说明传统read+write需要4次数据拷贝（磁盘→内核缓冲→用户缓冲→内核socket缓冲→网卡）。应解释sendfile（2次拷贝，内核内直接传输）、splice（管道机制，零拷贝）、mmap+write（减少一次拷贝）的原理。应分析各方案的适用场景和CPU使用率差异。",
+      "scoring_rubric": "1. 说明传统文件传输的数据拷贝路径；2. 解释sendfile/splice/mmap三种零拷贝方案的原理；3. 量化各方案的拷贝次数和CPU开销差异；4. 给出基于场景的选型建议。"
+    },
+    {
+      "id": "62-043",
+      "prompt": "请设计一个写时复制（Copy-On-Write）的数据结构：实现一个支持快照的可变列表，快照操作O(1)时间复杂度，修改原始列表不影响快照，且共享未修改的数据以节省内存。",
+      "sub_type": "copy_on_write_list",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用路径复制的树结构（如RRB-Tree或B+Tree变体）或基于版本号的分段数组实现。快照操作仅复制根节点引用O(1)，修改操作沿路径复制受影响的节点O(log n)。应分析与完整拷贝方案的内存差异，以及写放大（Write Amplification）的trade-off。",
+      "scoring_rubric": "1. 实现O(1)时间复杂度的快照操作；2. 共享未修改数据以节省内存；3. 修改操作的正确性（不影响已有快照）；4. 分析写放大与内存节省的trade-off。"
+    },
+    {
+      "id": "62-044",
+      "prompt": "请设计一个批量请求合并器（Request Coalescer）：多个并发请求同时查询同一个key时，只发起一次实际请求，所有等待者共享结果。分析去重率、延迟和实现复杂度。",
+      "sub_type": "request_coalescing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用字典映射key到Future/Promise，首个请求创建Future并发起实际查询，后续相同key的请求等待同一个Future。应处理请求失败时的错误传播（所有等待者都收到错误）。应分析在高并发下的去重率（如100个并发相同请求只需1次实际查询）和锁竞争开销。",
+      "scoring_rubric": "1. 使用Future/Promise实现请求共享；2. 正确处理请求失败时的错误传播；3. 分析高并发下的去重率和性能收益；4. 处理超时和Future清理的边界情况。"
+    },
+    {
+      "id": "62-045",
+      "prompt": "请设计一个内存高效的前缀树压缩方案：标准Trie树中大量节点只有一个子节点，浪费指针空间。实现Patricia Trie将单子节点路径压缩为单个边，并分析压缩前后的节点数量和内存占用差异。",
+      "sub_type": "patricia_trie_compression",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Patricia Trie（压缩前缀树），将只有一个子节点的连续路径合并为单个边，边的标签为合并的字符序列。应支持插入、查找和前缀查询操作。应量化压缩效果：对于英文词典数据，节点数量通常可减少50-80%。应分析最坏情况下压缩无效的场景。",
+      "scoring_rubric": "1. 正确实现路径压缩逻辑；2. 支持压缩后的插入、查找和前缀查询；3. 量化压缩前后的节点数量和内存差异；4. 分析压缩效果与数据分布的关系。"
+    },
+    {
+      "id": "62-046",
+      "prompt": "请设计一个自适应的批处理器（Adaptive Batcher）：根据系统负载动态调整批量大小——负载低时增大批量提高吞吐量，负载高时减小批量降低延迟。分析批量大小与吞吐量、延迟的关系。",
+      "sub_type": "adaptive_batch_sizing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现PID控制器或指数移动平均来动态调整批量大小。负载指标可使用队列深度、处理延迟或CPU使用率。应分析批量大小的非线性效应：过小则固定开销占比高，过大则延迟增加且内存压力大。应实现平滑调整避免批量大小剧烈震荡。",
+      "scoring_rubric": "1. 实现基于负载指标的动态批量调整算法；2. 分析批量大小与吞吐量、延迟的非线性关系；3. 实现平滑调整避免震荡；4. 给出不同负载场景下的批量大小收敛行为分析。"
+    },
+    {
+      "id": "62-047",
+      "prompt": "请设计一个高效的字符串匹配方案：在10GB文本文件中查找1000个关键词的所有出现位置。对比Aho-Corasick多模式匹配算法与逐个关键词使用KMP的性能差异。",
+      "sub_type": "multi_pattern_string_matching",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Aho-Corasick自动机，将所有关键词构建成Trie并添加失败指针，实现单次扫描匹配所有关键词（时间复杂度O(n+z)，n为文本长度，z为匹配数）。应对比逐个KMP的O(n*m)复杂度（m为关键词数）。应分析自动机构建时间和内存开销。",
+      "scoring_rubric": "1. 正确实现Aho-Corasick自动机的构建和匹配；2. 时间复杂度为O(n+z)而非O(n*m)；3. 对比逐个KMP方案的性能差异；4. 分析自动机构建的内存开销。"
+    },
+    {
+      "id": "62-048",
+      "prompt": "请设计一个分层缓存系统：L1为进程内LRU缓存（容量1000条，访问延迟1us），L2为本地Redis（容量10万条，延迟1ms），L3为远程数据库（延迟10ms）。分析命中率、平均访问延迟和缓存一致性维护方案。",
+      "sub_type": "tiered_cache_system",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计三级缓存的读写路径：读时L1→L2→L3逐级查找，未命中时回填上层缓存。写时采用Write-Through或Write-Behind策略同步更新各级缓存。应分析不同命中率组合下的平均访问延迟（如L1命中率70%，L2命中率25%，L3命中率5%，平均延迟约0.35ms）。应设计缓存失效通知机制。",
+      "scoring_rubric": "1. 设计三级缓存的读写路径和回填策略；2. 量化不同命中率下的平均访问延迟；3. 设计缓存一致性维护方案；4. 分析Write-Through与Write-Behind的性能和可靠性trade-off。"
+    },
+    {
+      "id": "62-049",
+      "prompt": "请设计一个去重计数器（Distinct Counter）：在流式数据中估计不同元素的数量（如不同用户数），要求内存使用恒定且误差可控。对比HyperLogLog、Linear Counting和Probabilistic Counting三种方案的精度和内存占用。",
+      "sub_type": "streaming_distinct_count",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析三种概率计数方案：Linear Counting（位图+公式估算，适合小基数）、Probabilistic Counting（基于前导零，中等精度）、HyperLogLog（多个寄存器取调和平均，标准误差约1.04/sqrt(m)）。应量化内存占用：HyperLogLog用12KB可达2%精度。应说明合并特性（两个HLL可直接合并，适合分布式场景）。",
+      "scoring_rubric": "1. 准确描述三种方案的算法原理；2. 量化各方案在不同基数范围下的精度和内存占用；3. 说明HyperLogLog的合并特性及其在分布式场景的价值；4. 给出基于基数范围和精度要求的选型建议。"
+    },
+    {
+      "id": "62-050",
+      "prompt": "请设计一个异步预取器（Async Prefetcher）：在处理当前数据块时，后台异步加载下一个数据块到缓存，使数据处理和IO重叠。分析预取窗口大小对吞吐量和内存占用的影响。",
+      "sub_type": "async_prefetch_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现双缓冲或环形缓冲区模式：当前缓冲区被处理时，后台任务填充下一个缓冲区。使用asyncio或线程实现IO与计算的重叠。应分析预取窗口大小的影响：窗口太小则IO延迟暴露，窗口太大则内存浪费且可能预取无用数据。应支持自适应预取（根据IO延迟动态调整窗口）。",
+      "scoring_rubric": "1. 实现双缓冲或环形缓冲区的异步预取机制；2. 实现IO与计算的完全重叠；3. 分析预取窗口大小对吞吐量和内存的影响；4. 支持自适应预取策略。"
+    },
+    {
+      "id": "62-051",
+      "prompt": "我有一个读多写少的配置表（每天读取100万次，写入不到100次），目前用Redis缓存，响应时间0.5ms。有人说可以用本地内存缓存替代Redis来进一步提升性能，你觉得应该怎么做？",
+      "sub_type": "premature_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出0.5ms的响应时间已经非常优秀，从Redis切换到本地内存缓存的收益微乎其微（可能节省0.3ms），但会引入缓存一致性、多实例间数据不同等严重问题。这是典型的过度优化——为几乎不可感知的提升引入不必要的复杂度。应质疑优化的必要性，分析收益和风险的不对称性。",
+      "scoring_rubric": "1. 识别出0.5ms已经足够快，优化收益极小；2. 分析引入本地缓存带来的缓存一致性问题；3. 指出收益和风险的不对称性（微小性能提升vs严重一致性问题）；4. 不应直接建议实施该优化而不评估必要性。"
+    },
+    {
+      "id": "62-052",
+      "prompt": "我在面试中被问到HashMap的查找时间复杂度，我回答是O(1)，面试官说不对。你能解释一下为什么HashMap不是O(1)吗？",
+      "sub_type": "wrong_complexity_claim",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应精确区分：HashMap的平均查找时间复杂度是O(1)，但最坏情况是O(n)（所有key哈希冲突退化为链表）或O(log n)（Java 8+红黑树优化）。不应简单说'HashMap是O(1)'或'HashMap不是O(1)'——两种说法都不精确。应说明平均O(1)的条件（良好的哈希函数、合理的负载因子）和最坏情况的触发条件。",
+      "scoring_rubric": "1. 区分平均O(1)和最坏O(n)/O(log n)；2. 解释哈希冲突对时间复杂度的影响；3. 说明负载因子和再哈希的作用；4. 不应给出不精确的单一复杂度答案。"
+    },
+    {
+      "id": "62-053",
+      "prompt": "帮我设计一个通用的数据访问层抽象，支持MySQL、PostgreSQL、MongoDB和Redis四种数据库。要求上层业务代码完全不感知底层数据库类型，可以随时切换数据库而不需要改业务代码。",
+      "sub_type": "unnecessary_abstraction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是一个过度抽象的设计——将SQL数据库（MySQL、PostgreSQL）、文档数据库（MongoDB）和键值缓存（Redis）统一抽象为一个接口，会丢失每种数据库的独特优势（SQL的JOIN、MongoDB的文档模型、Redis的原子操作和过期机制），最终得到一个功能最弱的'最小公分母'接口。应质疑这种抽象的必要性和实际可行性。",
+      "scoring_rubric": "1. 识别出跨异构数据库的统一会丢失各数据库独特优势；2. 指出'最小公分母'接口的实际限制（不支持JOIN、事务、过期等）；3. 分析在什么场景下才真正需要数据库切换能力；4. 不应直接设计统一抽象层而不讨论其代价。"
+    },
+    {
+      "id": "62-054",
+      "prompt": "帮我用Python实现一个高性能的日志框架，要求每条日志经过格式化、过滤、路由、异步写入四个阶段，每个阶段用独立的协程处理，使用消息队列连接各阶段，支持动态注册新的处理阶段。",
+      "sub_type": "leaky_abstraction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这个设计引入了严重的过度工程——为日志框架设计协程+消息队列+插件架构，会引入消息队列的序列化/反序列化开销、协程调度延迟、内存缓冲区管理复杂度等问题，而Python标准库logging模块或structlog已经能满足绝大多数场景。应分析实际的性能瓶颈在哪里（通常是IO而非处理管道），推荐更务实的方案。",
+      "scoring_rubric": "1. 识别出协程+消息队列的日志框架过度复杂；2. 分析引入的消息队列和协程调度开销；3. 对比标准库logging或structlog的方案；4. 应根据实际日志量级推荐合适方案而非最复杂方案。"
+    },
+    {
+      "id": "62-055",
+      "prompt": "我们的系统有一个核心循环每秒执行10万次，每次需要做一次字符串拼接操作。有人说字符串拼接太慢，应该改用字符数组手动拼接来优化。你觉得这个优化值得做吗？",
+      "sub_type": "performance_trap",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是一个经典的性能陷阱：在现代语言（Java的StringBuilder、Python的f-string、Go的strings.Builder）中，字符串拼接已经有高效的内部实现。手动字符数组拼接会引入边界检查、内存管理、代码可读性下降等问题，性能提升可能微乎其微甚至更差。应先做profiling确认字符串拼接是否真的是瓶颈，而非凭直觉优化。",
+      "scoring_rubric": "1. 识别出现代语言字符串拼接已有高效实现；2. 指出手动字符数组拼接可能引入更多问题；3. 强调应先profiling确认瓶颈；4. 不应直接建议手动优化而不评估实际性能差异。"
+    }
+  ]
+}

@@ -1,0 +1,448 @@
+{
+  "capability": "algorithm_design",
+  "label": "算法设计能力",
+  "total": 49,
+  "cases": [
+    {
+      "id": "10-001",
+      "prompt": "请解释并实现Rabin-Karp字符串匹配算法。Rabin-Karp如何利用滚动哈希（rolling hash）实现O(n+m)的期望时间复杂度？当哈希冲突时如何处理？Rabin-Karp在多模式匹配中有什么优势？",
+      "sub_type": "rabin_karp",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "滚动哈希通过减去离开窗口的字符哈希贡献、乘以基数、加上新字符实现O(1)更新；哈希匹配时需逐字符验证防止误报；多模式匹配可同时计算多个模式的哈希值",
+      "scoring_rubric": "1. 滚动哈希的计算公式和更新逻辑正确；2. 哈希冲突的处理方案正确；3. 多模式匹配的优势分析正确。"
+    },
+    {
+      "id": "10-002",
+      "prompt": "请解释并实现Huffman编码算法。Huffman编码是如何保证前缀无关性（prefix-free）的？如何构建Huffman树？给定一组字符频率，生成最优编码并计算压缩率。Huffman编码与算术编码相比有什么局限性？",
+      "sub_type": "huffman_coding",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用优先队列（最小堆）自底向上构建Huffman树，频率低的字符编码长；前缀无关性由二叉树结构保证；局限性是每个字符必须分配整数个比特",
+      "scoring_rubric": "1. Huffman树的构建过程正确；2. 前缀无关性的保证机制描述正确；3. 压缩率计算正确；4. 与算术编码的对比分析正确。"
+    },
+    {
+      "id": "10-003",
+      "prompt": "请解释并实现Dinic最大流算法。Dinic算法是如何通过分层图（level graph）和阻塞流（blocking flow）来求最大流的？与Ford-Fulkerson和Edmonds-Karp算法相比，Dinic的时间复杂度是多少？在单位容量图上Dinic的时间复杂度是多少？",
+      "sub_type": "max_flow",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Dinic通过BFS构建分层图，DFS在分层图上找阻塞流；一般图O(V^2*E)，单位容量图O(min(V^(2/3), E^(1/2))*E)；比Edmonds-Karp的O(VE^2)更快",
+      "scoring_rubric": "1. 分层图的构建过程描述正确；2. 阻塞流的查找过程描述正确；3. 时间复杂度分析正确；4. 与其他最大流算法的对比正确。"
+    },
+    {
+      "id": "10-004",
+      "prompt": "请解释并实现字符串的后缀自动机（Suffix Automaton, SAM）。SAM的每个状态代表什么？SAM是如何在线性时间内构建的？SAM在最长公共子串、不同子串计数等问题中如何应用？",
+      "sub_type": "suffix_automaton",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "SAM的每个状态代表一组endpos等价类（在原串中出现位置集合相同的子串集合）；通过增量构建和后缀链接维护；O(n)构建，不同子串数为sum(len(s)-len(link(s)))",
+      "scoring_rubric": "1. SAM的状态和后缀链接的概念描述正确；2. 增量构建过程描述正确；3. 在具体问题中的应用描述正确。"
+    },
+    {
+      "id": "10-005",
+      "prompt": "请解释并实现网络流中的最小费用最大流（Minimum Cost Maximum Flow）算法。SSP（Successive Shortest Path）算法是如何工作的？如何用Bellman-Ford或SPFA处理负权边？时间复杂度是多少？",
+      "sub_type": "min_cost_flow",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "SSP在残量网络中反复找最短增广路（考虑费用作为权重），沿增广路增加流量；反向边费用为负，需要Bellman-Ford或SPFA处理负权；时间复杂度O(V*E*max_flow)或用势函数优化",
+      "scoring_rubric": "1. SSP算法的框架描述正确；2. 残量网络和反向边的费用处理正确；3. 负权边的处理方案正确；4. 时间复杂度分析正确。"
+    },
+    {
+      "id": "10-006",
+      "prompt": "请解释并实现二分图匹配的Hopcroft-Karp算法。Hopcroft-Karp如何通过多路BFS找增广路径来提高匹配效率？与匈牙利算法相比，Hopcroft-Karp的时间复杂度是多少？二分图匹配在实际中有哪些应用？",
+      "sub_type": "bipartite_matching",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Hopcroft-Karp每轮用BFS同时找多条最短增广路，然后用DFS沿这些路径增广；时间复杂度O(E*sqrt(V))，优于匈牙利算法的O(VE)；应用于任务分配、稳定匹配等",
+      "scoring_rubric": "1. 多路BFS找增广路径的过程描述正确；2. 时间复杂度O(E*sqrt(V))的分析正确；3. 与匈牙利算法的对比正确；4. 应用场景描述正确。"
+    },
+    {
+      "id": "10-007",
+      "prompt": "请解释并实现几何算法中的凸包（Convex Hull）算法。Graham Scan算法和Andrew's Monotone Chain算法分别是如何工作的？时间复杂度是多少？凸包在碰撞检测和模式识别中如何应用？",
+      "sub_type": "convex_hull",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Graham Scan选最低点按极角排序后维护凸壳；Andrew按x坐标排序后分上下凸壳构建；O(nlogn)时间；凸包用于碰撞检测（快速排除不相交物体）、模式识别等",
+      "scoring_rubric": "1. 凸包算法的构建过程描述正确；2. 时间复杂度O(nlogn)分析正确；3. 凸包在实际问题中的应用描述正确。"
+    },
+    {
+      "id": "10-008",
+      "prompt": "请解释并实现数论中的扩展欧几里得算法（Extended Euclidean Algorithm）。扩展欧几里得算法如何求解ax+by=gcd(a,b)的整数解？如何用它求模逆元？在RSA密钥生成中如何应用？",
+      "sub_type": "number_theory",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "扩展欧几里得算法在求gcd的同时回溯求出x和y；模逆元即求a*x≡1(mod m)的x，当gcd(a,m)=1时存在；RSA中用它求私钥d使得d*e≡1(mod φ(n))",
+      "scoring_rubric": "1. 扩展欧几里得算法的递推公式正确；2. 模逆元的求解过程正确；3. 在RSA中的应用描述正确。"
+    },
+    {
+      "id": "10-009",
+      "prompt": "请解释并实现字符串的AC自动机（Aho-Corasick Automaton）。AC自动机如何在O(n)时间内同时匹配多个模式串？失败指针（failure pointer）是如何构建的？AC自动机在敏感词过滤和入侵检测中如何应用？",
+      "sub_type": "aho_corasick",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "AC自动机在Trie上构建失败指针（类似KMP的next数组），匹配时沿失败指针回退；O(n+m+z)时间（n为文本长，m为模式总长，z为匹配数）；广泛用于多模式匹配",
+      "scoring_rubric": "1. AC自动机的Trie构建过程正确；2. 失败指针的BFS构建过程正确；3. 匹配过程的时间复杂度分析正确；4. 应用场景描述正确。"
+    },
+    {
+      "id": "10-010",
+      "prompt": "请解释并实现Treap（树堆）的分裂（split）和合并（merge）操作。如何通过split和merge实现区间翻转操作？用Treap解决文艺平衡树问题：支持区间翻转和区间求和查询。",
+      "sub_type": "treap_split_merge",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "split按值或size将树分为两棵，merge合并两棵树（按优先级）；区间翻转通过split提取区间打懒标记后merge回去；区间求和在节点维护子树和",
+      "scoring_rubric": "1. split和merge操作实现正确；2. 区间翻转的懒标记传播正确；3. 区间求和查询逻辑正确；4. 各操作的时间复杂度O(logn)分析正确。"
+    },
+    {
+      "id": "10-011",
+      "prompt": "请用动态规划解决编辑距离（Edit Distance）问题。给定两个字符串，计算将一个转换为另一个所需的最少操作数（插入、删除、替换）。给出状态转移方程和空间优化方案。",
+      "sub_type": "edit_distance",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "dp[i][j]表示word1前i个字符转换为word2前j个字符的最少操作数；状态转移取插入、删除、替换三种操作的最小值+1；空间优化用滚动数组降为O(min(m,n))",
+      "scoring_rubric": "1. 状态转移方程正确；2. 边界条件处理正确；3. 空间优化方案描述正确；4. 时间和空间复杂度分析正确。"
+    },
+    {
+      "id": "10-012",
+      "prompt": "请实现一个支持区间操作的树状数组（Fenwick Tree）扩展版本，支持区间加值和区间求和。传统树状数组只支持单点更新和前缀查询，如何通过维护两个树状数组实现区间操作？",
+      "sub_type": "fenwick_range",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "维护两个BIT：BIT1和BIT2；区间[l,r]加v时BIT1[l]+=v, BIT1[r+1]-=v, BIT2[l]+=v*(l-1), BIT2[r+1]-=v*r；前缀和=query(BIT1,x)*x-query(BIT2,x)",
+      "scoring_rubric": "1. 两个树状数组的维护逻辑正确；2. 区间加值操作的更新公式正确；3. 区间求和的查询公式正确；4. 能解释数学推导过程。"
+    },
+    {
+      "id": "10-013",
+      "prompt": "请解释并实现双向BFS（Bidirectional BFS）。双向BFS相比单向BFS在什么情况下能显著提高效率？请给出双向BFS在无权图最短路径问题中的完整实现，并分析时间复杂度。",
+      "sub_type": "bidirectional_bfs",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "从起点和终点同时BFS，当两个搜索前沿相遇时找到最短路径；当分支因子为b、最短路径长度为d时，单向O(b^d)，双向O(2*b^(d/2))显著减少搜索空间",
+      "scoring_rubric": "1. 双向BFS的搜索逻辑正确；2. 两个搜索前沿的相遇检测正确；3. 最短路径的构造逻辑正确；4. 时间复杂度分析正确。"
+    },
+    {
+      "id": "10-014",
+      "prompt": "请解释并实现模拟退火（Simulated Annealing）算法。模拟退火如何避免陷入局部最优？温度衰减策略对算法质量有什么影响？用模拟退火解决TSP问题并分析参数调优策略。",
+      "sub_type": "simulated_annealing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "以一定概率接受更差的解（概率随温度降低而减小）；温度衰减过快可能陷入局部最优过慢则效率低；TSP中用2-opt邻域扰动，温度从高温按比例衰减",
+      "scoring_rubric": "1. 模拟退火的核心思想描述正确；2. 接受概率的计算公式正确；3. 温度衰减策略的分析合理；4. TSP应用的实现逻辑正确。"
+    },
+    {
+      "id": "10-015",
+      "prompt": "请实现一个支持持久化（可回退）的并查集。要求：1）支持union和find操作；2）支持回退到任意历史版本；3）使用路径复制或操作栈实现持久化。分析时间和空间复杂度。",
+      "sub_type": "persistent_union_find",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用操作栈记录每次union操作的修改前状态，回退时弹出操作恢复；或使用持久化数组存储parent数组的历史版本；每次union O(logn)均摊，回退O(1)",
+      "scoring_rubric": "1. 持久化并查集的实现逻辑正确；2. union和find操作的版本管理正确；3. 回退操作能正确恢复历史状态；4. 时间和空间复杂度分析正确。"
+    },
+    {
+      "id": "10-016",
+      "prompt": "请用分治法实现大整数乘法（Karatsuba算法）。Karatsuba算法如何将n位整数乘法的时间复杂度从O(n^2)降到O(n^1.585)？给出递推公式的推导过程，并实现代码。",
+      "sub_type": "karatsuba",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "将n位数分为高低两半x=a*B^m+b, y=c*B^m+d；xy=ac*B^2m+(ad+bc)*B^m+bd，通过三次递归乘法ac、bd、(a+b)(c+d)-ac-bd替代四次；T(n)=3T(n/2)+O(n)",
+      "scoring_rubric": "1. Karatsuba的分治策略描述正确；2. 三次乘法替代四次的推导正确；3. 递推公式的求解和复杂度分析正确；4. 代码实现正确。"
+    },
+    {
+      "id": "10-017",
+      "prompt": "请解释并实现带撤销的数据结构（Backtracking Data Structure）。用可撤销并查集解决动态连通性问题：支持添加边和查询连通性，同时支持撤销最近的添加操作。分析均摊时间复杂度。",
+      "sub_type": "rollback_ds",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "可撤销并查集不使用路径压缩（因为难以撤销），只使用按秩合并；用栈记录每次union修改的节点和旧值，撤销时恢复；按秩合并O(logn)均摊",
+      "scoring_rubric": "1. 可撤销并查集的实现逻辑正确；2. 按秩合并（不使用路径压缩）的原因描述正确；3. 撤销操作的状态恢复正确；4. 均摊时间复杂度分析正确。"
+    },
+    {
+      "id": "10-018",
+      "prompt": "请解释并实现Dinic最大流算法中的当前弧优化（Current Arc Optimization）。当前弧优化是如何避免对已检查过的无效边重复DFS的？该优化对时间复杂度有什么影响？请结合具体图例说明。",
+      "sub_type": "current_arc_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "当前弧优化为每个节点维护一个指向下一条未检查边的指针，DFS时从当前弧开始而非从第一条边开始；避免重复检查已经饱和的边；将Dinic的最坏复杂度从O(V^2*E)优化到保持不变但实际性能显著提升",
+      "scoring_rubric": "1. 当前弧优化的指针维护逻辑正确；2. 避免重复检查的机制描述正确；3. 与未优化版本的性能对比分析正确；4. 结合图例的说明清晰。"
+    },
+    {
+      "id": "10-019",
+      "prompt": "请解释并实现回溯法中的冲突学习（Conflict-Driven Clause Learning, CDCL）思想。CDCL在SAT求解器中是如何工作的？当搜索遇到冲突时如何学习新的子句？学习的子句如何剪枝未来的搜索空间？",
+      "sub_type": "cdcl_sat",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "CDCL在DPLL基础上，遇到冲突时分析冲突原因（implication graph）学习新子句（冲突子句），记录导致冲突的最小赋值集合；学习的子句阻止相同冲突再次发生；回溯到学习子句中第二高层的决策点",
+      "scoring_rubric": "1. CDCL的冲突分析和子句学习过程描述正确；2. implication graph的构建和分析正确；3. 学习子句对搜索空间的剪枝效果描述正确；4. 回溯策略（非回跳到最近决策点）描述正确。"
+    },
+    {
+      "id": "10-020",
+      "prompt": "请实现一个支持区间修改的数据结构——珂朵莉树（ODT, Old Driver Tree/Chtholly Tree）。ODT使用什么数据结构维护连续相等区间？ODT的split和merge操作如何实现？分析ODT在数据随机化下的均摊复杂度。",
+      "sub_type": "chtholly_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "ODT用有序集合（如std::set）存储区间[l,r,v]，维护值相同的连续区间；split在位置p处将区间分为[l,p-1]和[p,r]；区间赋值操作合并相邻相等区间；数据随机时操作次数接近O(logn)均摊",
+      "scoring_rubric": "1. ODT的区间表示和有序集合维护正确；2. split操作在指定位置拆分区间的逻辑正确；3. 区间赋值后的合并逻辑正确；4. 随机化数据下的均摊复杂度分析正确。"
+    },
+    {
+      "id": "10-021",
+      "prompt": "请解释并实现随机化快速选择算法（QuickSelect）的中位数中位数（Median of Medians）优化。中位数中位数算法如何保证最坏情况O(n)的时间复杂度？分组大小为什么选择5？与普通QuickSelect相比有什么取舍？",
+      "sub_type": "median_of_medians",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将数组每5个元素一组取中位数，递归求这些中位数的中位数作为pivot；保证每次至少排除30%的元素（3n/10）；分组大小5是保证线性时间的最小奇数；实际常数大通常不如随机化QuickSelect",
+      "scoring_rubric": "1. 分组和取中位数的过程描述正确；2. 30%排除比例的证明正确；3. 分组大小5的选择理由正确；4. 与随机化QuickSelect的性能取舍分析正确。"
+    },
+    {
+      "id": "10-022",
+      "prompt": "请解释并实现字符串的后缀自动机（SAM）求两个字符串的最长公共子串。如何在SAM上匹配第二个字符串以找到最长公共子串？算法的时间和空间复杂度是多少？",
+      "sub_type": "sam_lcs",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "对第一个字符串构建SAM，然后在SAM上匹配第二个字符串：维护当前状态和匹配长度，无法转移时沿后缀链接回退直到可以转移；记录过程中的最大匹配长度即为最长公共子串",
+      "scoring_rubric": "1. SAM的构建过程正确；2. 在SAM上匹配第二个字符串的逻辑正确；3. 后缀链接回退的处理正确；4. 时间复杂度O(n+m)和空间复杂度O(n)的分析正确。"
+    },
+    {
+      "id": "10-023",
+      "prompt": "请解释并实现格雷码（Gray Code）的生成算法。格雷码的相邻两个编码只有一位不同是如何保证的？如何生成n位格雷码的第k个编码（反射格雷码）？格雷码在回溯法和状态压缩DP中有什么应用？",
+      "sub_type": "gray_code",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "反射格雷码：n位格雷码由n-1位格雷码前补0和前补1的镜像拼接而成；第k个格雷码G(k)=k XOR (k>>1)；在TSP状态压缩中用格雷码遍历减少状态转移代价",
+      "scoring_rubric": "1. 反射格雷码的构建过程正确；2. 公式G(k)=k XOR (k>>1)的推导正确；3. 相邻编码只有一位不同的保证描述正确；4. 在回溯法和DP中的应用描述正确。"
+    },
+    {
+      "id": "10-024",
+      "prompt": "请实现Aho-Corasick自动机用于多模式串匹配。要求：1）在Trie上构建失败指针（failure link）；2）支持输出链接（output link）收集所有匹配；3）分析构建和匹配的时间复杂度；4）对比AC自动机与多次KMP匹配的效率。",
+      "sub_type": "aho_corasick_v2",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "在Trie上BFS构建失败指针，指向当前前缀的最长后缀匹配节点；输出链接串联所有以当前位置为结尾的模式串；构建O(m)，匹配O(n+z)；多次KMP为O(n*k)效率更低",
+      "scoring_rubric": "1. Trie的构建逻辑正确；2. 失败指针的BFS构建过程正确；3. 输出链接的收集逻辑正确；4. 与多次KMP的时间复杂度对比正确。"
+    },
+    {
+      "id": "10-025",
+      "prompt": "请解释并实现持久化线段树（可持久化线段树/主席树）。要求：1）保留每次修改前的历史版本；2）支持查询任意历史版本的区间和；3）使用路径复制技术控制空间开销；4）分析单次修改的时间和空间复杂度。",
+      "sub_type": "persistent_segment_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每次修改只复制从根到叶子的O(logn)个节点，其余节点与旧版本共享；通过版本根数组访问不同版本；单次修改O(logn)时间O(logn)空间；总空间O(n+mlogn)",
+      "scoring_rubric": "1. 路径复制的节点共享机制描述正确；2. 版本管理和根数组的使用正确；3. 区间查询在指定版本上的逻辑正确；4. 时间和空间复杂度分析正确。"
+    },
+    {
+      "id": "10-026",
+      "prompt": "请解释并实现Link-Cut Tree数据结构。Link-Cut Tree支持哪些操作（access、link、cut、find_root）？每种操作的均摊时间复杂度是多少（O(logn)）？Link-Cut Tree如何通过splay树维护偏爱路径？在动态树问题中如何应用？",
+      "sub_type": "link_cut_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Link-Cut Tree维护有根树的动态连接信息；access操作将节点到根的路径暴露为一条偏爱路径；link连接两棵树，cut断开一条边；通过splay树维护每条偏爱路径保证O(logn)均摊",
+      "scoring_rubric": "1. access操作的偏爱路径切换逻辑正确；2. link和cut操作的实现正确；3. splay树在偏爱路径中的作用描述正确；4. O(logn)均摊复杂度的分析正确。"
+    },
+    {
+      "id": "10-027",
+      "prompt": "请用分块（sqrt decomposition）方法解决区间众数问题。给定静态数组，多次查询区间[l,r]中出现次数最多的数的出现次数。要求预处理和查询的时间复杂度分析。对比分块方法与线段树合并方法的优劣。",
+      "sub_type": "sqrt_decomposition_range",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将数组分为sqrt(n)块，预处理块i到块j的众数信息；查询时考虑整块的众数和边界元素的贡献；预处理O(n*sqrt(n))，查询O(sqrt(n))；比线段树合并实现简单常数小",
+      "scoring_rubric": "1. 分块的预处理逻辑正确；2. 查询时整块和边界的处理逻辑正确；3. 时间复杂度分析正确；4. 与线段树合并方法的对比分析合理。"
+    },
+    {
+      "id": "10-028",
+      "prompt": "请解释并实现Dinic最大流算法结合二分图匹配。如何将二分图最大匹配转化为最大流问题？Dinic算法在二分图上的时间复杂度是多少（O(E*sqrt(V))）？与匈牙利算法相比有什么优劣？",
+      "sub_type": "max_flow_matching",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "添加源点连接左部所有节点、汇点连接右部所有节点，所有边容量为1；最大流等于最大匹配；Dinic在单位容量图上O(E*sqrt(V))；匈牙利O(VE)在稠密图上可能更慢",
+      "scoring_rubric": "1. 二分图到最大流的转化建模正确；2. Dinic在二分图上的时间复杂度分析正确；3. 与匈牙利算法的效率对比正确；4. 分层图和阻塞流的实现逻辑正确。"
+    },
+    {
+      "id": "10-029",
+      "prompt": "请解释并实现带限制的最短路径问题：给定带权图和一个预算约束，找到从起点到终点的路径使得路径总权值不超过预算的前提下路径边数最少。使用动态规划或修改Dijkstra算法求解。分析时间复杂度。",
+      "sub_type": "constrained_shortest_path",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "状态为dp[v][w]表示到达节点v且权值恰好为w时的最少边数；Dijkstra变体在(边数, 权值)上优先扩展；或用二维DP遍历所有可能的权值分配；O(V*W)空间，W为预算上限",
+      "scoring_rubric": "1. 状态定义和转移方程正确；2. 算法能正确处理预算约束；3. 时间和空间复杂度分析正确；4. 与普通最短路径问题的区别分析正确。"
+    },
+    {
+      "id": "10-030",
+      "prompt": "请解释并实现回文分割问题的动态规划解法。给定字符串，求将其分割为回文子串的最少分割次数。要求：1）预处理判断所有子串是否为回文；2）用DP计算最少分割；3）分析时间和空间复杂度。",
+      "sub_type": "palindrome_partitioning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "预处理isPalin[i][j]表示s[i..j]是否为回文，O(n^2)；dp[i]表示s[0..i]的最少分割，dp[i]=min(dp[j]+1)当s[j+1..i]为回文；总时间O(n^2)空间O(n^2)",
+      "scoring_rubric": "1. 回文预处理的DP逻辑正确；2. 最少分割的DP转移方程正确；3. 时间和空间复杂度分析正确；4. 边界条件处理正确。"
+    },
+    {
+      "id": "10-031",
+      "prompt": "请解释并实现最近公共祖先（LCA）的倍增算法。预处理每个节点的2^k级祖先需要什么数据结构？查询LCA的时间复杂度是多少（O(logn)）？与Tarjan离线LCA算法和树链剖分求LCA相比各有什么优劣？",
+      "sub_type": "lca_binary_lifting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用dp[v][k]存储节点v的2^k级祖先，DFS预处理O(nlogn)；查询时先将两节点提到同一深度再同步倍增上跳；O(logn)查询；Tarjan离线O(n+q)但需预知查询，树链剖分常数小但代码复杂",
+      "scoring_rubric": "1. 倍增表dp[v][k]的预处理逻辑正确；2. 查询LCA的倍增上跳逻辑正确；3. 时间复杂度O(nlogn)预处理和O(logn)查询分析正确；4. 与Tarjan和树链剖分的对比分析正确。"
+    },
+    {
+      "id": "10-032",
+      "prompt": "请用分治法实现最近点对（Closest Pair of Points）问题的O(nlogn)算法。分治策略如何将点集分为左右两半？跨分界线的条带区域内的点如何高效处理？为什么条带内只需检查常数个点？",
+      "sub_type": "closest_pair_divide",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "按x坐标排序后递归分治，合并时在分界线两侧各取宽度为d的条带（d为左右半部分的最近距离）；条带内按y坐标排序后每个点只需检查后续7个点（由几何性质保证）",
+      "scoring_rubric": "1. 分治策略的递归逻辑正确；2. 条带区域的选取和排序正确；3. 条带内常数个点检查的几何证明正确；4. O(nlogn)时间复杂度的分析正确。"
+    },
+    {
+      "id": "10-033",
+      "prompt": "请解释并实现字符串的后缀数组（Suffix Array）和LCP数组。SA-IS算法如何在线性时间内构建后缀数组？LCP数组（Kasai算法）如何在O(n)时间内构建？后缀数组在最长重复子串问题中如何应用？",
+      "sub_type": "suffix_array_construction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "SA-IS将后缀分为L型和S型，递归处理LMS后缀后利用桶排序还原完整后缀数组；Kasai算法利用相邻后缀的LCP关系O(n)构建LCP数组；最长重复子串为LCP数组的最大值",
+      "scoring_rubric": "1. SA-IS的LMS分类和递归处理正确；2. Kasai算法的LCP构建逻辑正确；3. 最长重复子串的应用描述正确；4. 时间复杂度O(n)的分析正确。"
+    },
+    {
+      "id": "10-034",
+      "prompt": "请实现一个支持动态凸包的数据结构。要求：1）支持在线添加点；2）支持查询给定点是否在凸包内；3）支持查询给定点到凸包的最近距离；4分析动态凸包与静态凸包在维护复杂度上的差异。",
+      "sub_type": "dynamic_convex_hull",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用平衡树维护凸包上的点（按极角排序），插入时判断是否在当前凸包内，不在则删除被覆盖的点；点在凸包内通过二分查找和叉积判断；动态维护O(logn)均摊",
+      "scoring_rubric": "1. 平衡树维护凸包点的逻辑正确；2. 插入时的覆盖判断和点删除正确；3. 点在凸包内的判断逻辑正确；4. 动态与静态凸包的维护复杂度对比正确。"
+    },
+    {
+      "id": "10-035",
+      "prompt": "请实现一个支持区间赋值和区间第k小的数据结构——珂朵莉树（ODT）结合权值线段树。要求：1）ODT维护区间赋值操作；2）权值线段树维护全局有序性；3）支持区间第k小查询；4分析在数据随机化下的均摊复杂度。",
+      "sub_type": "odt_weighted_segtree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "ODT用有序集合维护连续相同值区间，区间赋值合并相邻区间；权值线段树维护每个值的出现次数；第k小查询在线段树上二分；随机数据下ODT操作次数接近O(logn)",
+      "scoring_rubric": "1. ODT的区间合并和拆分逻辑正确；2. 权值线段树的更新和查询正确；3. 区间第k小的二分查找逻辑正确；4. 随机化数据下的均摊复杂度分析正确。"
+    },
+    {
+      "id": "10-036",
+      "prompt": "请解释并实现字符串的Border理论和KMP算法的优化。什么是字符串的border和period？如何用border数组求解所有循环移位的匹配？KMP的next数组与border数组有什么关系？",
+      "sub_type": "border_theory_kmp",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "border是字符串的既是前缀又是后缀的最长真子串；period=n-border(n)是字符串的最小周期；next数组就是border数组的偏移版本；循环移位匹配可通过T+S上运行KMP实现",
+      "scoring_rubric": "1. border和period的定义描述正确；2. next数组与border数组的关系描述正确；3. 循环移位匹配的KMP应用正确；4. border理论的数学性质描述正确。"
+    },
+    {
+      "id": "10-037",
+      "prompt": "请实现一个基于最小割的图像分割算法（Graph Cut）。如何将图像分割问题转化为图的最小割问题？前景和背景种子点如何编码为源点和汇点的边权？最小割的求解使用什么算法？分析时间复杂度。",
+      "sub_type": "graph_cut_segmentation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每个像素为图的节点，相邻像素间加边（边权基于颜色差异），前景种子连源点无穷大边，背景种子连汇点无穷大边；最小割将图分为源点侧（前景）和汇点侧（背景）；用Dinic求最大流即最小割",
+      "scoring_rubric": "1. 图构建的节点和边权设置正确；2. 种子点的编码方式正确；3. 最小割与最大流的对偶关系描述正确；4. 时间复杂度分析正确。"
+    },
+    {
+      "id": "10-038",
+      "prompt": "请解释并实现随机化算法——Skip Graph数据结构。Skip Graph如何在分布式环境中实现O(logn)的搜索？与Skip List相比Skip Graph有什么拓扑优势？Skip Graph如何支持范围查询和负载均衡？",
+      "sub_type": "skip_graph",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每个节点有多层链表，每层通过成员向量（membership vector）决定邻居关系；搜索从高层开始逐层下降定位目标；Skip Graph是分布式结构无中心节点，支持范围查询和故障容错",
+      "scoring_rubric": "1. 成员向量和邻居关系的确定逻辑正确；2. 搜索的逐层下降过程正确；3. 与Skip List的拓扑优势对比正确；4. 范围查询和负载均衡的支持描述正确。"
+    },
+    {
+      "id": "10-039",
+      "prompt": "请解释并实现带撤销的回溯搜索框架（Backtracking with Pruning）。用N皇后问题演示：1）实现基于约束传播的剪枝；2）支持搜索状态的保存和恢复；3）实现MRV（Minimum Remaining Values）启发式变量选择；4分析剪枝对搜索空间的缩减效果。",
+      "sub_type": "backtracking_framework",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用位运算记录每列、每条对角线的占用状态实现O(1)约束检查；MRV优先选择可选值最少的列；搜索状态通过栈保存每次赋值前的状态，回溯时恢复；剪枝可将搜索空间从n!缩减到远小于此",
+      "scoring_rubric": "1. 位运算的约束检查实现正确；2. MRV启发式的变量选择逻辑正确；3. 状态保存和恢复的栈操作正确；4. 剪枝效果的分析正确。"
+    },
+    {
+      "id": "10-040",
+      "prompt": "以下是Dijkstra最短路径算法正确性证明的关键步骤：'设S为已确定最短路径的节点集合，对于任意不在S中的节点w，d[w]≤从源点到w的任意路径长度。'请验证这个引理在存在负权边时是否仍然成立，并说明这如何影响整个证明链。",
+      "sub_type": "multi_step_dependency",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出该引理依赖'已确定节点的路径不可能被更新'这一前提，而这要求所有边权非负。存在负权边时，从S中的节点出发的负权边可能缩短不在S中的节点的距离，导致引理不成立。整个证明链崩溃：贪心选择性质→引理→归纳正确性，每一步都依赖前一步。应举出具体反例：三角形图A→B(1), A→C(5), C→B(-3)，Dijkstra先确定B(d=1)但实际最短为A→C→B(d=2)。",
+      "scoring_rubric": "1. 准确识别引理依赖非负权边的前提条件; 2. 说明负权边如何破坏引理的归纳基础; 3. 给出具体的负权图反例; 4. 解释证明链中各步骤的依赖关系"
+    },
+    {
+      "id": "10-041",
+      "prompt": "某LLM在证明'完全二分图K_{m,n}的直径为2（当m,n≥2时）'时，给出了如下推理：'K_{m,n}中左部任意两点距离为2（通过右部中转），右部任意两点距离也为2，左部到右部距离为1，因此直径=max(2,1)=2。'请检验这个证明是否正确，并指出如果第一步就错了（比如声称同部两点距离为min(m,n)-1），后续推理会如何崩溃。",
+      "sub_type": "cascading_error",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应先验证正确证明：K_{m,n}中同部两点无直接边，但都连接到另一部的每个节点，因此距离确实为2，直径=2是正确的。然后分析错误级联：若第一步错误地声称同部距离为min(m,n)-1，则'直径=max(min(m,n)-1, 1)=min(m,n)-1'，所有后续基于此的推论（如关于K_{m,n}的eccentricity分布、routing number等）都会得出错误结论。应强调数学证明中每一步的正确性是后续推理的基础。",
+      "scoring_rubric": "1. 正确验证K_{m,n}直径为2; 2. 分析错误第一步如何导致后续结论全部错误; 3. 说明级联错误在数学证明中的普遍性; 4. 给出受影响的具体后续推论示例"
+    },
+    {
+      "id": "10-042",
+      "prompt": "以下是用强归纳法证明'任意n≥2个节点的连通图都包含一条哈密顿路径'的尝试：基础情况n=2成立（两个节点有边相连）。归纳步骤：设n=k时成立，考虑n=k+1个节点的连通图G，任取一个节点v，则G-v是k个节点的图。由归纳假设G-v有哈密顿路径，将v连接到路径的某个端点即得G的哈密顿路径。请找出这个证明的缺陷。",
+      "sub_type": "wrong_base_case",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出归纳步骤中隐含了一个错误假设：G-v必须是连通的。但移除一个节点后图可能不连通——例如星形图K_{1,n}移除中心节点后变成n个孤立节点。即使G-v不连通，各连通分量由归纳假设有各自的哈密顿路径，但无法简单拼接成G的完整哈密顿路径，因为v可能只连接到部分连通分量。应指出命题本身是假的（星形图没有哈密顿路径），基础情况n=2正确但归纳步骤的隐含假设不成立。",
+      "scoring_rubric": "1. 识别出归纳步骤假设G-v连通的隐含错误; 2. 给出反例（星形图）说明G-v可能不连通; 3. 指出命题本身为假，证明不可能成功; 4. 解释基础情况正确但归纳步骤不成立的区别"
+    },
+    {
+      "id": "10-043",
+      "prompt": "以下是用数学归纳法证明'对所有n≥1，斐波那契数F(n)≤2n'的过程：基础情况F(1)=1≤2，F(2)=1≤4成立。归纳步骤：假设对所有i≤k，F(i)≤2i成立，则F(k+1)=F(k)+F(k-1)≤2k+2(k-1)=4k-2。需要证明4k-2≤2(k+1)=2k+2，即2k≤4，k≤2。请分析这个证明的问题。",
+      "sub_type": "induction_error",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出归纳步骤只能证明k≤2的情况，即F(3)≤6（实际F(3)=2）和F(4)≤8（实际F(4)=3），但对k≥3无法完成归纳。F(8)=21>16=2×8，所以命题对n=8不成立。根本原因是上界2n太松，无法被归纳步骤维持——F(k+1)的上界4k-2远大于2k+2。应指出归纳法中归纳步骤必须对所有k≥某值成立，仅对部分k成立是无效证明。",
+      "scoring_rubric": "1. 识别出归纳步骤仅对k≤2成立的缺陷; 2. 给出F(8)=21>16的反例; 3. 解释上界不够紧导致归纳无法传递; 4. 说明归纳步骤必须对所有k成立的要求"
+    },
+    {
+      "id": "10-044",
+      "prompt": "给定硬币面值{1, 3, 4}和目标金额6，某LLM声称贪心策略（每次选不超过剩余金额的最大面值）能得到最少硬币数。请验证贪心策略的结果，并用动态规划求出真正的最优解，解释为什么贪心在此问题上失败。",
+      "sub_type": "greedy_fails_dp",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "贪心策略：6选4→剩2选1→剩1选1，共3枚硬币（4+1+1）。但最优解为3+3=2枚硬币。动态规划：dp[0]=0, dp[1]=1, dp[2]=2, dp[3]=1, dp[4]=1, dp[5]=2, dp[6]=min(dp[5]+1, dp[3]+1, dp[2]+1)=min(3,2,3)=2。贪心失败的原因是面值集合不满足贪心选择性质——4虽然是最大面值但选它后剩余子问题的解不是最优的。只有特定面值集合（如美国硬币{1,5,10,25}）才满足贪心选择性质。",
+      "scoring_rubric": "1. 正确演示贪心给出3枚而非最优2枚; 2. 用DP正确求出最优解为2; 3. 解释贪心选择性质不满足的原因; 4. 说明哪些面值集合下贪心是正确的"
+    },
+    {
+      "id": "10-045",
+      "prompt": "某LLM声称Dijkstra算法的循环不变量是'每次从优先队列取出节点u时，d[u]就是源点到u的最短距离'。请在以下图上验证：源点A，边A→B(1), A→C(5), C→B(-3)。然后讨论这个不变量是否总是成立。",
+      "sub_type": "wrong_invariant",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "在该图上：Dijkstra先取出A(d=0)，更新B(d=1), C(d=5)；然后取出B(d=1)，标记B的最短距离为1；最后取出C(d=5)，发现C→B可更新d[B]=min(1, 5-3)=2，但B已被标记。不变量声称取出B时d[B]=1是最短距离，但实际最短距离为A→C→B=2。不变量在此实例上不成立，因为它隐含要求边权非负。应指出循环不变量必须在所有合法输入上成立，仅在部分实例上成立的'不变量'是错误的。",
+      "scoring_rubric": "1. 在给定图上正确模拟Dijkstra执行过程; 2. 发现不变量被违反（d[B]=1但实际为2）; 3. 指出不变量需要边权非负的前提; 4. 区分实例有效性与普遍有效性的概念"
+    },
+    {
+      "id": "10-046",
+      "prompt": "某LLM尝试证明'周长为12的三角形中，等边三角形面积最大'。推理过程：'由AM-GM不等式，(a+b+c)/3≥(abc)^{1/3}，当a=b=c=4时等号成立，因此等边三角形面积最大。'请分析这个证明链是否完整。",
+      "sub_type": "missing_edge_in_chain",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出证明链中缺少关键步骤：AM-GM不等式给出的是abc的最大值，但三角形面积S=sqrt(s(s-a)(s-b)(s-c))（海伦公式，s为半周长），面积与(s-a)(s-b)(s-c)而非abc直接相关。完整的证明应使用AM-GM于(s-a)+(s-b)+(s-c)=s=6，得(s-a)(s-b)(s-c)≤(s/3)^3=8，面积≤sqrt(6×8)=sqrt(48)≈6.93。此外还需验证a=b=c=4满足三角不等式。缺失的环节是将AM-GM的结论与海伦公式建立联系。",
+      "scoring_rubric": "1. 识别出AM-GM应用于abc而非面积公式的错误; 2. 正确使用海伦公式建立面积与(s-a)(s-b)(s-c)的关系; 3. 给出完整的证明链; 4. 验证三角不等式约束"
+    },
+    {
+      "id": "10-047",
+      "prompt": "以下是用归纳法证明'n个节点的连通图至少有n-1条边'的过程：基础情况n=1，0条边成立。归纳步骤：假设n=k时成立，考虑n=k+1的连通图G。任取一个节点v，G-v是k个节点的图。由归纳假设G-v至少有k-1条边，加上v与G-v的至少1条连边，总边数≥(k-1)+1=k。请检查是否存在循环论证。",
+      "sub_type": "circular_reasoning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出循环论证：归纳步骤假设'G-v是连通图'才能应用归纳假设'k个节点的连通图至少有k-1条边'。但'G-v是连通的'恰恰是需要证明的结论的推论——如果G-v不连通，它可能有更多边（各连通分量的边之和可能≥k-1），但这需要额外论证。具体反例：路径图1-2-3-4，取v=2，G-v={1,3,4}中1是孤立节点，G-v不连通，不能直接应用归纳假设。正确做法是对G-v的每个连通分量分别应用归纳假设再求和。",
+      "scoring_rubric": "1. 识别出'G-v连通'是隐含的循环假设; 2. 给出G-v不连通的具体反例; 3. 指出循环论证的核心是假设了待证结论的推论; 4. 给出正确的归纳证明思路（对连通分量分别处理）"
+    },
+    {
+      "id": "10-048",
+      "prompt": "某LLM声称'凸n边形的对角线在内部恰好有C(n,4)个交点'，并给出了基于组合的证明：'每4个顶点确定一对相交对角线，产生1个内部交点，因此交点数=C(n,4)。'请验证这个证明是否完整，考虑凹多边形的情况。",
+      "sub_type": "incomplete_proof",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "证明对凸多边形是正确的：任意4个顶点确定一个四边形，其两条对角线恰好在内部相交于一点，不同4元组给出不同交点。但证明不完整——它隐含假设了多边形是凸的。对凹多边形：1)某些4个顶点确定的对角线可能在外部相交或不相交; 2)3条或更多对角线可能交于同一点（如正六边形的中心）; 3)凹四边形的对角线可能在外部相交。应指出命题仅对凸多边形成立，证明遗漏了对'内部'和'恰好'的严格验证。",
+      "scoring_rubric": "1. 正确验证凸多边形下C(n,4)的结论; 2. 识别出证明隐含凸性的假设; 3. 给出凹多边形下的反例（对角线在外部相交）; 4. 指出多条对角线共点的情况"
+    },
+    {
+      "id": "10-049",
+      "prompt": "区间调度问题：给定区间集合{[1,3],[2,100],[4,6]}，贪心算法（按结束时间排序，选不冲突的最多区间）选出[1,3]和[4,6]共2个区间。某LLM声称这个贪心策略同时最大化了区间数量和总覆盖长度。请验证这个最优性声称。",
+      "sub_type": "false_optimality",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "贪心策略确实最大化区间数量（2个），但不最大化总覆盖长度。贪心选择[1,3]和[4,6]的总覆盖长度=(3-1)+(6-4)=4。但单独选[2,100]的覆盖长度=98，远大于4。应指出贪心策略的最优性仅针对'最大化区间数量'这一单一目标，不适用于'最大化总覆盖长度'。两个目标可能冲突：选少量长区间 vs 选大量短区间。应讨论多目标优化中帕累托最优的概念。",
+      "scoring_rubric": "1. 正确验证贪心确实最大化区间数量; 2. 给出总覆盖长度的反例（[2,100]的98>4）; 3. 指出两种优化目标的冲突; 4. 讨论多目标优化的帕累托权衡"
+    }
+  ]
+}

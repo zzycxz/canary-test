@@ -1,0 +1,412 @@
+{
+  "capability": "tool_selection",
+  "label": "工具选择与使用判断",
+  "total": 45,
+  "cases": [
+    {
+      "id": "154-001",
+      "prompt": "我有一个包含大量扫描件（图片格式）的PDF文件，需要提取其中的文字内容。有什么工具推荐？",
+      "sub_type": "ocr_tool_selection",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出扫描件PDF是图片格式，需要OCR（光学字符识别）工具才能提取文字。应推荐Tesseract OCR、PaddleOCR或商业OCR服务（如百度OCR、阿里云OCR），说明中文场景下PaddleOCR通常优于Tesseract。",
+      "scoring_rubric": "1. 识别出扫描件PDF需要OCR而非普通PDF解析；2. 推荐适合中文场景的OCR工具；3. 说明各工具的优缺点和使用方式；4. 提及预处理（如图像增强）对OCR准确率的影响。"
+    },
+    {
+      "id": "154-002",
+      "prompt": "我需要对一个Python项目做性能剖析，找出哪些函数最耗时。用什么工具好？",
+      "sub_type": "profiling_tool_selection",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐cProfile（内置）、py-spy（采样式，低开销）、line_profiler（行级分析）或Austin等工具，说明各工具适用场景：cProfile适合全局概览，py-spy适合生产环境，line_profiler适合精确定位。",
+      "scoring_rubric": "1. 推荐多个性能剖析工具并说明差异；2. 区分确定式和采样式剖析的开销差异；3. 说明各工具的适用场景（开发vs生产）；4. 给出基本使用命令和结果解读方法。"
+    },
+    {
+      "id": "154-003",
+      "prompt": "我需要将一个Spring Boot应用的API自动生成OpenAPI文档。目前项目没有任何文档。有什么工具可以用？",
+      "sub_type": "api_doc_generation_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐SpringDoc OpenAPI（springdoc-openapi-ui）或Swagger（springfox，已不推荐），说明注解驱动的文档生成方式，以及Swagger UI的集成方法。",
+      "scoring_rubric": "1. 推荐springdoc-openapi而非过时的springfox；2. 说明注解配置方式（@Operation、@Schema等）；3. 说明Swagger UI的集成和访问方式；4. 考虑与CI/CD集成自动更新文档。"
+    },
+    {
+      "id": "154-004",
+      "prompt": "我想在代码提交时自动检测提交信息是否符合Conventional Commits规范。有什么pre-commit hook工具推荐？",
+      "sub_type": "commit_lint_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐commitlint、husky（Git hooks管理）、pre-commit框架等工具，说明如何配置commit-msg hook来验证提交格式。",
+      "scoring_rubric": "1. 推荐commitlint+husky或pre-commit框架；2. 说明Conventional Commits的基本格式要求；3. 给出配置文件示例；4. 考虑与CI集成的方案。"
+    },
+    {
+      "id": "154-005",
+      "prompt": "我需要在CI/CD中自动检测代码中的敏感信息（API Key、密码、私钥等）泄露。有什么工具推荐？",
+      "sub_type": "secret_scanning_tool",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐truffleHog、gitleaks、detect-secrets等专用密钥扫描工具，说明如何集成到pre-commit hook和CI流水线中。",
+      "scoring_rubric": "1. 推荐专用的密钥扫描工具（如truffleHog、gitleaks）；2. 说明扫描原理（正则+熵检测）；3. 给出CI集成方案；4. 考虑误报处理和白名单配置。"
+    },
+    {
+      "id": "154-006",
+      "prompt": "我需要对比两个版本的API响应，找出所有字段的差异（新增、删除、类型变化）。手动对比太慢了，有什么工具？",
+      "sub_type": "api_diff_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐openapi-diff、oasdiff等OpenAPI规范对比工具，或json-diff、jd等通用JSON对比工具，说明如何检测breaking changes。",
+      "scoring_rubric": "1. 推荐OpenAPI规范对比工具或JSON diff工具；2. 说明breaking change的检测能力；3. 给出命令行使用示例；4. 建议集成到CI中自动检测API变更。"
+    },
+    {
+      "id": "154-007",
+      "prompt": "我需要测试一个WebSocket服务在高并发下的表现，Locust支持WebSocket吗？还是有更好的工具？",
+      "sub_type": "websocket_load_testing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应说明Locust可以通过自定义WebSocket客户端进行压测，但也推荐Artillery、k6等原生支持WebSocket的工具，说明WebSocket压测与HTTP压测的差异（长连接、消息推送）。",
+      "scoring_rubric": "1. 说明Locust支持WebSocket但需要自定义客户端；2. 推荐原生支持WebSocket的压测工具；3. 分析WebSocket压测的特殊关注点（连接数、消息延迟）；4. 给出基本的测试配置示例。"
+    },
+    {
+      "id": "154-008",
+      "prompt": "我想分析一个Python项目的模块依赖关系，画出import依赖图。有什么工具可以用？",
+      "sub_type": "dependency_graph_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐pydeps、importlab、snakefood等Python依赖分析工具，或使用pyreverse生成类图。应说明如何可视化依赖关系和检测循环导入。",
+      "scoring_rubric": "1. 推荐Python依赖图分析工具（如pydeps）；2. 说明输出格式（DOT/PNG/SVG）；3. 指出检测循环导入的能力；4. 给出基本使用命令。"
+    },
+    {
+      "id": "154-009",
+      "prompt": "我需要为一个REST API自动生成各种语言的客户端SDK。有什么工具可以从OpenAPI规范生成SDK？",
+      "sub_type": "sdk_generation_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐OpenAPI Generator（openapi-generator-cli）或swagger-codegen，说明支持的语言列表和自定义模板的能力。",
+      "scoring_rubric": "1. 推荐OpenAPI Generator作为首选工具；2. 说明支持的客户端语言列表；3. 介绍自定义模板和配置选项；4. 给出基本的生成命令。"
+    },
+    {
+      "id": "154-010",
+      "prompt": "我需要在Kubernetes集群中实时查看所有Pod的日志，聚合分析错误模式。kubectl logs一个一个看太慢了，有什么更好的工具？",
+      "sub_type": "k8s_log_aggregation_tool",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐kubetail（多Pod日志聚合查看）、stern（多容器日志流）、或完整的日志聚合方案（Loki+Grafana、ELK Stack），说明轻量级工具和完整方案的适用场景。",
+      "scoring_rubric": "1. 推荐轻量级工具（kubetail/stern）用于临时查看；2. 推荐完整日志聚合方案（Loki/ELK）用于长期分析；3. 说明各工具的特点和使用方式；4. 考虑日志量对存储和查询性能的影响。"
+    },
+    {
+      "id": "154-011",
+      "prompt": "我需要对比两个Python包（packageA和packageB）的API兼容性，确保升级后不会破坏现有调用。有什么工具可以用？",
+      "sub_type": "api_compatibility_check_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐griffe、pycompat等Python API兼容性检查工具，或使用importlab分析导入关系。对于公开API变更检测，可推荐semver规范和pyproject.toml中的version约束。应说明如何在CI中集成自动兼容性检查。",
+      "scoring_rubric": "1. 推荐Python API兼容性检查工具；2. 说明如何检测函数签名、类接口的变更；3. 说明语义化版本与API变更的关系；4. 建议CI集成方案。"
+    },
+    {
+      "id": "154-012",
+      "prompt": "我需要为一个微服务项目生成服务间的API调用关系图，自动分析代码中的HTTP调用和gRPC调用。有什么工具推荐？",
+      "sub_type": "service_dependency_extraction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐静态分析工具（如cloc结合自定义脚本分析import链）、APM工具（如Jaeger、Zipkin的链路追踪数据）、或依赖分析工具（如go-callvis for Go、pydeps for Python）。应说明静态分析和运行时分析各自的优劣。",
+      "scoring_rubric": "1. 推荐适合微服务依赖分析的工具；2. 区分静态分析和运行时追踪两种方式；3. 说明各工具对HTTP/gRPC调用的识别能力；4. 给出可视化的建议。"
+    },
+    {
+      "id": "154-013",
+      "prompt": "我需要测试一个GraphQL API，自动生成查询和变异语句来发现潜在的bug。有什么自动化测试工具可以用？",
+      "sub_type": "graphql_fuzzing_tool",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐graphql-query-generator、Clairvoyance（自动发现schema）、InQL（Burp Suite插件）等GraphQL专用测试工具。应说明GraphQL测试与REST测试的差异（schema自省、嵌套查询复杂度、N+1问题等），并建议结合负载测试工具评估查询性能。",
+      "scoring_rubric": "1. 推荐GraphQL专用测试或fuzzing工具；2. 说明GraphQL测试的特殊关注点（schema、嵌套、N+1）；3. 区分功能测试和性能测试工具；4. 给出基本的测试策略。"
+    },
+    {
+      "id": "154-014",
+      "prompt": "我需要在一个大型遗留项目中找出所有未使用的代码（dead code），项目使用了动态导入和反射。Python项目，代码量约50万行。",
+      "sub_type": "dead_code_detection_dynamic",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出动态导入和反射使静态dead code检测变得困难。应推荐vulture（Python dead code检测）、coverage.py（运行时覆盖率分析）结合使用。说明vulture可能有误报（动态使用被误判为dead code），建议用运行时覆盖率数据交叉验证。",
+      "scoring_rubric": "1. 认识到动态导入/反射对静态分析的挑战；2. 推荐vulture+coverage.py组合方案；3. 说明两种工具各自的优缺点和误报率；4. 建议渐进式清理策略（先标记再删除）。"
+    },
+    {
+      "id": "154-015",
+      "prompt": "我需要监控Python应用中每个函数的调用次数和平均执行时间，生成火焰图来定位性能瓶颈。在生产环境中使用，不能明显影响性能。",
+      "sub_type": "production_profiling_tool",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐py-spy（采样式，无需修改代码，开销极低）、Austin（异步采样器）或eBPF-based工具（如bcc/bpftrace）用于生产环境。应强调采样式剖析（sampling）对生产环境影响远小于确定式（如cProfile），并说明火焰图生成方式（speedscope、火焰图视图）。",
+      "scoring_rubric": "1. 推荐采样式而非确定式剖析工具；2. 区分开发环境和生产环境适用的工具；3. 说明py-spy/eBPF的低开销原理；4. 提供火焰图生成和解读方法。"
+    },
+    {
+      "id": "154-016",
+      "prompt": "我需要为一个REST API实现请求速率限制（Rate Limiting），支持按用户、按IP、按API端点分别设置限制。有什么成熟的中间件或库推荐？",
+      "sub_type": "rate_limiting_implementation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐具体框架对应的限流中间件：Python（Flask-Limiter、django-ratelimit）、Nginx（limit_req模块）、API网关（Kong、APISIX的限流插件）、通用方案（Redis + 滑动窗口算法）。应说明令牌桶、漏桶、滑动窗口等算法的适用场景。",
+      "scoring_rubric": "1. 推荐适合具体技术栈的限流中间件；2. 说明不同限流算法的适用场景；3. 考虑分布式环境下的Redis集中式限流；4. 给出按用户/IP/端点分别配置的方案。"
+    },
+    {
+      "id": "154-017",
+      "prompt": "我需要在一个Python项目中实现配置热更新（修改配置文件后不重启服务立即生效）。有什么好的方案或库？",
+      "sub_type": "config_hot_reload_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐watchdog（文件系统监控）、python-dotenv结合信号量、或使用配置中心方案（如Apollo、Nacos、Consul KV）。应区分简单场景（单机文件监控）和分布式场景（配置中心），说明各方案的适用范围和复杂度差异。",
+      "scoring_rubric": "1. 推荐文件监控（watchdog）和配置中心两类方案；2. 区分单机和分布式场景的适用方案；3. 说明配置热更新的线程安全注意事项；4. 给出配置变更通知机制的实现建议。"
+    },
+    {
+      "id": "154-018",
+      "prompt": "我需要对一个Web应用进行安全渗透测试，检测OWASP Top 10漏洞。我是该应用的开发者，想在上线前自查。有什么工具推荐？",
+      "sub_type": "authorized_penetration_testing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应确认用户是应用开发者（有授权），然后推荐OWASP ZAP（开源Web安全扫描器）、Burp Suite Community、Nikto等工具。应说明自动化扫描只能发现部分漏洞，建议结合手动测试。推荐SAST工具（Bandit/Semgrep）做代码层安全检查。",
+      "scoring_rubric": "1. 确认用户有授权后推荐合适工具；2. 推荐OWASP ZAP等开源渗透测试工具；3. 说明自动化扫描的局限性；4. 建议SAST+DAST组合的安全测试策略。"
+    },
+    {
+      "id": "154-019",
+      "prompt": "我需要将一个Python机器学习模型部署为API服务，支持自动扩缩容、A/B测试和模型版本管理。有什么MLOps平台推荐？",
+      "sub_type": "ml_model_serving_platform",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐KServe（Kubernetes原生模型服务）、Seldon Core、MLflow（模型注册+版本管理）、BentoML等MLOps工具。应说明各工具在自动扩缩容、A/B测试、模型版本管理方面的能力差异，以及与Kubernetes的集成方式。",
+      "scoring_rubric": "1. 推荐适合的模型服务平台（KServe/Seldon/BentoML等）；2. 说明各平台在扩缩容、A/B测试方面的能力；3. 考虑模型版本管理和灰度发布；4. 分析部署复杂度和运维成本。"
+    },
+    {
+      "id": "154-020",
+      "prompt": "我需要自动化管理云上资源（创建VPC、配置安全组、部署ECS实例），同时支持多环境（开发、测试、生产）的基础设施一致性。有什么IaC工具推荐？",
+      "sub_type": "infrastructure_as_code_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐Terraform（多云支持）、Pulumi（用编程语言写IaC）、AWS CloudFormation/Aliyun ROS（特定云平台）等IaC工具。应说明Terraform的声明式语法和状态管理机制，以及多环境管理的最佳实践（workspace、目录结构、变量分层）。",
+      "scoring_rubric": "1. 推荐主流IaC工具并说明适用场景；2. 区分多云和单云场景的工具选择；3. 说明多环境管理的目录结构和变量分层策略；4. 考虑状态文件管理和团队协作。"
+    },
+    {
+      "id": "154-021",
+      "prompt": "我需要在一个Python项目中实现分布式任务队列，支持任务重试、延迟执行、优先级和死信队列。团队之前用的是Celery但觉得太重了，有什么轻量级替代方案？",
+      "sub_type": "task_queue_alternative_selection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐轻量级方案如rq（Redis Queue，简单但功能有限）、Dramatiq（比Celery简洁但支持重试和中间件）、Huey（嵌入式任务队列）。应对比各方案在重试、延迟、优先级、死信队列方面的能力差异，以及与Redis/RabbitMQ的依赖关系。如果需要全部特性，可能仍需Celery的broker配置。",
+      "scoring_rubric": "1. 推荐多个轻量级替代方案并对比功能覆盖；2. 说明各方案在重试/延迟/优先级方面的能力差异；3. 分析消息中间件依赖的差异；4. 根据需求给出推荐而非一味否定Celery。"
+    },
+    {
+      "id": "154-022",
+      "prompt": "我需要对一个Python Web应用做端到端测试，模拟用户在浏览器中的操作（点击、填表、上传文件）。团队不熟悉Selenium，有没有更现代的工具？",
+      "sub_type": "e2e_testing_tool_modern_alternative",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐Playwright（微软出品，支持Python，API现代，自动等待机制好）、Cypress（前端团队友好但主要支持JS）。应重点介绍Playwright的Python绑定（playwright-python），说明其相对于Selenium的优势（自动等待、网络拦截、原生多浏览器支持、更好的调试体验）。",
+      "scoring_rubric": "1. 推荐Playwright作为Selenium的现代替代；2. 说明Playwright Python绑定的使用方式；3. 对比Playwright与Selenium的关键差异（自动等待、调试体验）；4. 给出基本的测试脚本示例。"
+    },
+    {
+      "id": "154-023",
+      "prompt": "我需要在CI/CD中自动为每次代码变更生成changelog，并根据conventional commits自动确定版本号。有什么工具推荐？",
+      "sub_type": "changelog_and_versioning_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐semantic-release（全自动版本和changelog）、conventional-changelog（生成changelog）、standard-version（本地版本管理）、release-please（Google出品，GitHub友好）。应说明各工具在CI集成方式、版本号确定规则、changelog格式方面的差异。",
+      "scoring_rubric": "1. 推荐适合的changelog生成和版本管理工具；2. 说明与conventional commits的集成方式；3. 区分全自动（semantic-release）和半自动（standard-version）模式；4. 给出CI集成的基本配置。"
+    },
+    {
+      "id": "154-024",
+      "prompt": "我需要在一个Python项目中实现细粒度的权限控制，支持RBAC和基于属性的动态权限（ABAC）。有什么成熟的库推荐？",
+      "sub_type": "authorization_library_selection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐Casbin（支持RBAC/ABAC/ACL多种模型，Python原生支持）、django-guardian（Django对象级权限）、PyCasbin。应说明Casbin的模型定义语言和适配器机制，以及如何与Flask/Django/FastAPI集成。如果需求复杂，可推荐Open Policy Agent（OPA）作为外部策略引擎。",
+      "scoring_rubric": "1. 推荐Casbin等支持RBAC+ABAC的授权库；2. 说明策略模型定义和适配器机制；3. 给出与常见Web框架的集成方式；4. 区分应用内嵌和外部策略引擎两种架构。"
+    },
+    {
+      "id": "154-025",
+      "prompt": "我需要测试一个gRPC服务的功能和性能，但不想写proto文件的客户端代码。有什么工具可以自动生成测试客户端并发送请求？",
+      "sub_type": "grpc_testing_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐grpcurl（命令行工具，类似curl但支持gRPC）、Postman（支持gRPC请求）、BloomRPC（GUI客户端）、ghz（gRPC压测工具）。应说明grpcurl可以通过反射服务自动发现proto定义，无需手写客户端。对于压测推荐ghz。",
+      "scoring_rubric": "1. 推荐grpcurl作为gRPC的curl替代；2. 说明gRPC反射服务的自动发现机制；3. 区分功能测试工具和性能测试工具；4. 给出基本的grpcurl命令示例。"
+    },
+    {
+      "id": "154-026",
+      "prompt": "我的团队需要在多个微服务之间共享API契约（OpenAPI规范），确保前后端、不同服务团队使用一致的API定义。有什么工具可以管理和分发这些契约？",
+      "sub_type": "api_contract_management_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐Swagger Hub（API设计和协作平台）、Stoplight（API设计+文档+mock）、Apicurio Registry（开源API注册中心）。应说明如何通过CI集成自动验证API实现与规范的一致性（如Schemathesis、Prism），以及如何通过代码生成确保客户端与服务端一致。",
+      "scoring_rubric": "1. 推荐API契约管理和协作平台；2. 说明如何在CI中自动验证API与规范的一致性；3. 介绍代码生成确保一致性的方案；4. 区分中心化注册和Git-based管理两种模式。"
+    },
+    {
+      "id": "154-027",
+      "prompt": "我需要在一个Python数据分析项目中实现数据质量检查，自动检测数据中的异常值、缺失值、类型不一致等问题。有什么工具可以用？",
+      "sub_type": "data_quality_framework_selection",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐Great Expectations（Python数据质量框架，声明式验证规则）、pandera（DataFrame schema验证和数据类型检查）、Deequ（Apache Spark上的数据质量库）。应说明Great Expectations的expectation机制和数据文档自动生成能力，以及pandera在pandas DataFrame上的类型检查优势。",
+      "scoring_rubric": "1. 推荐适合Python项目的数据质量框架；2. 说明声明式验证规则的定义方式；3. 区分数据质量检查和schema验证的工具差异；4. 给出与数据管道（Airflow等）的集成建议。"
+    },
+    {
+      "id": "154-028",
+      "prompt": "我需要为一个FastAPI项目实现API限流，支持按用户、按IP、按端点分别设置不同的限流策略，且支持Redis作为分布式存储。推荐什么库？",
+      "sub_type": "fastapi_rate_limiting_library",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐slowapi（专为FastAPI/Starlette设计的限流中间件，基于limits库）、fastapi-limiter（Redis后端的限流库）。应说明slowapi支持装饰器级别的限流配置（按端点）、自定义key_func（按用户/IP）、以及与Redis的集成方式。如果需要更复杂的策略，可推荐直接使用limits库配合自定义中间件。",
+      "scoring_rubric": "1. 推荐适合FastAPI的限流库；2. 说明按用户/IP/端点分别配置的方式；3. 给出Redis分布式限流的集成方法；4. 提供基本的装饰器配置示例。"
+    },
+    {
+      "id": "154-029",
+      "prompt": "我需要将一个现有的REST API自动转换为GraphQL，减少手动编写resolver的工作量。有什么工具或框架可以用？",
+      "sub_type": "rest_to_graphql_tool",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推荐Hasura（自动将PostgreSQL暴露为GraphQL，支持远程schema拼接REST）、PostGraphile（类似，针对PostgreSQL）、Stitching/Schema Federation方案（Apollo Federation拼接多个REST服务）。对于已有的REST API，可推荐graphql-mesh（自动将REST端点包装为GraphQL resolver）或OpenAPI-to-GraphQL工具。",
+      "scoring_rubric": "1. 推荐REST到GraphQL的自动转换工具；2. 区分数据库直连和REST包装两种方式；3. 说明graphql-mesh等自动包装工具的使用；4. 指出自动转换的局限性（复杂查询仍需手动优化resolver）。"
+    },
+    {
+      "id": "154-030",
+      "prompt": "我需要在一个大型Python项目中自动检测和修复常见的代码风格问题（如import排序、未使用的变量、行尾空格等），并在提交前自动执行。推荐什么工具组合？",
+      "sub_type": "pre_commit_code_quality_toolchain",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐pre-commit框架（管理Git hooks）配合ruff（超快的Python linter和formatter，替代flake8+isort+black）、或传统的flake8+isort+black+autoflake组合。应说明ruff的优势（速度比flake8快10-100倍、规则兼容多个linter）以及pre-commit的配置方式（.pre-commit-config.yaml）。",
+      "scoring_rubric": "1. 推荐pre-commit框架管理Git hooks；2. 推荐ruff作为一体化linter+formatter；3. 说明ruff相对于传统工具链的优势；4. 给出.pre-commit-config.yaml的配置示例。"
+    },
+    {
+      "id": "154-031",
+      "prompt": "我需要在一个Python项目中实现分布式锁，团队在考虑用Redis SETNX还是ZooKeeper。项目已有Redis集群但没有ZK。请推荐方案。",
+      "sub_type": "distributed_lock_implementation_choice",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析Redis SETNX和ZooKeeper实现分布式锁的优劣：Redis性能高但存在主从切换时锁丢失的风险（可用Redlock缓解），ZooKeeper基于ZAB协议更可靠但需要额外部署。团队已有Redis集群，应推荐基于Redis的方案（如python-redis-lock或Redlock），并说明如何处理锁续期和过期问题。",
+      "scoring_rubric": "1. 对比Redis和ZooKeeper实现分布式锁的可靠性差异；2. 分析Redis主从切换时锁丢失的风险和Redlock方案；3. 考虑团队已有基础设施（Redis集群）；4. 给出具体的库推荐和使用注意事项。"
+    },
+    {
+      "id": "154-032",
+      "prompt": "我们需要对一个遗留的PHP项目做自动化测试，但项目没有任何测试代码，也没有API文档。想先做端到端测试保障基本功能。有什么工具推荐？",
+      "sub_type": "legacy_app_e2e_testing_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐适合遗留PHP项目的E2E测试方案：Playwright或Cypress（通过浏览器操作测试前端功能）、PHPUnit结合HTTP客户端测试API。对于没有API文档的情况，建议先用Postman或Bruno收集API调用作为基线。应说明在遗留项目中从E2E测试开始而非单元测试是合理的策略（Michael Feathers的《修改代码的艺术》推荐）。",
+      "scoring_rubric": "1. 推荐适合遗留PHP项目的E2E测试工具；2. 建议先收集API调用作为基线；3. 说明从E2E测试切入遗留项目的合理性；4. 给出渐进式测试覆盖的实施建议。"
+    },
+    {
+      "id": "154-033",
+      "prompt": "我在开发一个CLI工具，需要支持命令行参数解析、子命令、自动补全和彩色输出。Python项目，不想引入太重的依赖。推荐什么库？",
+      "sub_type": "cli_framework_selection",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐Click（功能丰富、轻量、支持子命令和自动补全）或Typer（基于Click、使用类型注解更现代）。应对比argparse（标准库、无依赖但API较繁琐）、Click和Typer的优劣。对于彩色输出，推荐rich库（功能强大）或简单的colorama。应根据'不想太重'的需求推荐Click而非完整的框架如Cement。",
+      "scoring_rubric": "1. 推荐Click或Typer作为CLI框架；2. 对比argparse、Click、Typer的优劣；3. 推荐rich或colorama处理彩色输出；4. 考虑依赖轻量级的需求。"
+    },
+    {
+      "id": "154-034",
+      "prompt": "我需要为一个Python Web服务实现灰度发布，支持按用户ID、IP地址和请求Header三种条件路由到不同后端版本。有什么成熟的方案？",
+      "sub_type": "traffic_routing_tool_selection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应区分基础设施层和应用层的灰度方案：Nginx/OpenResty（基于Header/IP的路由）、Envoy（强大的流量管理能力）、应用层中间件（自定义路由逻辑）。推荐Envoy或OpenResty作为流量网关，通过Lua脚本或Filter实现复杂路由规则。如果使用Kubernetes，可推荐Istio的VirtualService实现更精细的流量管理。",
+      "scoring_rubric": "1. 区分基础设施层和应用层的灰度方案；2. 推荐Envoy或OpenResty等流量网关；3. 说明按用户ID/IP/Header路由的实现方式；4. 考虑Kubernetes环境下的Istio方案。"
+    },
+    {
+      "id": "154-035",
+      "prompt": "我需要在一个Python数据分析项目中自动检测数据集中的数据漂移（Data Drift），比较训练数据和线上数据的分布差异。有什么工具可以用？",
+      "sub_type": "data_drift_detection_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐Evidently AI（开源数据和ML模型监控工具，支持多种漂移检测方法）、Alibi Detect（专注于异常和漂移检测的库）、NannyML（监控ML模型性能下降）。应说明数据漂移检测的常用方法（KS检验、PSI、Wasserstein距离等）以及各工具的特点。对于与现有管道的集成，推荐Evidently的报告生成功能。",
+      "scoring_rubric": "1. 推荐数据漂移检测专用工具；2. 说明常用检测方法（KS检验、PSI等）；3. 对比各工具的特点和适用场景；4. 给出与ML管道集成的建议。"
+    },
+    {
+      "id": "154-036",
+      "prompt": "我需要在一个Go项目中实现HTTP请求的重试和熔断功能。不想引入过重的框架，有什么轻量级的库推荐？",
+      "sub_type": "retry_circuit_breaker_go_library",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐sony/gobreaker（轻量级熔断器实现）、avast/retry-go（重试逻辑库）、或hashicorp/go-retryablehttp（结合重试的HTTP客户端）。应说明重试策略（指数退避、最大重试次数）和熔断器的三种状态（关闭、打开、半开）的实现方式。如果需要更完整的解决方案，可推荐go-kit的中间件模式。",
+      "scoring_rubric": "1. 推荐Go语言的重试和熔断器库；2. 区分重试策略和熔断器的不同作用；3. 说明各库的轻量级特点；4. 给出组合使用的代码结构建议。"
+    },
+    {
+      "id": "154-037",
+      "prompt": "我需要将一个现有的REST API自动生成TypeScript的类型定义（d.ts文件），保持与后端API的类型同步。有什么工具可以用？",
+      "sub_type": "api_to_types_codegen_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐openapi-typescript（从OpenAPI规范生成TypeScript类型，速度快、类型准确）、swagger-codegen-typescript或Orval（支持React Query hooks生成）。应说明这些工具需要后端提供OpenAPI规范文件（swagger.json），建议在CI中集成自动生成以保持前后端类型同步。如果后端没有OpenAPI规范，建议先用springdoc或drf-spectacular生成。",
+      "scoring_rubric": "1. 推荐从OpenAPI生成TypeScript类型的工具；2. 说明需要后端提供OpenAPI规范的前提；3. 建议CI集成保持类型同步；4. 给出后端生成OpenAPI规范的方案。"
+    },
+    {
+      "id": "154-038",
+      "prompt": "我需要对一个Python机器学习模型做可解释性分析，了解模型的预测依据。项目使用scikit-learn和XGBoost。推荐什么工具？",
+      "sub_type": "ml_explainability_tool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐SHAP（基于Shapley值的模型解释库，支持全局和局部解释）、LIME（局部可解释的模型无关解释）、或eli5（轻量级模型解释工具）。应重点推荐SHAP，因为它有坚实的理论基础（博弈论），支持scikit-learn和XGBoost的原生集成，能生成特征重要性图、力图和依赖图。说明SHAP的TreeExplainer对树模型的高效计算。",
+      "scoring_rubric": "1. 推荐SHAP作为首选的模型可解释性工具；2. 说明SHAP的理论基础和可视化能力；3. 区分全局解释和局部解释的不同场景；4. 给出与scikit-learn和XGBoost的集成示例。"
+    },
+    {
+      "id": "154-039",
+      "prompt": "我需要在一个Python项目中实现API的请求签名验证（类似支付宝/微信支付的签名机制），确保请求未被篡改。有什么成熟的库可以用？",
+      "sub_type": "api_signature_verification_library",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐hmac（Python标准库，支持HMAC-SHA256签名）、PyJWT（JWT令牌的签名和验证）、或自定义签名方案（参数排序+密钥拼接+哈希）。应说明常见签名机制：HMAC签名（对称密钥）、RSA/ECDSA签名（非对称密钥）、JWT令牌。根据安全性需求推荐不同方案，并给出防重放攻击（nonce+timestamp）的实现建议。",
+      "scoring_rubric": "1. 推荐hmac/PyJWT等签名验证库；2. 区分对称和非对称签名的适用场景；3. 说明防重放攻击的nonce+timestamp机制；4. 给出签名生成和验证的完整流程。"
+    },
+    {
+      "id": "154-040",
+      "prompt": "我需要监控一个Python应用的实时性能指标（QPS、延迟分布、错误率），并将数据发送到Prometheus。有什么库推荐？",
+      "sub_type": "python_prometheus_metrics_library",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应推荐prometheus_client（Python官方Prometheus客户端库，支持Counter、Histogram、Gauge、Summary四种指标类型）。应说明如何在Flask/FastAPI/Django中集成（使用中间件自动采集HTTP指标）、自定义业务指标的定义方式、以及与Grafana的可视化集成。对于延迟分布，推荐使用Histogram而非Summary（Histogram支持服务端聚合）。",
+      "scoring_rubric": "1. 推荐prometheus_client库；2. 说明四种指标类型的适用场景；3. 给出与Web框架集成的中间件方案；4. 建议Histogram用于延迟分布并说明原因。"
+    },
+    {
+      "id": "154-041",
+      "prompt": "我们团队要做一个内部工具，用户量10人，功能是简单的表单提交和数据统计。有人建议用Kubernetes部署并配置自动扩缩容，这个方案合适吗？",
+      "sub_type": "unnecessary_tool_use",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出Kubernetes对于10人内部工具严重过度——自动扩缩容在低并发场景下无意义，K8s的运维复杂度远超收益。应建议使用单机Docker部署甚至直接进程运行，搭配Nginx反向代理即可。应分析工具选择需匹配实际规模。",
+      "scoring_rubric": "1. 指出K8s对10人内部工具过度复杂；2. 分析自动扩缩容在低并发下的无意义性；3. 推荐Docker单机部署或直接运行等简单方案；4. 强调工具选择应匹配项目规模和团队能力。"
+    },
+    {
+      "id": "154-042",
+      "prompt": "我需要存储医院的患者就诊记录、医生信息、预约排班、药品处方和费用明细，数据之间有复杂的关联关系。团队建议用MongoDB，因为'它比MySQL快'。请评估这个选择。",
+      "sub_type": "wrong_tool_choice",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出医疗数据具有强关联性和事务一致性要求（如处方与药品的关联、费用明细的ACID要求），关系型数据库更适合。MongoDB的文档模型难以高效处理多表关联查询，且事务支持不如MySQL成熟。应推荐MySQL/PostgreSQL，说明'快'不是唯一选型标准。",
+      "scoring_rubric": "1. 分析医疗数据的强关联性和一致性需求；2. 指出MongoDB在多表关联和事务方面的局限；3. 推荐关系型数据库作为更合适的选择；4. 纠正'MongoDB比MySQL快'的过度简化说法。"
+    },
+    {
+      "id": "154-043",
+      "prompt": "我们有100份扫描版PDF发票（图片格式），需要提取发票号码、金额和日期三个字段。团队建议用LayoutLMv3训练自定义文档理解模型，再用Tesseract做OCR，最后用正则提取字段。这个方案合适吗？",
+      "sub_type": "tool_overkill",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出训练LayoutLMv3对100份发票严重过度——模型训练需要大量标注数据和GPU资源，100份远不够。应推荐PaddleOCR或百度/阿里云的发票OCR API（预训练模型已支持发票字段提取），100份发票几行代码即可完成。应分析工具复杂度与数据规模的匹配。",
+      "scoring_rubric": "1. 指出自定义模型训练对100份数据严重过度；2. 推荐预训练OCR API（PaddleOCR/云服务）；3. 说明发票OCR已有成熟的预训练方案；4. 分析工具复杂度与数据量的匹配关系。"
+    },
+    {
+      "id": "154-044",
+      "prompt": "我需要对一个Python Web API做安全漏洞扫描，找出SQL注入、XSS和CSRF漏洞。有人说只用Bandit一个工具就够了。请评估是否完整。",
+      "sub_type": "missing_tool_combination",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出Bandit主要检测Python代码安全问题（如硬编码密码、不安全的函数调用），对SQL注入和XSS的检测能力有限。应建议组合使用：Bandit（代码安全）+Semgrep（OWASP规则匹配）+pip-audit（依赖漏洞）+手动审查或DAST工具（运行时漏洞检测），单一工具无法覆盖所有漏洞类型。",
+      "scoring_rubric": "1. 指出Bandit的功能边界和局限性；2. 说明SQL注入/XSS/CSRF需要不同检测手段；3. 推荐SAST+DAST+依赖扫描的组合方案；4. 给出具体的工具组合建议。"
+    },
+    {
+      "id": "154-045",
+      "prompt": "我需要将一个Python应用容器化并部署到Kubernetes，请按正确顺序列出需要使用的工具和步骤。",
+      "sub_type": "tool_order_error",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应给出正确的工具使用顺序：1）编写Dockerfile并本地构建测试；2）配置CI/CD流水线自动构建镜像；3）编写K8s Deployment/Service YAML；4）部署到K8s集群；5）配置监控和日志收集。常见错误是将CI/CD配置放在Dockerfile之前，或跳过本地测试直接部署。",
+      "scoring_rubric": "1. 正确排序容器化步骤（Dockerfile→构建→K8s配置→部署→监控）；2. 强调本地构建测试在部署前的必要性；3. 说明CI/CD集成应在镜像构建验证之后；4. 考虑监控和日志收集的配置顺序。"
+    }
+  ]
+}

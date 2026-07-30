@@ -1,0 +1,376 @@
+{
+  "capability": "frontend_development",
+  "label": "前端开发能力",
+  "total": 41,
+  "cases": [
+    {
+      "id": "69-001",
+      "prompt": "请解释CSS-in-JS方案。Styled-Components和Emotion的实现原理有何不同？什么是运行时CSS-in-JS的性能问题？零运行时CSS-in-JS（如vanilla-extract、Linaria）如何解决性能瓶颈？",
+      "sub_type": "css_in_js",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Styled-Components通过标签模板字符串生成组件，Emotion支持css prop和源码级source map；运行时方案在每次渲染时序列化样式对象导致开销；零运行时方案在编译阶段提取CSS为静态文件，消除运行时开销但限制动态样式能力",
+      "scoring_rubric": "1. Styled-Components和Emotion的实现原理区别描述正确；2. 运行时CSS-in-JS的性能瓶颈分析正确；3. 零运行时方案的编译策略描述正确；4. 动态样式与静态提取的取舍分析合理。"
+    },
+    {
+      "id": "69-002",
+      "prompt": "请解释Vite的核心原理。Vite为什么比Webpack快？什么是依赖预构建（Pre-bundling）？Vite的HMR（热模块替换）是如何工作的？Vite在生产构建时使用什么工具？",
+      "sub_type": "vite_bundler",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Vite利用浏览器原生ESM，在开发时不打包源码而按需编译；依赖预构建使用esbuild将node_modules中的CommonJS/UMD转为ESM并合并；HMR通过ESM边界精确更新模块；生产构建使用Rollup进行tree-shaking和代码分割",
+      "scoring_rubric": "1. Vite利用原生ESM加速开发的原理描述正确；2. 依赖预构建的目的和实现描述正确；3. HMR的工作机制描述正确；4. 生产构建工具链描述正确。"
+    },
+    {
+      "id": "69-003",
+      "prompt": "请设计一个复杂的表单验证方案。如何实现跨字段联动验证（如密码确认）？如何处理异步验证（如用户名是否已注册）？Zod和Yup有什么区别？如何实现服务端错误与客户端校验的统一展示？",
+      "sub_type": "form_validation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "跨字段验证通过refine或自定义校验函数引用其他字段值；异步验证使用debounce避免频繁请求，通过校验状态反馈loading；Zod基于TypeScript类型推断更严格，Yup支持链式API更灵活；服务端错误映射到对应字段通过setError统一展示",
+      "scoring_rubric": "1. 跨字段联动验证的实现方案描述正确；2. 异步验证的防抖和状态管理描述正确；3. Zod和Yup的核心差异描述正确；4. 服务端与客户端错误统一展示的方案描述正确。"
+    },
+    {
+      "id": "69-004",
+      "prompt": "请解释无限滚动（Infinite Scroll）的实现方案。如何检测滚动到底部？什么是虚拟化列表（Virtualized List）？当列表项高度不固定时如何实现虚拟滚动？如何处理快速滚动时的白屏闪烁问题？",
+      "sub_type": "infinite_scroll",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "通过IntersectionObserver监听哨兵元素或计算scrollHeight判断到底部；虚拟化只渲染可视区域的DOM节点（如react-window）；高度不固定时需预估或动态测量行高；通过overscan预留缓冲区和skeleton占位减少白屏",
+      "scoring_rubric": "1. 滚动检测的两种方案描述正确；2. 虚拟化列表的原理描述正确；3. 动态高度的处理策略描述正确；4. 白屏闪烁的优化方案描述正确。"
+    },
+    {
+      "id": "69-005",
+      "prompt": "请设计一个基于Module Federation的微前端方案。主应用需要动态加载多个子应用的组件，子应用之间需要共享状态。请说明如何处理子应用的版本冲突、如何实现子应用的独立部署和灰度发布，以及如何解决共享依赖的Singleton问题。",
+      "sub_type": "module_federation_advanced",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Module Federation通过remote和host配置实现模块共享；版本冲突通过shared配置的singleton和requiredVersion约束解决；独立部署通过CDN托管子应用的remoteEntry.js实现；灰度发布通过在主应用中动态切换remote URL实现；共享依赖的Singleton通过配置singleton:true确保React等库只加载一份",
+      "scoring_rubric": "1. Module Federation的配置和加载机制描述正确；2. 版本冲突的解决方案描述正确；3. 独立部署和灰度发布方案描述合理；4. Singleton共享依赖的处理描述正确；5. 能分析Module Federation的局限性和适用场景"
+    },
+    {
+      "id": "69-006",
+      "prompt": "请设计一个基于Web Components的跨框架组件库。组件需要在React、Vue和Angular项目中都能使用。请说明Shadow DOM的封装机制、Custom Elements的生命周期，以及如何处理Web Components与框架的事件系统和数据绑定的兼容性问题。",
+      "sub_type": "web_component_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Web Components通过Custom Elements定义自定义标签，Shadow DOM实现样式和DOM封装；生命周期包括connectedCallback、disconnectedCallback、attributeChangedCallback；与框架兼容：React需要使用ref传递事件，Vue通过v-on直接监听自定义事件；构建工具使用Stencil或Lit简化开发",
+      "scoring_rubric": "1. Shadow DOM的封装机制描述正确；2. Custom Elements的生命周期描述正确；3. 与React/Vue/Angular的兼容性问题分析正确；4. 事件系统和数据绑定的兼容方案描述合理；5. 构建工具选型建议正确"
+    },
+    {
+      "id": "69-007",
+      "prompt": "请设计一个基于微内核架构的低代码平台前端。平台核心只提供渲染引擎和通信总线，业务功能通过插件扩展。请设计插件的注册、加载和通信机制，说明如何实现插件的热插拔和版本管理，以及如何保证插件之间的样式和状态隔离。",
+      "sub_type": "frontend_microkernel",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "微内核核心包含插件注册表、事件总线和渲染容器；插件通过manifest.json声明依赖和暴露的API，运行时动态加载JS模块；通信通过事件总线的发布-订阅模式实现松耦合；热插拔通过动态import和生命周期管理实现；样式隔离通过Shadow DOM或CSS Modules，状态隔离通过独立的Store实例",
+      "scoring_rubric": "1. 微内核架构的核心组件设计合理；2. 插件注册和加载机制描述正确；3. 事件总线通信模式描述正确；4. 热插拔和版本管理方案描述合理；5. 样式和状态隔离方案描述正确"
+    },
+    {
+      "id": "69-008",
+      "prompt": "请设计一个复杂的页面过渡动画系统。页面包含大量DOM元素，过渡时需要实现元素的位移、缩放、透明度变化和路径动画。请分析JS动画、CSS动画和Web Animations API的性能差异，说明如何避免动画过程中的布局抖动，以及如何实现FLIP动画技术。",
+      "sub_type": "web_animations_performance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "JS动画灵活但受主线程阻塞影响，CSS动画利用GPU加速性能好但控制有限，Web Animations API结合两者优势；避免Layout Thrashing通过批量读取DOM属性再批量写入；FLIP技术先记录元素最终位置，再计算与初始位置的差异，通过transform反向变换后执行动画",
+      "scoring_rubric": "1. 三种动画方案的性能差异分析正确；2. Layout Thrashing的成因和避免方法描述正确；3. FLIP动画技术的原理和实现描述正确；4. GPU加速的触发条件和优化策略描述正确；5. 路径动画的实现方式描述正确"
+    },
+    {
+      "id": "69-009",
+      "prompt": "你的Monorepo项目包含50+包，构建时间已超过15分钟。请设计构建优化方案，包括增量构建、并行构建、缓存策略和构建分析。请对比Turborepo和Nx在缓存命中率和构建速度上的差异，并说明如何实现远程缓存的团队共享。",
+      "sub_type": "build_system_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "增量构建通过文件哈希检测变化只重建受影响的包；并行构建通过依赖图拓扑排序最大化并行度；缓存策略：本地缓存构建产物，缓存Key由文件哈希加依赖哈希加环境变量组成；Turborepo通过Pipeline配置实现缓存，Nx通过Computation Cache优化；远程缓存通过S3或Nx Cloud实现团队共享",
+      "scoring_rubric": "1. 增量构建和并行构建的原理描述正确；2. 缓存Key的设计和命中策略描述正确；3. Turborepo和Nx的缓存机制差异描述正确；4. 远程缓存的实现方案描述合理；5. 构建分析和瓶颈定位方法描述正确"
+    },
+    {
+      "id": "69-010",
+      "prompt": "请设计一个面向全球用户的电商平台的边缘渲染方案。对比SSG、SSR、ISR和Edge SSR四种渲染策略的性能和适用场景，说明如何利用Edge Function在CDN边缘节点执行服务端渲染以降低TTFB，以及如何处理Edge Runtime的限制。",
+      "sub_type": "edge_rendering_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "SSG适合静态内容、SSR适合动态内容但TTFB受源站距离影响、ISR折中两者、Edge SSR在CDN边缘执行降低延迟；Edge Function运行在V8 Isolate中无Node.js API；需处理的限制：无文件系统（使用KV存储）、执行时间限制、包体积限制；通过中间件判断请求类型选择渲染策略",
+      "scoring_rubric": "1. 四种渲染策略的性能和适用场景对比正确；2. Edge Function的工作原理和部署方式描述正确；3. Edge Runtime的限制和应对方案描述正确；4. 渲染策略的选择逻辑描述合理；5. 能分析Edge SSR的成本和复杂性"
+    },
+    {
+      "id": "69-011",
+      "prompt": "请设计一个前端应用的安全防护方案。需要防范XSS攻击、数据注入和恶意脚本执行。请详细说明Content Security Policy（CSP）的配置策略，如何处理CSP与内联脚本、第三方脚本的兼容性问题，以及如何实现Trusted Types防止DOM XSS。",
+      "sub_type": "content_security_policy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "CSP通过Content-Security-Policy响应头限制资源加载来源；关键指令：script-src限制脚本来源、style-src限制样式来源、connect-src限制API请求目标；内联脚本通过nonce或hash白名单解决兼容性；Trusted Types强制API使用安全的类型化对象替代字符串注入DOM；报告模式用于监控违规而不阻断",
+      "scoring_rubric": "1. CSP的核心指令和配置方式描述正确；2. 内联脚本和第三方脚本的兼容方案描述正确；3. Trusted Types的原理和实现描述正确；4. 报告模式和强制模式的使用策略描述正确；5. 能分析CSP的局限性和绕过风险"
+    },
+    {
+      "id": "69-012",
+      "prompt": "请设计一个前端微应用的运行时沙箱方案。多个子应用运行在同一个页面中，需要实现JS沙箱隔离（防止全局变量污染）和CSS沙箱隔离（防止样式冲突）。请对比快照沙箱和代理沙箱的实现原理，说明如何处理子应用间的通信。",
+      "sub_type": "runtime_sandbox_isolation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "快照沙箱在激活时恢复window快照，卸载时保存快照适合单实例场景；代理沙箱通过Proxy代理window的读写操作实现多实例并行隔离；CSS隔离通过Shadow DOM或命名空间前缀（scoped CSS）实现；子应用通信通过CustomEvent或共享的全局状态Store实现发布-订阅；需处理定时器和事件监听器的清理防止内存泄漏",
+      "scoring_rubric": "1. 快照沙箱和代理沙箱的原理和差异描述正确；2. CSS隔离方案的优劣对比正确；3. 子应用通信机制描述正确；4. 资源清理和内存泄漏预防描述正确；5. 能分析沙箱方案的性能开销和兼容性"
+    },
+    {
+      "id": "69-013",
+      "prompt": "你的前端应用需要支持离线模式，用户在无网络时仍可操作数据，上线后自动同步。请设计基于Service Worker和IndexedDB的离线架构，说明如何实现操作队列的离线记录、冲突检测和合并策略，以及如何处理离线状态下的乐观UI更新。",
+      "sub_type": "offline_first_frontend",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Service Worker通过Cache API缓存静态资源和API响应，IndexedDB存储用户操作数据；离线操作记录到操作队列（包含操作类型、目标和时间戳），上线后按序重放到服务端；冲突检测通过版本向量或时间戳比较实现，合并策略可选最后写入胜出或三路合并；乐观UI在操作时立即更新本地状态和UI，同步失败时回滚并提示用户",
+      "scoring_rubric": "1. Service Worker和IndexedDB的协作架构描述正确；2. 操作队列的设计和重放机制描述正确；3. 冲突检测和合并策略描述正确；4. 乐观UI更新和回滚机制描述正确；5. 能分析离线架构的数据一致性挑战"
+    },
+    {
+      "id": "69-014",
+      "prompt": "请设计一个大型表单的状态管理方案。表单包含200+字段，分布在多个Tab页面中，支持字段联动验证、条件显示和草稿自动保存。请设计表单的数据模型、验证引擎和性能优化策略，说明如何避免每次输入都触发全量验证。",
+      "sub_type": "complex_form_state_management",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "数据模型采用扁平化的Field Store存储各字段的值、错误、触摸状态和可见性；验证引擎通过依赖图追踪字段间的验证依赖，只触发受影响字段的验证；条件显示通过表达式引擎动态计算字段可见性；草稿自动保存通过防抖监听字段变更写入localStorage或IndexedDB；性能优化：虚拟化Tab页面只渲染当前Tab、使用React.memo避免无关字段重渲染、验证延迟到失焦时执行",
+      "scoring_rubric": "1. 表单数据模型设计合理；2. 增量验证的依赖图方案描述正确；3. 条件显示的表达式引擎描述正确；4. 草稿自动保存方案描述正确；5. 性能优化策略描述合理且可落地"
+    },
+    {
+      "id": "69-015",
+      "prompt": "你的前端项目需要从Webpack迁移到Rspack以提升构建速度。请设计渐进式迁移方案，说明如何处理Webpack特有的Loader和Plugin兼容性、如何迁移Module Federation配置、以及如何通过构建产物对比验证迁移的正确性。",
+      "sub_type": "bundler_migration_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "渐进迁移分阶段：先替换entry/output，再逐个迁移Loader，最后迁移Plugin（部分用Rspack内置替代）；Module Federation通过内置Plugin迁移几乎无需改动；验证：对比构建产物大小和运行时行为，E2E测试验证功能正确性",
+      "scoring_rubric": "1. 渐进式迁移的阶段划分合理；2. Loader和Plugin的兼容性处理描述正确；3. Module Federation的迁移方案描述正确；4. 构建产物对比验证方法描述正确；5. 能分析迁移风险和回滚策略"
+    },
+    {
+      "id": "69-016",
+      "prompt": "请设计一个前端的实时协作编辑方案。多个用户同时编辑同一文档，需要实现实时同步和冲突解决。请对比OT（Operational Transformation）和CRDT（Conflict-free Replicated Data Type）两种算法的原理差异，说明如何实现光标位置同步和选区可见。",
+      "sub_type": "real_time_collaborative_editing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "OT通过操作变换函数将并发操作转换为可顺序执行的等价操作，需要中心服务器协调；CRDT通过数据结构的数学性质保证并发操作自动合并无需中心协调；光标位置同步通过WebSocket广播每个用户的光标位置和选区范围，使用用户颜色标识；实现方案：基于Yjs或Automerge的CRDT库简化开发，通过WebSocket或WebRTC实现低延迟通信",
+      "scoring_rubric": "1. OT和CRDT的算法原理差异描述正确；2. 各自的优缺点和适用场景分析正确；3. 光标位置同步的实现方案描述正确；4. 协作编辑的架构设计合理；5. 能分析网络延迟对协作体验的影响"
+    },
+    {
+      "id": "69-017",
+      "prompt": "你的前端应用需要实现复杂的拖拽交互：列表排序、跨列表拖拽和画布上的自由拖拽。请设计统一的拖拽系统架构，说明如何使用HTML5 Drag and Drop API或Pointer Events实现拖拽，如何处理拖拽过程中的性能优化，以及如何实现拖拽的无障碍支持。",
+      "sub_type": "drag_drop_system_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "统一架构分为拖拽源、放置目标和拖拽层；HTML5 DnD适合列表排序但自定义受限，Pointer Events更灵活；性能：预览用fixed脱离文档流避免重排、transform替代top/left实现GPU加速、requestAnimationFrame节流；无障碍：键盘替代操作和aria-live播报",
+      "scoring_rubric": "1. 拖拽系统架构的分层设计合理；2. HTML5 DnD和Pointer Events的选型分析正确；3. 性能优化策略描述正确；4. 无障碍支持方案描述正确；5. 能分析复杂拖拽交互的事件处理冲突"
+    },
+    {
+      "id": "69-018",
+      "prompt": "请设计一个前端的GraphQL客户端方案。应用使用GraphQL作为API层，需要实现查询缓存、乐观更新和实时订阅。请对比Apollo Client和urql的设计哲学，说明如何设计缓存的规范化策略，以及如何处理分页查询的缓存合并。",
+      "sub_type": "graphql_client_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Apollo Client功能全面支持规范化缓存，urql更轻量通过Exchange扩展；规范化缓存通过__typename和id拆分实体存储，更新一个实体自动更新所有引用；分页合并通过relay-style或offset-limit的merge策略；乐观更新通过optimisticResponse预设结果",
+      "scoring_rubric": "1. Apollo Client和urql的设计差异描述正确；2. 规范化缓存的实现原理描述正确；3. 分页缓存合并策略描述正确；4. 乐观更新的实现方式描述正确；5. 能分析GraphQL客户端的缓存失效策略"
+    },
+    {
+      "id": "69-019",
+      "prompt": "你的前端应用在低端安卓设备上首屏加载超过6秒。请设计一个综合的性能优化方案，从资源加载、渲染策略和运行时性能三个维度分析瓶颈并给出优化策略。如何通过Performance API和Lighthouse定位具体瓶颈？",
+      "sub_type": "frontend_performance_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "资源加载：代码分割按路由懒加载、WebP+srcset图片、关键CSS内联；渲染策略：SSR/SSG减少TTI、预渲染首屏、减少主线程阻塞；运行时：虚拟化长列表、减少重渲染、Web Worker处理计算；定位：Performance API记录耗时、Lighthouse给优化建议、Coverage分析未使用代码",
+      "scoring_rubric": "1. 资源加载优化策略描述正确；2. 渲染策略优化方案描述正确；3. 运行时性能优化描述正确；4. 性能分析工具的使用方法描述正确；5. 各优化项的预期收益估算合理"
+    },
+    {
+      "id": "69-020",
+      "prompt": "请设计一个前端的国际化动态加载方案。应用支持50+语言，但不应在首屏加载所有语言包。请设计语言包的按需加载策略、翻译缺失时的降级方案，以及如何处理复数规则、日期格式和RTL布局的动态切换。",
+      "sub_type": "dynamic_i18n_loading",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "语言包按需加载：默认内嵌基础语言，其他通过动态import加载并缓存到localStorage；缺失时回退到默认语言并上报；复数规则通过ICU MessageFormat处理；日期格式通过Intl.DateTimeFormat自动格式化；RTL通过dir属性和CSS逻辑属性动态切换",
+      "scoring_rubric": "1. 语言包按需加载和缓存策略描述正确；2. 翻译缺失的降级方案描述正确；3. 复数规则和日期格式的处理描述正确；4. RTL布局动态切换的实现描述正确；5. 能分析大规模i18n方案的翻译管理流程"
+    },
+    {
+      "id": "69-021",
+      "prompt": "你的团队需要构建一个基于插件体系的可视化大屏编辑器。用户可以通过拖拽组件搭建数据大屏，支持自定义组件开发。请设计编辑器的架构，说明组件的注册和渲染机制、画布的缩放和平移实现、以及如何设计组件间的数据联动。",
+      "sub_type": "visual_editor_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "编辑器架构分为画布层、组件层和属性面板层；组件注册通过manifest.json声明组件的属性和数据绑定接口，运行时动态加载组件模块；画布缩放通过CSS transform: scale实现，平移通过translate实现，使用矩阵变换保证缩放中心正确；数据联动通过数据源管理器统一管理各组件的数据请求和刷新，支持组件间事件通信（如点击图表筛选表格数据）；自定义组件通过SDK暴露标准接口供第三方开发",
+      "scoring_rubric": "1. 编辑器的分层架构设计合理；2. 组件注册和渲染机制描述正确；3. 画布缩放和平移的实现描述正确；4. 组件间数据联动方案描述正确；5. 自定义组件的扩展机制设计合理"
+    },
+    {
+      "id": "69-022",
+      "prompt": "请设计一个前端的微前端共享状态方案。多个子应用需要共享用户信息、主题配置和全局通知。请对比Redux跨应用共享、自定义Event Bus和BroadcastChannel三种方案的优劣，说明如何保证状态变更的实时性和子应用间的隔离性。",
+      "sub_type": "micro_frontend_shared_state",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Redux共享通过主应用注入store到子应用但增加耦合；Event Bus通过发布订阅模式实现松耦合但调试困难；BroadcastChannel支持跨标签页通信适合多窗口场景；实时性通过消息推送保证，隔离性通过只暴露必要的状态接口实现",
+      "scoring_rubric": "1. 三种共享状态方案的优劣对比正确；2. 状态变更的实时性保证方案描述正确；3. 子应用间的隔离性设计描述正确；4. 能分析各方案的适用场景和限制"
+    },
+    {
+      "id": "69-023",
+      "prompt": "你的前端应用需要实现复杂的撤销/重做功能。用户可以对画布上的图形进行移动、缩放、旋转和删除操作。请设计基于Command模式的操作栈，说明如何实现操作的合并（如连续移动合并为一次操作）和操作栈的内存优化。",
+      "sub_type": "undo_redo_command_pattern",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Command模式将每个操作封装为Command对象支持execute和undo；操作栈维护undo栈和redo栈，新操作清空redo栈；操作合并通过检测操作类型和时间间隔将连续同类型操作合并为一个Compound Command；内存优化通过只存储操作差异而非完整快照",
+      "scoring_rubric": "1. Command模式的操作栈设计正确；2. 操作合并的策略描述合理；3. 内存优化方案描述正确；4. 能分析复杂操作（如分组操作）的撤销实现"
+    },
+    {
+      "id": "69-024",
+      "prompt": "请设计一个前端的无障碍组件库。组件需要支持键盘导航、屏幕阅读器和高对比度模式。请说明如何设计Focus Trap管理模态对话框的焦点、如何实现Live Region的动态内容播报，以及如何通过自动化测试验证无障碍合规性。",
+      "sub_type": "accessible_component_library",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Focus Trap在模态框打开时将Tab键焦点限制在模态框内，关闭时恢复到触发元素；Live Region通过aria-live属性让屏幕阅读器自动播报动态变化的内容；自动化测试使用axe-core或jest-axe检测WCAG违规；高对比度模式通过CSS prefers-contrast媒体查询适配",
+      "scoring_rubric": "1. Focus Trap的实现机制描述正确；2. Live Region的播报策略描述正确；3. 自动化测试方案描述正确；4. 高对比度模式的适配方案描述合理"
+    },
+    {
+      "id": "69-025",
+      "prompt": "请设计一个基于Canvas的大规模数据可视化方案。需要在画布上渲染10万个散点图数据点，支持缩放、平移和框选交互。请说明如何通过离屏Canvas、四叉树索引和分层渲染优化性能，以及如何实现高DPI屏幕的清晰渲染。",
+      "sub_type": "canvas_massive_data_viz",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "离屏Canvas将静态内容渲染到离屏画布减少每帧重绘量；四叉树索引加速鼠标点击和框选的碰撞检测；分层渲染将背景、数据点和交互层分离到不同Canvas避免全量重绘；高DPI通过devicePixelRatio缩放Canvas分辨率；缩放通过矩阵变换实现平滑缩放和平移",
+      "scoring_rubric": "1. 离屏Canvas和分层渲染的优化原理描述正确；2. 四叉树索引的碰撞检测方案描述正确；3. 高DPI渲染方案描述正确；4. 缩放和平移的交互实现描述合理"
+    },
+    {
+      "id": "69-026",
+      "prompt": "请设计一个前端的表单设计器。用户可以通过拖拽组件（输入框、下拉框、日期选择器等）搭建表单，并支持字段联动和自定义校验规则。请设计设计器的数据模型、渲染引擎和校验引擎，说明如何实现表单Schema的导入导出。",
+      "sub_type": "form_designer_engine",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "数据模型使用JSON Schema描述表单结构包含字段类型、属性和校验规则；渲染引擎根据Schema动态生成React/Vue组件树；校验引擎通过依赖图追踪字段联动关系实现增量校验；Schema导入导出支持JSON格式与后端交互；拖拽通过HTML5 DnD或Pointer Events实现组件排序",
+      "scoring_rubric": "1. 表单Schema的数据模型设计合理；2. 动态渲染引擎的实现方案描述正确；3. 校验引擎的联动机制描述正确；4. Schema导入导出方案描述正确"
+    },
+    {
+      "id": "69-027",
+      "prompt": "你的前端应用需要实现渐进式的首屏加载策略。用户看到骨架屏后逐步加载真实内容。请设计从HTML流式渲染、关键CSS提取到组件级按需加载的完整方案，说明如何通过Resource Hints（preload、prefetch、preconnect）优化资源加载时序。",
+      "sub_type": "progressive_loading_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "HTML流式渲染通过SSR分块输出让浏览器逐步解析渲染；关键CSS提取通过Critical CSS工具内联首屏样式；组件按需加载通过React.lazy和Suspense实现代码分割；preload加载当前路由的关键资源，prefetch预加载下一个可能访问的路由，preconnect提前建立与API服务器的连接",
+      "scoring_rubric": "1. HTML流式渲染的实现方案描述正确；2. 关键CSS提取和内联策略描述正确；3. Resource Hints的使用方式和效果描述正确；4. 组件级按需加载的实现描述合理"
+    },
+    {
+      "id": "69-028",
+      "prompt": "请设计一个前端的多主题系统。应用需要支持浅色、深色和高对比度三种主题，且支持用户自定义主题色。请设计基于CSS变量和Design Token的主题架构，说明如何实现主题的无缝切换（避免闪烁）和主题的持久化存储。",
+      "sub_type": "multi_theme_system",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "CSS变量定义颜色、间距等Design Token在:root或主题类中声明；主题切换通过修改根元素的class或data属性触发CSS变量更新避免闪烁；持久化通过localStorage存储用户偏好并在HTML头部内联脚本同步读取避免FOUC；自定义主题通过颜色选择器修改CSS变量值并实时预览",
+      "scoring_rubric": "1. CSS变量和Design Token的主题架构描述正确；2. 主题无缝切换的实现方案描述正确；3. 持久化和避免FOUC的方案描述正确；4. 自定义主题的实现描述合理"
+    },
+    {
+      "id": "69-029",
+      "prompt": "请设计一个前端的WebSocket连接管理器。应用中有多个模块需要独立的WebSocket连接。请设计连接池管理、自动重连、心跳检测和消息路由机制，说明如何处理页面可见性变化对连接的影响。",
+      "sub_type": "websocket_connection_manager",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "连接池管理多个命名连接的创建和销毁，支持共享连接减少资源消耗；自动重连使用指数退避策略并在页面恢复可见时立即重连；心跳通过定时发送ping消息检测连接存活，超时则断开重连；消息路由通过topic订阅模式将消息分发到对应的处理器；页面不可见时降低心跳频率节省资源",
+      "scoring_rubric": "1. 连接池管理机制描述正确；2. 自动重连和心跳检测方案描述正确；3. 消息路由的实现描述正确；4. 页面可见性变化的处理策略描述合理"
+    },
+    {
+      "id": "69-030",
+      "prompt": "你的前端项目需要从React 17升级到React 19。请设计渐进式升级方案，说明如何处理已废弃的API（如findDOMNode、componentWillMount）、如何迁移Class组件到Hooks，以及如何在升级过程中保持生产环境的稳定性。",
+      "sub_type": "react_version_migration",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "升级分阶段：先修复所有Deprecation Warning，再迁移Class组件到Hooks，最后启用React 19新特性；废弃API替换：findDOMNode用ref替代，componentWillMount用useEffect替代；渐进迁移通过codemod工具自动转换简单场景，复杂场景手动重构；稳定性通过双版本运行（Module Federation）和灰度发布验证",
+      "scoring_rubric": "1. 升级阶段划分合理；2. 废弃API的替换方案描述正确；3. Class组件到Hooks的迁移策略描述正确；4. 生产环境稳定性保障措施描述合理"
+    },
+    {
+      "id": "69-031",
+      "prompt": "请设计一个前端的静态资源CDN缓存策略。应用的JS/CSS/图片等资源需要实现长期缓存和即时更新。请说明如何通过文件名哈希实现缓存失效、如何配置CDN的缓存规则，以及如何处理CDN缓存不一致和预热问题。",
+      "sub_type": "cdn_cache_strategy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "文件名哈希通过Webpack的contenthash生成唯一文件名，内容变化则文件名变化实现长期缓存；CDN缓存规则：HTML设置no-cache每次验证，JS/CSS/图片设置max-age一年；缓存不一致通过HTML引用新文件名自动获取新版本；CDN预热在发布后主动推送新文件到边缘节点",
+      "scoring_rubric": "1. 文件名哈希的缓存失效机制描述正确；2. CDN缓存规则的配置策略描述正确；3. 缓存不一致的处理方案描述正确；4. CDN预热方案描述合理"
+    },
+    {
+      "id": "69-032",
+      "prompt": "请设计一个基于WebGPU的高性能前端计算方案。需要利用GPU加速实现大规模数据的并行计算（如矩阵运算、图像处理）。请对比WebGPU和WebGL在计算场景的性能差异，设计计算着色器的内存管理策略，以及如何处理WebGPU不可用时的降级方案。",
+      "sub_type": "webgpu_compute_shader",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "WebGPU提供Compute Shader支持通用GPU计算比WebGL的片段着色器更灵活高效；内存管理通过Buffer的映射和解映射实现CPU和GPU数据传输，使用Storage Buffer存储大规模数据；降级方案在WebGPU不可用时回退到WebAssembly多线程或Web Workers并行计算；性能优化通过工作组大小调优和减少CPU-GPU数据传输次数",
+      "scoring_rubric": "1. WebGPU和WebGL在计算场景的差异描述正确；2. Compute Shader的内存管理策略描述正确；3. 降级方案设计合理；4. 性能优化策略描述正确"
+    },
+    {
+      "id": "69-033",
+      "prompt": "请设计一个无障碍的拖拽排序系统。用户可以通过鼠标拖拽或键盘操作对列表项进行排序。请设计键盘操作的交互模式（如Space拾取、方向键移动、Space放置），说明如何通过ARIA Live Region向屏幕阅读器用户播报拖拽状态。",
+      "sub_type": "accessible_drag_and_drop",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "键盘操作模式：Tab聚焦到可拖拽项、Space或Enter拾取、方向键移动位置、Space或Enter放置、Escape取消；ARIA属性：draggable项设置aria-grabbed和aria-dropeffect，使用aria-live播报当前位置变化；屏幕阅读器播报通过Live Region实时通知拾取、移动和放置状态；视觉反馈：拖拽时显示占位符和移动动画",
+      "scoring_rubric": "1. 键盘操作的交互模式设计合理；2. ARIA属性的使用描述正确；3. Live Region的播报策略描述正确；4. 视觉反馈和无障碍的协同设计合理"
+    },
+    {
+      "id": "69-034",
+      "prompt": "请设计一个微前端架构中的CSS隔离方案。多个子应用的样式不能相互影响。请对比Shadow DOM、CSS Modules、CSS-in-JS和命名空间前缀四种隔离方案的优劣，说明如何处理全局样式和主题的共享问题。",
+      "sub_type": "micro_frontend_css_isolation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Shadow DOM隔离最彻底但与部分UI库不兼容；CSS Modules通过哈希类名隔离但全局样式需额外处理；CSS-in-JS运行时隔离有性能开销；命名空间前缀最简单但依赖开发者遵守规范；全局样式共享通过CSS变量定义Design Token注入到各子应用；主题切换通过修改根元素的CSS变量实现；需处理第三方库样式的冲突问题",
+      "scoring_rubric": "1. 四种CSS隔离方案的优劣对比正确；2. 全局样式和主题的共享方案描述正确；3. 第三方库样式冲突的处理描述合理；4. 能分析各方案的适用场景"
+    },
+    {
+      "id": "69-035",
+      "prompt": "请设计一个前端的状态机驱动表单方案。表单的各个字段之间存在复杂的联动关系和条件验证。请使用有限状态机管理表单的整体状态（编辑、验证中、提交中、成功、失败），说明如何实现字段间的依赖验证和条件显示。",
+      "sub_type": "state_machine_form_management",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "状态机定义表单状态和转换条件：编辑到验证中（提交触发）到提交中（验证通过）到成功或失败；字段依赖通过有向图描述字段间的验证依赖关系只触发受影响字段的验证；条件显示通过表达式引擎根据其他字段值动态计算字段可见性；状态转换通过事件驱动实现解耦；XState库可用于实现状态机逻辑",
+      "scoring_rubric": "1. 状态机的状态和转换设计合理；2. 字段依赖验证的实现方案描述正确；3. 条件显示的表达式引擎描述正确；4. 事件驱动的状态转换设计合理"
+    },
+    {
+      "id": "69-036",
+      "prompt": "请设计一个支持SSR的深色模式方案。应用需要在服务端渲染时就确定主题，避免客户端水合时的主题闪烁。请设计主题的检测、持久化和应用机制，以及如何处理图片和视频在深色模式下的适配。",
+      "sub_type": "ssr_dark_mode_implementation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "主题检测通过读取Cookie或系统偏好在服务端确定初始主题；持久化通过localStorage存储用户选择并在HTML头部内联脚本同步读取避免FOUC；SSR应用通过在html元素上设置class或data属性驱动CSS变量切换；图片适配通过picture元素的media属性或CSS filter调整；避免闪烁的关键是在HTML解析阶段就应用正确的CSS变量",
+      "scoring_rubric": "1. SSR主题检测和应用机制描述正确；2. 避免闪烁的技术方案描述正确；3. 图片和视频的适配方案描述正确；4. 主题持久化方案描述合理"
+    },
+    {
+      "id": "69-037",
+      "prompt": "请设计一个基于浏览器的实时协作白板系统。多个用户可以同时在同一画布上绘图，支持画笔、形状和文字工具。请对比Canvas和SVG的渲染性能，设计绘图数据的CRDT同步方案，以及如何实现离线绘图和冲突合并。",
+      "sub_type": "collaborative_whiteboard_system",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Canvas适合大量自由绘图路径性能好但交互需手动计算碰撞；SVG适合形状和文字交互方便但大量节点性能差；混合方案：绘图用Canvas、形状和文字用SVG；CRDT同步通过Yjs库实现绘图操作的无冲突合并；离线绘图在本地执行操作并记录到操作队列，上线后通过CRDT自动合并；实时性通过WebSocket或WebRTC传输操作增量",
+      "scoring_rubric": "1. Canvas和SVG的性能对比和选型分析正确；2. CRDT同步方案的实现描述正确；3. 离线绘图和冲突合并机制描述正确；4. 实时通信方案描述合理"
+    },
+    {
+      "id": "69-038",
+      "prompt": "你的前端项目需要从JavaScript渐进式迁移到TypeScript。项目包含200+个JS文件，不可能一次性迁移。请设计渐进式迁移方案，说明如何配置TypeScript的严格度、如何处理第三方库的类型定义、以及如何设计类型覆盖的度量指标和迁移优先级。",
+      "sub_type": "typescript_gradual_migration",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "渐进迁移通过tsconfig的allowJs和strict逐步开启；先迁移工具函数和纯逻辑模块再迁移组件；第三方库类型通过安装@types包或编写.d.ts声明文件；类型覆盖度量通过脚本统计.ts/.tsx文件占比和any类型使用次数；迁移优先级按文件被引用次数排序高频文件优先迁移；构建配置需同时支持JS和TS文件的编译",
+      "scoring_rubric": "1. 渐进式迁移的阶段划分合理；2. TypeScript严格度配置策略描述正确；3. 第三方库类型处理方案描述正确；4. 类型覆盖度量和迁移优先级设计合理"
+    },
+    {
+      "id": "69-039",
+      "prompt": "请设计一个基于浏览器的P2P文件传输系统。用户可以通过浏览器直接传输大文件给其他用户，不经过服务器中转。请设计WebRTC Data Channel的文件传输方案、大文件的分片和校验机制，以及如何处理NAT穿透失败时的回退策略。",
+      "sub_type": "browser_p2p_file_transfer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "WebRTC Data Channel通过信令服务器交换SDP建立P2P连接；文件分片按固定大小（如64KB）切割并附带序号和校验和；传输通过Data Channel的可靠模式（ordered: true）保证数据完整性；NAT穿透通过STUN服务器获取公网地址，穿透失败时通过TURN服务器中转作为降级方案；进度追踪通过已传输分片数和总分片数计算；断点续传通过记录已确认的分片序号实现",
+      "scoring_rubric": "1. WebRTC Data Channel的文件传输方案描述正确；2. 大文件分片和校验机制描述正确；3. NAT穿透和TURN回退方案描述正确；4. 断点续传和进度追踪实现描述合理"
+    },
+    {
+      "id": "69-040",
+      "prompt": "请设计一个前端的运行时错误恢复方案。当JavaScript运行时错误发生时，应用不应完全崩溃而应尽可能恢复。请设计错误边界（Error Boundary）的层级策略、关键状态的备份和恢复机制，以及如何实现用户操作的回放帮助重现问题。",
+      "sub_type": "runtime_error_recovery",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "错误边界分为页面级、区域级和组件级三层隔离错误传播范围；关键状态备份通过定时快照将Redux/Zustand Store序列化到localStorage；错误恢复通过Error Boundary的备用UI和重试按钮让用户手动恢复或自动重载组件；用户操作回放通过记录用户点击、输入等事件序列存储到IndexedDB，出错时可回放还原问题现场；错误上报自动将错误堆栈和操作回放数据发送到监控平台",
+      "scoring_rubric": "1. 错误边界的层级策略设计合理；2. 关键状态备份和恢复机制描述正确；3. 用户操作回放方案描述正确；4. 错误上报和监控集成描述合理"
+    },
+    {
+      "id": "69-041",
+      "prompt": "请设计一个大规模Monorepo的依赖分析和变更影响评估系统。当某个包的代码发生变化时，需要自动识别所有受影响的包和应用。请设计依赖图的构建和更新方案、变更影响的自动分析算法，以及如何通过依赖分析优化CI/CD的构建范围。",
+      "sub_type": "dependency_impact_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "依赖图通过解析package.json和import语句构建有向无环图（DAG）；变更影响分析通过从变更包出发在DAG上正向遍历找到所有直接和间接依赖；增量更新通过文件哈希检测只重建变化包的依赖关系；CI优化通过只构建和测试受影响的包而非全量构建；依赖可视化通过交互式图表展示包间的依赖关系和影响范围",
+      "scoring_rubric": "1. 依赖图的构建方案描述正确；2. 变更影响分析算法描述正确；3. CI/CD优化方案描述正确；4. 依赖可视化设计合理"
+    }
+  ]
+}

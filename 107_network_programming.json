@@ -1,0 +1,394 @@
+{
+  "capability": "network_programming",
+  "label": "网络编程能力",
+  "total": 43,
+  "cases": [
+    {
+      "id": "107-001",
+      "prompt": "请解释QUIC协议的设计。QUIC基于UDP实现了哪些TCP的功能？QUIC的0-RTT连接建立是如何工作的？QUIC的多路复用如何避免TCP的队头阻塞？QUIC的连接迁移（Connection Migration）是如何实现的？",
+      "sub_type": "quic_protocol",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "QUIC在UDP上实现可靠传输、流量控制和拥塞控制；0-RTT通过缓存的密钥材料在首次握手时就发送数据；每个stream独立不互相阻塞；连接迁移通过Connection ID而非IP+端口标识连接",
+      "scoring_rubric": "1. QUIC相比TCP的功能改进描述正确；2. 0-RTT的实现原理和安全权衡描述正确；3. 多路复用避免队头阻塞的机制描述正确；4. 连接迁移的实现原理描述正确。"
+    },
+    {
+      "id": "107-002",
+      "prompt": "请用Python实现一个简单的HTTP/1.1代理服务器。要求：1）支持GET和POST请求转发；2）支持HTTPS的CONNECT隧道方法；3）处理Connection头部（hop-by-hop headers）；4）支持基本的缓存机制（Cache-Control）。",
+      "sub_type": "http_proxy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "解析客户端请求，转发到目标服务器并返回响应；CONNECT方法建立TCP隧道直接转发字节流；移除hop-by-hop头部（Connection、Transfer-Encoding等）；基于Cache-Control和ETag实现缓存",
+      "scoring_rubric": "1. HTTP请求解析和转发逻辑正确；2. CONNECT隧道方法实现正确；3. hop-by-hop头部处理正确；4. 缓存机制的基本逻辑正确。"
+    },
+    {
+      "id": "107-003",
+      "prompt": "请解释网络中的队头阻塞（Head-of-Line Blocking）问题。TCP层、HTTP/1.1层和HTTP/2层分别存在什么队头阻塞？HTTP/3（QUIC）如何彻底解决这个问题？请结合具体场景分析。",
+      "sub_type": "head_of_line_blocking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "HTTP/1.1同一连接只能顺序请求；HTTP/2解决了HTTP层队头阻塞但TCP层丢包仍阻塞所有流；HTTP/3基于QUIC每个stream独立丢包互不影响；需理解TCP字节流语义与多路复用的矛盾",
+      "scoring_rubric": "1. 三个层次的队头阻塞问题描述正确；2. HTTP/2解决了什么、遗留了什么描述正确；3. HTTP/3通过QUIC彻底解决的机制描述正确；4. 能结合丢包场景具体说明影响。"
+    },
+    {
+      "id": "107-004",
+      "prompt": "请用Go实现一个DNS解析器，支持：1）递归查询和迭代查询；2）A、AAAA、CNAME、MX、TXT记录类型；3）DNS缓存（带TTL）；4）并发查询多个DNS服务器。分析DNS解析的性能瓶颈和优化策略。",
+      "sub_type": "dns_resolver",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "构造DNS查询报文（头部+问题段），UDP发送到DNS服务器，解析响应报文；迭代查询从根DNS逐级查询；缓存按TTL过期；并发查询多个服务器取最快响应",
+      "scoring_rubric": "1. DNS报文格式的编码解码正确；2. 迭代查询逻辑正确（根→顶级→权威）；3. 缓存和TTL机制实现正确；4. 并发查询和超时处理正确。"
+    },
+    {
+      "id": "107-005",
+      "prompt": "请解释TLS 1.3的握手过程。TLS 1.3与TLS 1.2相比有哪些改进？1-RTT和0-RTT握手分别如何工作？0-RTT存在什么安全风险（重放攻击）？如何缓解？",
+      "sub_type": "tls_handshake",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "TLS 1.3简化握手为1-RTT（密钥共享在ClientHello中），0-RTT通过PSK在握手时就发送应用数据；0-RTT数据可被重放，需服务端实现幂等性或使用一次性token",
+      "scoring_rubric": "1. TLS 1.3握手流程描述正确；2. 与TLS 1.2的改进对比正确；3. 0-RTT的工作原理和安全风险描述正确；4. 重放攻击的缓解方案描述正确。"
+    },
+    {
+      "id": "107-006",
+      "prompt": "请解释eBPF在网络编程中的应用。eBPF程序是如何附加到网络钩子（XDP、TC、socket）上的？eBPF如何实现高性能的网络包过滤和流量监控？请对比eBPF与iptables在性能和灵活性上的差异。",
+      "sub_type": "ebpf_networking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "eBPF在内核态运行沙箱程序，XDP在网卡驱动层处理包（最高性能），TC在流量控制层，socket在套接字层；eBPF比iptables更灵活且JIT编译后性能更高",
+      "scoring_rubric": "1. eBPF的网络钩子类型和执行时机描述正确；2. eBPF实现包过滤的原理描述正确；3. 与iptables的性能和功能对比分析正确。"
+    },
+    {
+      "id": "107-007",
+      "prompt": "请用Go实现一个连接池（Connection Pool），要求：1）支持最大连接数和空闲连接数限制；2）支持连接的健康检查（定期ping）；3）获取连接时支持超时和上下文取消；4）连接使用完毕自动归还。",
+      "sub_type": "connection_pool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用channel作为连接容器控制最大并发数，后台goroutine定期检查空闲连接健康状态；获取时select监听context.Done和连接channel；归还时检查连接是否有效",
+      "scoring_rubric": "1. 连接池的获取和归还逻辑正确；2. 健康检查机制能正确检测和移除失效连接；3. 超时和上下文取消实现正确；4. 不会出现连接泄漏。"
+    },
+    {
+      "id": "107-008",
+      "prompt": "请用Python实现一个简单的RPC框架，要求：1）支持函数注册和远程调用；2）使用JSON序列化请求和响应；3）支持同步和异步调用；4）处理网络异常和超时。",
+      "sub_type": "rpc_framework",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "服务端维护函数注册表，接收请求后反序列化参数并调用本地函数返回结果；客户端通过代理对象发起远程调用；使用socket传输，JSON编解码",
+      "scoring_rubric": "1. RPC的注册和调用流程正确；2. JSON序列化和反序列化逻辑正确；3. 同步和异步调用模式均正确实现；4. 网络异常和超时处理完善。"
+    },
+    {
+      "id": "107-009",
+      "prompt": "请解释并实现TCP的Nagle算法和延迟ACK的交互问题。为什么Nagle算法和延迟ACK组合会导致短消息延迟？TCP_NODELAY选项是如何解决这个问题的？请用代码演示开启和关闭Nagle算法的延迟差异。",
+      "sub_type": "nagle_algorithm",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Nagle算法在有未确认数据时缓冲小包，延迟ACK等待最多200ms再确认；两者组合导致发送方等待ACK才能发送下一个包；TCP_NODELAY禁用Nagle算法",
+      "scoring_rubric": "1. Nagle算法的工作原理描述正确；2. 与延迟ACK的交互问题描述正确；3. TCP_NODELAY的解决方案描述正确；4. 代码演示能体现延迟差异。"
+    },
+    {
+      "id": "107-010",
+      "prompt": "请用Rust实现一个异步TCP服务器，使用tokio框架。要求：1）支持并发处理多个客户端连接；2）实现一个简单的行协议（按行分隔消息）；3）支持连接级别的超时控制；4）优雅关闭时等待现有连接处理完毕。",
+      "sub_type": "async_tcp_server",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用tokio::net::TcpListener接受连接，tokio::spawn并发处理；行协议用BufReader按行读取；tokio::time::timeout实现超时；shutdown信号触发后等待所有任务完成",
+      "scoring_rubric": "1. 异步TCP服务器的并发处理正确；2. 行协议的编解码逻辑正确；3. 超时控制实现正确；4. 优雅关闭机制能等待现有连接完成。"
+    },
+    {
+      "id": "107-011",
+      "prompt": "请解释并实现HTTP/2的帧格式解析。HTTP/2的帧头由哪几个字段组成（长度、类型、标志、流标识符）？DATA帧、HEADERS帧和SETTINGS帧分别有什么作用？请用代码解析一个HTTP/2帧头。",
+      "sub_type": "http2_frames",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "帧头9字节：3字节长度+1字节类型+1字节标志+4字节流标识符；DATA帧传输数据，HEADERS帧传输头部，SETTINGS帧协商参数；解析时注意字节序",
+      "scoring_rubric": "1. HTTP/2帧头格式描述正确；2. 三种帧的作用描述正确；3. 帧头解析代码的字节处理正确；4. 能说明帧与流的关系。"
+    },
+    {
+      "id": "107-012",
+      "prompt": "请用Go实现一个基于一致性哈希的负载均衡器。要求：1）支持节点的动态添加和移除；2）使用虚拟节点提高均匀性；3）支持权重配置；4）分析当节点数量变化时的键重分配比例。",
+      "sub_type": "consistent_hash_lb",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用哈希环组织节点，每个物理节点对应多个虚拟节点；请求通过顺时针找到第一个节点；节点变化时只有部分键需要重分配（约1/n）",
+      "scoring_rubric": "1. 一致性哈希环的构建和查找逻辑正确；2. 虚拟节点的实现能提高均匀性；3. 权重配置通过虚拟节点数量实现；4. 键重分配比例分析正确。"
+    },
+    {
+      "id": "107-013",
+      "prompt": "请用Python实现一个简单的反向代理服务器。要求：1）支持将请求转发到后端服务器池；2）实现健康检查（定期探测后端存活）；3）支持基于路径的路由分发；4）添加X-Forwarded-For头。",
+      "sub_type": "reverse_proxy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "解析客户端请求URL，根据路径规则选择后端服务器，转发请求并返回响应；后台线程定期发送健康检查请求；在请求头中添加客户端真实IP",
+      "scoring_rubric": "1. 请求转发和响应返回逻辑正确；2. 健康检查机制能正确检测后端状态；3. 路径路由分发规则正确；4. X-Forwarded-For头正确添加。"
+    },
+    {
+      "id": "107-014",
+      "prompt": "请用C++实现一个IO多路复用的Reactor模式框架。要求：1）支持epoll/kqueue的事件驱动；2）支持读、写和错误事件的注册和回调；3）支持定时器事件；4）实现一个简单的echo服务器作为示例。",
+      "sub_type": "reactor_framework",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "封装epoll_wait事件循环，EventLoop类管理事件分发，Channel类绑定fd和回调；定时器用最小堆或timerfd实现；echo服务器注册读事件回调后回写数据",
+      "scoring_rubric": "1. Reactor模式的事件循环实现正确；2. 事件注册和回调机制正确；3. 定时器实现逻辑正确；4. echo服务器示例能正常工作。"
+    },
+    {
+      "id": "107-015",
+      "prompt": "请解释并实现一个基于WebSocket的实时聊天系统。要求：1）支持多房间管理；2）支持用户加入和离开房间的广播通知；3）支持消息的持久化存储；4）处理WebSocket的断线重连和消息补偿。",
+      "sub_type": "websocket_chat",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "服务端维护房间到连接的映射，用户加入/离开时广播通知；消息存储到数据库并携带序列号；客户端重连后通过序列号获取离线消息补偿",
+      "scoring_rubric": "1. 多房间管理的逻辑正确；2. 广播通知机制实现正确；3. 消息持久化和序列号设计合理；4. 断线重连和消息补偿逻辑正确。"
+    },
+    {
+      "id": "107-016",
+      "prompt": "请用Go实现一个支持HTTP/2服务器推送（Server Push）的简单Web服务器。要求：1）在响应HTML页面时主动推送关联的CSS和JS资源；2）客户端可以拒绝推送（RST_STREAM）；3）分析服务器推送与预加载（preload）的优劣。",
+      "sub_type": "http2_server_push",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用http.Pusher接口在处理HTML请求时调用Push方法推送CSS/JS资源；客户端发送RST_STREAM可取消推送；预加载由客户端决策更灵活，服务器推送可减少RTT但可能浪费带宽",
+      "scoring_rubric": "1. HTTP/2 Server Push的Pusher接口使用正确；2. 推送资源的路径和类型设置正确；3. 客户端拒绝推送的处理描述正确；4. 与preload的对比分析合理。"
+    },
+    {
+      "id": "107-017",
+      "prompt": "请解释并实现一个简单的SOCKS5代理客户端。要求：1）完成SOCKS5握手（无认证和用户名/密码认证）；2）支持CONNECT命令建立TCP隧道；3）支持域名解析方式（ATYP=0x03）；4）分析SOCKS5与HTTP代理的区别。",
+      "sub_type": "socks5_proxy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "握手阶段协商认证方式，认证阶段验证用户名密码，请求阶段发送CONNECT命令指定目标地址和端口；SOCKS5工作在会话层支持任意协议，HTTP代理只处理HTTP",
+      "scoring_rubric": "1. SOCKS5握手和认证流程正确；2. CONNECT命令的报文格式正确；3. 域名地址类型（ATYP=0x03）的处理正确；4. 与HTTP代理的区别分析正确。"
+    },
+    {
+      "id": "107-018",
+      "prompt": "请用Rust实现一个异步HTTP客户端，支持：1）连接池复用；2）自动重试（指数退避）；3）超时控制（连接超时和读写超时）；4）TLS证书验证。分析连接池对性能的影响。",
+      "sub_type": "async_http_client",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用hyper或reqwest框架，连接池通过Arc<Mutex<Pool>>或专用连接池库管理；重试在5xx或网络错误时触发并指数退避；超时通过tokio::time::timeout包装；连接池减少TCP握手开销显著提升性能",
+      "scoring_rubric": "1. 连接池的管理逻辑正确；2. 指数退避重试的实现正确；3. 多层超时控制实现正确；4. 连接池性能影响分析合理。"
+    },
+    {
+      "id": "107-019",
+      "prompt": "请解释并实现一个简单的流量整形（Traffic Shaping）器。使用令牌桶算法限制发送速率。要求：1）支持配置桶容量和令牌生成速率；2）支持突发流量处理；3）支持多优先级流量的差异化处理；4）分析漏桶算法与令牌桶的区别。",
+      "sub_type": "traffic_shaping",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "令牌桶按固定速率生成令牌，请求消耗令牌后发送，桶满时丢弃多余令牌允许突发；漏桶以固定速率输出不允许突发；多优先级可通过加权令牌分配实现",
+      "scoring_rubric": "1. 令牌桶算法的实现正确；2. 突发流量处理逻辑正确；3. 多优先级差异化处理设计合理；4. 漏桶与令牌桶的区别分析正确。"
+    },
+    {
+      "id": "107-020",
+      "prompt": "请用Go实现一个DNS负载均衡器。要求：1）为同一个域名返回多个A记录；2）支持加权轮询策略；3）定期检查后端服务器健康状态；4）不健康的服务器自动从应答中移除。分析DNS负载均衡的局限性。",
+      "sub_type": "dns_load_balancer",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "构造DNS响应报文包含多个A记录，按权重分配记录顺序；后台goroutine定期TCP探测后端存活；移除不健康的服务器IP；局限性：DNS缓存导致切换慢、无法感知服务器负载",
+      "scoring_rubric": "1. DNS响应报文中多个A记录的构造正确；2. 加权轮询策略实现正确；3. 健康检查和自动移除逻辑正确；4. DNS负载均衡的局限性分析正确。"
+    },
+    {
+      "id": "107-021",
+      "prompt": "请解释并实现TCP的SACK（选择性确认）机制。SACK如何解决传统TCP累积确认的效率问题？SACK选项在TCP头部中是如何编码的？当收到乱序报文时发送方如何利用SACK信息优化重传？",
+      "sub_type": "tcp_sack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "累积确认只能表示连续收到的最大序号，SACK通过报告已收到的非连续块让发送方只重传缺失部分；SACK选项包含多个左-右边界对；发送方维护已确认的块集合推断缺失段",
+      "scoring_rubric": "1. SACK解决的效率问题描述正确；2. SACK选项的编码格式描述正确；3. 发送方利用SACK信息优化重传的逻辑正确；4. 与传统累积确认的对比分析正确。"
+    },
+    {
+      "id": "107-022",
+      "prompt": "请用Python实现一个简单的网络抓包工具（使用原始套接字）。要求：1）捕获并解析以太网帧头、IP头和TCP/UDP头；2）提取源/目的IP和端口；3）统计每个连接的流量；4）分析原始套接字的权限要求。",
+      "sub_type": "packet_capture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用socket.AF_PACKET创建原始套接字（需root权限），按字节偏移解析各层头部字段；以太网头14字节，IP头20字节起，TCP头20字节起；用(src_ip,src_port,dst_ip,dst_port)作为连接key统计流量",
+      "scoring_rubric": "1. 各层协议头部的字节偏移解析正确；2. 源/目的地址和端口的提取正确；3. 连接级流量统计逻辑正确；4. 权限要求和平台差异描述正确。"
+    },
+    {
+      "id": "107-023",
+      "prompt": "请解释并实现一个基于WebRTC的简单信令服务器。要求：1）支持房间管理（创建/加入/离开）；2）转发SDP Offer/Answer和ICE Candidate；3）支持WebSocket作为信令通道；4分析信令服务器为什么不参与媒体数据传输。",
+      "sub_type": "webrtc_signaling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "信令服务器通过WebSocket维护客户端连接和房间映射，转发SDP和ICE候选给对端；信令只负责协调连接建立，媒体流通过P2P的ICE/DTLS/SRTP直接传输以减少延迟和服务器负载",
+      "scoring_rubric": "1. 房间管理逻辑正确；2. SDP和ICE Candidate的转发逻辑正确；3. WebSocket信令通道的实现正确；4. 信令与媒体分离的原因分析正确。"
+    },
+    {
+      "id": "107-024",
+      "prompt": "请用C++实现一个异步DNS解析器，使用非阻塞UDP与DNS服务器通信。要求：1）支持并发发送多个DNS查询；2）实现超时重试（最多重试3次）；3）支持CNAME递归解析；4）分析同步DNS解析（getaddrinfo）在高并发下的瓶颈。",
+      "sub_type": "async_dns_resolver",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用非阻塞UDP socket发送DNS查询报文，epoll/select监听响应；超时通过定时器触发重试；CNAME响应需递归查询真实记录；getaddrinfo是阻塞调用在高并发下占用线程",
+      "scoring_rubric": "1. DNS查询报文的构造和发送正确；2. 超时重试逻辑正确（最多3次）；3. CNAME递归解析逻辑正确；4. 同步DNS的瓶颈分析正确。"
+    },
+    {
+      "id": "107-025",
+      "prompt": "请解释并实现一个简单的网络拥塞模拟器。使用NS-3或纯Python模拟TCP Reno的拥塞控制行为。要求：1）模拟网络拓扑和链路带宽；2）观察拥塞窗口随时间的变化曲线；3）对比不同丢包率下的吞吐量；4）解释慢启动到拥塞避免的转换点。",
+      "sub_type": "congestion_simulation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模拟TCP Reno的慢启动（指数增长）到拥塞避免（线性增长）转换，丢包后快重传快恢复；丢包率高时吞吐量下降；转换点在cwnd达到ssthresh时",
+      "scoring_rubric": "1. TCP Reno拥塞窗口变化规律模拟正确；2. 慢启动和拥塞避免的转换逻辑正确；3. 不同丢包率下的吞吐量对比合理；4. 快重传快恢复的行为描述正确。"
+    },
+    {
+      "id": "107-026",
+      "prompt": "请用Go实现一个DNS-over-HTTPS（DoH）解析器，要求：1）使用HTTP/2向DoH服务器发送DNS查询；2）支持GET和POST两种请求方式；3）支持DNSSEC验证响应签名；4）分析DoH相比传统DNS在隐私保护方面的优势。",
+      "sub_type": "doh_resolver",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "构造DNS查询报文后Base64编码作为URL参数（GET）或放在请求体（POST），通过HTTPS发送到DoH服务器；DNSSEC通过RRSIG和DNSKEY记录验证响应完整性；DoH加密DNS查询防止中间人窃听",
+      "scoring_rubric": "1. DoH的GET和POST请求格式正确；2. DNS响应的解析逻辑正确；3. DNSSEC验证流程描述正确；4. DoH隐私优势分析准确。"
+    },
+    {
+      "id": "107-027",
+      "prompt": "请解释TCP的流量控制机制。滑动窗口是如何工作的？接收方通告窗口（rwnd）和拥塞窗口（cwnd）如何共同决定发送速率？什么是糊涂窗口综合征（Silly Window Syndrome），Nagle算法和Clark方案分别如何解决？",
+      "sub_type": "tcp_flow_control",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "滑动窗口限制已发送但未确认的数据量；实际发送窗口=min(rwnd, cwnd)；SWS是接收方每次只通告小窗口导致发送方发送小包；Nagle在发送方缓冲小包，Clark在接收方延迟通告小窗口",
+      "scoring_rubric": "1. 滑动窗口的工作机制描述正确；2. rwnd和cwnd的协作关系描述正确；3. 糊涂窗口综合征的产生原因和两种解决方案描述正确；4. 流量控制与拥塞控制的区别分析正确。"
+    },
+    {
+      "id": "107-028",
+      "prompt": "请用Python实现一个支持SOCKS5认证的代理服务器，要求：1）支持无认证和用户名/密码两种认证方式；2）支持CONNECT和UDP ASSOCIATE命令；3）处理域名地址类型（ATYP=0x03）；4）分析SOCKS5代理在内网穿透中的应用场景。",
+      "sub_type": "socks5_auth_proxy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "握手阶段协商认证方式，认证阶段验证用户名密码，CONNECT命令建立TCP隧道，UDP ASSOCIATE建立UDP中继；域名类型先由代理服务器解析再连接目标；SOCKS5常用于内网穿透和科学上网",
+      "scoring_rubric": "1. SOCKS5握手和认证流程实现正确；2. CONNECT和UDP ASSOCIATE命令处理正确；3. 域名地址类型的解析和转发正确；4. 内网穿透场景分析合理。"
+    },
+    {
+      "id": "107-029",
+      "prompt": "请用Rust实现一个WebSocket服务端，支持：1）完成WebSocket握手（解析Upgrade请求）；2）处理文本帧、二进制帧和关闭帧；3）实现ping/pong心跳机制（每30秒发送一次ping）；4）支持消息分片的组装。",
+      "sub_type": "websocket_server_impl",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "握手阶段解析HTTP Upgrade请求并计算Sec-WebSocket-Accept响应头；帧格式解析包括FIN/opcode/mask/payload长度；心跳通过定时器发送ping帧并在收到pong时重置超时；分片通过FIN=0标记开始直到FIN=1",
+      "scoring_rubric": "1. WebSocket握手的请求解析和响应构造正确；2. 帧格式的编解码逻辑正确；3. ping/pong心跳机制的定时和超时处理正确；4. 分片消息的组装逻辑正确。"
+    },
+    {
+      "id": "107-030",
+      "prompt": "请用C++实现一个IP分片和重组模块。要求：1）解析IP头部的分片相关字段（MF标志、Fragment Offset）；2）支持将超大IP数据包分片为MTU大小的片段；3）实现接收端的分片重组（处理乱序和重叠分片）；4）处理分片超时未收齐的情况。",
+      "sub_type": "ip_fragmentation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "分片时根据MTU计算每片数据大小，设置MF标志和偏移量；重组时用偏移量排序分片，MF=0标识最后一片；超时通过定时器清理未完成的重组缓冲区；需处理分片重叠和乱序到达",
+      "scoring_rubric": "1. IP头部的分片字段解析正确；2. 分片逻辑（MTU计算、偏移量设置）正确；3. 重组逻辑（排序、完整性检查）正确；4. 超时清理机制实现正确。"
+    },
+    {
+      "id": "107-031",
+      "prompt": "请解释并实现一个网络协议的TLV（Type-Length-Value）编解码器。要求：1）支持嵌套TLV结构；2）支持变长编码（如BER长度编码）；3）处理不完整消息的粘包拆包问题；4）分析TLV在自定义协议设计中的优势。",
+      "sub_type": "tlv_codec",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "TLV格式：Type标识字段类型，Length标识Value长度，Value为实际数据；嵌套TLV的Value本身是TLV序列；变长编码用最高位标记后续字节数；粘包通过Length字段确定消息边界",
+      "scoring_rubric": "1. TLV的编码和解码逻辑正确；2. 嵌套结构的递归解析正确；3. 变长长度编码的处理正确；4. 粘包拆包的缓冲区管理逻辑正确。"
+    },
+    {
+      "id": "107-032",
+      "prompt": "请用Go实现一个基于ICMP的网络路径探测工具（类似traceroute），要求：1）发送递增TTL的UDP或ICMP包探测每一跳；2）解析ICMP超时和端口不可达响应提取路由器IP；3）支持并行探测多个目标；4）分析traceroute在NAT环境下的局限性。",
+      "sub_type": "traceroute_implementation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "从TTL=1开始递增发送探测包，每跳路由器因TTL过期返回ICMP Time Exceeded，最终目标返回ICMP Port Unreachable或Echo Reply；并行探测通过多goroutine实现；NAT可能隐藏内部拓扑结构",
+      "scoring_rubric": "1. TTL递增和ICMP响应解析逻辑正确；2. 路由器IP提取正确；3. 并行探测的并发安全处理正确；4. NAT环境下的局限性分析正确。"
+    },
+    {
+      "id": "107-033",
+      "prompt": "请解释并实现一个连接复用的HTTP/1.1客户端，支持：1）HTTP Keep-Alive连接池管理；2）连接的健康检查（定期检测连接是否可用）；3）Pipeline模式的请求发送和响应匹配；4）分析HTTP/1.1 Pipeline与HTTP/2多路复用的性能差异。",
+      "sub_type": "http11_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "连接池维护空闲连接并设置最大空闲时间和数量；健康检查通过发送空请求或检测socket状态实现；Pipeline按序发送请求但响应必须按序返回（队头阻塞）；HTTP/2多路复用允许乱序响应效率更高",
+      "scoring_rubric": "1. 连接池的创建、复用和回收逻辑正确；2. 健康检查机制能正确检测失效连接；3. Pipeline的请求排队和响应匹配逻辑正确；4. 与HTTP/2多路复用的性能差异分析正确。"
+    },
+    {
+      "id": "107-034",
+      "prompt": "请用Go实现一个基于QUIC协议的简易可靠传输层。要求：1）在UDP上实现有序可靠传输；2）支持多路复用的逻辑流；3）实现简单的拥塞控制（类似NewReno）；4）分析QUIC流与TCP连接在队头阻塞上的差异。",
+      "sub_type": "quic_reliable_transport",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用序列号和ACK实现可靠传输，每个逻辑流独立维护序号和接收窗口；拥塞控制通过慢启动和拥塞避免调整发送窗口；单个流丢包只阻塞该流不影响其他流",
+      "scoring_rubric": "1. 可靠传输的序列号和ACK机制正确；2. 多路复用的独立流管理正确；3. 拥塞控制的状态转换逻辑正确；4. 与TCP队头阻塞的对比分析正确。"
+    },
+    {
+      "id": "107-035",
+      "prompt": "请用Python实现一个HTTP/2帧解析器和HPACK头部压缩解码器。要求：1）解析HTTP/2帧头（9字节）并分发到对应帧类型处理器；2）实现HPACK静态表查找和霍夫曼解码；3）处理动态表的索引更新；4）分析HPACK相比HTTP/1.1头部传输的带宽节省。",
+      "sub_type": "hpack_decoder",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "帧头9字节解析出长度、类型、标志和流ID；HPACK静态表包含61个预定义头部字段；霍夫曼解码按位匹配编码表；动态表按需添加新头部字段并维护最大容量",
+      "scoring_rubric": "1. 帧头解析的字节处理正确；2. HPACK静态表查找逻辑正确；3. 霍夫曼解码的位操作正确；4. 带宽节省的分析基于实际压缩比。"
+    },
+    {
+      "id": "107-036",
+      "prompt": "请用C++实现一个异步DNS缓存，支持：1）缓存DNS查询结果并按TTL过期；2）支持并发查询的去重（相同查询只发一次请求）；3）支持缓存的主动刷新（预取）；4）分析DNS缓存对Web应用首屏加载时间的影响。",
+      "sub_type": "dns_cache_async",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用ConcurrentHashMap缓存查询结果，TTL通过定时器或惰性检查过期；并发去重通过Future/Promise实现（相同查询共享一个Future）；预取在TTL过期前异步刷新；DNS缓存可减少数十到数百毫秒的解析延迟",
+      "scoring_rubric": "1. TTL过期和缓存清理逻辑正确；2. 并发查询去重的Future共享机制正确；3. 主动预取的刷新时机正确；4. DNS缓存对加载时间的影响分析合理。"
+    },
+    {
+      "id": "107-037",
+      "prompt": "请用Rust实现一个基于epoll的Reactor模式事件循环。要求：1）支持读写事件的注册和回调；2）支持定时器事件（超时回调）；3）支持信号事件（如SIGINT）；4）实现一个简单的HTTP请求路由器作为示例。",
+      "sub_type": "reactor_event_loop",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用epoll_wait监听fd事件，通过HashMap映射fd到回调函数；定时器用最小堆管理，epoll_wait的超时参数设为最近定时器的时间差；信号通过signalfd转换为fd事件；HTTP路由器解析请求行和头部后分发到对应handler",
+      "scoring_rubric": "1. epoll事件循环的注册和分发逻辑正确；2. 定时器的最小堆管理和超时计算正确；3. 信号事件的fd转换正确；4. HTTP路由器的请求解析和分发正确。"
+    },
+    {
+      "id": "107-038",
+      "prompt": "请用Go实现一个基于WebRTC的P2P数据传输通道。要求：1）通过STUN服务器获取公网地址；2）实现ICE候选收集和交换；3）建立DTLS加密的数据通道；4）分析P2P直连与通过TURN中继的性能差异。",
+      "sub_type": "webrtc_data_channel",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "STUN绑定请求获取服务器反射候选，host候选从本地网络接口收集；ICE检查所有候选对的连通性选择最优路径；DTLS在UDP上提供加密；P2P直连延迟低带宽高，TURN中继增加延迟但保证连通性",
+      "scoring_rubric": "1. STUN地址获取和候选收集逻辑正确；2. ICE候选交换和连通性检查正确；3. DTLS握手和数据传输正确；4. P2P与TURN的性能差异分析合理。"
+    },
+    {
+      "id": "107-039",
+      "prompt": "请用Java实现一个HTTP/2客户端，支持：1）多路复用的并发请求；2）头部压缩（HPACK编码）；3）流优先级和依赖管理；4）服务端推送的接收和处理。分析HTTP/2客户端连接管理的复杂性。",
+      "sub_type": "http2_client",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "单连接上通过流ID多路复用请求，HPACK编码压缩请求头部；流优先级通过优先级树管理权重和依赖；服务端推送通过PUSH_PROMISE帧接收并关联到父流；连接管理需处理GOAWAY和流控窗口",
+      "scoring_rubric": "1. 多路复用的流管理逻辑正确；2. HPACK编码的静态表和动态表使用正确；3. 流优先级和依赖树的维护正确；4. 服务端推送的处理逻辑正确。"
+    },
+    {
+      "id": "107-040",
+      "prompt": "请用Python实现一个简易的网络地址转换（NAT）模拟器。要求：1）实现NAPT（网络地址端口转换）映射；2）支持TCP和UDP的地址转换；3）维护映射表并处理超时清理；4）分析锥型NAT和对称型NAT在映射行为上的区别。",
+      "sub_type": "nat_simulator",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "维护(内部IP:端口, 外部端口, 协议)映射表；出站包替换源地址和端口，入站包根据映射表还原；锥型NAT对同一内部地址映射固定外部端口，对称型NAT对不同目标使用不同映射",
+      "scoring_rubric": "1. NAPT映射表的维护和查找逻辑正确；2. TCP和UDP的地址转换处理正确；3. 映射超时清理机制正确；4. 锥型和对称型NAT的区别分析正确。"
+    },
+    {
+      "id": "107-041",
+      "prompt": "请用Go实现一个基于gRPC的双向流式通信服务。要求：1）客户端和服务端双向流式收发消息；2）支持流级别的超时控制；3）处理连接断开后的自动重连；4）分析双向流式与一元调用在实时通信场景下的性能差异。",
+      "sub_type": "grpc_bidirectional_stream",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "客户端和服务端各自维护发送和接收goroutine，通过stream.Send和stream.Recv双向通信；超时通过context.WithTimeout控制；重连通过拦截器在流断开时自动建立新流；双向流式减少RTT适合实时场景",
+      "scoring_rubric": "1. 双向流的并发收发逻辑正确；2. 流级别超时的context使用正确；3. 自动重连的拦截器实现正确；4. 与一元调用的性能对比分析合理。"
+    },
+    {
+      "id": "107-042",
+      "prompt": "请用C++实现一个TCP拥塞控制算法的模拟器，支持：1）实现TCP Reno的慢启动、拥塞避免和快恢复三个阶段；2）模拟丢包事件对拥塞窗口的影响；3）绘制拥塞窗口随时间变化的曲线；4）对比Reno和CUBIC在高带宽延迟积网络上的表现。",
+      "sub_type": "congestion_control_sim",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "慢启动阶段cwnd指数增长直到ssthresh，拥塞避免阶段线性增长；丢包时ssthresh减半，快恢复将cwnd设为ssthresh+3；CUBIC用三次函数控制窗口增长更适合高BDP网络",
+      "scoring_rubric": "1. Reno三个阶段的状态转换正确；2. 丢包事件的窗口调整逻辑正确；3. 拥塞窗口曲线的绘制逻辑正确；4. Reno与CUBIC的对比分析基于实际行为差异。"
+    },
+    {
+      "id": "107-043",
+      "prompt": "请用Rust实现一个异步的SMTP邮件发送客户端。要求：1）完成SMTP握手（EHLO/HELO）和STARTTLS升级；2）支持AUTH LOGIN/PLAIN认证；3）构造MIME格式的邮件正文（支持附件）；4）处理SMTP错误码的重试逻辑。",
+      "sub_type": "smtp_client_async",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "EHLO获取服务器能力列表，STARTTLS升级到加密连接；AUTH LOGIN用Base64编码用户名密码；MIME格式通过boundary分隔正文和附件；错误码4xx重试5xx不重试",
+      "scoring_rubric": "1. SMTP握手和STARTTLS流程正确；2. AUTH认证的编码处理正确；3. MIME格式的构造（含附件）正确；4. 错误码分类和重试逻辑正确。"
+    }
+  ]
+}

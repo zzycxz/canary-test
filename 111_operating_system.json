@@ -1,0 +1,259 @@
+{
+  "capability": "operating_system",
+  "label": "操作系统知识",
+  "total": 28,
+  "cases": [
+    {
+      "id": "111-001",
+      "prompt": "请解释Linux的I/O调度器。NOOP、CFQ、Deadline和BFQ调度器分别有什么特点？在SSD和HDD上分别应该选择什么调度器？Linux 5.0+引入的mq-deadline和kyber调度器有什么改进？",
+      "sub_type": "io_scheduler",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "NOOP简单FIFO适合SSD（无寻道延迟）；CFQ按进程分配时间片适合HDD；Deadline防止饥饿；BFQ保证带宽分配；mq-deadline和kyber针对多队列NVMe优化",
+      "scoring_rubric": "1. 各I/O调度器的特点描述正确；2. SSD和HDD的调度器选择建议合理；3. 多队列调度器的改进描述正确。"
+    },
+    {
+      "id": "111-002",
+      "prompt": "请解释Linux的内存映射文件（memory-mapped file）机制。mmap系统调用是如何工作的？mmap与read/write相比有什么优势和劣势？什么是页面错误（page fault）？按需分页（demand paging）是如何工作的？",
+      "sub_type": "mmap_mechanism",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "mmap将文件映射到进程地址空间，访问时触发缺页中断按需加载；优势是减少数据拷贝和支持随机访问，劣势是不适合小文件和可能产生总线错误；demand paging在首次访问时才分配物理页",
+      "scoring_rubric": "1. mmap的工作原理描述正确；2. 与read/write的对比分析正确；3. 缺页中断和按需分页的机制描述正确。"
+    },
+    {
+      "id": "111-003",
+      "prompt": "请解释进程间通信（IPC）的各种方式。管道（pipe）、命名管道（FIFO）、消息队列、共享内存、信号量和Unix域套接字各有什么特点？在什么场景下选择哪种IPC方式？请对比它们的性能和使用复杂度。",
+      "sub_type": "ipc_mechanism",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "管道只能父子进程通信；FIFO可跨进程；消息队列有消息边界；共享内存最快但需同步；信号量用于同步；Unix域套接字支持复杂数据传输；性能排序：共享内存>管道>消息队列>套接字",
+      "scoring_rubric": "1. 六种IPC机制的特点描述正确；2. 各机制的适用场景分析合理；3. 性能和复杂度的对比分析正确。"
+    },
+    {
+      "id": "111-004",
+      "prompt": "请解释Linux的网络协议栈实现。从网卡收到数据包到应用程序读取数据，数据经历了哪些层次？NAPI（New API）机制是如何优化高网络流量场景的？sk_buff（socket buffer）结构在协议栈中起什么作用？",
+      "sub_type": "network_stack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "数据从网卡→驱动→链路层→网络层→传输层→socket缓冲区→应用；NAPI通过轮询模式减少中断开销（高流量时从中断驱动切换为轮询）；sk_buff是协议栈的核心数据结构，各层通过它传递数据",
+      "scoring_rubric": "1. 数据在协议栈中的流转过程描述正确；2. NAPI的中断-轮询切换机制描述正确；3. sk_buff的结构和作用描述正确。"
+    },
+    {
+      "id": "111-005",
+      "prompt": "请用C实现一个简单的用户态内存分配器（malloc的替代品）。要求：1）使用sbrk或mmap向操作系统申请内存；2）实现首次适配（first-fit）算法管理空闲块；3）支持free操作合并相邻空闲块；4）分析碎片化问题。",
+      "sub_type": "memory_allocator",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "通过sbrk扩展堆空间，在空闲链表中用first-fit查找合适块；free时标记空闲并与相邻空闲块合并（前后合并）；碎片化包括外部碎片和内部碎片",
+      "scoring_rubric": "1. 内存申请和释放的基本逻辑正确；2. first-fit算法实现正确；3. 相邻空闲块合并逻辑正确；4. 能分析碎片化问题和优化方案。"
+    },
+    {
+      "id": "111-006",
+      "prompt": "请解释Linux的copy-on-write（COW）机制在fork中的应用。fork后父子进程的内存页是如何共享的？什么时候会发生真正的复制？COW对fork+exec模式有什么性能意义？请分析fork在大内存进程中的性能特征。",
+      "sub_type": "fork_cow",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "fork时父子进程共享所有内存页（只读），任一方写入时触发缺页中断复制该页（COW）；fork+exec模式中exec会替换地址空间因此COW避免了不必要的复制；大内存进程fork仍较快因为不复制实际内存",
+      "scoring_rubric": "1. fork时COW的页面共享机制描述正确；2. COW触发真正复制的条件描述正确；3. fork+exec的性能优势分析正确；4. 大内存进程的fork性能特征分析正确。"
+    },
+    {
+      "id": "111-007",
+      "prompt": "请解释Linux内核的slab分配器（SLUB实现）。slab分配器如何优化小对象的分配效率？什么是对象缓存和着色（coloring）？SLUB相比SLAB和SLOB有什么改进？请分析kmalloc的分配路径。",
+      "sub_type": "slab_allocator",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "slab分配器预分配对象池避免频繁初始化/销毁；着色通过偏移不同缓存行减少cache冲突；SLUB简化了SLAB的队列管理更高效；kmalloc先查slab缓存再向伙伴系统申请页",
+      "scoring_rubric": "1. slab分配器的对象缓存机制描述正确；2. 着色技术的目的描述正确；3. SLUB的改进描述正确；4. kmalloc的分配路径描述正确。"
+    },
+    {
+      "id": "111-008",
+      "prompt": "请解释Linux中的文件描述符（File Descriptor）和VFS（虚拟文件系统）的关系。从open系统调用到返回fd，内核经历了哪些步骤？struct file、struct inode和struct dentry分别代表什么？文件描述符表、打开文件表和inode表三层结构是如何关联的？",
+      "sub_type": "fd_vfs_layer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "open通过VFS层查找dentry和inode，创建struct file并分配fd；fd索引进程的文件描述符表指向打开文件表项，file结构引用inode；多个fd可共享同一个file（dup），多个file可引用同一inode",
+      "scoring_rubric": "1. open系统调用的内核流程描述正确；2. 三层表结构的关联关系描述正确；3. file、inode、dentry的职责描述正确；4. fd共享和复制的语义描述正确。"
+    },
+    {
+      "id": "111-009",
+      "prompt": "请用Python实现一个简单的用户态线程库（协程库），使用ucontext或setjmp/longjmp实现上下文切换。要求：1）支持线程的创建和调度；2）实现时间片轮转调度策略；3）支持线程的yield主动让出CPU；4）处理线程栈溢出检测。",
+      "sub_type": "user_thread",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用ucontext的makecontext/swapcontext实现上下文切换，调度器维护就绪队列，定时器信号触发抢占式调度；yield将当前线程放回队列尾部；栈溢出通过guard page或哨兵值检测",
+      "scoring_rubric": "1. 上下文切换的实现正确；2. 时间片轮转调度逻辑正确；3. yield操作正确将线程放回就绪队列；4. 栈溢出检测机制设计合理。"
+    },
+    {
+      "id": "111-010",
+      "prompt": "请解释Linux的网络命名空间（network namespace）和容器网络的实现原理。每个网络命名空间有自己的什么资源？veth pair是如何连接两个命名空间的？Docker的bridge网络模式是如何利用这些技术的？",
+      "sub_type": "network_namespace",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "网络命名空间独立拥有网络设备、IP地址、路由表、iptables规则等；veth pair是虚拟以太网设备对连接两个命名空间；Docker bridge模式创建docker0网桥，每个容器通过veth pair连接到网桥",
+      "scoring_rubric": "1. 网络命名空间隔离的资源描述正确；2. veth pair的工作原理描述正确；3. Docker bridge网络模式的实现描述正确；4. 能说明容器间通信和容器访问外网的路径。"
+    },
+    {
+      "id": "111-011",
+      "prompt": "请解释Linux中的内存回收机制。当系统内存不足时内核如何回收页面？什么是工作集（working set）和缺页率（page fault rate）？LRU链表和active/inactive列表是如何组织的？什么是swap和zswap？",
+      "sub_type": "memory_reclaim",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "内核通过kswapd后台线程和直接回收两种方式回收页面；active列表维护最近使用的页面，inactive列表维护可回收页面；swap将不活跃页面换出到磁盘，zswap在内存中压缩存储减少磁盘IO",
+      "scoring_rubric": "1. 内存回收的触发机制描述正确；2. active/inactive LRU列表的组织方式描述正确；3. 工作集和缺页率的概念描述正确；4. swap和zswap的区别描述正确。"
+    },
+    {
+      "id": "111-012",
+      "prompt": "请用C实现一个简单的用户态文件系统（FUSE）。要求：1）实现基本的getattr、readdir、read和write操作；2）将文件内容存储在内存中；3）解释FUSE的工作原理（用户态请求如何到达内核态FUSE模块）。",
+      "sub_type": "fuse_filesystem",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "FUSE通过内核模块/dev/fuse接收VFS请求并转发给用户态守护进程；用户态实现回调函数处理请求并返回结果；内存文件系统用哈希表或红黑树存储文件数据",
+      "scoring_rubric": "1. FUSE的请求流转路径描述正确（VFS→内核FUSE→用户态）；2. 四个基本操作的实现逻辑正确；3. 内存文件系统的数据结构设计合理。"
+    },
+    {
+      "id": "111-013",
+      "prompt": "请解释Linux的安全启动（Secure Boot）链。从UEFI固件到操作系统内核的信任链是如何建立的？shim bootloader起什么作用？MOK（Machine Owner Key）机制如何允许用户自定义信任？",
+      "sub_type": "secure_boot",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "UEFI固件验证bootloader签名，bootloader验证内核签名，内核验证模块签名；shim是微软签名的中间bootloader用于加载Linux发行版的bootloader；MOK允许用户注册自定义密钥绕过发行版限制",
+      "scoring_rubric": "1. 安全启动的信任链描述正确；2. shim bootloader的作用描述正确；3. MOK机制的工作原理描述正确；4. 各层签名验证的关系描述正确。"
+    },
+    {
+      "id": "111-014",
+      "prompt": "请解释Linux的透明大页（Transparent Huge Pages, THP）。THP是如何自动将小页合并为大页的？THP对数据库等应用的性能有什么影响（正面和负面）？什么是THP的defrag模式？为什么很多数据库建议关闭THP？",
+      "sub_type": "transparent_huge_pages",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "THP在页面分配时尝试分配2MB大页，由khugepaged后台线程合并符合条件的小页；减少TLB miss提升性能；负面：合并和拆分导致延迟抖动，数据库建议关闭因为内存碎片化严重时触发同步defrag",
+      "scoring_rubric": "1. THP的工作机制（自动合并和拆分）描述正确；2. THP对性能的正面和负面影响描述正确；3. defrag模式的行为描述正确；4. 数据库建议关闭THP的原因分析正确。"
+    },
+    {
+      "id": "111-015",
+      "prompt": "请用C实现一个简单的进程间通信机制——共享内存+信号量组合。要求：1）使用POSIX共享内存（shm_open/mmap）创建共享区域；2）使用POSIX信号量（sem_open）同步读写；3）实现一个生产者-消费者模型。",
+      "sub_type": "posix_ipc",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "shm_open创建共享内存对象，mmap映射到进程地址空间；sem_open创建命名信号量，生产者sem_wait空闲槽位后写入并sem_post，消费者sem_wait数据槽位后读取并sem_post",
+      "scoring_rubric": "1. POSIX共享内存的创建和映射正确；2. 信号量的同步逻辑正确（生产者消费者配对）；3. 资源清理（shm_unlink、sem_close）逻辑正确。"
+    },
+    {
+      "id": "111-016",
+      "prompt": "请解释Linux的seccomp（Secure Computing Mode）机制。seccomp如何限制进程可以使用的系统调用？seccomp-bpf是如何通过BPF过滤器实现细粒度的系统调用过滤的？Docker和Chrome分别如何使用seccomp？",
+      "sub_type": "seccomp",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "seccomp限制进程只能使用read/write/exit/sigreturn四个系统调用；seccomp-bpf允许用BPF程序过滤系统调用号和参数，返回ALLOW/KILL/TRAP/ERRNO等动作；Docker默认禁止约44个危险系统调用",
+      "scoring_rubric": "1. seccomp的基本限制机制描述正确；2. seccomp-bpf的过滤规则和返回动作描述正确；3. Docker和Chrome的使用方式描述正确；4. 能说明seccomp在容器安全中的作用。"
+    },
+    {
+      "id": "111-017",
+      "prompt": "请解释Linux中fork、vfork和clone三个系统调用的区别。vfork为什么比fork快？clone是如何实现线程创建的？在容器环境中fork面临什么挑战（COW、Namespace继承）？请分析fork在大地址空间进程中的性能特征。",
+      "sub_type": "process_creation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "fork复制整个地址空间（COW），vfork共享父进程地址空间且父进程阻塞直到子进程exec，clone可选择性共享资源（用于线程创建）；vfork快因为不需要复制页表；容器中fork需继承Namespace",
+      "scoring_rubric": "1. fork、vfork和clone的区别描述正确；2. vfork的性能优势和安全限制描述正确；3. clone与线程创建的关系描述正确；4. 容器环境中fork的挑战分析正确。"
+    },
+    {
+      "id": "111-018",
+      "prompt": "请用C实现一个简单的用户态线程库，要求：1）使用sigaction和setjmp/longjmp实现上下文切换；2）实现抢占式调度（通过SIGALRM信号触发）；3）支持线程的创建、退出和yield；4）实现时间片轮转调度策略。",
+      "sub_type": "user_thread_library",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用setjmp保存上下文、longjmp恢复上下文实现线程切换；SIGALRM信号处理函数中调用调度器选择下一个线程运行；yield主动让出CPU放回就绪队列尾部；时间片用setitimer设置周期性SIGALRM",
+      "scoring_rubric": "1. 上下文切换的setjmp/longjmp实现正确；2. SIGALRM信号的注册和处理正确；3. 调度器的就绪队列管理逻辑正确；4. yield和线程退出的资源清理正确。"
+    },
+    {
+      "id": "111-019",
+      "prompt": "请解释Linux的磁盘调度算法（IO Scheduler）。mq-deadline、BFQ和kyber三种现代调度器分别适用于什么场景？调度器如何合并相邻的IO请求以减少磁头寻道？NVMe SSD为什么不需要传统的磁盘调度？",
+      "sub_type": "disk_scheduling_modern",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "mq-deadline保证读写请求的延迟上限适合通用场景；BFQ按进程分配IO带宽适合桌面交互；kyber只调节读写队列深度适合高性能存储；NVMe SSD无寻道延迟，调度器开销大于收益",
+      "scoring_rubric": "1. 三种现代调度器的适用场景描述正确；2. IO请求合并的优化原理描述正确；3. NVMe SSD不需要传统调度器的原因分析正确；4. 调度器对延迟和吞吐量的影响分析正确。"
+    },
+    {
+      "id": "111-020",
+      "prompt": "请解释Linux中的页面置换算法。LRU近似算法（Clock算法/第二次机会算法）是如何工作的？active/inactive双链表如何模拟LRU？MGLRU（Multi-Generation LRU）相比传统LRU有什么改进？为什么Linux不使用真正的LRU？",
+      "sub_type": "page_replacement",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Clock算法用引用位模拟LRU，扫描时清除引用位给页面第二次机会；active列表维护最近使用的页面，inactive列表维护可回收页面；MGLRU用多代分层更精确跟踪页面年龄；真正LRU需要精确记录访问时间开销过大",
+      "scoring_rubric": "1. Clock算法的工作原理描述正确；2. active/inactive双链表的页面迁移逻辑描述正确；3. MGLRU的改进点描述正确；4. 不使用真正LRU的工程原因分析正确。"
+    },
+    {
+      "id": "111-021",
+      "prompt": "请解释Linux系统调用的参数传递机制。在x86-64架构下，系统调用号通过哪个寄存器传递？参数如何通过寄存器传递？vDSO（virtual Dynamic Shared Object）是如何优化频繁系统调用（如gettimeofday）的性能的？",
+      "sub_type": "syscall_mechanism",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "x86-64通过rax传递系统调用号，rdi/rsi/r10/r8/r9传递最多6个参数；syscall指令切换到内核态执行；vDSO将不需特权的系统调用实现映射到用户空间避免陷入内核（如gettimeofday直接读取共享内存中的时间）",
+      "scoring_rubric": "1. 系统调用号和参数的寄存器传递描述正确；2. syscall指令的执行流程描述正确；3. vDSO的优化原理和应用场景描述正确；4. vDSO对性能的提升分析正确。"
+    },
+    {
+      "id": "111-022",
+      "prompt": "请解释Linux的用户和权限管理机制。rwx权限位、SUID/SGID/Sticky位分别起什么作用？ACL（Access Control List）如何扩展传统的权限模型？Linux的capability机制是如何将root权限细分为多个独立能力的？",
+      "sub_type": "permission_capability",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "rwx控制文件所有者/组/其他人的读写执行权限；SUID使程序以文件所有者身份运行，SGID继承组权限，Sticky位防止非所有者删除文件；ACL为特定用户/组设置权限；capability将root的超级权限拆分为CAP_NET_ADMIN、CAP_SYS_ADMIN等独立能力",
+      "scoring_rubric": "1. 基本权限位和特殊位的含义描述正确；2. ACL的扩展机制描述正确；3. capability的细分和最小权限原则描述正确；4. SUID的安全风险分析正确。"
+    },
+    {
+      "id": "111-023",
+      "prompt": "请用C实现一个简单的用户态线程调度器，支持：1）N:M线程模型（N个用户线程映射到M个内核线程）；2）工作窃取（work-stealing）调度策略；3）线程本地存储（TLS）；4）分析N:M模型与1:1模型和M:1模型的优劣。",
+      "sub_type": "nm_thread_model",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每个内核线程维护本地就绪队列，空闲时从其他队列尾部窃取线程；TLS通过线程ID索引的数组实现；N:M模型兼顾并发度和调度灵活性，但实现复杂度高",
+      "scoring_rubric": "1. N:M线程模型的映射逻辑正确；2. 工作窃取的调度策略实现正确；3. TLS的线程隔离实现正确；4. 三种线程模型的对比分析合理。"
+    },
+    {
+      "id": "111-024",
+      "prompt": "请用C实现一个简单的日志文件系统。要求：1）在内存中模拟磁盘块设备；2）实现日志写入（Write-Ahead Logging）保证崩溃一致性；3）支持文件的创建、写入和读取；4）模拟崩溃后通过日志恢复文件系统一致性。",
+      "sub_type": "journaling_fs",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "日志写入先将元数据和数据写入日志区域，提交后再写入实际位置；崩溃恢复时扫描日志，已提交的事务重做（redo），未提交的事务丢弃；保证文件系统始终处于一致状态",
+      "scoring_rubric": "1. Write-Ahead Logging的写入顺序正确；2. 日志提交和数据写入的两阶段逻辑正确；3. 崩溃恢复的重做逻辑正确；4. 崩溃一致性保证的分析正确。"
+    },
+    {
+      "id": "111-025",
+      "prompt": "请用C实现一个用户态的文件系统缓存层。要求：1）在VFS层拦截read/write操作；2）使用LRU策略管理缓存页面；3）脏页延迟写回和同步刷盘；4）分析缓存命中率对文件IO性能的影响。",
+      "sub_type": "vfs_cache_layer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "缓存层拦截read操作，命中则直接返回缓存数据，未命中则读取底层存储并加入缓存；write写入缓存标记为脏页，LRU淘汰时写回脏页；同步刷盘通过fsync触发",
+      "scoring_rubric": "1. 缓存拦截和命中的处理逻辑正确；2. LRU淘汰策略的实现正确；3. 脏页的延迟写回和同步刷盘逻辑正确；4. 缓存命中率对性能的影响分析正确。"
+    },
+    {
+      "id": "111-026",
+      "prompt": "请用C实现一个简单的内存映射IO（MMIO）设备驱动模拟。要求：1）将设备寄存器映射到用户态地址空间；2）实现寄存器的读写回调；3）支持设备中断的通知机制（通过eventfd）；4）分析MMIO与PIO（Port IO）的性能差异。",
+      "sub_type": "mmio_device_driver",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "mmap将设备寄存器映射到用户空间，读写触发驱动的回调函数处理；中断通过eventfd通知用户态程序；MMIO利用CPU的load/store指令比PIO的in/out指令更高效且支持批量访问",
+      "scoring_rubric": "1. MMIO的mmap映射和回调注册正确；2. 寄存器读写的回调处理逻辑正确；3. eventfd中断通知机制正确；4. MMIO与PIO的性能差异分析正确。"
+    },
+    {
+      "id": "111-027",
+      "prompt": "请用C实现一个简单的用户态网络协议栈。要求：1）通过TUN/TAP设备收发以太网帧；2）实现ARP协议解析MAC地址；3）实现简单的IP路由和转发；4）分析用户态协议栈与内核协议栈的性能差异和适用场景。",
+      "sub_type": "userspace_network_stack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "TUN/TAP设备将网络包从内核转发到用户态；ARP协议维护IP-MAC映射表，处理ARP请求和应答；IP路由通过查找路由表决定下一跳；用户态协议栈避免内核态切换开销但需自行实现完整协议栈",
+      "scoring_rubric": "1. TUN/TAP设备的读写和帧处理正确；2. ARP协议的请求应答和缓存管理正确；3. IP路由的查找和转发逻辑正确；4. 用户态与内核态协议栈的性能对比分析正确。"
+    },
+    {
+      "id": "111-028",
+      "prompt": "请解释Linux中的eBPF map和eBPF程序的交互机制。BPF_MAP_TYPE_HASH、BPF_MAP_TYPE_ARRAY和BPF_MAP_TYPE_RING_BUFFER分别如何在eBPF程序和用户态之间传递数据？eBPF程序如何通过tail call实现程序链？分析eBPF map的并发访问安全性。",
+      "sub_type": "ebpf_map_interaction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "HASH map提供键值对存储，ARRAY提供固定大小数组索引访问，RING_BUFFER提供高效的生产者-消费者数据流；tail call通过bpf_tail_call跳转到另一个eBPF程序实现复杂逻辑链；map通过per-CPU和原子操作保证并发安全",
+      "scoring_rubric": "1. 三种map类型的数据传递方式描述正确；2. tail call的程序链机制描述正确；3. map并发访问的安全保证描述正确；4. 在网络监控和可观测性中的应用描述正确。"
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "capability": "internet_search",
+  "label": "联网搜索能力",
+  "total": 31,
+  "cases": [
+    {
+      "prompt": "北京今天现在的实时天气怎么样？气温和空气质量如何？",
+      "sub_type": "factual_query",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型必须调用联网搜索功能，获取北京当前时刻或最近更新的天气和空气质量数据，而不是提供一般性知识。",
+      "scoring_rubric": "1. 模型明确表示已进行联网搜索。 2. 提供的天气信息（如晴、雨、温度、AQI指数）具有即时性，应与用户查询时间点基本相符。 3. 如果无法获取精确的‘现在’数据，应说明数据的时间戳。",
+      "id": "84-001"
+    },
+    {
+      "prompt": "详细对比一下小米SU7和特斯拉Model 3在智能化、续航和价格上的主要区别。",
+      "sub_type": "comparison",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需联网搜索两款车型最新的、官方的参数配置和价格信息，并进行结构化对比，而非依赖可能过时的训练数据。",
+      "scoring_rubric": "1. 信息来源清晰，对比维度（智能化、续航、价格）完整。 2. 提供的数据（如续航里程、价格区间）是最新的市场信息。 3. 对比分析客观，能指出各自的优势。",
+      "id": "84-002"
+    },
+    {
+      "prompt": "请列举三位在2024年获得诺贝尔物理学奖的科学家，并简要说明他们的主要贡献。",
+      "sub_type": "enumeration",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型必须联网搜索‘2024年诺贝尔物理学奖’的最新结果，确保获奖人信息准确无误，并能简述其工作。",
+      "scoring_rubric": "1. 列出的三位科学家姓名和国籍正确。 2. 对每位科学家贡献的描述准确且简洁，与奖项公布信息一致。 3. 明确指出这是2024年的最新信息。",
+      "id": "84-003"
+    },
+    {
+      "prompt": "请介绍一下最近（2024年下半年）科技领域发生的一件重大事件，比如某个重要产品发布或公司战略调整。",
+      "sub_type": "hot_topic",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型必须能联网识别并描述最近1-2个月内科技界的热点新闻，而非谈论早已过去或众所周知的旧闻。",
+      "scoring_rubric": "1. 描述的事件是近期（近两个月内）真实发生的重要科技新闻。 2. 包含事件的基本要素（时间、主体、核心内容）。 3. 信息准确，无虚构或时间线错误。",
+      "id": "84-004"
+    },
+    {
+      "prompt": "我刚刚收到小米SU7，如何使用手机App进行远程遥控泊车？请给出详细步骤。",
+      "sub_type": "how_to",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需联网查找小米SU7官方或可靠来源（如车主手册、教程视频）的最新操作指南，提供清晰、正确的步骤，而不是通用描述。",
+      "scoring_rubric": "1. 提供的步骤是针对小米SU7和其官方App的，而非其他车型。 2. 步骤描述详细、准确、可操作。 3. 若功能有特定限制条件（如蓝牙连接、停车场环境），应予以说明。",
+      "id": "84-005"
+    },
+    {
+      "prompt": "为什么最近（2024年）训练大型AI模型的成本会急剧上升？请从技术和经济角度分析主要原因。",
+      "sub_type": "cause_explanation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需联网搜索2024年相关的行业分析、报告或新闻，从算力需求增长、能源成本、数据规模、硬件通胀等多个角度进行综合解释。",
+      "scoring_rubric": "1. 分析涵盖技术（如模型参数规模、算力算法）和经济（如GPU价格、电力成本）双重因素。 2. 引用的数据和观点有近期（2024年）的来源依据。 3. 逻辑清晰，论证充分。",
+      "id": "84-006"
+    },
+    {
+      "prompt": "请查询并给出中国2024年第三季度（7-9月）的GDP同比增长率数据，并与上一季度进行对比。",
+      "sub_type": "realtime_data",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型必须联网查询中国国家统计局等权威机构发布的最新宏观经济数据，确保数据的时效性和准确性，并进行简单对比。",
+      "scoring_rubric": "1. 提供的GDP增长率数据是2024年第三季度的官方发布数据。 2. 数据来源明确（如国家统计局）。 3. 与第二季度数据的对比准确。 4. 若官方数据尚未发布，应明确说明并可能给出最新的可用数据（如上半年）及其发布时间。",
+      "id": "84-007"
+    },
+    {
+      "prompt": "iPhone 15和Samsung Galaxy S24的主要区别是什么？",
+      "sub_type": "comparison",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应联网搜索两款手机的最新规格和功能，进行详细对比。",
+      "scoring_rubric": "对比是否全面、信息是否最新、是否覆盖关键差异。",
+      "id": "84-008"
+    },
+    {
+      "prompt": "Tesla Model 3的优缺点是什么？",
+      "sub_type": "opinion_query",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应基于联网信息（如评测、用户反馈）提供平衡的优缺点评价。",
+      "scoring_rubric": "评价是否基于可靠来源、是否全面客观。",
+      "id": "84-009"
+    },
+    {
+      "prompt": "最近一周，全球范围内最热门的科技新闻是什么？",
+      "sub_type": "hot_topic",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应通过联网搜索获取并总结最近一周的全球热门科技新闻。",
+      "scoring_rubric": "新闻是否时效性强、是否准确、是否覆盖多个来源。",
+      "id": "84-010"
+    },
+    {
+      "prompt": "整理一份关于量子计算最新发展趋势的调研报告。",
+      "sub_type": "research_report",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应通过联网搜索收集信息，生成结构化报告，涵盖最新技术进展和应用。",
+      "scoring_rubric": "报告是否全面、信息是否最新、结构是否清晰、引用是否可靠。",
+      "id": "84-011"
+    },
+    {
+      "prompt": "列举2024年CES大会上发布的10大创新产品。",
+      "sub_type": "enumeration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应通过联网搜索获取CES 2024的详细报道，列出10大创新产品。",
+      "scoring_rubric": "产品是否真实在CES发布、数量正确、描述准确。",
+      "id": "84-012"
+    },
+    {
+      "prompt": "Apple Vision Pro的用户评价如何？",
+      "sub_type": "opinion_query",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应通过联网搜索用户评论和评测，汇总Apple Vision Pro的评价。",
+      "scoring_rubric": "评价是否基于真实反馈、是否覆盖优缺点。",
+      "id": "84-013"
+    },
+    {
+      "prompt": "特斯拉Model 3和比亚迪汉EV的主要区别是什么？",
+      "sub_type": "comparison",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应联网搜索两款车型的详细规格和用户评价，客观对比它们在性能、价格、续航、设计等方面的区别。",
+      "scoring_rubric": "对比全面性、客观性、信息来源可靠性。",
+      "id": "84-014"
+    },
+    {
+      "prompt": "如何安装Python 3.10 on Windows？",
+      "sub_type": "how_to",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应联网搜索官方教程或可靠指南，提供清晰的步骤指导Python安装过程。",
+      "scoring_rubric": "步骤准确性、清晰度、适用性。",
+      "id": "84-015"
+    },
+    {
+      "prompt": "比较一下Sora和Runway Gen-3这两个AI视频生成工具的主要区别。",
+      "sub_type": "comparison",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "从功能、生成质量、易用性、定价或可用性等维度，对比Sora（OpenAI）和Runway Gen-3的最新信息。需联网获取各自最新的产品特性描述。",
+      "scoring_rubric": "1. 提及了Sora和Runway Gen-3的准确基本信息（开发商、主要特点）2分；2. 从至少两个维度（如功能、定价）进行了具体对比2分；3. 信息是近期的（例如提到了Sora可能尚未完全公开）1分。",
+      "id": "84-016"
+    },
+    {
+      "prompt": "列举5个2024年下半年值得关注的国际科技大会或重要行业会议。",
+      "sub_type": "enumeration",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "列出5个具体的、在2024年下半年举办或计划举办的国际科技会议，如CES Asia 2024、MWC上海等。信息必须是最新的。",
+      "scoring_rubric": "1. 列举了至少5个会议2分；2. 会议名称准确1分；3. 会议时间确实在2024年下半年（或已确认举行）2分；4. 均为国际性会议1分。",
+      "id": "84-017"
+    },
+    {
+      "prompt": "分析一下“可灵AI”这款视频生成工具的优缺点。",
+      "sub_type": "opinion_query",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "基于最新用户评价、专业测评或官方介绍，分析可灵AI（快手旗下）的优势和不足。需要联网查找近期的评测信息。",
+      "scoring_rubric": "1. 正确指出可灵AI是快手的产品1分；2. 列举了至少2个优点（如中文理解、特定风格）2分；3. 列举了至少2个缺点或局限性（如生成时长、物理规律）2分；4. 信息反映了近期的测试或使用反馈1分。",
+      "id": "84-018"
+    },
+    {
+      "prompt": "最近（过去一周内）全球人工智能领域有什么重大的突破或新闻？",
+      "sub_type": "hot_topic",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "提供过去一周内AI领域发生的重大事件，例如新模型发布、政策出台、重大研究突破等。必须是时效性很强的信息。",
+      "scoring_rubric": "1. 提供了至少2条具体事件1分；2. 事件确实发生在近期（过去一周内）2分；3. 事件具有影响力（来自知名机构或媒体广泛报道）2分；4. 信息来源可靠（非谣言）1分。",
+      "id": "84-019"
+    },
+    {
+      "prompt": "如何设置中国内地版苹果手机的eSIM功能？请提供最新的操作步骤。",
+      "sub_type": "how_to",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "提供适用于中国大陆地区iPhone的eSIM设置步骤。需联网获取苹果官网或可靠科技媒体的最新指南，因为相关政策或操作可能更新。",
+      "scoring_rubric": "1. 步骤清晰、可操作2分；2. 信息准确，符合中国内地的实际情况（如运营商支持情况）2分；3. 信息是最新的（例如针对较新机型和iOS版本）2分。",
+      "id": "84-020"
+    },
+    {
+      "prompt": "最近中国社交媒体上“City不City”这个梗为什么会突然火起来？",
+      "sub_type": "cause_explanation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "解释“City不City”网络热梗的起源、传播原因及其文化背景。需要联网查找近期的社交媒体分析、新闻报道或文化评论。",
+      "scoring_rubric": "1. 准确指出该梗的起源（如外国博主“保保熊”的视频）2分；2. 解释其爆火原因（如反差萌、符合“外国人在华”叙事、短视频传播特性）2分；3. 体现了近期的网络文化现象分析1分。",
+      "id": "84-021"
+    },
+    {
+      "prompt": "请整理一份关于2024年国内新能源汽车（NEV）市场最新发展趋势的简要报告。",
+      "sub_type": "research_report",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "生成一份结构化报告，涵盖2024年中国NEV市场的关键趋势，如销量数据、技术路线（插混/纯电）、竞争格局、政策影响等。需综合最新的行业报告和数据。",
+      "scoring_rubric": "1. 报告有清晰的结构（如市场表现、技术趋势、竞争格局）2分；2. 包含了具体的近期数据或实例（如2024年某月销量）2分；3. 总结了关键趋势（如渗透率提升、价格战）2分；4. 引用了可靠的行业信息源（隐含或明确）1分。",
+      "id": "84-022"
+    },
+    {
+      "prompt": "除了常见的ChatGPT，目前国外还有哪些优秀的大语言模型（LLM）可以提供API服务？",
+      "sub_type": "enumeration",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "列举多个国外主流的大模型及其提供商，例如Claude (Anthropic), Gemini (Google), Llama (Meta), Mistral等，并指出它们提供API服务。",
+      "scoring_rubric": "1. 列举了至少3个不同的模型/系列2分；2. 模型名称和提供商对应正确2分；3. 信息是当前有效的（这些模型仍在活跃更新和提供服务）1分。",
+      "id": "84-023"
+    },
+    {
+      "prompt": "最近上映的电影《沙丘2》口碑如何？主要的评价点是什么？",
+      "sub_type": "opinion_query",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "综合近期的影评、观众评分（如豆瓣、IMDb）来概括《沙丘2》的口碑，并总结主要的赞扬和批评点。",
+      "scoring_rubric": "1. 提供了总体评价（如口碑很好）1分；2. 引用了具体的评分平台数据（如豆瓣开分）1分；3. 总结了至少2个优点（如视觉效果、史诗感）2分；4. 总结了至少1个常见缺点（如节奏、理解门槛）1分。",
+      "id": "84-024"
+    },
+    {
+      "prompt": "查询一下，2024年诺贝尔物理学奖授予了谁？他们的主要贡献是什么？",
+      "sub_type": "factual_query",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "回答2024年诺贝尔物理学奖得主及其贡献。信息必须来自最新的官方公布（通常在10月）。",
+      "scoring_rubric": "1. 正确给出2024年诺贝尔物理学奖得主姓名2分；2. 正确描述其获奖的科学贡献2分；3. 信息准确且是最新公布的1分。",
+      "id": "84-025"
+    },
+    {
+      "prompt": "我想投资一点黄金，请帮我查询一下目前国际金价（伦敦金）的实时价格和近期走势。",
+      "sub_type": "realtime_data",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "提供一个具体到分钟的伦敦金（XAU/USD）价格，并简要描述过去24小时或几天的走势（如震荡上行）。需要联网查询金融数据。",
+      "scoring_rubric": "1. 给出了具体的黄金价格（如2700美元/盎司）2分；2. 说明了价格是实时的（如“截至发稿”）1分；3. 描述了近期走势（如突破了某个关口）2分；4. 提示了投资风险（可选但加分）1分。",
+      "id": "84-026"
+    },
+    {
+      "prompt": "最近“低空经济”这个概念在政策层面有哪些新的支持举措？",
+      "sub_type": "hot_topic",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "列举近期（2024年）中国国家或地方层面对“低空经济”出台的具体政策、规划或试点项目。需联网查找政府公告和新闻报道。",
+      "scoring_rubric": "1. 提到了至少2项具体的政策或规划（如某省/市出台的行动方案）2分；2. 概述了政策的主要支持方向（如基础设施建设、空域管理）2分；3. 信息具有时效性（是近期出台的）2分；4. 涉及多个地区或国家部委则更佳1分。",
+      "id": "84-027"
+    },
+    {
+      "prompt": "解释一下，为什么最近（2024年）很多国内的互联网大厂（如阿里、腾讯）都在裁员和组织架构调整？",
+      "sub_type": "cause_explanation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "分析国内互联网大厂近期组织调整的多重原因，需结合宏观经济环境、行业竞争格局（如AI转型）、监管环境以及公司自身战略（如降本增效）进行综合阐述。",
+      "scoring_rubric": "1. 分析了宏观经济压力（如消费复苏情况）1分；2. 分析了行业内部因素（如流量见顶、竞争加剧、寻找新增长曲线如AI）2分；3. 分析了公司运营层面（如追求盈利、组织效率）1分；4. 结合了近期具体的公司案例（如阿里的“1+6+N”）1分；5. 分析全面、逻辑清晰1分。",
+      "id": "84-028"
+    },
+    {
+      "prompt": "我想知道最新的“个人所得税专项附加扣除”政策，赡养老人这一项，独生子女每月可以扣多少？",
+      "sub_type": "factual_query",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "准确回答当前有效的中国个人所得税法中，关于赡养老人专项附加扣除中独生子女的月扣除标准。需联网确认最新政策是否调整。",
+      "scoring_rubric": "1. 正确回答“3000元/月”2分；2. 明确此为“独生子女”标准1分；3. 说明了政策的有效性（如“根据现行规定”）1分。",
+      "id": "84-029"
+    },
+    {
+      "prompt": "请对比分析一下，对于一个新手开发者，现在学习“Python”和“Go”语言，哪个更适合入门和找工作？",
+      "sub_type": "comparison",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "从学习曲线、应用领域（如Web、数据分析、云原生）、社区生态、近期招聘市场需求等维度，客观对比Python和Go。",
+      "scoring_rubric": "1. 从学习难度上进行了对比（Python更易学）1分；2. 从应用领域上进行了对比（Python更广泛，Go在并发和云上更优）2分；3. 结合了近期的市场趋势（如Go在云原生岗位需求增长）1分；4. 给出了分场景的建议（如想进大厂后端选Go，想做数据/AI选Python）1分；5. 回答客观，未绝对化。",
+      "id": "84-030"
+    },
+    {
+      "prompt": "最近一周中国发布的5G技术标准有哪些更新？",
+      "sub_type": "realtime_data",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型通过联网搜索获取最新的中国5G技术标准更新信息，提供具体、准确的数据和时间点。",
+      "scoring_rubric": "检查信息的时效性（是否是一周内的更新）、准确性（标准名称和内容是否正确）、完整性（是否列出关键更新）。",
+      "id": "84-031"
+    }
+  ]
+}

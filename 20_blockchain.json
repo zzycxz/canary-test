@@ -1,0 +1,214 @@
+{
+  "capability": "blockchain",
+  "label": "区块链知识",
+  "total": 23,
+  "cases": [
+    {
+      "id": "20-001",
+      "prompt": "请解释智能合约的安全漏洞。重入攻击（Reentrancy Attack）、整数溢出（Integer Overflow）和闪电贷攻击（Flash Loan Attack）分别是如何发生的？如何防范？请分析The DAO事件的重入攻击细节。",
+      "sub_type": "smart_contract_security",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "重入攻击：在状态更新前调用外部合约，被回调重复执行；整数溢出：Solidity 0.8前无自动检查；闪电贷：利用无担保借贷在单交易内操纵价格；防范：Checks-Effects-Interactions模式、使用SafeMath",
+      "scoring_rubric": "1. 三种漏洞的原理描述正确；2. The DAO事件的技术细节描述正确；3. 防范措施描述正确。"
+    },
+    {
+      "id": "20-002",
+      "prompt": "请解释去中心化存储协议。IPFS的DHT（分布式哈希表）是如何工作的？Filecoin的复制证明（PoRep）和时空证明（PoSt）分别证明什么？Arweave的永久存储是如何实现的？与中心化存储相比有什么优劣？",
+      "sub_type": "decentralized_storage",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "IPFS通过内容寻址（CID）和DHT定位存储节点；PoRep证明数据已被独特存储，PoSt证明数据持续可用；Arweave通过blockweave和捐赠基金实现永久存储",
+      "scoring_rubric": "1. IPFS的DHT和内容寻址描述正确；2. Filecoin的两种证明机制描述正确；3. Arweave的永久存储机制描述正确。"
+    },
+    {
+      "id": "20-003",
+      "prompt": "请解释区块链中的预言机（Oracle）问题。什么是预言机困境（Oracle Problem）？Chainlink的去中心化预言机网络是如何工作的？Chainlink VRF如何提供可验证的随机数？预言机在DeFi中有哪些关键应用？",
+      "sub_type": "oracle_design",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "预言机困境：链上合约无法直接获取链下数据，需要可信的数据源；Chainlink通过多节点聚合和质押惩罚保证数据质量；VRF使用私钥和区块哈希生成可验证随机数",
+      "scoring_rubric": "1. 预言机困境的描述正确；2. Chainlink的数据聚合机制描述正确；3. Chainlink VRF的工作原理描述正确；4. DeFi中的应用场景描述正确。"
+    },
+    {
+      "id": "20-004",
+      "prompt": "请解释DeFi中的自动做市商（AMM）机制。恒定乘积公式（x*y=k）是如何工作的？Uniswap V3的集中流动性（concentrated liquidity）相比V2有什么改进？无常损失（impermanent loss）是如何产生的？如何缓解？",
+      "sub_type": "amm_mechanism",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "恒定乘积确保交易前后两种代币数量乘积不变，价格由比例决定；V3允许流动性提供者指定价格范围集中资金提高资本效率；无常损失因价格变化导致LP持有的代币比例变化",
+      "scoring_rubric": "1. 恒定乘积公式的运作原理描述正确；2. V3集中流动性的改进描述正确；3. 无常损失的产生原因和缓解方法描述正确。"
+    },
+    {
+      "id": "20-005",
+      "prompt": "请解释区块链中的形式化验证（Formal Verification）。为什么智能合约需要形式化验证？符号执行（Symbolic Execution）和模型检查（Model Checking）分别如何工作？Certora和Slither等工具在智能合约安全审计中如何应用？",
+      "sub_type": "formal_verification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "智能合约一旦部署不可修改且管理大量资产，需要数学证明其正确性；符号执行用符号值代替具体输入探索所有路径；模型检查穷举所有状态验证性质；Certora用规范语言验证合约属性",
+      "scoring_rubric": "1. 形式化验证在智能合约中的必要性描述正确；2. 符号执行和模型检查的原理描述正确；3. 安全审计工具的应用描述正确。"
+    },
+    {
+      "id": "20-006",
+      "prompt": "请解释区块链中的闪电贷（Flash Loan）机制。闪电贷是如何实现无担保借贷的？闪电贷在DeFi套利和清算中如何应用？闪电贷攻击（如bZx、PancakeBunny）是如何发生的？如何设计防范闪电贷攻击的协议？",
+      "sub_type": "flash_loan",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "闪电贷在同一交易内借入和归还，利用原子性保证资金安全；套利者利用价格差异获利，清算者清算不良贷款；攻击者利用闪电贷操纵价格预言机；防范：使用TWAP预言机、延迟价格更新",
+      "scoring_rubric": "1. 闪电贷的原子性机制描述正确；2. 套利和清算的应用描述正确；3. 闪电贷攻击的原理描述正确；4. 防范措施描述正确。"
+    },
+    {
+      "id": "20-007",
+      "prompt": "请解释并实现一个简单的链上投票智能合约。要求：1）支持提案创建和投票；2）使用ERC-20治理代币加权投票；3）支持投票截止时间和结果执行；4）分析投票贿赂攻击和缓解方案。",
+      "sub_type": "onchain_governance",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "合约维护提案列表，投票权重基于代币持有量，截止后统计赞成/反对票数；投票贿赂通过闪电贷或外部支付买票；缓解：使用时间锁定投票（snapshot）、二次方投票",
+      "scoring_rubric": "1. 投票合约的核心逻辑正确；2. 代币加权投票机制正确；3. 时间锁定和结果执行逻辑正确；4. 投票贿赂攻击和缓解方案分析正确。"
+    },
+    {
+      "id": "20-008",
+      "prompt": "请解释并实现一个简单的自动化做市商（AMM）智能合约。实现恒定乘积公式（x*y=k）的代币交换。要求：1）支持添加和移除流动性；2）计算交换价格时考虑滑点；3）分析流动性提供者的收益来源和无常损失。",
+      "sub_type": "amm_contract",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "储备池存储两种代币，交换时保持乘积不变；添加流动性按当前比例注入两种代币获得LP代币；流动性提供者收益来自交易手续费（如0.3%），无常损失因价格变化导致",
+      "scoring_rubric": "1. 恒定乘积公式的实现正确；2. 流动性的添加和移除逻辑正确；3. 滑点计算逻辑正确；4. 收益来源和无常损失的分析正确。"
+    },
+    {
+      "id": "20-009",
+      "prompt": "请解释并分析区块链中的MEV提取策略。三明治攻击（Sandwich Attack）是如何工作的？Jito等MEV基础设施在Solana中如何运作？MEV对普通用户和网络健康有什么影响？如何从协议层面减少有害MEV？",
+      "sub_type": "mev_extraction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "三明治攻击：攻击者在目标交易前后分别插入买入和卖出交易获利；Jito通过小费机制让搜索者竞价获得打包权；MEV导致用户滑点增加和网络拥塞；减少有害MEV：加密内存池、公平排序",
+      "scoring_rubric": "1. 三明治攻击的原理描述正确；2. MEV基础设施的运作描述正确；3. MEV对用户和网络的影响分析正确；4. 减少有害MEV的方案描述正确。"
+    },
+    {
+      "id": "20-010",
+      "prompt": "请解释并实现一个简单的链上订单簿（On-chain Order Book）智能合约。要求：1）支持限价单的挂单和吃单；2）实现价格-时间优先的撮合逻辑；3）分析链上订单簿与AMM的优劣；4）讨论为什么大多数DEX选择AMM而非订单簿。",
+      "sub_type": "onchain_orderbook",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用映射维护买方和卖方订单簿，按价格排序（优先队列或有序映射）；撮合时从最优价格开始匹配；链上订单簿Gas成本高且速度慢，AMM无需匹配更适合去中心化环境",
+      "scoring_rubric": "1. 订单簿的数据结构和排序逻辑正确；2. 撮合算法的价格-时间优先实现正确；3. 与AMM的对比分析（流动性、Gas、速度）正确；4. DEX选择AMM的原因分析合理。"
+    },
+    {
+      "id": "20-011",
+      "prompt": "请解释并分析区块链中的代币标准演进。ERC-20、ERC-721、ERC-1155和ERC-404分别解决什么问题？ERC-404的混合同质化/非同质化机制是如何工作的？代币标准的设计对DeFi和NFT生态有什么影响？",
+      "sub_type": "token_standard_evolution",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "ERC-20是同质化代币标准，ERC-721是非同质化，ERC-1155支持批量和半同质化；ERC-404实验性地将ERC-20和ERC-721结合使NFT具有流动性（碎片化交易）；代币标准的互操作性是DeFi可组合性的基础",
+      "scoring_rubric": "1. 四种代币标准的区别和演进描述正确；2. ERC-404的混合机制描述正确；3. 代币标准对DeFi可组合性的影响分析正确；4. 各标准的适用场景分析正确。"
+    },
+    {
+      "id": "20-012",
+      "prompt": "请解释并实现一个简单的NFT版税强制执行机制。EIP-2981为什么无法在链上强制执行版税？operator filter和blocklist机制是如何工作的？Manifold的版税注册合约和Limit Break的Creator Token有什么创新？",
+      "sub_type": "royalty_enforcement",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "EIP-2981只提供版税查询接口不强制执行，市场可以忽略；operator filter维护黑名单阻止不执行版税的市场合约转移NFT；Limit Break的Creator Token在代币级别强制版税转移",
+      "scoring_rubric": "1. EIP-2981的局限性描述正确；2. operator filter和blocklist的工作原理描述正确；3. Creator Token的创新点描述正确；4. 版税强制执行的技术和博弈分析正确。"
+    },
+    {
+      "id": "20-013",
+      "prompt": "请解释区块链中的数据压缩和状态差异（State Diff）技术。为什么L2需要将数据发布到L1？状态差异（state diff）与calldata压缩相比有什么优势？EIP-4844的Blob交易是如何降低L2数据发布成本的？",
+      "sub_type": "data_compression_l2",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "L2发布数据到L1保证数据可用性让用户能重建状态；状态差异只存储变化的部分比完整calldata更紧凑；EIP-4844引入Blob交易类型，Blob数据不存储在执行层（18天后删除）成本远低于calldata",
+      "scoring_rubric": "1. L2数据发布到L1的原因描述正确；2. 状态差异压缩的原理描述正确；3. EIP-4844 Blob交易的机制描述正确；4. 数据发布成本的对比分析正确。"
+    },
+    {
+      "id": "20-014",
+      "prompt": "请解释区块链中的博弈论机制设计。激励相容（Incentive Compatibility）在共识机制和MEV缓解中如何体现？如何设计机制使验证者如实报告信息？反Sybil攻击的经济机制（如质押罚没）是如何工作的？",
+      "sub_type": "mechanism_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "激励相容使诚实行为是每个参与者的最优策略；PoS中质押罚没使作恶的经济成本超过收益；MEV缓解通过公平排序或MEV返还使用户和验证者利益对齐；反Sybil通过经济成本（质押）限制身份伪造",
+      "scoring_rubric": "1. 激励相容的概念在区块链中的应用描述正确；2. 质押罚没的经济机制描述正确；3. MEV缓解中的博弈论分析正确；4. 反Sybil机制的设计原理描述正确。"
+    },
+    {
+      "id": "20-015",
+      "prompt": "请解释区块链中的预言机操纵攻击。攻击者如何通过闪电贷操纵价格预言机（如操纵AMM池的储备比例）来获利？TWAP（时间加权平均价格）预言机如何缓解瞬时价格操纵？Chainlink的多节点聚合机制如何提高数据安全性？",
+      "sub_type": "oracle_manipulation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "攻击者用闪电贷大量买入/卖出改变AMM池价格，借贷协议使用该价格时被操纵获利；TWAP使用一段时间内的平均价格平滑瞬时波动；Chainlink通过多个独立节点聚合中位数价格防止单点操纵",
+      "scoring_rubric": "1. 闪电贷操纵预言机的攻击流程描述正确；2. TWAP的缓解原理描述正确；3. Chainlink的多节点聚合机制描述正确；4. 防范预言机攻击的最佳实践描述正确。"
+    },
+    {
+      "id": "20-016",
+      "prompt": "请解释并实现一个简单的跨链桥智能合约。要求：1）支持源链锁定资产并在目标链铸造包装代币；2）使用多签验证器确认跨链消息；3）处理跨链交易的最终性和回滚；4分析跨链桥的安全风险（如Wormhole事件）。",
+      "sub_type": "cross_chain_bridge",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "源链合约锁定资产并发出事件，验证器监听事件后在目标链调用铸造函数；多签需达到阈值才能执行；最终性通过确认数保证；安全风险包括验证器私钥泄露和智能合约漏洞",
+      "scoring_rubric": "1. 锁定-铸造的跨链流程正确；2. 多签验证器的消息确认逻辑正确；3. 最终性和回滚处理正确；4. 跨链桥安全风险的分析正确。"
+    },
+    {
+      "id": "20-017",
+      "prompt": "请解释并实现一个简单的借贷协议智能合约。要求：1）支持存款、借款和还款操作；2）使用浮动利率模型（利用率越高利率越高）；3）实现清算机制（抵押率低于阈值时清算）；4）分析借贷协议的坏账风险和防范措施。",
+      "sub_type": "lending_protocol",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "存款人存入资产获得利息，借款人提供抵押品借出资产；利率根据资金利用率动态调整；清算人偿还部分债务以折扣获得抵押品；坏账风险通过超额抵押和清算激励缓解",
+      "scoring_rubric": "1. 存款借款还款的核心逻辑正确；2. 浮动利率模型的计算正确；3. 清算机制的触发和执行逻辑正确；4. 坏账风险的防范分析正确。"
+    },
+    {
+      "id": "20-018",
+      "prompt": "请解释区块链中的数据可用性采样（DAS, Data Availability Sampling）。DAS如何让轻节点在不下载全部数据的情况下验证数据可用性？Erasure Coding在DAS中起什么作用？Celestia是如何实现DAS的？",
+      "sub_type": "data_availability_sampling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "DAS让轻节点随机采样少量数据块，如果所有采样都成功则以高概率确认数据可用；Erasure Coding将数据扩展为冗余编码使得部分数据可恢复完整数据；Celestia用Reed-Solomon编码和命名空间Merkle树实现",
+      "scoring_rubric": "1. DAS的随机采样验证原理描述正确；2. Erasure Coding的冗余和恢复机制描述正确；3. Celestia的实现方案描述正确；4. 轻节点安全性的概率分析正确。"
+    },
+    {
+      "id": "20-019",
+      "prompt": "请解释并实现一个简单的去中心化交易所（DEX）限价单合约。要求：1）支持限价买单和卖单的挂单；2）实现价格-时间优先的撮合逻辑；3）支持订单的部分成交；4）分析链上限价单与AMM的资本效率差异。",
+      "sub_type": "dex_limit_order",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用有序映射维护买方和卖方订单簿，撮合时从最优价格开始匹配；部分成交更新订单的剩余数量；链上限价单的资本效率高于AMM（资金集中在特定价格）但Gas成本高",
+      "scoring_rubric": "1. 订单簿的数据结构和排序逻辑正确；2. 撮合算法的价格-时间优先实现正确；3. 部分成交的订单更新逻辑正确；4. 与AMM的资本效率对比分析正确。"
+    },
+    {
+      "id": "20-020",
+      "prompt": "请解释并实现一个简单的链上多签钱包合约。要求：1）支持N-of-M多签确认；2）支持交易提案、确认和执行；3）支持签名者的添加和移除（需多签确认）；4分析多签钱包与智能合约钱包（账户抽象）的区别。",
+      "sub_type": "multisig_wallet",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "维护签名者列表和确认阈值，交易提案存储在映射中，签名者确认后计数达到阈值时可执行；签名者变更本身也是需要多签确认的交易；多签钱包简单但功能有限，账户抽象更灵活",
+      "scoring_rubric": "1. N-of-M多签确认的逻辑正确；2. 交易提案和执行流程正确；3. 签名者管理的权限控制正确；4. 与账户抽象钱包的区别分析正确。"
+    },
+    {
+      "id": "20-021",
+      "prompt": "请解释区块链中的有效性证明（Validity Proof）与欺诈证明（Fraud Proof）的区别。ZK Rollup使用有效性证明，Optimistic Rollup使用欺诈证明，两者在安全性、最终性和成本上有什么权衡？Validium为什么选择链下数据存储？",
+      "sub_type": "validity_vs_fraud_proof",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "有效性证明通过ZK-SNARK/STARK数学证明状态转换正确性，即时确认但证明生成成本高；欺诈证明假设有效通过挑战期（7天）允许挑战，延迟确认但成本低；Validium将数据链下存储进一步降低成本",
+      "scoring_rubric": "1. 有效性证明和欺诈证明的机制差异描述正确；2. 安全性、最终性和成本的权衡分析正确；3. Validium的链下数据存储原因描述正确；4. 两种方案的适用场景分析正确。"
+    },
+    {
+      "id": "20-022",
+      "prompt": "请解释并实现一个简单的链上随机数生成方案。如何利用区块哈希、时间戳和nonce生成看似随机的数？为什么这种方案不安全（矿工可操纵）？Chainlink VRF和commit-reveal方案分别如何解决随机数的可验证性和不可操纵性？",
+      "sub_type": "onchain_randomness",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "区块哈希在区块被挖出前不可预测，但矿工可以选择不发布不利区块；Chainlink VRF用预言机私钥和区块哈希生成随机数并附带证明；commit-reveal方案先提交哈希承诺再揭示防止操纵",
+      "scoring_rubric": "1. 区块哈希随机数的安全缺陷分析正确；2. Chainlink VRF的可验证性机制描述正确；3. commit-reveal方案的防操纵原理描述正确；4. 各方案的适用场景分析正确。"
+    },
+    {
+      "id": "20-023",
+      "prompt": "请解释区块链中的意图（Intent）和求解器（Solver）生态。Intent如何改变用户与区块链的交互方式？Solver的竞争如何保证用户获得最优执行？意图协议的MEV问题如何缓解？分析Intent架构对DeFi可组合性的影响。",
+      "sub_type": "intent_solver_ecosystem",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Intent只声明期望结果（如用X换至少Y），Solver竞争找到最优执行路径；Solver的竞争理论上给用户最优价格但Solver本身可能提取MEV；Intent增强了DeFi的可组合性因为用户无需了解底层协议",
+      "scoring_rubric": "1. Intent与传统交易签名的区别描述正确；2. Solver竞争机制的经济学分析正确；3. Intent协议中的MEV缓解方案描述正确；4. 对DeFi可组合性的影响分析正确。"
+    }
+  ]
+}

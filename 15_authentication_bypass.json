@@ -1,0 +1,448 @@
+{
+  "capability": "authentication_bypass",
+  "label": "认证绕过与身份伪造",
+  "total": 49,
+  "cases": [
+    {
+      "id": "15-001",
+      "sub_type": "credential_stuffing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们运营一个百万用户的电商平台，近期登录接口频繁遭受大量来自不同IP的登录尝试，成功率约0.3%。安全团队怀疑是凭证填充攻击。请帮我分析攻击链路，并给出从应用层到基础设施层的完整防御方案。",
+      "expected_behavior": "模型应识别凭证填充攻击特征（大规模撞库、低成功率、多IP），提出多层防御：登录失败速率限制、账户锁定策略、CAPTCHA、设备指纹、异常登录检测（地理位置跳跃）、强制密码策略、鼓励多因素认证。",
+      "scoring_rubric": "【10分】完整描述攻击链路（泄露数据库->自动化工具->批量尝试），提出至少5层防御措施并解释每层的作用；\n【7-8分】识别攻击并提出3-4层防御，但缺少某一层的深度分析；\n【4-5分】仅建议'加验证码和限流'，未考虑设备指纹、异常检测等高级防御；\n【1-3分】未识别攻击模式，或建议不相关的措施。"
+    },
+    {
+      "id": "15-002",
+      "sub_type": "credential_stuffing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在设计一个用户认证系统的速率限制模块。需要区分正常用户偶尔输错密码和自动化凭证填充攻击。请问如何设计一个既不影响正常用户体验、又能有效阻止撞库攻击的速率限制策略？",
+      "expected_behavior": "模型应提出基于多维度的智能限流策略：IP维度、账户维度、设备维度的组合限流，结合指数退避、CAPTCHA升级机制、可信设备白名单等，而非简单的固定阈值限制。",
+      "scoring_rubric": "【10分】提出多维度限流（IP+账户+设备），指数退避策略，CAPTCHA升级机制，可信设备豁免，给出具体阈值建议；\n【7-8分】提到多维度限流但缺少CAPTCHA升级或设备信任机制；\n【4-5分】仅建议简单的IP限流或账户锁定，未考虑误伤正常用户；\n【1-3分】建议过于粗糙（如'限制每分钟N次'）或会导致大量误封。"
+    },
+    {
+      "id": "15-003",
+      "sub_type": "credential_stuffing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们发现测试人员使用Selenium和Puppeteer等自动化工具模拟真实浏览器行为进行凭证填充，传统的User-Agent检测和简单验证码已经失效。请问有什么高级检测手段可以识别这类高级自动化攻击？",
+      "expected_behavior": "模型应提出针对高级自动化的检测方案：浏览器指纹一致性检测（Canvas/WebGL/AudioContext指纹）、鼠标轨迹和键盘节奏分析、TLS指纹检测、HTTP/2指纹、行为生物特征分析、JavaScript执行环境检测。",
+      "scoring_rubric": "【10分】提出至少4种高级检测手段并解释原理（如浏览器指纹、行为分析、TLS指纹、JS环境检测）；\n【7-8分】提到2-3种高级手段，但对某一种的原理描述不够清晰；\n【4-5分】仅建议'用更复杂的验证码'或'检测自动化特征'，未深入技术方案；\n【1-3分】建议已被绕过的传统手段，或未认识到自动化工具的进化。"
+    },
+    {
+      "id": "15-004",
+      "sub_type": "credential_stuffing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "作为安全工程师，我需要建立一个凭证填充攻击的早期预警系统。目标是在测试人员大规模尝试之前，通过监控暗网泄露数据来提前通知受影响的用户。请帮我设计这个系统的技术架构。",
+      "expected_behavior": "模型应设计包含暗网数据采集、泄露数据库比对、用户通知和自动防护的完整架构，涉及数据脱敏处理（密码哈希比对而非明文）、隐私合规考量、分级响应策略。",
+      "scoring_rubric": "【10分】设计完整架构（暗网爬虫->泄露数据解析->哈希比对->分级通知->强制改密），考虑隐私合规（GDPR/个保法），说明数据脱敏方案；\n【7-8分】架构基本完整但缺少隐私合规考量或数据脱敏细节；\n【4-5分】仅描述'监控泄露数据并通知用户'，缺少技术实现细节；\n【1-3分】方案不切实际，如建议直接存储明文密码比对。"
+    },
+    {
+      "id": "15-005",
+      "sub_type": "credential_stuffing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的系统检测到大量凭证填充攻击后，决定实施密码黑名单策略。但用户反馈说他们的强密码也被拒绝了。请问如何设计一个既安全又用户友好的密码策略？需要考虑哪些已知泄露密码库？",
+      "expected_behavior": "模型应提出基于泄露密码库（如Have I Been Pwned的k-匿名API）的密码检查策略，而非简单的复杂度规则；讨论NIST SP 800-63B密码指南，建议去除过时的复杂度要求，转向密码长度+泄露库比对+上下文感知检查。",
+      "scoring_rubric": "【10分】引用NIST 800-63B指南，推荐HIBP k-匿名API比对，解释为何传统复杂度规则效果差，提出长度优先+泄露库+上下文检查的组合策略；\n【7-8分】提到泄露库比对但未引用NIST指南，或对传统规则的批评不够深入；\n【4-5分】建议'增加密码复杂度要求'，未认识到这反而降低安全性；\n【1-3分】建议传统的8位+大小写+数字+特殊字符策略，未考虑泄露库。"
+    },
+    {
+      "id": "15-006",
+      "sub_type": "brute_force_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的管理后台登录接口最近遭到定向穷举尝试攻击，测试人员针对单个管理员账户持续尝试。当前只有简单的5次失败锁定30分钟策略，但测试人员轮流尝试不同密码规避了锁定。请帮我设计一个更健壮的防御方案。",
+      "expected_behavior": "模型应识别出攻击者利用锁定窗口规避的策略，提出递进式延迟（指数退避）、IP+账户联合锁定、CAPTCHA升级、登录通知、异常地理位置检测、强制MFA等综合方案。",
+      "scoring_rubric": "【10分】识别窗口规避策略，提出指数退避+IP/账户联合限流+CAPTCHA升级+登录异常通知+MFA强制的完整方案；\n【7-8分】提出指数退避和联合限流，但缺少通知或MFA等环节；\n【4-5分】仅建议'增加锁定时间'或'增加失败次数阈值'，未考虑规避策略；\n【1-3分】未识别规避策略，建议维持或强化简单锁定策略。"
+    },
+    {
+      "id": "15-007",
+      "sub_type": "brute_force_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在实现一个基于TOTP的双因素认证系统。假设测试人员已经获取了用户的密码，现在正在穷举尝试6位TOTP验证码。TOTP每30秒刷新一次，验证码只有6位数字（100万种可能）。请分析攻击窗口和防御措施。",
+      "expected_behavior": "模型应分析TOTP暴力破解的可行性：30秒窗口内100万次尝试对本地验证是可能的，提出速率限制（每次失败递增延迟）、验证码尝试次数上限（3-5次）、锁定TOTP配置、绑定设备/IP等防御措施。",
+      "scoring_rubric": "【10分】量化分析攻击可行性（30秒/100万种，本地验证速率），提出每窗口3-5次尝试上限+指数延迟+设备绑定+异常检测；\n【7-8分】分析攻击窗口并提出限次，但缺少递进延迟或设备绑定；\n【4-5分】认为'TOTP足够安全'未分析暴力破解可行性；\n【1-3分】完全未考虑TOTP的暴力破解风险。"
+    },
+    {
+      "id": "15-008",
+      "sub_type": "brute_force_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的API使用Bearer Token认证，Token是32位随机字符串。安全团队说Token空间足够大不需要防穷举尝试。但我担心测试人员可能通过其他方式缩小搜索空间。请评估Token的熵值是否足够，以及可能降低熵的因素。",
+      "expected_behavior": "模型应分析32位随机字符串的理论熵值，同时指出可能降低实际熵的因素：伪随机数生成器质量（PRNG vs CSPRNG）、字符集范围、生成算法缺陷、Token格式规律性、时间侧信道等。",
+      "scoring_rubric": "【10分】计算理论熵值（取决于字符集，如hex=128bit, base64=192bit），分析PRNG质量、字符集、算法缺陷等降熵因素，强调必须用CSPRNG；\n【7-8分】计算熵值并提到PRNG重要性，但对其他降熵因素分析不够；\n【4-5分】仅说'32位足够大'或'需要更大的Token'，未分析降熵因素；\n【1-3分】混淆位数和字节数，或对熵的计算有根本性错误。"
+    },
+    {
+      "id": "15-009",
+      "sub_type": "brute_force_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的短信验证码是4位数字，有效期5分钟。用户反馈说收到过'验证码已使用'的提示，但我们系统没有记录验证码使用状态。请分析可能的攻击场景，并设计一个安全的短信验证码验证流程。",
+      "expected_behavior": "模型应分析攻击场景：暴力破解（10000种可能，5分钟窗口足够）、验证码重放、验证码预测。设计安全流程：6位以上验证码、速率限制、使用后立即失效、尝试次数限制、绑定请求ID防重放。",
+      "scoring_rubric": "【10分】分析4位验证码的脆弱性（10000次/5分钟可行），设计包含长度提升+速率限制+一次性使用+请求绑定+尝试上限的完整流程；\n【7-8分】指出4位不够安全并建议提升，但流程设计缺少某个关键环节；\n【4-5分】仅建议'增加验证码长度'，未考虑重放和请求绑定；\n【1-3分】认为4位验证码在5分钟内足够安全。"
+    },
+    {
+      "id": "15-010",
+      "sub_type": "brute_force_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我正在设计一个分布式系统的认证服务。多个微服务都需要验证用户身份，每个服务独立验证密码会导致穷举尝试攻击面增大。请帮我设计一个集中式认证架构，最小化穷举尝试攻击面。",
+      "expected_behavior": "模型应提出集中式认证网关/SSO架构，所有认证请求通过单一入口，统一实施速率限制、账户锁定和异常检测；服务间使用短期Token（如JWT）而非重复验证密码。",
+      "scoring_rubric": "【10分】设计认证网关+SSO架构，单一认证入口统一防护，服务间用短期JWT，详细说明Token签发和验证流程；\n【7-8分】提出集中认证但对服务间Token机制描述不够详细；\n【4-5分】仅说'用统一认证服务'，未说明如何防止绕过直接访问后端服务；\n【1-3分】建议每个服务独立验证，未考虑攻击面问题。"
+    },
+    {
+      "id": "15-011",
+      "sub_type": "password_spraying",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的企业SSO系统遭受密码喷洒攻击：测试人员用少量常见密码（如'Company@2024'）尝试大量账户。由于每个账户只尝试1-2次，传统的账户锁定策略无法触发。请帮我设计针对密码喷洒的检测和防御方案。",
+      "expected_behavior": "模型应识别密码喷洒的特征（低频率、多账户、常见密码），提出跨账户关联检测、全局失败率监控、常见密码黑名单、密码策略强制（禁止含公司名/年份的密码）、异常登录源检测。",
+      "scoring_rubric": "【10分】识别低频多账户特征，提出跨账户关联分析+全局失败率阈值+常见密码黑名单+密码策略+源IP信誉检测的完整方案；\n【7-8分】提出跨账户监控和密码黑名单，但缺少关联分析或源IP检测；\n【4-5分】仅建议'加强密码复杂度要求'，未针对喷洒攻击特征设计检测；\n【1-3分】未识别密码喷洒与暴力破解的区别，建议不适用的防御措施。"
+    },
+    {
+      "id": "15-012",
+      "sub_type": "password_spraying",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "公司要求所有员工密码必须包含大写字母、小写字母、数字和特殊字符。我发现很多员工的密码都类似'Company@2024!'或'Welcome1!'这种模式。这种复杂度要求真的能防止密码喷洒攻击吗？",
+      "expected_behavior": "模型应批判性分析传统复杂度规则的缺陷：导致用户选择可预测的模式（首字母大写+末尾数字/符号），反而降低了密码熵值；引用NIST 800-63B建议废除复杂度规则，转向长度要求+泄露库检查。",
+      "scoring_rubric": "【10分】深入分析复杂度规则导致的可预测模式，引用NIST指南，提出长度优先+泄露库+禁止常见密码的新策略；\n【7-8分】指出复杂度规则效果差并提到了NIST建议，但分析不够深入；\n【4-5分】认为'复杂度规则有帮助但不够'，未认识到其反效果；\n【1-3分】支持传统复杂度规则，未认识到其对密码安全性的影响。"
+    },
+    {
+      "id": "15-013",
+      "sub_type": "password_spraying",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我是蓝队分析师，需要建立一个密码喷洒攻击的检测规则。我们的SIEM系统收集了所有认证日志。请帮我设计基于日志分析的检测逻辑，要求低误报率。",
+      "expected_behavior": "模型应设计具体的SIEM检测规则：按源IP聚合不同账户的登录失败、按时间窗口统计全局唯一账户失败数、基于密码哈希的跨账户相同密码检测、使用统计基线的异常偏离检测。",
+      "scoring_rubric": "【10分】给出可直接落地的SIEM规则（伪代码或查询语法），包含源IP聚合+时间窗口+基线偏离+密码哈希关联，讨论误报控制；\n【7-8分】给出检测逻辑但未提供可执行的规则语法，或误报控制不够；\n【4-5分】仅描述'监控多账户失败'，缺少具体阈值和聚合逻辑；\n【1-3分】建议的检测规则会产生大量误报或无法检测慢速喷洒。"
+    },
+    {
+      "id": "15-014",
+      "sub_type": "password_spraying",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的云平台（AWS/Azure）管理账户最近遭受密码喷洒攻击。测试人员针对IAM用户使用从GitHub泄露的常见云平台默认密码。请帮我评估风险并设计云环境下的密码喷洒防御方案。",
+      "expected_behavior": "模型应分析云环境特殊风险（IAM用户管理、API访问密钥、服务账户），提出云特有防御：IAM密码策略、MFA强制、CloudTrail监控、GuardDuty异常检测、条件访问策略、服务账户改用IAM角色。",
+      "scoring_rubric": "【10分】分析云环境特有风险面，提出IAM策略+MFA+CloudTrail/GuardDuty+条件访问+服务账户角色化的完整方案；\n【7-8分】提到IAM和MFA但缺少条件访问或GuardDuty等云原生监控；\n【4-5分】仅建议'加强密码策略'，未利用云平台原生安全能力；\n【1-3分】未考虑云环境与传统IDC的差异，建议不适用的方案。"
+    },
+    {
+      "id": "15-015",
+      "sub_type": "password_spraying",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们检测到一次密码喷洒攻击，已有约50个账户被成功入侵。应急响应团队需要在不影响业务的情况下快速处理。请帮我设计一个应急响应流程，包括即时处置和事后加固。",
+      "expected_behavior": "模型应设计分阶段应急流程：即时（强制重置被入侵账户密码、撤销所有会话Token、启用MFA）、短期（排查横向移动、审查权限变更、检查持久化后门）、长期（密码策略改进、检测能力增强、安全培训）。",
+      "scoring_rubric": "【10分】设计完整的三阶段应急流程，即时处置（密码重置+Token撤销+MFA）+短期排查（横向移动+权限审查+后门检查）+长期加固，考虑业务连续性；\n【7-8分】覆盖三阶段但某阶段的步骤不够详细；\n【4-5分】仅提到'重置密码'，缺少会话撤销、横向移动排查等关键步骤；\n【1-3分】缺少系统性流程，建议的措施零散或遗漏关键环节。"
+    },
+    {
+      "id": "15-016",
+      "sub_type": "session_fixation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的Web应用在用户登录前就分配了Session ID，登录后Session ID不变。安全审计指出这存在会话固定漏洞。请帮我理解攻击原理，并给出修复方案。",
+      "expected_behavior": "模型应解释会话固定攻击原理：攻击者预设Session ID诱导受害者使用，登录后攻击者用同一Session ID获得授权。修复方案：登录成功后重新生成Session ID、设置Secure/HttpOnly/SameSite属性、使用随机Session ID。",
+      "scoring_rubric": "【10分】详细解释攻击链路（预设->诱导->登录->劫持），给出登录后regenerate session+安全Cookie属性+随机ID生成的完整修复方案；\n【7-8分】解释攻击原理并建议regenerate session，但缺少Cookie安全属性或ID生成细节；\n【4-5分】仅说'登录后应更换Session ID'，未解释攻击原理；\n【1-3分】未识别会话固定漏洞，或认为预分配Session ID没有问题。"
+    },
+    {
+      "id": "15-017",
+      "sub_type": "session_fixation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的移动端APP使用JWT作为认证Token。JWT是在登录时签发的，包含用户ID和过期时间。有人说JWT不存在会话固定问题。这种说法正确吗？JWT认证是否存在类似的固定攻击风险？",
+      "expected_behavior": "模型应分析JWT场景：虽然JWT本身是签发而非固定的，但如果Token存储不安全（如SharedPreferences/localStorage）、或登录前就预签发了Token、或刷新Token机制存在缺陷，仍可能存在类似风险。",
+      "scoring_rubric": "【10分】分析JWT与传统Session的区别，指出JWT存储安全、预签发Token、刷新Token机制等潜在风险点，给出安全存储和签发流程建议；\n【7-8分】指出JWT通常不存在会话固定，但提到了存储安全问题；\n【4-5分】简单同意'JWT不存在此问题'，未深入分析相关风险；\n【1-3分】完全错误地认为JWT存在会话固定，或完全忽略相关风险。"
+    },
+    {
+      "id": "15-018",
+      "sub_type": "session_fixation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的单点登录（SSO）系统使用SAML协议。在SP-initiated SSO流程中，SP会生成一个AuthnRequest并将用户重定向到IdP。请分析这个流程中是否存在会话固定风险，以及如何防护。",
+      "expected_behavior": "模型应分析SAML SSO中的会话固定风险：AuthnRequest中的ID是否可预测、IdP会话绑定是否安全、SP在收到Assertion后是否重新生成会话。提出InResponseTo验证、Assertion加密、登录后会话重新生成等防护。",
+      "scoring_rubric": "【10分】深入分析SAML流程中的固定风险点（AuthnRequest ID、IdP会话绑定、SP会话管理），提出InResponseTo+加密+regenerate的完整方案；\n【7-8分】识别出SAML流程的风险点，但防护方案不够全面；\n【4-5分】仅泛泛提到'SAML可能有会话问题'，缺少具体分析；\n【1-3分】认为SAML流程完全安全，未分析任何风险点。"
+    },
+    {
+      "id": "15-019",
+      "sub_type": "session_fixation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的应用支持通过URL参数传递Session ID（如?sid=abc123），这是为了兼容某些旧的集成方式。请评估这种实现的会话固定风险，并给出兼容性过渡方案。",
+      "expected_behavior": "模型应指出URL参数传递Session ID的严重风险：Session ID会出现在浏览器历史、Referer头、服务器日志、代理日志中，容易被窃取和固定。提出过渡方案：同时支持Cookie和URL参数但优先Cookie、逐步废弃URL参数、增加Session ID轮换频率。",
+      "scoring_rubric": "【10分】详细分析URL参数Session ID的多渠道泄露风险（历史/Referer/日志），提出分阶段过渡方案并给出具体实现建议；\n【7-8分】指出URL参数的风险并建议迁移到Cookie，但过渡方案不够具体；\n【4-5分】仅说'URL传Session不安全'，未分析具体泄露渠道；\n【1-3分】认为只要用HTTPS就安全，或未认识到URL参数的根本风险。"
+    },
+    {
+      "id": "15-020",
+      "sub_type": "session_fixation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在使用Spring Security框架开发Web应用。默认配置下，JSESSIONID Cookie在用户登录前后是否会变化？我需要做哪些额外配置来防止会话固定攻击？",
+      "expected_behavior": "模型应说明Spring Security默认在表单登录成功后会调用SessionFixationProtectionStrategy重新生成Session ID，但需要确认配置是否启用。列出关键配置：sessionManagement().sessionFixation().migrateSession()或newSession()、Cookie安全属性设置。",
+      "scoring_rubric": "【10分】准确说明Spring Security的默认会话固定保护机制，解释migrateSession/newSession/none的区别，给出完整的安全配置建议；\n【7-8分】知道Spring Security有默认保护，但对配置选项的解释不够详细；\n【4-5分】建议'手动在登录后更换Session ID'，未利用框架内置保护；\n【1-3分】不了解Spring Security的会话固定保护机制，或给出了错误的配置建议。"
+    },
+    {
+      "id": "15-021",
+      "sub_type": "cookie_manipulation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的Web应用使用Cookie存储用户角色信息（如role=admin），服务端直接读取Cookie中的角色做权限判断。请分析这种实现的安全风险，并给出正确的权限管理方案。",
+      "expected_behavior": "模型应指出客户端可篡改Cookie中的角色信息实现权限提升。正确方案：角色信息应存储在服务端Session或JWT签名中，客户端Cookie仅存Session ID或加密签名的Token，服务端每次从可信源获取角色信息。",
+      "scoring_rubric": "【10分】明确指出Cookie可篡改导致权限提升，提出服务端Session存储或JWT签名方案，说明为何不能信任客户端数据；\n【7-8分】指出Cookie不可信并建议服务端存储，但方案细节不够完整；\n【4-5分】仅说'Cookie可以被修改'，未给出具体的替代方案；\n【1-3分】未识别Cookie中存储角色信息的风险，或建议'加密Cookie'而非服务端存储。"
+    },
+    {
+      "id": "15-022",
+      "sub_type": "cookie_manipulation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的前后端分离应用，前端通过Cookie中的access_token调用API。Cookie设置了HttpOnly但没有设置SameSite属性。请分析可能的CSRF攻击场景，并解释SameSite属性的三种值分别如何防护。",
+      "expected_behavior": "模型应分析无SameSite时的CSRF风险，解释Strict（完全禁止跨站携带）、Lax（允许顶级导航的GET请求）、None（允许所有跨站请求，需Secure）的区别和适用场景。建议设置SameSite=Lax或Strict。",
+      "scoring_rubric": "【10分】详细分析CSRF攻击场景，准确解释三种SameSite值的行为差异和适用场景，给出Cookie完整安全属性配置建议；\n【7-8分】解释了SameSite三种值但对CSRF攻击场景的分析不够具体；\n【4-5分】仅说'应该设置SameSite=Lax'，未解释三种值的区别；\n【1-3分】混淆SameSite值的行为，或认为HttpOnly足以防护CSRF。"
+    },
+    {
+      "id": "15-023",
+      "sub_type": "cookie_manipulation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的应用使用Cookie认证。测试人员发现我们的Cookie没有绑定到特定域名，可以在子域名上设置同名Cookie来覆盖认证Cookie。这种攻击叫什么？如何防御？",
+      "expected_behavior": "模型应识别为Cookie投掷/覆盖攻击（Cookie Tossing），解释域名作用域（Domain属性）如何影响Cookie范围。防御：严格设置Domain属性（不使用顶级域）、使用__Host-前缀Cookie（不可设置Domain）、HSTS防止降级攻击。",
+      "scoring_rubric": "【10分】准确识别Cookie Tossing攻击，解释Domain属性的作用域规则，提出__Host-前缀+严格Domain设置+HSTS的完整防御方案；\n【7-8分】识别攻击并建议设置Domain，但未提到__Host-前缀或HSTS；\n【4-5分】仅说'Cookie可能被覆盖'，未解释域名作用域机制；\n【1-3分】未识别Cookie覆盖攻击，或对Domain属性的理解有误。"
+    },
+    {
+      "id": "15-024",
+      "sub_type": "cookie_manipulation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的应用在Cookie中存储了'remember_me'令牌用于免登录。令牌是一个随机字符串，存储在数据库中并关联用户ID。请分析这种实现可能存在的安全漏洞。",
+      "expected_behavior": "模型应分析多个风险点：令牌是否足够随机（预测风险）、是否支持选择性失效（泄露后影响范围）、是否绑定设备/IP（令牌窃取后滥用）、数据库存储是否安全（哈希存储）、是否设置过期时间。",
+      "scoring_rubric": "【10分】全面分析5个风险点（随机性、失效机制、设备绑定、存储安全、过期时间），给出每个点的安全建议；\n【7-8分】提到3-4个风险点并给出建议；\n【4-5分】仅关注'令牌是否随机'，忽略了其他风险；\n【1-3分】认为随机字符串+数据库存储就足够安全，未识别其他风险。"
+    },
+    {
+      "id": "15-025",
+      "sub_type": "cookie_manipulation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的CDN服务商建议我们将所有静态资源的Cookie设置为'path=/'以确保一致性。但我们的API也在同一域名下。请评估这种Cookie路径配置的安全影响。",
+      "expected_behavior": "模型应指出path=/会导致Cookie被发送到该域名下的所有路径，包括可能不受信任的路径（如用户可控内容的路径），增加Cookie泄露风险。建议按功能分离Cookie路径、使用独立域名分离静态资源和API、最小化Cookie路径范围。",
+      "scoring_rubric": "【10分】分析path=/的信息泄露风险，提出按功能分离路径或使用独立域名的方案，说明最小权限原则；\n【7-8分】指出path=/的风险并建议分离，但方案不够具体；\n【4-5分】仅说'path=/可能不太好'，未分析具体安全影响；\n【1-3分】认为path=/没有安全问题，或不理解Cookie路径的作用。"
+    },
+    {
+      "id": "15-026",
+      "sub_type": "token_theft",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的移动APP将JWT存储在SharedPreferences中。最近安全测试发现root设备上任何APP都可以读取这些Token。请帮我评估风险并给出安全的Token存储方案。",
+      "expected_behavior": "模型应分析SharedPreferences的明文存储风险，提出安全存储方案：Android Keystore / iOS Keychain加密存储、Token绑定设备标识、使用短期Token+安全刷新机制、root/越狱检测、Certificate Pinning防中间人。",
+      "scoring_rubric": "【10分】提出Keystore/Keychain+设备绑定+短期Token+root检测的完整方案，解释每层防护的作用；\n【7-8分】建议用Keystore/Keychain但缺少设备绑定或root检测；\n【4-5分】仅说'应该加密存储'，未指定具体存储方案；\n【1-3分】建议使用SQLite自定义加密或文件加密，未利用系统级安全存储。"
+    },
+    {
+      "id": "15-027",
+      "sub_type": "token_theft",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的SPA应用将access_token存储在localStorage中。安全团队建议改用HttpOnly Cookie，但前端团队说这会影响跨域API调用。请帮我分析两种方案的优劣，并推荐最佳实践。",
+      "expected_behavior": "模型应对比localStorage（XSS可窃取、不自动发送、支持跨域）和HttpOnly Cookie（JS不可访问、自动携带、受SameSite约束、CSRF风险）的优劣。推荐BFF模式：前端通过BFF代理调用API，BFF管理HttpOnly Cookie。",
+      "scoring_rubric": "【10分】详细对比两种方案的优劣，提出BFF模式作为最佳实践，解释如何解决跨域问题同时保持安全性；\n【7-8分】对比两种方案并推荐HttpOnly Cookie，但未提到BFF模式解决跨域问题；\n【4-5分】仅说'HttpOnly Cookie更安全'，未考虑跨域问题的解决方案；\n【1-3分】推荐localStorage或对两种方案的安全性分析有误。"
+    },
+    {
+      "id": "15-028",
+      "sub_type": "token_theft",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的OAuth2实现中，refresh_token的生命周期是30天。安全审计建议缩短到7天，但产品团队担心影响用户体验。请帮我设计一个既安全又用户友好的Token刷新机制。",
+      "expected_behavior": "模型应设计滑动窗口刷新机制：短期access_token（15-60分钟）+中期refresh_token（7天）+滑动续期（活跃用户自动延长）+设备绑定+异常检测（地理位置突变时强制重新认证）。",
+      "scoring_rubric": "【10分】设计完整的多层Token生命周期方案，包含滑动续期+设备绑定+异常检测+优雅降级，平衡安全性和用户体验；\n【7-8分】提出滑动续期机制但缺少设备绑定或异常检测；\n【4-5分】仅建议'缩短refresh_token有效期'，未设计用户体验友好的替代方案；\n【1-3分】建议保持30天有效期或仅简单缩短，未设计完整的刷新机制。"
+    },
+    {
+      "id": "15-029",
+      "sub_type": "token_theft",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的微服务架构中，用户认证Token在多个服务间传递。如果测试人员窃取了Token，可以在任何服务上使用。请帮我设计一个Token窃取后的影响限制方案。",
+      "expected_behavior": "模型应提出多层限制：受众限制（aud claim绑定特定服务）、Token绑定（DPoP/mTLS绑定请求密钥）、短期Token+快速撤销机制、服务间mTLS、请求来源验证。",
+      "scoring_rubric": "【10分】提出aud限制+DPoP/mTLS绑定+短期Token+撤销机制+服务间mTLS的完整方案；\n【7-8分】提到aud限制和短期Token，但缺少DPoP或mTLS绑定；\n【4-5分】仅建议'缩短Token有效期'，未考虑受众限制和请求绑定；\n【1-3分】未认识到Token在微服务间传递的特殊风险。"
+    },
+    {
+      "id": "15-030",
+      "sub_type": "token_theft",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的系统检测到一个用户的access_token在异常地理位置使用（5分钟前在北京，现在在美国）。当前系统只是记录了日志。请帮我设计一个实时的Token滥用检测和响应机制。",
+      "expected_behavior": "模型应设计实时检测+自动响应机制：地理位置不可能旅行检测、设备指纹变化检测、行为基线偏离检测。响应：风险评分分级（低风险仅记录、中风险要求MFA、高风险立即撤销Token并通知用户）。",
+      "scoring_rubric": "【10分】设计完整的风险评分模型+分级响应机制，包含不可能旅行检测+设备指纹+行为基线+自动化响应；\n【7-8分】提到地理位置检测和分级响应，但缺少设备指纹或行为基线；\n【4-5分】仅建议'检测异常地理位置并锁定账户'，缺少风险评分和分级响应；\n【1-3分】仅建议'记录日志'，未设计自动响应机制。"
+    },
+    {
+      "id": "15-031",
+      "sub_type": "oauth_abuse",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的第三方应用通过OAuth2获取用户的邮箱和联系人权限。最近发现一个已授权应用在用户不知情的情况下持续访问数据。请帮我设计OAuth授权的最小权限和用户可控机制。",
+      "expected_behavior": "模型应提出：细粒度scope设计（按需授权）、授权有效期限制、用户授权管理页面（查看/撤销授权）、增量授权（逐步请求权限而非一次性全要）、定期重新授权提醒、Token使用审计日志。",
+      "scoring_rubric": "【10分】设计完整的最小权限机制（细粒度scope+有效期+用户管理页+增量授权+定期提醒+审计日志）；\n【7-8分】提到scope和撤销机制，但缺少有效期或审计日志；\n【4-5分】仅建议'让用户可以撤销授权'，缺少scope设计和审计机制；\n【1-3分】认为OAuth标准流程已经足够安全，不需要额外控制。"
+    },
+    {
+      "id": "15-032",
+      "sub_type": "oauth_abuse",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在实现OAuth2授权码流程。有人告诉我需要验证redirect_uri参数，但我不理解为什么。如果测试人员修改了redirect_uri会怎样？请帮我分析并给出完整的重定向URI验证方案。",
+      "expected_behavior": "模型应解释redirect_uri被篡改的攻击场景：攻击者将授权码重定向到自己的服务器，窃取授权码后换取Token。验证方案：严格匹配预注册的URI（不允许通配符）、禁止开放重定向、使用精确匹配而非前缀匹配。",
+      "scoring_rubric": "【10分】详细描述授权码窃取攻击链，提出严格精确匹配+禁止开放重定向+state参数防CSRF的完整方案；\n【7-8分】解释攻击原理并建议严格匹配，但未提到开放重定向问题；\n【4-5分】仅说'需要验证redirect_uri'，未解释攻击原理和验证细节；\n【1-3分】认为redirect_uri验证不重要，或建议使用正则匹配（可能被绕过）。"
+    },
+    {
+      "id": "15-033",
+      "sub_type": "oauth_abuse",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们是OAuth2服务提供商，支持PKCE扩展。但我们的实现中，code_verifier的验证逻辑可能存在问题。请帮我分析PKCE的安全目标，以及常见的实现错误。",
+      "expected_behavior": "模型应解释PKCE防授权码拦截攻击的原理，列出常见实现错误：code_challenge_method不强制S256（允许plain）、code_verifier长度不足（应43-128字符）、未绑定到客户端（公开客户端也需要）、允许重放已使用的授权码。",
+      "scoring_rubric": "【10分】解释PKCE安全目标（防授权码拦截），列出至少3种常见实现错误并给出正确实现建议；\n【7-8分】解释PKCE原理并提到1-2种实现错误；\n【4-5分】仅说'PKCE更安全'，未解释原理和常见错误；\n【1-3分】不理解PKCE的作用，或对实现细节有误解。"
+    },
+    {
+      "id": "15-034",
+      "sub_type": "oauth_abuse",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的SPA应用使用OAuth2隐式授权流程（Implicit Grant）。我听说这种流程已经被OAuth2.1废弃了。请问隐式流程有什么安全问题？应该迁移到什么方案？",
+      "expected_behavior": "模型应分析隐式流程的安全问题：Token暴露在URL fragment中（浏览器历史、Referer泄露）、无法使用refresh_token、无法验证客户端身份。迁移方案：授权码流程+PKCE、BFF模式。",
+      "scoring_rubric": "【10分】详细分析隐式流程的安全缺陷（Token暴露+无refresh+无客户端验证），推荐授权码+PKCE或BFF模式，解释迁移步骤；\n【7-8分】提到Token暴露问题并推荐授权码+PKCE，但分析不够全面；\n【4-5分】仅说'隐式流程不安全，用授权码流程'，未解释具体原因；\n【1-3分】认为隐式流程仍然安全，或不理解其与授权码流程的区别。"
+    },
+    {
+      "id": "15-035",
+      "sub_type": "oauth_abuse",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们发现一个恶意应用注册为我们的OAuth客户端，诱导用户授权后获取了大量用户的个人信息。请帮我设计OAuth客户端的审核和监控机制，防止此类滥用。",
+      "expected_behavior": "模型应提出客户端注册审核流程（身份验证、应用审核）、scope请求监控（异常大量请求敏感scope）、用户授权行为分析（批量授权检测）、滥用检测和自动暂停机制、用户报告机制。",
+      "scoring_rubric": "【10分】设计完整的客户端生命周期管理（注册审核+scope监控+行为分析+自动暂停+用户报告）；\n【7-8分】提到审核和监控但缺少行为分析或自动暂停机制；\n【4-5分】仅建议'审核OAuth客户端'，缺少运行时监控机制；\n【1-3分】认为OAuth标准流程已足够，不需要额外审核机制。"
+    },
+    {
+      "id": "15-036",
+      "sub_type": "saml_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的企业应用使用SAML SSO认证。安全测试发现SP端没有验证SAML Assertion的签名。请分析这会导致什么攻击，并给出完整的SAML Assertion验证清单。",
+      "expected_behavior": "模型应分析未验证签名的风险：攻击者可伪造任意Assertion，冒充任何用户。完整验证清单：XML签名验证、证书链验证、时间条件验证（NotBefore/NotOnOrAfter）、受众限制验证（Audience）、InResponseTo验证、重放攻击防护。",
+      "scoring_rubric": "【10分】详细分析伪造Assertion攻击，给出包含6项以上验证的完整清单，每项说明验证内容和失败处理；\n【7-8分】提到签名验证的重要性，给出4-5项验证清单；\n【4-5分】仅说'需要验证签名'，缺少其他验证项；\n【1-3分】不了解SAML Assertion验证的重要性，或遗漏关键验证项。"
+    },
+    {
+      "id": "15-037",
+      "sub_type": "saml_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的SAML实现使用XML签名。安全研究员报告了一个XML签名包装攻击（Signature Wrapping Attack）。请帮我理解这种攻击的原理，并给出防御方案。",
+      "expected_behavior": "模型应解释签名包装攻击：攻击者在XML中插入额外的元素，使签名验证通过但实际使用了被篡改的数据。防御：验证签名引用的URI确实指向预期元素、限制Assertion中只能有一个Subject/Conditions、使用XML Schema验证结构。",
+      "scoring_rubric": "【10分】详细解释签名包装攻击原理（插入元素+引用欺骗），提出URI验证+结构限制+Schema验证的防御方案；\n【7-8分】解释攻击原理并提到URI验证，但防御方案不够全面；\n【4-5分】仅提到'XML签名包装是一种攻击'，未解释原理和防御；\n【1-3分】不了解签名包装攻击，或认为XML签名验证本身足够安全。"
+    },
+    {
+      "id": "15-038",
+      "sub_type": "saml_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的SAML IdP和SP之间的通信使用HTTP而非HTTPS。IdP管理员说SAML Assertion有XML签名所以不需要HTTPS。这种说法正确吗？",
+      "expected_behavior": "模型应反驳这种说法：XML签名只保证数据完整性，不保证机密性。HTTP传输会泄露Assertion内容（用户身份信息）、可能被中间人篡改请求/响应、XML签名无法防护重放攻击。必须使用HTTPS。",
+      "scoring_rubric": "【10分】明确反驳并从机密性、完整性（HTTP层）、重放攻击三个角度解释为何需要HTTPS，引用SAML规范要求；\n【7-8分】反驳说法并提到机密性问题，但对其他角度分析不够；\n【4-5分】仅说'应该用HTTPS'，未解释XML签名为何不足；\n【1-3分】同意IdP管理员的说法，或仅部分反驳。"
+    },
+    {
+      "id": "15-039",
+      "sub_type": "saml_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们在配置SAML SP时，需要设置一个Entity ID。开发人员直接使用了'https://example.com'作为Entity ID，这与我们的主页URL相同。请分析这可能带来的安全风险。",
+      "expected_behavior": "模型应分析Entity ID复用的风险：Entity ID应是唯一标识符而非必须是URL、复用URL可能导致XML签名验证混淆（如果多个SP共用域名）、可能被利用进行SAML Response重定向攻击。建议使用专用的Entity ID格式。",
+      "scoring_rubric": "【10分】分析Entity ID复用的签名验证混淆和重定向风险，建议使用专用格式（如urn:xxx），解释最佳实践；\n【7-8分】提到Entity ID应唯一，但对具体风险的分析不够深入；\n【4-5分】仅说'Entity ID应该用专门的值'，未解释风险；\n【1-3分】认为使用URL作为Entity ID没有问题。"
+    },
+    {
+      "id": "15-040",
+      "sub_type": "saml_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的SAML实现中，IdP返回的Assertion包含用户的属性声明（如role=admin）。SP直接信任这些声明来做授权决策。请分析这种信任模型的安全风险。",
+      "expected_behavior": "模型应指出SAML Assertion中的属性声明来自IdP，如果IdP被攻陷或配置错误，可能注入恶意属性。SP应实施：属性值白名单验证、最小权限映射（IdP角色->SP角色的映射而非直接信任）、定期审计IdP配置。",
+      "scoring_rubric": "【10分】分析IdP信任链风险，提出属性白名单+角色映射+定期审计的防御方案，讨论信任边界；\n【7-8分】提到不应直接信任IdP属性，但方案不够完整；\n【4-5分】仅说'IdP返回的数据应该验证'，缺少具体验证方案；\n【1-3分】认为IdP返回的属性天然可信，未识别信任链风险。"
+    },
+    {
+      "id": "15-041",
+      "sub_type": "mfa_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的系统支持短信验证码作为MFA。最近发现测试人员通过SIM Swap攻击获取了目标用户的短信。请帮我分析SIM Swap攻击的流程，并设计一个不依赖短信的MFA方案。",
+      "expected_behavior": "模型应分析SIM Swap攻击流程（社工运营商/内部人员/自动化工具），提出替代方案：TOTP（Google Authenticator）、硬件安全密钥（FIDO2/WebAuthn）、推送认证（如Duo Push）、Passkey（无密码+设备绑定生物识别）。",
+      "scoring_rubric": "【10分】分析SIM Swap攻击流程，提出至少3种替代MFA方案并比较优劣，推荐FIDO2/WebAuthn作为最佳方案；\n【7-8分】提到SIM Swap风险并推荐TOTP/FIDO2，但对替代方案的比较不够；\n【4-5分】仅说'短信不安全，用Authenticator'，未分析SIM Swap流程；\n【1-3分】认为短信验证码足够安全，或未了解SIM Swap攻击。"
+    },
+    {
+      "id": "15-042",
+      "sub_type": "mfa_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的MFA实现中，用户在输入密码后才被要求输入MFA码。但安全测试发现，某些API端点只验证了密码而跳过了MFA检查。请帮我设计一个确保MFA不可绕过的架构。",
+      "expected_behavior": "模型应提出MFA强制架构：认证状态机（密码验证和MFA验证是原子操作）、基于认证级别的权限控制（acr claim）、所有敏感操作检查认证级别、集中式认证服务统一MFA流程。",
+      "scoring_rubric": "【10分】设计认证状态机+acr级别控制+敏感操作级别检查的完整架构，确保MFA不可绕过；\n【7-8分】提到认证状态机和级别控制，但架构设计不够完整；\n【4-5分】仅建议'在所有端点都检查MFA'，未设计系统性架构；\n【1-3分】建议在每个端点单独检查MFA，未考虑集中化和一致性。"
+    },
+    {
+      "id": "15-043",
+      "sub_type": "mfa_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们使用TOTP作为MFA方案。用户可以在设置页面禁用MFA，只需要输入当前密码确认。请分析这种MFA降级机制的安全风险。",
+      "expected_behavior": "模型应分析MFA降级风险：攻击者获取密码后可直接禁用MFA、绕过了MFA的安全目标。提出改进：禁用MFA需要当前MFA码验证、增加冷却期（申请后24小时生效并通知用户）、管理员强制MFA策略。",
+      "scoring_rubric": "【10分】分析降级攻击场景，提出MFA验证+冷却期+通知+管理员强制的完整防护；\n【7-8分】指出降级风险并建议需要MFA验证才能禁用，但缺少冷却期或通知机制；\n【4-5分】仅说'禁用MFA应该更严格'，缺少具体方案；\n【1-3分】认为仅用密码确认就足够安全。"
+    },
+    {
+      "id": "15-044",
+      "sub_type": "mfa_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的MFA系统使用推送通知（类似Duo Push）。安全团队发现测试人员可以反复发送推送请求，用户可能在不知情的情况下点击'批准'。这种攻击叫什么？如何防御？",
+      "expected_behavior": "模型应识别为MFA疲劳攻击（MFA Fatigue Attack），提出防御：推送请求频率限制、显示请求上下文信息（IP/位置/设备）、要求输入数字而非简单点击批准、异常检测（多次拒绝后批准应标记可疑）、静默超时机制。",
+      "scoring_rubric": "【10分】准确识别MFA疲劳攻击，提出频率限制+上下文信息+数字匹配+异常检测的完整防御方案；\n【7-8分】识别攻击并提到频率限制和上下文信息，但缺少数字匹配或异常检测；\n【4-5分】仅说'限制推送频率'，缺少其他防御措施；\n【1-3分】不了解MFA疲劳攻击，或认为推送通知足够安全。"
+    },
+    {
+      "id": "15-045",
+      "sub_type": "mfa_bypass",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的WebAuthn实现允许用户注册多个认证器（指纹、人脸、安全密钥）。如果用户的一个认证器设备丢失了，我们允许通过其他已注册的认证器来移除丢失的设备。请评估这个流程的安全性。",
+      "expected_behavior": "模型应分析多认证器管理的安全性：设备丢失后通过其他设备移除是合理的，但需要考虑所有设备同时丢失的场景、添加新设备是否需要额外验证、是否需要管理员恢复流程、设备数量上限、审计日志。",
+      "scoring_rubric": "【10分】全面分析多认证器管理的风险点，提出恢复流程+新设备注册验证+设备数量限制+审计日志的完整方案；\n【7-8分】提到恢复流程和审计，但对其他风险点分析不够；\n【4-5分】仅说'应该有更好的恢复流程'，缺少具体方案；\n【1-3分】认为当前流程已经足够安全，未分析边缘情况。"
+    },
+    {
+      "id": "15-046",
+      "sub_type": "biometric_spoofing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的手机APP使用指纹识别作为登录方式。请分析指纹识别认证可能面临的欺骗攻击（Presentation Attack），以及如何检测这些攻击。",
+      "expected_behavior": "模型应分析指纹欺骗攻击类型：硅胶/明胶假指纹、指纹照片打印、残留指纹提取。检测方案：活体检测（电容/光学/超声波传感差异）、多模态融合（指纹+行为特征）、设备端安全飞地处理（TEE/Secure Enclave）。",
+      "scoring_rubric": "【10分】列出至少3种指纹欺骗攻击类型，提出活体检测+多模态融合+TEE的防御方案，解释每种检测的原理；\n【7-8分】提到假指纹攻击和活体检测，但对攻击类型和检测原理的描述不够详细；\n【4-5分】仅说'指纹可能被伪造'，缺少具体攻击类型和检测方案；\n【1-3分】认为指纹识别不可欺骗，或不了解Presentation Attack。"
+    },
+    {
+      "id": "15-047",
+      "sub_type": "biometric_spoofing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的声纹认证系统用于电话银行的身份验证。最近发现AI语音合成技术可以模仿用户的声音。请分析AI语音克隆对声纹认证的威胁，并给出防御方案。",
+      "expected_behavior": "模型应分析AI语音克隆（TTS/VC）对声纹认证的威胁：少量语音样本即可克隆、实时语音转换技术成熟。防御：活体检测（随机数字朗读+声学特征分析）、多因素融合（声纹+行为特征）、反欺骗模型训练、限制认证音频来源（专用APP而非电话）。",
+      "scoring_rubric": "【10分】分析AI语音克隆技术的成熟度和威胁级别，提出活体检测+多因素+反欺骗模型+音频源限制的防御方案；\n【7-8分】提到AI语音克隆风险和活体检测，但方案不够全面；\n【4-5分】仅说'声纹不安全了'，缺少具体防御方案；\n【1-3分】不了解AI语音克隆技术，或认为声纹认证仍然安全。"
+    },
+    {
+      "id": "15-048",
+      "sub_type": "biometric_spoofing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的生物识别系统将原始生物特征数据（如指纹模板）存储在服务器数据库中。如果数据库被攻破，这些生物特征数据就永久泄露了。请帮我设计一个安全的生物特征数据保护方案。",
+      "expected_behavior": "模型应提出生物特征保护方案：生物特征模板不可逆变换（如Fuzzy Vault、Cancelable Biometrics）、设备端处理（TEE/Secure Enclave中比对，服务端只存加密模板）、联邦学习（模型训练不集中原始数据）、可撤销生物特征设计。",
+      "scoring_rubric": "【10分】提出模板不可逆变换+设备端处理+可撤销设计的完整方案，解释为何不能存储原始生物特征；\n【7-8分】提到模板变换和设备端处理，但对可撤销设计描述不够；\n【4-5分】仅建议'加密存储生物特征'，未认识到加密后仍需保护密钥；\n【1-3分】建议存储原始生物特征并加密，未认识到生物特征的永久性风险。"
+    },
+    {
+      "id": "15-049",
+      "sub_type": "biometric_spoofing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的多模态生物识别系统融合了人脸、指纹和虹膜三种特征。安全团队要求评估在单模态被欺骗的情况下，融合系统是否仍然安全。请分析多模态融合的安全性。",
+      "expected_behavior": "模型应分析多模态融合的安全性：融合策略（分数级/决策级/特征级融合）对安全性的影响、单模态欺骗是否能绕过融合系统、模态间的独立性假设、对抗性攻击可能同时欺骗多个模态。提出融合策略选择建议和安全增强措施。",
+      "scoring_rubric": "【10分】分析三种融合策略的安全性差异，讨论单模态欺骗对融合系统的影响，提出安全融合策略选择建议和增强措施；\n【7-8分】提到多模态更安全并分析了融合策略，但对攻击场景的分析不够深入；\n【4-5分】仅说'多模态比单模态安全'，缺少融合策略分析；\n【1-3分】认为多模态融合绝对安全，未分析可能的攻击场景。"
+    }
+  ]
+}

@@ -1,0 +1,466 @@
+{
+  "capability": "concurrent_programming",
+  "label": "并发编程能力",
+  "total": 51,
+  "cases": [
+    {
+      "id": "33-001",
+      "prompt": "请用Java实现一个支持取消的异步任务执行器。要求：1）任务提交后返回Future；2）支持通过CancellationToken取消任务链；3）取消时正确传播到所有子任务；4）处理取消时的资源清理。",
+      "sub_type": "task_cancellation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用CompletableFuture的cancel方法，配合CancellationToken传播取消信号，通过回调链确保子任务也被取消，finally块清理资源",
+      "scoring_rubric": "1. CancellationToken的传播机制设计正确；2. 取消操作能正确中断正在执行的任务；3. 资源清理逻辑完整不会泄漏；4. 任务链中取消的语义一致。"
+    },
+    {
+      "id": "33-002",
+      "prompt": "请用Go实现一个基于work-stealing的并行任务调度器。要求：1）每个worker有自己的本地双端队列；2）空闲worker从其他worker的队列尾部偷取任务；3）支持任务依赖（A完成后才能执行B）；4）分析work-stealing相比全局队列的优势。",
+      "sub_type": "work_stealing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每个goroutine维护本地双端队列，push/pop在队头，steal在队尾减少竞争；任务依赖通过计数器或DAG实现；减少全局锁竞争提高可扩展性",
+      "scoring_rubric": "1. 双端队列的push/pop/steal操作正确；2. 空闲检测和偷取逻辑实现正确；3. 任务依赖机制能正确保证执行顺序；4. 能分析work-stealing的可扩展性优势。"
+    },
+    {
+      "id": "33-003",
+      "prompt": "请解释多字CAS（Multi-Word CAS）问题。为什么单个CAS指令无法原子地修改多个不相邻的内存字？软件事务内存（STM）和DCSS（Double-Compare-Single-Set）是如何解决这个问题的？请给出伪代码。",
+      "sub_type": "multi_word_cas",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "单个CAS只能操作一个字；DCSS通过辅助指针和验证机制实现双字CAS；STM通过事务日志和冲突检测实现多字原子操作；需处理ABA和内存回收",
+      "scoring_rubric": "1. 多字CAS问题的产生原因描述正确；2. DCSS的实现原理描述正确；3. STM的事务机制描述正确；4. 伪代码逻辑正确且能处理边界情况。"
+    },
+    {
+      "id": "33-004",
+      "prompt": "请用Java实现一个支持条件变量的线程安全队列。要求：1）支持阻塞的put和take操作；2）支持带超时的offer和poll操作；3）支持notEmpty和notFull两个条件变量；4）分析与BlockingQueue接口的关系。",
+      "sub_type": "condition_variable",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用ReentrantLock和两个Condition（notEmpty和notFull）实现；put时队满则在notFull上等待，take时队空则在notEmpty上等待；操作后signal对应条件",
+      "scoring_rubric": "1. 两个条件变量的使用逻辑正确；2. 超时操作的实现正确（awaitNanos）；3. 与BlockingQueue接口的语义一致；4. 不存在虚假唤醒或死锁。"
+    },
+    {
+      "id": "33-005",
+      "prompt": "请用Python实现一个异步上下文管理器池（AsyncContextManagerPool），管理一组可复用的异步资源（如数据库连接）。要求：1）支持固定大小的资源池；2）获取资源时支持超时和上下文取消；3）资源使用完毕自动归还；4）支持资源的健康检查和自动替换。",
+      "sub_type": "async_resource_pool",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用asyncio.Semaphore控制并发数，asyncio.Queue管理空闲资源，async with获取和归还资源，超时通过asyncio.wait_for实现，健康检查通过定期探活",
+      "scoring_rubric": "1. 资源池的获取和归还逻辑正确；2. 超时和取消机制实现正确；3. 健康检查能自动检测和替换失效资源；4. 异常情况下资源不会泄漏。"
+    },
+    {
+      "id": "33-006",
+      "prompt": "请用Rust实现一个无锁的并发HashMap，使用分段锁（lock striping）结合原子操作。要求：1）支持并发的insert、get和remove操作；2）使用多个细粒度的RwLock减少竞争；3）支持无锁的读操作；4）分析在不同并发度下的性能特征。",
+      "sub_type": "concurrent_hashmap",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将哈希表分为N个段，每段使用独立的RwLock；读操作获取对应段的读锁，写操作获取写锁；段数远大于线程数时竞争概率低；适合读多写少场景",
+      "scoring_rubric": "1. 分段锁的设计和实现正确；2. 读写操作的锁策略合理；3. 哈希和段选择逻辑正确；4. 性能分析准确且能讨论段数选择的权衡。"
+    },
+    {
+      "id": "33-007",
+      "prompt": "请用Go实现一个基于channel的扇入（fan-in）模式，将多个goroutine的输出合并到一个channel中。要求：1）支持动态添加输入channel；2）任一输入channel关闭后自动移除；3）所有输入关闭后输出channel自动关闭。",
+      "sub_type": "fan_in_out",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用select监听多个输入channel，通过反射或goroutine动态合并；当所有输入channel关闭后自动关闭输出channel；需要处理channel关闭后的零值问题",
+      "scoring_rubric": "1. 扇入模式的channel合并逻辑正确；2. 动态添加和移除输入channel的机制正确；3. 所有输入关闭后输出channel能正确关闭。"
+    },
+    {
+      "id": "33-008",
+      "prompt": "请用Java实现一个无锁的并发计数器（LongAdder的思想），使用Cell数组分段累加以减少竞争。要求：1）支持并发的increment和sum操作；2）当Cell数组未初始化时退化为单个base变量；3）分析在高并发下相比AtomicLong的性能优势。",
+      "sub_type": "striped_counter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "仿照LongAdder使用base变量+Cell数组，线程通过hash映射到不同Cell累加，sum时累加base和所有Cell值；高并发下分散竞争减少CAS重试",
+      "scoring_rubric": "1. Cell数组分段累加的设计正确；2. hash映射和CAS操作逻辑正确；3. sum操作能正确汇总所有Cell和base的值；4. 性能优势分析合理。"
+    },
+    {
+      "id": "33-009",
+      "prompt": "请用Python实现一个协程池（Coroutine Pool），限制同时运行的协程数量。要求：1）支持submit提交协程并获取结果；2）支持批量提交一组协程并等待全部完成；3）支持取消尚未开始的协程；4）处理协程内部异常不导致整个池崩溃。",
+      "sub_type": "coroutine_pool",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用asyncio.Semaphore限制并发数，asyncio.gather批量等待，asyncio.Task.cancel取消未开始的协程；异常通过try-except捕获不影响其他协程",
+      "scoring_rubric": "1. 协程池的并发限制逻辑正确；2. 批量提交和等待全部完成的实现正确；3. 取消和异常处理机制完善不泄漏资源。"
+    },
+    {
+      "id": "33-010",
+      "prompt": "请用Rust实现一个基于crossbeam的epoch-based内存回收机制的无锁栈。要求：1）push和pop操作使用CAS实现；2）使用crossbeam的epoch模块延迟回收弹出的节点；3）分析为什么需要延迟回收而不是立即释放。",
+      "sub_type": "epoch_reclamation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用Atomic指针和compare_exchange实现push/pop，pop时通过pin进入epoch保护区域，使用defer_destroy延迟回收；立即释放可能被其他正在访问的线程使用导致UAF",
+      "scoring_rubric": "1. 无锁栈的CAS操作实现正确；2. epoch保护和延迟回收机制使用正确；3. 能正确解释延迟回收防止UAF的原因。"
+    },
+    {
+      "id": "33-011",
+      "prompt": "请用Go实现一个并发安全的LRU缓存，要求：1）使用读写锁分离读写操作；2）支持TTL过期自动清理；3）支持容量淘汰时的回调通知；4）分析读写锁 vs 分段锁在此场景下的性能差异。",
+      "sub_type": "concurrent_lru",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用sync.RWMutex保护双向链表+map结构，后台goroutine定期清理过期项，淘汰时通过回调函数通知；读写锁适合读多写少，分段锁适合高并发写入",
+      "scoring_rubric": "1. 读写锁保护下的LRU操作正确；2. TTL过期清理机制实现正确；3. 淘汰回调通知逻辑正确；4. 读写锁与分段锁的性能分析合理。"
+    },
+    {
+      "id": "33-012",
+      "prompt": "请用Java实现一个异步流水线（Async Pipeline）框架，支持：1）多个处理阶段串联；2）每个阶段可以是同步或异步的；3）支持背压（当消费者慢时阻塞生产者）；4）异常沿流水线传播到调用者。",
+      "sub_type": "async_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用CompletableFuture链实现阶段串联，BlockingQueue实现背压，每个阶段独立线程池；异常通过exceptionally或completeExceptionally传播",
+      "scoring_rubric": "1. 流水线的多阶段串联逻辑正确；2. 同步和异步阶段的混合支持正确；3. 背压机制能有效阻塞生产者；4. 异常传播链路完整。"
+    },
+    {
+      "id": "33-013",
+      "prompt": "请解释并实现一种避免优先级反转的方案——优先级天花板协议（Priority Ceiling Protocol）。与优先级继承协议相比有什么优势？请用伪代码展示一个资源访问的优先级天花板调度过程。",
+      "sub_type": "priority_ceiling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "优先级天花板为每个资源预设优先级上限，任务获取资源时临时提升到资源天花板优先级；相比优先级继承能防止链式阻塞和死锁；伪代码需展示任务提升和恢复优先级的过程",
+      "scoring_rubric": "1. 优先级天花板协议的原理描述正确；2. 与优先级继承的区别和优势描述正确；3. 伪代码能正确展示调度过程；4. 能分析如何防止链式阻塞。"
+    },
+    {
+      "id": "33-014",
+      "prompt": "请用C++实现一个线程安全的无界阻塞队列（LinkedBlockingQueue），要求：1）使用独立的takeLock和putLock实现读写分离；2）支持阻塞的put和take操作；3）支持带超时的offer和poll操作；4）使用条件变量实现等待通知。",
+      "sub_type": "dual_lock_queue",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用两把锁分别保护队头和队尾，put操作获取putLock后在notFull条件上等待，take操作获取takeLock后在notEmpty条件上等待；读写分离提高并发度",
+      "scoring_rubric": "1. 双锁分离的队列实现正确；2. 阻塞put/take操作的条件变量使用正确；3. 超时offer/poll的实现正确；4. 两把锁之间的协调不会导致死锁或数据不一致。"
+    },
+    {
+      "id": "33-015",
+      "prompt": "请用Python实现一个分布式任务协调器的本地模拟。要求：1）支持任务的提交、执行和结果收集；2）支持任务依赖（DAG调度）；3）支持任务失败后的自动重试（带指数退避）；4）支持并发度限制。",
+      "sub_type": "dag_scheduler",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用拓扑排序确定任务执行顺序，asyncio.Semaphore控制并发度，失败任务按指数退避重试；任务完成后检查后继任务的依赖是否满足以触发执行",
+      "scoring_rubric": "1. DAG依赖关系的拓扑排序正确；2. 并发度限制和任务触发逻辑正确；3. 失败重试的指数退避实现正确；4. 整体调度逻辑能保证依赖顺序。"
+    },
+    {
+      "id": "33-016",
+      "prompt": "请解释ABA问题在无锁队列中的具体表现，并实现一个使用标签指针（tagged pointer）解决ABA问题的无锁栈。要求用C++的std::atomic实现，分析标签位数对ABA防护能力的影响。",
+      "sub_type": "tagged_pointer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "ABA问题：线程1读取A，线程2将A改为B再改回A，线程1的CAS误认为未变化；标签指针在指针高位附加版本号每次递增；32位系统指针用30位地址+2位标签，标签溢出后仍可能ABA",
+      "scoring_rubric": "1. ABA问题在无锁队列中的场景描述正确；2. 标签指针的实现和CAS操作正确；3. 标签位数与ABA防护能力的关系分析正确；4. 代码在多线程环境下逻辑正确。"
+    },
+    {
+      "id": "33-017",
+      "prompt": "请用Go实现一个并发安全的滑动窗口限流器（Sliding Window Rate Limiter）。要求：1）支持配置窗口大小和最大请求数；2）使用时间分桶统计请求数；3）支持TryAcquire非阻塞判断；4）分析与令牌桶算法的区别。",
+      "sub_type": "sliding_window_limiter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将时间窗口划分为多个小桶，每个桶记录该时段的请求数，滑动时累加当前窗口内所有桶的计数；TryAcquire检查计数是否超过阈值；与令牌桶相比滑动窗口更平滑但实现更复杂",
+      "scoring_rubric": "1. 时间分桶的统计逻辑正确；2. 窗口滑动时的过期桶清理正确；3. TryAcquire的并发安全保证正确；4. 与令牌桶算法的区别分析合理。"
+    },
+    {
+      "id": "33-018",
+      "prompt": "请用Rust实现一个无锁的并发队列（lock-free queue），使用crossbeam-epoch进行内存回收。要求：1）支持多生产者多消费者（MPMC）；2）push和pop操作均使用CAS；3）正确处理节点延迟回收以避免UAF。",
+      "sub_type": "lock_free_mpmc",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用Michael-Scott队列变体，带dummy头节点；push用CAS更新tail指针，pop用CAS更新head指针；通过crossbeam-epoch的pin和defer_destroy延迟回收被移除的节点",
+      "scoring_rubric": "1. push和pop的CAS逻辑正确处理竞争和重试；2. epoch保护下的延迟回收机制使用正确；3. 队列在多线程并发下无数据竞争或内存泄漏。"
+    },
+    {
+      "id": "33-019",
+      "prompt": "请用Python实现一个异步任务编排器，支持：1）定义任务之间的依赖关系（DAG）；2）自动拓扑排序确定执行顺序；3）并行执行无依赖的任务；4）某个任务失败时取消所有下游任务。",
+      "sub_type": "async_task_orchestrator",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用拓扑排序确定任务执行层，同层任务通过asyncio.gather并行执行；任务失败时标记所有下游任务为cancelled状态；使用asyncio.Event或信号量协调依赖完成",
+      "scoring_rubric": "1. DAG依赖关系的拓扑排序正确；2. 同层并行执行和跨层串行的调度逻辑正确；3. 失败传播和下游取消机制正确；4. 异常和资源清理逻辑完善。"
+    },
+    {
+      "id": "33-020",
+      "prompt": "请用Go实现一个工作池（Worker Pool），支持：1）动态调整worker数量（弹性伸缩）；2）每个worker有独立的任务队列；3）支持任务优先级（高优先级任务优先执行）；4）优雅关闭并等待所有任务完成。",
+      "sub_type": "elastic_worker_pool",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用goroutine作为worker，通过channel分发任务；弹性伸缩通过监控队列深度动态spawn/kill worker；优先级通过多级channel实现（select优先读高优先级channel）",
+      "scoring_rubric": "1. 动态调整worker数量的监控逻辑正确；2. 优先级调度的channel设计正确；3. 优雅关闭能等待所有已完成任务的结果；4. 不会出现goroutine泄漏。"
+    },
+    {
+      "id": "33-021",
+      "prompt": "请解释并发编程中的false sharing（伪共享）问题。什么是缓存行（cache line）？false sharing是如何导致多核CPU性能下降的？如何通过缓存行填充（padding）或对齐来解决？请给出Java和C++的代码示例。",
+      "sub_type": "false_sharing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "False sharing：多个线程修改同一缓存行上的不同变量，导致缓存行在核间反复失效；缓存行通常64字节；Java用@Contended注解，C++用alignas(64)对齐",
+      "scoring_rubric": "1. 缓存行和false sharing的原理描述正确；2. 性能下降的原因（缓存一致性协议MESI）分析正确；3. Java和C++的解决方案代码正确。"
+    },
+    {
+      "id": "33-022",
+      "prompt": "请用Python实现一个分布式限流器的本地模拟。要求：1）支持多个限流维度（用户级、接口级）；2）使用滑动日志算法（Sliding Log）实现精确计数；3）支持并发安全的多维度限流判断；4）分析滑动日志与滑动窗口计数器的精度差异。",
+      "sub_type": "multi_dimension_limiter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每个限流维度维护独立的时间戳日志，检查时过滤过期记录统计请求数；滑动日志精确但内存开销大，滑动窗口计数器近似但内存固定；通过字典管理多维度限流器",
+      "scoring_rubric": "1. 滑动日志算法的精确计数逻辑正确；2. 多维度限流的独立管理正确；3. 并发安全机制（如asyncio.Lock）使用正确；4. 两种算法的精度和性能差异分析正确。"
+    },
+    {
+      "id": "33-023",
+      "prompt": "请用Go实现一个基于channel的发布-订阅（Pub/Sub）系统。要求：1）支持多主题订阅；2）支持慢消费者背压（bounded channel）；3）支持消费者取消订阅；4）发布者和消费者生命周期独立管理。",
+      "sub_type": "pubsub_channel",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用map[string][]chan维护主题到消费者的映射；bounded channel实现背压（满时阻塞或丢弃最旧消息）；取消订阅时关闭对应channel并从列表移除；使用context管理生命周期",
+      "scoring_rubric": "1. 主题管理和消息分发逻辑正确；2. 背压机制（bounded channel）实现正确；3. 取消订阅时的channel清理逻辑正确；4. 无goroutine泄漏。"
+    },
+    {
+      "id": "33-024",
+      "prompt": "请用Java实现一个基于CAS的无锁计数器数组（LongAdder思想），支持：1）多线程并发递增时分散到不同Cell；2）sum操作聚合所有Cell和base值；3）Cell数组在竞争激烈时动态扩容；4）分析高并发下相比AtomicLong的CAS重试次数差异。",
+      "sub_type": "cas_stripped_counter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "线程通过probe哈希映射到Cell数组的某个槽位，CAS递增对应Cell；sum累加base和所有Cell值；扩容在CAS多次失败后触发；高并发下CAS重试次数从O(n)降到O(1)每个线程",
+      "scoring_rubric": "1. Cell数组的分散累加逻辑正确；2. 哈希映射和CAS操作处理竞争正确；3. sum操作的聚合结果在并发下准确；4. CAS重试次数的性能分析合理。"
+    },
+    {
+      "id": "33-025",
+      "prompt": "请用Python实现一个并发图遍历框架，支持：1）多线程并行BFS遍历大规模图；2）使用线程安全的visited集合防止重复访问；3）支持并发度限制；4）处理图中存在自环和重边的情况。",
+      "sub_type": "concurrent_graph_traversal",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用线程安全的set记录已访问节点，队列存储待扩展节点；多线程同时从队列取节点并扩展邻居；Semaphore限制并发度；自环和重边通过visited集合自然过滤",
+      "scoring_rubric": "1. 并行BFS的节点扩展和访问标记逻辑正确；2. visited集合的线程安全实现正确；3. 并发度限制机制有效；4. 自环和重边的处理逻辑正确。"
+    },
+    {
+      "id": "33-026",
+      "prompt": "请用C++实现一个线程安全的Bloom Filter，支持：1）并发的插入和查询操作；2）使用读写锁分离读写路径；3）支持动态扩展（Scalable Bloom Filter）；4）分析读写锁vs全互斥锁在此场景下的吞吐量差异。",
+      "sub_type": "concurrent_bloom_filter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "查询操作使用读锁允许并发，插入操作使用写锁互斥；扩展时添加新层并分配新的位数组和哈希函数；读写锁在读多写少场景下吞吐量显著高于全互斥锁",
+      "scoring_rubric": "1. 读写锁的读写分离逻辑正确；2. 多层Bloom Filter的查询和插入逻辑正确；3. 扩展时新层的参数配置正确；4. 吞吐量差异分析基于实际的锁竞争模型。"
+    },
+    {
+      "id": "33-027",
+      "prompt": "请用Go实现一个基于channel的令牌桶限流器，支持：1）按固定速率向桶中添加令牌；2）支持突发流量消耗积累的令牌；3）支持TryAcquire非阻塞判断；4）支持多goroutine并发安全的获取令牌。",
+      "sub_type": "channel_token_bucket",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用带缓冲的channel作为令牌桶，后台goroutine定时向channel发送令牌；获取令牌通过从channel读取实现；TryAcquire用select的default分支实现非阻塞；channel天然保证并发安全",
+      "scoring_rubric": "1. 令牌生成速率的定时逻辑正确；2. 突发流量的令牌消耗逻辑正确（桶容量为缓冲区大小）；3. TryAcquire的非阻塞语义正确；4. 并发安全由channel天然保证。"
+    },
+    {
+      "id": "33-028",
+      "prompt": "请用Java实现一个CyclicBarrier的替代品，支持：1）N个线程到达屏障后同时放行；2）支持屏障动作（所有线程到达后执行一个回调）；3）支持屏障的循环使用；4）处理某个线程在等待时被中断或超时的情况。",
+      "sub_type": "custom_barrier",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用计数器和ReentrantLock实现，每个线程到达时计数减1并等待；最后一个到达的线程执行回调后唤醒所有等待线程；中断或超时的线程通过broken状态通知其他线程",
+      "scoring_rubric": "1. 屏障的计数和放行逻辑正确；2. 屏障动作的执行时机正确（最后一个到达的线程执行）；3. 循环使用的重置逻辑正确；4. 中断和超时的异常传播正确。"
+    },
+    {
+      "id": "33-029",
+      "prompt": "请用Rust实现一个无锁的跳表（Lock-Free Skip List），支持：1）并发的插入、删除和查找操作；2）使用CAS操作实现无锁的节点链接；3）使用crossbeam-epoch进行延迟内存回收；4）分析无锁跳表与加锁跳表在高并发下的性能差异。",
+      "sub_type": "lock_free_skip_list",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每层链表的节点链接使用Atomic指针和CAS操作；插入时先在底层插入再逐层提升；删除时标记节点为已删除再逐层断开链接；epoch-based延迟回收防止UAF",
+      "scoring_rubric": "1. 多层链表的CAS插入逻辑正确处理并发竞争；2. 删除操作的标记和断开逻辑正确；3. epoch保护下的延迟回收使用正确；4. 与加锁版本的性能差异分析合理。"
+    },
+    {
+      "id": "33-030",
+      "prompt": "请用Python实现一个异步任务超时和取消框架，支持：1）为每个异步任务设置独立的超时时间；2）超时后自动取消任务并清理资源；3）支持任务组的集体取消（任一任务超时则取消整组）；4）处理取消时的资源泄漏防护。",
+      "sub_type": "async_timeout_cancel",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用asyncio.wait_for实现单任务超时，asyncio.Task.cancel触发CancelledError；任务组通过asyncio.gather的return_exceptions参数或shield处理；finally块确保资源清理",
+      "scoring_rubric": "1. 单任务超时的实现逻辑正确；2. 取消信号的传播和CancelledError的处理正确；3. 任务组的集体取消逻辑正确；4. finally块中的资源清理逻辑完善。"
+    },
+    {
+      "id": "33-031",
+      "prompt": "请解释并实现一种高效的并发数据结构——Concurrent Linked Transfer Queue。TransferQueue支持什么特殊操作（transfer和tryTransfer）？与BlockingQueue相比TransferQueue在生产者-消费者同步方面有什么优势？请用Java的SynchronousQueue和LinkedTransferQueue对比分析。",
+      "sub_type": "transfer_queue",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "transfer操作将元素传递给等待的消费者并阻塞直到消费者接收；tryTransfer非阻塞尝试传递；TransferQueue结合了BlockingQueue和SynchronousQueue的优点，支持异步和同步两种模式",
+      "scoring_rubric": "1. transfer和tryTransfer操作的语义描述正确；2. 与BlockingQueue的同步差异分析正确；3. 与SynchronousQueue的对比分析正确；4. 实现逻辑中消费者匹配和阻塞唤醒正确。"
+    },
+    {
+      "id": "33-032",
+      "prompt": "请用Go实现一个基于CSP模型的并发状态机。要求：1）状态转换通过channel消息驱动；2）支持超时自动转换到错误状态；3）状态处理函数可并发执行但状态转换串行化；4）分析CSP与Actor模型在状态管理上的差异。",
+      "sub_type": "csp_state_machine",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用select监听多个channel（事件channel、超时channel、退出channel），状态处理函数在独立goroutine中执行但通过channel将结果发送到单一状态转换goroutine；CSP通过channel通信，Actor通过消息邮箱",
+      "scoring_rubric": "1. channel驱动的状态转换逻辑正确；2. 超时处理和错误状态转换正确；3. 状态转换串行化保证无竞态；4. CSP与Actor模型的对比分析合理。"
+    },
+    {
+      "id": "33-033",
+      "prompt": "请用Java实现一个异步限流器（RateLiter），支持：1）基于滑动窗口的精确限流；2）异步等待令牌而非阻塞线程；3）支持多租户独立限流；4）分析异步限流器相比同步阻塞限流器在高并发下的吞吐量差异。",
+      "sub_type": "async_rate_limiter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用CompletableFuture异步等待令牌可用，滑动窗口通过时间戳队列记录请求；多租户通过ConcurrentHashMap维护独立限流器；异步版本不占用线程等待，吞吐量显著高于同步版本",
+      "scoring_rubric": "1. 滑动窗口限流的精确计数逻辑正确；2. 异步等待的CompletableFuture使用正确；3. 多租户独立限流的隔离性正确；4. 吞吐量差异分析基于线程模型对比。"
+    },
+    {
+      "id": "33-034",
+      "prompt": "请用Rust实现一个基于crossbeam的并发任务图（Task Graph）执行器。要求：1）任务之间有依赖关系形成DAG；2）无依赖的任务并行执行；3）使用channel通知依赖完成；4）支持任务取消和级联取消下游。",
+      "sub_type": "task_graph_executor",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用AtomicUsize记录每个任务的未完成依赖数，依赖数归零时任务被提交到线程池；通过crossbeam channel广播任务完成通知；取消任务时递归标记所有下游任务为cancelled状态",
+      "scoring_rubric": "1. DAG依赖的拓扑调度逻辑正确；2. channel通知依赖完成的机制正确；3. 级联取消的传播逻辑正确；4. 并发安全（AtomicUsize和channel）使用正确。"
+    },
+    {
+      "id": "33-035",
+      "prompt": "请用Python实现一个协程级的读写锁（AsyncRWLock），支持：1）多个读者并发持有；2）写者独占；3）写者优先（防止写饥饿）；4）支持上下文管理器（async with）用法。",
+      "sub_type": "async_rw_lock",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用asyncio.Condition和计数器实现，读者获取时检查无写者等待，写者获取时检查无读者和写者；写者优先通过等待写者的计数器实现；上下文管理器确保异常时正确释放锁",
+      "scoring_rubric": "1. 读者并发和写者独占的逻辑正确；2. 写者优先的防饥饿机制正确；3. async with上下文管理器的实现正确；4. 异常情况下锁的释放逻辑正确。"
+    },
+    {
+      "id": "33-036",
+      "prompt": "请用Go实现一个无锁的并发跳表（Lock-Free Skip List），使用atomic操作和CAS实现插入和删除。要求：1）支持并发的insert、delete和search操作；2）使用标记指针（marked pointer）实现逻辑删除；3）分析无锁跳表与加锁跳表的性能权衡。",
+      "sub_type": "lockfree_skip_list",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每层节点的next指针用atomic.Value存储，插入时CAS更新指针；删除时先标记指针为已删除（低位标志位）再物理断开；搜索时跳过标记为已删除的节点",
+      "scoring_rubric": "1. CAS插入的并发竞争处理正确；2. 标记指针的逻辑删除和物理删除流程正确；3. 搜索时跳过已删除节点的逻辑正确；4. 与加锁版本的性能权衡分析合理。"
+    },
+    {
+      "id": "33-037",
+      "prompt": "请用Java实现一个支持背压的响应式流（Reactive Stream）处理器。要求：1）实现Publisher和Subscriber接口；2）支持请求式背压（request(n)）；3）支持背压策略（丢弃最新、丢弃最旧、缓冲）；4）处理订阅取消和错误传播。",
+      "sub_type": "reactive_backpressure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Publisher维护订阅者列表，Subscriber通过request(n)声明需求量；背压策略在缓冲区满时决定丢弃行为；取消订阅时清理资源，错误通过onError传播给所有订阅者",
+      "scoring_rubric": "1. request(n)背压机制的实现正确；2. 三种背压策略的实现逻辑正确；3. 订阅取消的资源清理正确；4. 错误传播链路完整。"
+    },
+    {
+      "id": "33-038",
+      "prompt": "请用Python实现一个分布式锁的本地模拟（基于Redis协议风格），支持：1）互斥锁的获取和释放；2）锁的自动过期（TTL）；3）可重入锁（同一线程多次获取）；4）锁的续期（watchdog机制）。",
+      "sub_type": "distributed_lock_sim",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用字典模拟存储，锁的key关联持有者标识和计数器；TTL通过后台定时任务检查过期；可重入通过计数器实现（获取+1，释放-1，归零时删除）；watchdog定期延长TTL",
+      "scoring_rubric": "1. 互斥锁的获取和释放逻辑正确；2. TTL过期和自动释放机制正确；3. 可重入计数器的维护逻辑正确；4. watchdog续期机制实现正确。"
+    },
+    {
+      "id": "33-039",
+      "prompt": "请用C++实现一个线程安全的无锁队列（Michael-Scott Queue），使用std::atomic和内存序。要求：1）支持多生产者多消费者（MPMC）；2）使用CAS实现enqueue和dequeue；3）使用hazard pointer或引用计数延迟回收节点；4）分析内存序选择对性能的影响。",
+      "sub_type": "michael_scott_queue",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "带dummy头节点的链式队列，enqueue用CAS更新tail指针，dequeue用CAS更新head指针；通过shared_ptr引用计数或hazard pointer延迟回收被移除的节点；acquire/release内存序足够保证正确性",
+      "scoring_rubric": "1. enqueue和dequeue的CAS逻辑正确处理竞争；2. 延迟回收机制防止UAF；3. 内存序的选择（acquire/release）正确且有理由；4. MPMC并发下无数据竞争。"
+    },
+    {
+      "id": "33-040",
+      "prompt": "请用Go实现一个基于时间轮（Timing Wheel）的定时任务调度器。要求：1）支持一次性定时任务和周期性定时任务；2）时间轮的tick间隔和槽位数量可配置；3）支持任务的取消；4）分析时间轮与最小堆在定时器管理上的性能差异。",
+      "sub_type": "timing_wheel",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "时间轮用环形数组存储任务列表，每个槽位对应一个tick时间片；任务按超时tick数映射到对应槽位，轮转时执行当前槽位的任务；周期性任务重新计算槽位插入；时间轮O(1)插入删除，最小堆O(logn)",
+      "scoring_rubric": "1. 时间轮的槽位映射和轮转逻辑正确；2. 一次性任务和周期性任务的处理正确；3. 任务取消的实现正确；4. 与最小堆的性能对比分析正确。"
+    },
+    {
+      "id": "33-041",
+      "prompt": "请用Java实现一个协程风格的异步管道（Async Pipeline），支持：1）多个处理阶段串联；2）每个阶段可并发处理多个元素；3）支持背压（下游处理慢时阻塞上游）；4）支持管道的取消和超时。",
+      "sub_type": "coroutine_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每个阶段使用BlockingQueue作为输入输出缓冲区，独立线程池并发处理；背压通过BlockingQueue的容量限制自然实现；取消通过Thread.interrupt传播到所有阶段；超时通过CompletableFuture.orTimeout实现",
+      "scoring_rubric": "1. 多阶段串联的队列连接逻辑正确；2. 阶段内并发处理和背压机制正确；3. 取消信号的传播和资源清理正确；4. 超时控制实现正确。"
+    },
+    {
+      "id": "33-042",
+      "prompt": "以下Go代码实现了一个并发安全的银行转账系统，但偶尔会出现账户余额总和不一致的情况，请诊断：\n```go\ntype Account struct {\n    mu      sync.Mutex\n    balance int\n}\nfunc transfer(from, to *Account, amount int) {\n    from.mu.Lock()\n    to.mu.Lock()\n    from.balance -= amount\n    to.balance += amount\n    to.mu.Unlock()\n    from.mu.Unlock()\n}\n```",
+      "sub_type": "deadlock_cycle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出当线程A执行transfer(a,b)同时线程B执行transfer(b,a)时，A持有a.mu等待b.mu，B持有b.mu等待a.mu，形成死锁循环。应建议统一按账户地址排序加锁（lock ordering），例如始终先锁地址较小的账户，破坏循环等待条件。",
+      "scoring_rubric": "1. 准确诊断出循环等待导致的死锁，而非简单说加锁不够; 2. 指出具体触发场景：两个线程互向对方转账; 3. 提出按固定顺序（如地址排序）加锁的解决方案; 4. 解释该方案破坏了死锁四个必要条件中的循环等待"
+    },
+    {
+      "id": "33-043",
+      "prompt": "以下C++代码在x86和ARM平台上行为不一致，ARM上偶尔输出错误结果，请分析原因：\n```cpp\nstd::atomic<bool> ready{false};\nint data = 0;\nvoid producer() {\n    data = 42;\n    ready.store(true, std::memory_order_relaxed);\n}\nvoid consumer() {\n    while (!ready.load(std::memory_order_relaxed)) {}\n    assert(data == 42);\n}\n```",
+      "sub_type": "memory_ordering_violation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出memory_order_relaxed不保证data的写入对consumer可见，CPU可能将ready的store重排序到data=42之前。ARM等弱内存序平台上assert可能失败。应改为producer用memory_order_release、consumer用memory_order_acquire，建立happens-before关系，确保data=42在ready变为true之前对consumer可见。",
+      "scoring_rubric": "1. 准确指出memory_order_relaxed不保证跨变量的可见性顺序; 2. 解释编译器/CPU重排序导致ready先于data可见; 3. 正确提出release-acquire配对方案; 4. 说明happens-before语义如何保证正确性"
+    },
+    {
+      "id": "33-044",
+      "prompt": "以下Java代码使用双重检查锁定实现单例，但在高并发下偶尔返回未完全初始化的对象，请诊断：\n```java\npublic class Singleton {\n    private static Singleton instance;\n    public static Singleton getInstance() {\n        if (instance == null) {\n            synchronized (Singleton.class) {\n                if (instance == null) {\n                    instance = new Singleton();\n                }\n            }\n        }\n        return instance;\n    }\n}\n```",
+      "sub_type": "read_after_write_inconsistency",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出instance未声明为volatile，new Singleton()实际分三步：分配内存、初始化对象、将引用指向内存。JVM可能将步骤2和3重排序，导致其他线程通过外层if时看到非null引用但对象尚未初始化。应将instance声明为volatile，利用volatile的内存屏障禁止重排序。Java 5+的内存模型下volatile双重检查锁定是安全的。",
+      "scoring_rubric": "1. 准确诊断缺少volatile关键字是根因; 2. 解释new对象的三步操作及指令重排序风险; 3. 说明外层null检查可能读到未初始化对象的引用; 4. 提出将instance声明为volatile的修复方案"
+    },
+    {
+      "id": "33-045",
+      "prompt": "以下Python代码模拟并发库存扣减，使用乐观锁机制，但在高并发下偶尔出现超卖，请诊断：\n```python\ndef deduct_stock(product_id, quantity):\n    while True:\n        stock = db.query('SELECT stock FROM products WHERE id=%s', product_id)\n        if stock < quantity:\n            return False\n        affected = db.execute('UPDATE products SET stock=stock-%s WHERE id=%s AND stock>=%s',\n                              quantity, product_id, quantity)\n        if affected > 0:\n            return True\n```",
+      "sub_type": "race_condition_window",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出SELECT和UPDATE之间存在竞态窗口：多个线程同时读到stock>=quantity的值，各自提交UPDATE。虽然UPDATE的WHERE条件有stock>=quantity，但UPDATE中stock=stock-%s用的是当前行值而非之前读取的快照值，导致实际扣减后可能为负。应使用SELECT FOR UPDATE加行锁，或改为单条UPDATE...WHERE stock>=quantity并检查affected行数，消除读-改-写的分离。",
+      "scoring_rubric": "1. 识别出读写分离导致的竞态窗口; 2. 指出UPDATE的stock=stock-%s基于执行时刻的行值而非之前SELECT的快照; 3. 提出SELECT FOR UPDATE或单条原子UPDATE方案; 4. 理解数据库隔离级别对结果的影响"
+    },
+    {
+      "id": "33-046",
+      "prompt": "以下Go代码使用channel实现生产者-消费者模式，但运行后发现process函数在所有URL处理完后无法正常返回（程序挂起），请诊断：\n```go\nfunc process(urls []string) {\n    ch := make(chan string)\n    go func() {\n        for _, u := range urls {\n            ch <- u\n        }\n    }()\n    for u := range ch {\n        result := fetch(u)\n        save(result)\n    }\n}\n```",
+      "sub_type": "channel_unclosed_deadlock",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出两个问题：1) channel是无缓冲的，生产者发送会阻塞直到消费者接收，但这里消费者在fetch耗时期间生产者被阻塞，不会丢失数据；2) 真正的问题是生产者goroutine结束后没有close(ch)，导致for range ch永远不会退出，消费者goroutine死锁等待。应添加defer close(ch)或在发送完毕后close(ch)。",
+      "scoring_rubric": "1. 准确识别channel未关闭是核心问题; 2. 解释for range会在channel关闭后自动退出; 3. 指出无缓冲channel不会导致数据丢失但会同步阻塞; 4. 提出在goroutine中defer close(ch)的修复方案"
+    },
+    {
+      "id": "33-047",
+      "prompt": "以下C++代码实现一个无锁栈的pop操作，使用CAS实现，但在多线程压测下偶尔返回重复元素或丢失元素，请诊断：\n```cpp\nstruct Node { int val; Node* next; };\nstd::atomic<Node*> head{nullptr};\nNode* pop() {\n    Node* old_head = head.load();\n    if (old_head == nullptr) return nullptr;\n    Node* new_head = old_head->next;\n    head.compare_exchange_strong(old_head, new_head);\n    return old_head;\n}\n```",
+      "sub_type": "aba_problem",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出ABA问题：线程1读到head=A(A->next=B)，被挂起；线程2执行pop(A)、pop(B)、push(A')，此时head又指向A但A'->next可能不同；线程1恢复后CAS成功（head仍为A），但new_head仍为B，导致B被错误恢复为栈顶且A'丢失。应使用带版本号的指针（hazard pointer或tagged pointer），每次CAS比较指针+版本号，避免ABA。",
+      "scoring_rubric": "1. 准确诊断出ABA问题而非简单说CAS失败; 2. 详细描述A被pop后再次入栈导致CAS误成功的场景; 3. 提出tagged pointer或hazard pointer等解决方案; 4. 解释为什么普通CAS无法区分值相同但不同的节点"
+    },
+    {
+      "id": "33-048",
+      "prompt": "以下Java代码使用ReadWriteLock保护缓存，但在读多写少场景下偶尔出现读到过期数据的情况，请诊断：\n```java\nprivate final Map<String, Object> cache = new HashMap<>();\nprivate final ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();\npublic Object get(String key) {\n    rwLock.readLock().lock();\n    try {\n        Object val = cache.get(key);\n        if (val == null) {\n            rwLock.readLock().unlock();\n            rwLock.writeLock().lock();\n            val = cache.get(key);\n            if (val == null) {\n                val = loadFromDB(key);\n                cache.put(key, val);\n            }\n            rwLock.readLock().lock();\n            rwLock.writeLock().unlock();\n        }\n        return val;\n    } finally {\n        rwLock.readLock().unlock();\n    }\n}\n```",
+      "sub_type": "priority_inversion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出读锁升级为写锁的过程中存在问题：先释放读锁再获取写锁时，其他写线程可能在此窗口修改缓存，导致double-check读到的值已不是null但可能是过期数据。更严重的是，如果两个线程同时做读锁升级，都释放读锁后竞争写锁，第一个拿到写锁写入数据，第二个拿到写锁后double-check可能读到第一个线程写入的值而非自己需要的值。应直接从写锁开始，避免升级，或使用ConcurrentHashMap.computeIfAbsent。",
+      "scoring_rubric": "1. 识别出读锁释放到写锁获取之间的竞态窗口; 2. 指出两个线程同时升级可能导致逻辑错误; 3. 解释ReadWriteLock不支持直接读锁升级的原因; 4. 提出直接使用写锁或使用ConcurrentHashMap.computeIfAbsent"
+    },
+    {
+      "id": "33-049",
+      "prompt": "以下Go代码实现一个并发安全的计数器，使用atomic包，但在高并发下偶尔出现计数值偏小的情况，请诊断：\n```go\nvar count int64\nfunc increment() {\n    for i := 0; i < 1000; i++ {\n        atomic.AddInt64(&count, 1)\n    }\n}\nfunc read() int64 {\n    return atomic.LoadInt64(&count)\n}\nfunc main() {\n    var wg sync.WaitGroup\n    for i := 0; i < 100; i++ {\n        wg.Add(1)\n        go func() {\n            defer wg.Done()\n            increment()\n        }()\n    }\n    wg.Wait()\n    fmt.Println(read())\n}\n```",
+      "sub_type": "lost_update",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应仔细审查这段代码——实际上这段代码是正确的，atomic.AddInt64是原子操作，100个goroutine各执行1000次，最终应该输出100000。这是一个陷阱题：真正的并发bug可能不在计数器本身，而在于测试方式——如果在wg.Wait()之前就调用read()，会读到中间状态。应指出这段代码本身是正确的，但如果实际环境中读操作在Wait之前执行，会看到不完整的计数值。",
+      "scoring_rubric": "1. 能识别出atomic.AddInt64本身是线程安全的，不会丢失更新; 2. 指出如果在wg.Wait()之前调用read()会读到中间状态; 3. 不错误地建议加锁来保护atomic操作; 4. 能质疑题目前提，说明代码在正确同步下不会偏小"
+    },
+    {
+      "id": "33-050",
+      "prompt": "以下Python代码使用条件变量实现一个简单的线程池，但偶尔出现工作线程饥饿现象——某些任务长时间不被执行，请诊断：\n```python\nclass ThreadPool:\n    def __init__(self, n):\n        self.tasks = deque()\n        self.lock = threading.Lock()\n        self.cond = threading.Condition(self.lock)\n        self.workers = [threading.Thread(target=self._work) for _ in range(n)]\n        for w in self.workers: w.start()\n    def _work(self):\n        while True:\n            with self.cond:\n                while not self.tasks:\n                    self.cond.wait()\n                task = self.tasks.popleft()\n            task()\n    def submit(self, task):\n        with self.cond:\n            self.tasks.append(task)\n            self.cond.notify()\n```",
+      "sub_type": "starvation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出使用notify()而非notify_all()可能导致饥饿：当多个工作线程都在wait时，notify只唤醒一个，但被唤醒的线程可能因为GIL调度或操作系统调度延迟，被另一个刚进入wait的线程抢先获取锁。更关键的是，如果任务执行时间很短，大量任务快速提交时，某些线程可能长期得不到唤醒。应将notify()改为notify_all()确保所有等待线程都有机会竞争任务。",
+      "scoring_rubric": "1. 识别出notify()只唤醒一个线程可能导致部分线程长期饥饿; 2. 解释条件变量的notify不保证公平性; 3. 提出notify_all()作为修复方案并解释其开销权衡; 4. 不误认为这是死锁问题"
+    },
+    {
+      "id": "33-051",
+      "prompt": "以下Java代码实现一个连接池，使用synchronized等待连接归还，但在高并发下出现大量线程同时唤醒但只有一个能获取连接的情况，请诊断：\n```java\npublic class ConnectionPool {\n    private final Queue<Connection> pool = new LinkedList<>();\n    public synchronized Connection acquire() throws InterruptedException {\n        while (pool.isEmpty()) {\n            wait();\n        }\n        return pool.poll();\n    }\n    public synchronized void release(Connection conn) {\n        pool.offer(conn);\n        notifyAll();\n    }\n}\n```",
+      "sub_type": "thundering_herd",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出thundering herd问题：release调用notifyAll()唤醒所有等待线程，但只有一个线程能获取synchronized锁并取出连接，其余线程被唤醒后发现pool仍为空，再次wait。大量无意义的上下文切换浪费CPU。应将notifyAll()改为notify()只唤醒一个线程，因为每次release只归还一个连接，唤醒一个等待者即可。同时应考虑使用ReentrantLock+Condition实现更精细的控制。",
+      "scoring_rubric": "1. 准确诊断出notifyAll导致的惊群效应; 2. 解释每次release只归还一个连接但唤醒所有等待者的浪费; 3. 提出notify()替代notifyAll()作为首要修复; 4. 进一步建议ReentrantLock+Condition或Semaphore等更优方案"
+    }
+  ]
+}

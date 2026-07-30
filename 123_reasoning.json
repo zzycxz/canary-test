@@ -1,0 +1,484 @@
+{
+  "capability": "reasoning",
+  "label": "推理能力",
+  "total": 53,
+  "cases": [
+    {
+      "prompt": "如果所有会飞的动物都是鸟，企鹅不会飞，那么企鹅是鸟吗？",
+      "sub_type": "logical_deduction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应正确应用三段论推理，得出企鹅不是鸟，因为企鹅不满足‘所有会飞的动物都是鸟’的条件，避免肯定后件谬误。",
+      "scoring_rubric": "逻辑推理准确性，是否识别有效三段论，结论是否基于给定前提。",
+      "id": "123-001"
+    },
+    {
+      "prompt": "我看到草地上有露珠，但昨晚没有下雨。推断可能的原因。",
+      "sub_type": "causal_reasoning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应推断露珠可能由清晨的凝结形成，考虑湿度、温度变化等因素，提供合理的替代原因。",
+      "scoring_rubric": "因果推理的合理性，是否考虑多种可能原因，避免单一归因。",
+      "id": "123-002"
+    },
+    {
+      "prompt": "小明从家出发向东走10米，然后向北走5米，再向西走3米。此时小明相对于家的位置和方向是什么？",
+      "sub_type": "spatial_reasoning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应计算净位移：向东7米、向北5米，因此在家的东北方向，距离约√74米（约8.6米），正确处理方向和距离关系。",
+      "scoring_rubric": "空间推理准确性，位移计算是否正确，方向判断是否合理。",
+      "id": "123-003"
+    },
+    {
+      "prompt": "今天是2023年10月1日，星期日。问10月10日是星期几？",
+      "sub_type": "time_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应计算日期差：从10月1日到10月10日共9天，星期日加9天模7，得到星期二。",
+      "scoring_rubric": "日期计算准确性，星期推算是否正确，逻辑是否清晰。",
+      "id": "123-004"
+    },
+    {
+      "prompt": "在厨房里，我需要烧开水泡茶，应该先做什么？",
+      "sub_type": "common_sense",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应建议先烧水，然后泡茶，遵循日常任务的逻辑顺序，如先准备热水再冲泡茶叶。",
+      "scoring_rubric": "常识判断合理性，任务步骤是否符合日常生活经验。",
+      "id": "123-005"
+    },
+    {
+      "prompt": "一个农夫带着一只狼、一只羊和一棵白菜过河，船每次只能载农夫和另一件东西。狼吃羊，羊吃白菜，如何安全过河？",
+      "sub_type": "lateral_thinking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供一系列过河步骤，确保在任意时刻狼和羊、羊和白菜不会单独在一起，解决方案需有效避免冲突。",
+      "scoring_rubric": "创造性问题解决能力，解决方案是否完整且可行，是否打破常规思维。",
+      "id": "123-006"
+    },
+    {
+      "prompt": "如果明天下雨，我就带伞；如果我带伞，我就不会淋湿。明天下雨，我会淋湿吗？",
+      "sub_type": "conditional",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应推理条件链：明天下雨 → 我带伞 → 我不会淋湿，因此答案是不会淋湿，正确处理if-then逻辑。",
+      "scoring_rubric": "条件逻辑链的准确推理，是否避免常见逻辑错误如否定前件。",
+      "id": "123-007"
+    },
+    {
+      "prompt": "所有哺乳动物都有心脏。狗是哺乳动物。鲸鱼也是哺乳动物。请问：狗有心脏吗？鲸鱼有心脏吗？",
+      "sub_type": "logical_deduction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应清晰地应用三段论：大前提（哺乳动物有心脏）和小前提（狗/鲸鱼是哺乳动物），得出狗和鲸鱼都有心脏的结论。",
+      "scoring_rubric": "1. 准确应用三段论规则。2. 明确得出狗有心脏的结论。3. 明确得出鲸鱼有心脏的结论。4. 推理过程简洁、逻辑清晰。",
+      "id": "123-008"
+    },
+    {
+      "prompt": "如果明天下雨，学校的运动会就会取消。如果运动会取消，小明就会去图书馆。已知小明今天没有去图书馆。请问：明天会下雨吗？",
+      "sub_type": "logical_deduction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应进行反向推理：小明没去图书馆 -> 运动会没取消 -> 明天没下雨。能识别这是一个有效的否定后件推理（Modus Tollens）。",
+      "scoring_rubric": "1. 正确构建逻辑链（下雨->取消->去图书馆）。2. 根据小明行为（没去图书馆）进行有效反推。3. 得出‘明天不会下雨’的正确结论。4. 能清晰解释推理步骤。",
+      "id": "123-009"
+    },
+    {
+      "prompt": "根据以下现象推导最可能的原因：小刚把一块磁铁放在一个木盒子旁边，然后发现盒子里的铁钉都贴向了靠近磁铁的一侧。",
+      "sub_type": "causal_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别出磁铁具有吸引铁的特性（磁性），并推断是磁铁的磁场作用导致铁钉移动。",
+      "scoring_rubric": "1. 准确识别出关键因素是‘磁铁’。2. 正确关联磁铁的特性（吸引铁）。3. 得出合理结论：磁力使铁钉移动。4. 解释清晰，符合物理常识。",
+      "id": "123-010"
+    },
+    {
+      "prompt": "一辆卡车在高速公路收费站领卡后开始计费，行驶了120公里后下高速。高速费按每公里0.5元计算，但起步价（首10公里）为5元。请计算小明需要支付多少高速费？",
+      "sub_type": "causal_reasoning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应理解计费规则并进行计算：总费用 = 起步价 + 超出部分费用。起步价覆盖首10公里，超出部分为(120-10)公里。",
+      "scoring_rubric": "1. 正确解析计费规则（起步价与单价）。2. 将总里程正确分解为首10公里和剩余110公里。3. 计算：5 + (110 * 0.5) = 60元。4. 最终答案准确。",
+      "id": "123-011"
+    },
+    {
+      "prompt": "小红从家出发向北走了500米到达书店，然后向东走了300米到达公园。请问公园在家的什么方向？距离家多远？",
+      "sub_type": "spatial_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应在心理上构建坐标系或路径图，计算最终位置相对于起点的方位（东北方向）和直线距离（直角三角形斜边）。",
+      "scoring_rubric": "1. 正确理解‘向北’、‘向东’的方向含义。2. 在心理上正确绘制出‘L’形路径。3. 计算出公园在家东北方向。4. 应用勾股定理计算距离（约583米），或给出合理估算。",
+      "id": "123-012"
+    },
+    {
+      "prompt": "你在一个陌生的城市，站在一个十字路口，面前是东方。你看到一栋大楼的正面，它的正门朝南。现在，你需要去这栋大楼的正门。你应该向哪个方向走？走多远？",
+      "sub_type": "spatial_reasoning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要进行两步方向推理：1. 识别大楼正门朝南。2. 将自己面对的方向（东）与目标方向（南）关联，判断需要转向（向右转）才能面向南。",
+      "scoring_rubric": "1. 正确解析‘正门朝南’的含义。2. 基于自身当前朝向（东），判断目标方向（南）是右侧。3. 给出正确行动指令：向右转（或向南走）。4. 注意：此题未给距离，模型应说明需要移动到大楼位置，或指出距离信息不足，而非编造距离。",
+      "id": "123-013"
+    },
+    {
+      "prompt": "小明昨天下午3点从上海乘高铁去北京，全程5小时。火车准点到达。请问小明到达北京时是几点？",
+      "sub_type": "time_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应进行简单的时长加法计算：下午3点 + 5小时 = 晚上8点（或20:00）。",
+      "scoring_rubric": "1. 准确理解‘下午3点’和‘5小时’。2. 正确计算到达时间。3. 输出格式清晰（如‘晚上8点’或‘20:00’）。",
+      "id": "123-014"
+    },
+    {
+      "prompt": "今天是2023年10月27日，星期五。小丽说：‘上个星期天我去了动物园’。请问小丽去动物园的日期是哪一天？",
+      "sub_type": "time_reasoning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要进行日期推算：1. ‘上个星期天’指过去一周内的星期日。2. 从当前星期五倒推：星期五 -> 星期四 -> 星期三 -> 星期二 -> 星期一 -> 星期日（上个）。3. 计算出具体日期：10月27日（周五）往前推2天是10月25日（周三），再往前推4天是10月22日（周日）。",
+      "scoring_rubric": "1. 正确理解‘上个星期天’的语义。2. 以当前日期为基准，进行正确的星期回溯。3. 得出正确日期：2023年10月22日。4. 解释推算过程。",
+      "id": "123-015"
+    },
+    {
+      "prompt": "为什么在寒冷的冬天，我们从室内走到室外时，戴的眼镜会起雾？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应基于生活常识和物理知识解释：室内外温差导致呼出的热气（水蒸气）遇到冷的镜片液化成小水珠。",
+      "scoring_rubric": "1. 提到温差是关键原因。2. 提到水蒸气（呼出的热气）遇冷液化。3. 解释过程符合物理原理。4. 表述通俗易懂。",
+      "id": "123-016"
+    },
+    {
+      "prompt": "在公共图书馆里，以下哪种行为是不符合常规礼仪的？A. 轻声交谈 B. 使用笔记本电脑打字 C. 用手机外放视频声音 D. 安静阅读",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应根据对公共图书馆环境（需要安静）的理解，判断出选项C（用手机外放视频声音）是破坏安静、不符合礼仪的行为。",
+      "scoring_rubric": "1. 准确识别出图书馆的核心要求是‘安静’。2. 正确判断出选项C的行为（外放声音）直接破坏安静环境。3. 可简要说明其他选项在一定条件下是可接受的（如B小声打字）。",
+      "id": "123-017"
+    },
+    {
+      "prompt": "你有两根不均匀的香，每根香从头烧到尾都需要1小时。你如何用这两根香准确测量出45分钟的时间？",
+      "sub_type": "lateral_thinking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要跳出‘一根香计时’的固定思维。经典解法：同时点燃第一根香的两端和第二根香的一端。第一根香烧完（30分钟），点燃第二根香的另一端。第二根香剩余部分（本应再烧30分钟）现在两头烧，15分钟烧完。总计30+15=45分钟。",
+      "scoring_rubric": "1. 理解香燃烧的特性（时间固定但燃烧速率可能不均）。2. 提出‘同时点燃一端和两端’的关键技巧。3. 正确分步推导：第一步30分钟，第二步15分钟。4. 最终时间累计准确（45分钟）。",
+      "id": "123-018"
+    },
+    {
+      "prompt": "有一个人推着一辆车，来到一家酒店门口，他立刻知道自己破产了。这是为什么？",
+      "sub_type": "lateral_thinking",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "这是一个经典的横向思维谜题。模型需要联想到‘大富翁’类棋盘游戏或类似情境：玩家推着‘车’（棋子）到达‘酒店’格子，根据规则需要支付高额费用，因此‘破产’。",
+      "scoring_rubric": "1. 理解这是一个非常规场景。2. 能联想到棋盘游戏、虚拟情境或隐喻（如‘人生如棋’）。3. 给出合理解释（如：他是棋子，酒店格子让他破产）。4. 解释需要有一定创意但又合理。",
+      "id": "123-019"
+    },
+    {
+      "prompt": "只有年满18岁并且持有有效身份证件，才能购买酒精饮料。小明20岁了，但他的身份证过期了。他能买到啤酒吗？",
+      "sub_type": "conditional",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型需要处理一个复合条件：AND逻辑（必须同时满足年龄>=18 AND 证件有效）。小明满足年龄条件，但不满足证件条件，因此整体条件不成立。",
+      "scoring_rubric": "1. 准确提取两个并列条件（年龄、证件）。2. 识别逻辑关系为‘并且’（AND）。3. 评估小明的两个条件状态。4. 得出正确结论：不能购买。",
+      "id": "123-020"
+    },
+    {
+      "prompt": "智能门锁的规则如下：1. 如果检测到指纹且未超时，则开门。2. 如果检测到指纹但超时，则报警。3. 如果没有检测到指纹，则尝试人脸识别。4. 人脸识别成功则开门，失败则保持锁定。现在，系统检测到了有效指纹，但录入时间显示为35秒前（超时设定为30秒）。请问门锁会如何反应？",
+      "sub_type": "conditional",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要处理一个包含多条件分支和优先级的if-then规则链。根据输入（有指纹、超时），直接命中规则2，应触发报警。模型应理解规则顺序或条件优先级，而不是继续向下检查人脸识别。",
+      "scoring_rubric": "1. 正确解析输入状态（指纹有效、超时）。2. 在规则集中准确匹配到‘检测到指纹但超时’的条件（规则2）。3. 给出正确反应：报警。4. 说明为何不触发人脸识别（因为规则已匹配，或人脸识别是并行/后备流程，在此场景不启动）。",
+      "id": "123-021"
+    },
+    {
+      "prompt": "钢琴 : 演奏 :: 画笔 : （    ）",
+      "sub_type": "analogy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要分析‘钢琴’与‘演奏’的关系（前者是后者使用的工具/乐器），然后对‘画笔’应用相同关系，找到与之匹配的动作（绘画/作画）。",
+      "scoring_rubric": "1. 准确提取‘工具-使用该工具进行的活动’这一关系模式。2. 对‘画笔’应用该模式，得出‘绘画’或‘作画’。3. 答案在语法和语义上与前半部分对应（动词或动名词形式）。",
+      "id": "123-022"
+    },
+    {
+      "prompt": "如果所有的猫都是动物，而Tom是一只猫，那么Tom是什么？",
+      "sub_type": "logical_deduction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "正确应用三段论，推断Tom是动物。",
+      "scoring_rubric": "推理正确，结论清晰，逻辑步骤完整。",
+      "id": "123-023"
+    },
+    {
+      "prompt": "有A、B、C三个集合。A是B的子集，B是C的子集，且x在A中。以下哪项一定正确？1) x在B中 2) x在C中 3) x不在C中 4) 以上都不一定",
+      "sub_type": "logical_deduction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "基于集合包含关系，推断x在B和C中，选择1和2。",
+      "scoring_rubric": "正确分析集合关系，推理出x属于所有包含A的集合。",
+      "id": "123-024"
+    },
+    {
+      "prompt": "在逻辑命题中，如果P蕴含Q，且Q蕴含R，那么P蕴含R。现在，如果P为真且R为假，那么P、Q、R的真值是什么？",
+      "sub_type": "logical_deduction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "运用命题逻辑，推导出P为假或Q为假，但具体取决于推理规则。",
+      "scoring_rubric": "正确使用蕴含关系和反证法，推导出真值。",
+      "id": "123-025"
+    },
+    {
+      "prompt": "一个农场有鸡和兔，从上面数有10个头，从下面数有28只脚。请问有几只鸡和几只兔？",
+      "sub_type": "logical_deduction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "设置方程求解，得出鸡6只，兔4只。",
+      "scoring_rubric": "数学推理正确，解法清晰。",
+      "id": "123-026"
+    },
+    {
+      "prompt": "如果今天下雨，那么地面会湿；现在地面湿了。能推断出今天下雨了吗？",
+      "sub_type": "causal_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "指出这是肯定后件的逻辑错误，不能确定原因。",
+      "scoring_rubric": "识别逻辑谬误，解释因果关系的不确定性。",
+      "id": "123-027"
+    },
+    {
+      "prompt": "汽车发动机过热，可能导致的原因有哪些？请推断最可能的原因和预防措施。",
+      "sub_type": "causal_reasoning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "列出常见原因如冷却液不足，并建议检查。",
+      "scoring_rubric": "原因分析合理，预测和建议基于常识。",
+      "id": "123-028"
+    },
+    {
+      "prompt": "观察到一个人频繁打喷嚏、流鼻涕，但没有发烧。推断他可能患了什么病，并解释理由。",
+      "sub_type": "causal_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "推断可能是过敏或普通感冒，基于症状。",
+      "scoring_rubric": "症状与疾病匹配，推理合理。",
+      "id": "123-029"
+    },
+    {
+      "prompt": "从北京到上海，如果向南走100公里，再向东走50公里，最终位置相对于起点是？",
+      "sub_type": "spatial_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "计算净位移，向东南方向。",
+      "scoring_rubric": "方向理解正确，计算准确。",
+      "id": "123-030"
+    },
+    {
+      "prompt": "一个房间长5米、宽3米、高4米。一只蚂蚁从左下角爬到对角上角，最短路径是多少？",
+      "sub_type": "spatial_reasoning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "运用勾股定理计算空间对角线，约7.07米。",
+      "scoring_rubric": "几何推理正确，单位转换无误。",
+      "id": "123-031"
+    },
+    {
+      "prompt": "在地图上，A点在B点的正北方10公里处，C点在B点的正东方8公里处。从A点到C点的直线距离是多少？",
+      "sub_type": "spatial_reasoning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用勾股定理，计算约12.8公里。",
+      "scoring_rubric": "距离计算准确，几何关系清晰。",
+      "id": "123-032"
+    },
+    {
+      "prompt": "一个会议从上午9点开始，每小时有15分钟休息，总共3小时。结束时间是几点？",
+      "sub_type": "time_reasoning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "计算总时间：3小时加2次15分钟休息，结束于中午12:30。",
+      "scoring_rubric": "时间安排合理，计算准确。",
+      "id": "123-033"
+    },
+    {
+      "prompt": "如果你在东八区，现在时间是下午3点，纽约（西五区）是几点？考虑夏令时。",
+      "sub_type": "time_reasoning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "时差13小时，纽约时间是凌晨2点（假设无夏令时调整）。",
+      "scoring_rubric": "时区转换正确，考虑夏令时细节。",
+      "id": "123-034"
+    },
+    {
+      "prompt": "为什么冬天人们穿厚衣服，而夏天穿薄衣服？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "基于温度变化，保暖或散热。",
+      "scoring_rubric": "常识解释合理，贴合日常生活。",
+      "id": "123-035"
+    },
+    {
+      "prompt": "在公共场合，为什么通常需要排队？从社会角度推断原因。",
+      "sub_type": "common_sense",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "涉及公平、秩序和社会规范。",
+      "scoring_rubric": "社会常识理解深入，解释清晰。",
+      "id": "123-036"
+    },
+    {
+      "prompt": "如果一个人不吃不喝，最多能存活多久？基于生理常识推断。",
+      "sub_type": "common_sense",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "给出大致范围，如几天，强调个体差异。",
+      "scoring_rubric": "常识准确，推理基于生物学知识。",
+      "id": "123-037"
+    },
+    {
+      "prompt": "一个房间里有三盏灯和三个开关在房间外。你只能进房间一次，如何确定哪个开关控制哪盏灯？",
+      "sub_type": "lateral_thinking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "经典解法：利用热量或亮度差异。",
+      "scoring_rubric": "创造性思维，解法有效。",
+      "id": "123-038"
+    },
+    {
+      "prompt": "你有两个沙漏，一个计时7分钟，一个计时11分钟，如何精确测量15分钟？",
+      "sub_type": "lateral_thinking",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "描述步骤，如同时启动，利用交替计时。",
+      "scoring_rubric": "逻辑步骤清晰，达到目标。",
+      "id": "123-039"
+    },
+    {
+      "prompt": "一个人走进酒吧，要了一杯水，酒保突然拿出一把枪指着他。那人说了声“谢谢”就走了。为什么？",
+      "sub_type": "lateral_thinking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "解释为打嗝治愈等经典谜题。",
+      "scoring_rubric": "跳出常规思维，合理解释。",
+      "id": "123-040"
+    },
+    {
+      "prompt": "如果明天下雨，运动会取消；如果运动会取消，学生们失望；现在学生们不失望。能推断出明天不下雨吗？",
+      "sub_type": "conditional",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "使用否定后件，推断明天不下雨。",
+      "scoring_rubric": "条件推理正确，逻辑严谨。",
+      "id": "123-041"
+    },
+    {
+      "prompt": "医生：如果病人发烧，给他退烧药；如果病人咳嗽，给他止咳药。现在病人发烧且咳嗽，给他什么药？",
+      "sub_type": "conditional",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应用两个条件，给出两种药。",
+      "scoring_rubric": "条件应用正确，结论明确。",
+      "id": "123-042"
+    },
+    {
+      "prompt": "如果A比B高，B比C高，那么A和C谁高？",
+      "sub_type": "logical_deduction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "推断A比C高，基于传递性。",
+      "scoring_rubric": "简单逻辑推理正确。",
+      "id": "123-043"
+    },
+    {
+      "prompt": "观察到植物在阳光下生长更快，推断阳光对植物生长的因果影响。",
+      "sub_type": "causal_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "解释光合作用等科学原因。",
+      "scoring_rubric": "因果推理基于科学知识，合理。",
+      "id": "123-044"
+    },
+    {
+      "prompt": "一个迷宫有北、南、东、西四个方向，从起点向北走10步，然后向东走5步，再向南走3步，最后向西走2步。最终位置相对于起点是？",
+      "sub_type": "spatial_reasoning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "计算净位移：北7步，东3步，东北方向。",
+      "scoring_rubric": "方向追踪准确，计算无误。",
+      "id": "123-045"
+    },
+    {
+      "prompt": "如果一个人每天存10元钱，30天后他有多少钱？考虑利息忽略。",
+      "sub_type": "time_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "简单乘法，300元。",
+      "scoring_rubric": "时间序列计算正确。",
+      "id": "123-046"
+    },
+    {
+      "prompt": "为什么在图书馆要保持安静？从常识和礼仪角度推断。",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "解释为尊重他人学习环境。",
+      "scoring_rubric": "常识理解准确，理由充分。",
+      "id": "123-047"
+    },
+    {
+      "prompt": "一个房间里有100个人，每个人都有一个双胞胎兄弟或姐妹。房间里至少有多少人？",
+      "sub_type": "lateral_thinking",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "推断为100人，因为双胞胎可以配对。",
+      "scoring_rubric": "思维跳出，正确分析双胞胎关系。",
+      "id": "123-048"
+    },
+    {
+      "prompt": "如果今天是小明的生日，那么他会收到礼物；现在他没有收到礼物。能推断出今天不是他的生日吗？",
+      "sub_type": "conditional",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "使用否定后件，推断今天不是生日。",
+      "scoring_rubric": "逻辑推理正确，符合条件语句。",
+      "id": "123-049"
+    },
+    {
+      "prompt": "在逻辑中，如果P或Q为真，且P为假，那么Q是什么？",
+      "sub_type": "logical_deduction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "推断Q为真，基于析取推理。",
+      "scoring_rubric": "命题逻辑应用正确。",
+      "id": "123-050"
+    },
+    {
+      "prompt": "观察到某地区空气污染严重，同时呼吸道疾病增多。推断污染与疾病的因果关系，并预测改善措施的效果。",
+      "sub_type": "causal_reasoning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "分析相关性，建议减排措施，并预测健康改善。",
+      "scoring_rubric": "因果分析深入，预测合理。",
+      "id": "123-051"
+    },
+    {
+      "prompt": "一个房间有四个门，每个门朝向一个基本方向。你站在中心，面向北门，要走到东门，需要向右转多少度？",
+      "sub_type": "spatial_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "向右转90度。",
+      "scoring_rubric": "方向判断正确，角度准确。",
+      "id": "123-052"
+    },
+    {
+      "prompt": "如果一个项目需要5天完成，但只能工作3天，每天工作2小时，总共工作时间是？",
+      "sub_type": "time_reasoning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "计算6小时，但基于上下文调整。",
+      "scoring_rubric": "时间计算简单直接。",
+      "id": "123-053"
+    }
+  ]
+}

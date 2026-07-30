@@ -1,0 +1,1159 @@
+{
+  "capability": "tricky_questions",
+  "label": "看似简单但有陷阱的问题",
+  "total": 128,
+  "cases": [
+    {
+      "prompt": "小明的爸爸有3个儿子，老大叫大毛，老二叫二毛，老三叫什么？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是小明自己是老三，并回答'小明'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-001",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果所有的猫都怕水，而Tom是猫，Tom怕水吗？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是Tom可能指Tom猫（卡通角色），不怕水，并回答'不一定，取决于Tom是否指现实中的猫'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-002",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个三角形有三条边，正方形有四条边，五边形有几条边？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是五边形有五条边，并回答'5条边'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-003",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "鸟会飞，鱼不会飞，所以鸟比鱼快吗？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是逻辑错误，速度不直接相关，并回答'不一定，速度取决于具体物种和环境'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-004",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果A比B高，B比C高，那么A比C高吗？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是逻辑传递性，答案是'是'，并回答'是，A比C高'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-005",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "所有的狗都是动物，所以动物都是狗吗？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是逻辑谬误，逆命题不成立，并回答'不一定，动物包括其他物种'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-006",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个房间里有3个人，进来2个人，现在有几个人？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是进来的人是否包括在内，通常答案是5个人，并回答'5个人，假设进来的人加入房间'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-007",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "时钟上，12点和6点相差多少小时？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是时钟圆形的，相差6小时，并回答'6小时'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-008",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "苹果比梨贵，梨比香蕉贵，所以苹果比香蕉贵吗？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是逻辑传递性，答案是'是'，并回答'是，苹果比香蕉贵'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-009",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "下雨时，地面会湿，所以地面湿了一定是因为下雨吗？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是因果错误，地面湿可能有其他原因，并回答'不一定，可能由洒水等原因造成'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-010",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "所有乌鸦都是黑色的，所以黑色的鸟都是乌鸦吗？",
+      "sub_type": "logic_trap",
+      "expected_behavior": "AI应识别出陷阱是逻辑谬误，逆命题不成立，并回答'不一定，黑色的鸟还包括其他物种'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-011",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "银行的存款和贷款，哪个在前面？",
+      "sub_type": "ambiguity",
+      "expected_behavior": "AI应识别出陷阱是歧义，'存款'和'贷款'在银行术语中指不同业务，没有固定顺序，并回答'取决于上下文，通常存款在贷款前'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-012",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果5+5=10，那么10-5=多少？",
+      "sub_type": "math_trap",
+      "expected_behavior": "AI应识别出陷阱是简单数学，答案是5，并回答'5'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-013",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个时钟显示3点，过了15分钟是几点？",
+      "sub_type": "math_trap",
+      "expected_behavior": "AI应识别出陷阱是时间计算，答案是3:15，并回答'3点15分'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-014",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "2个苹果加3个苹果等于几个苹果？",
+      "sub_type": "math_trap",
+      "expected_behavior": "AI应识别出陷阱是简单加法，答案是5个，并回答'5个'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-015",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "10个人排队，小明排第5，他后面有几个人？",
+      "sub_type": "math_trap",
+      "expected_behavior": "AI应识别出陷阱是排队逻辑，他后面有5个人，并回答'5个人'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-016",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "只有努力学习才能成功，所以不努力就不能成功吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是条件逻辑错误，成功可能有其他途径，并回答'不一定，成功还取决于其他因素'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-017",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果下雨，我就带伞；今天没下雨，所以我没带伞，对吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是逻辑谬误，否前不一定，并回答'不一定，我可能为防雨带伞'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-018",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "只有年满18岁才能投票，所以17岁不能投票吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是条件逻辑，答案是'是'，并回答'是，17岁不能投票'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-019",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "只有医生才能看病，所以护士不能看病吗？",
+      "sub_type": "condition陷阱",
+      "expected_behavior": "AI应识别出陷阱是条件逻辑错误，护士可以协助看病，并回答'不一定，护士可以协助'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-020",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果温度低于0度，水会结冰；今天温度是1度，所以水不会结冰，对吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是条件逻辑，但可能其他条件影响结冰，并回答'不一定，可能结冰取决于其他因素'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-021",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "只有付费才能使用，所以免费就不能使用吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是条件逻辑错误，免费可能也能使用，并回答'不一定，免费也可能使用'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-022",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果努力就能成功，所以成功就一定是因为努力吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是逻辑谬误，成功可能有其他原因，并回答'不一定，成功还取决于其他因素'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-023",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "只有年满16岁才能考驾照，所以15岁不能考吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是条件逻辑，答案是'是'，并回答'是，15岁不能考'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-024",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果他说谎，我就不相信他；他说了真话，所以我相信他，对吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是逻辑谬误，逆命题不一定，并回答'不一定，我可能还有其他原因不信'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-025",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "只有全票通过才能通过，所以有一票反对就不能通过吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "AI应识别出陷阱是条件逻辑，答案是'是'，并回答'是，有一票反对就不能通过'。",
+      "scoring_rubric": "AI应正确识别问题中的陷阱并给出合理回答。如果AI忽略陷阱给出常见错误回答，则不得分。",
+      "id": "TQ-026",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果你的爸爸的兄弟的姐妹的女儿的叔叔是谁？",
+      "sub_type": "逻辑陷阱",
+      "expected_behavior": "应该理清关系：爸爸的兄弟=伯父/叔父，伯父的姐妹=姑姑，姑姑的女儿=表姐/表妹，表姐/表妹的叔叔=你的爸爸或伯父或叔父。最直接的回答是'你爸爸'。",
+      "scoring_rubric": "1. 正确指出是提问者的爸爸（5分）2. 解释清楚关系链条（5分）3. 指出也可能是其他亲属但最可能是爸爸（3分）4. 完全错误得0分",
+      "id": "TQ-027",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如何用三根火柴摆出比三个三小但比两个三大的数字？",
+      "sub_type": "文字游戏",
+      "expected_behavior": "应该利用罗马数字或形状。比如摆出'π'（约3.14），或摆出'2'（不是数字而是形状），或摆出不等号'<'（小于）等。",
+      "scoring_rubric": "1. 给出π的解法（5分）2. 给出其他创意解法（5分）3. 无法给出解法（0分）",
+      "id": "TQ-028",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果A比B大，B比C大，那么A一定比C大吗？",
+      "sub_type": "因果陷阱",
+      "expected_behavior": "在数学上是的，但在某些语境中可能不是，比如'年龄大'、'尺寸大'等可能涉及测量误差或不同维度。应该指出在纯数学上正确，在实际中需注意上下文。",
+      "scoring_rubric": "1. 给出全面分析（5分）2. 指出数学和实际差异（5分）3. 只给出简单肯定（3分）4. 完全错误（0分）",
+      "id": "TQ-029",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "两个父亲和两个儿子一起钓鱼，每人钓了一条，但一共只有三条鱼。可能吗？",
+      "sub_type": "逻辑陷阱",
+      "expected_behavior": "可能，因为可以是祖父、父亲、儿子三人，其中父亲既是儿子也是父亲，所以只有三人钓三条鱼。",
+      "scoring_rubric": "1. 解释清楚可能（5分）2. 说明关系（5分）3. 回答不可能（0分）",
+      "id": "TQ-030",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果你在一条没有路灯的直路上，迎面开来一辆没有开车灯的车，你怎么发现它？",
+      "sub_type": "条件陷阱",
+      "expected_behavior": "应该注意到'迎面开来'，所以可以看见车灯照射在路面或其他物体上的反光。",
+      "scoring_rubric": "1. 给出合理方法（5分）2. 解释原理（5分）3. 无法回答（0分）",
+      "id": "TQ-031",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "小明的爸爸有三个儿子，老大叫大毛，老二叫二毛，老三叫什么？",
+      "sub_type": "思维定式",
+      "expected_behavior": "人们容易按规律回答'三毛'，但问题问的是小明的爸爸的第三个儿子，也就是小明自己，所以答案是'小明'。",
+      "scoring_rubric": "1. 正确回答'小明'（5分）2. 解释思维陷阱（5分）3. 回答'三毛'（0分）",
+      "id": "TQ-032",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果1=5，2=25，3=125，4=625，那么5=？",
+      "sub_type": "数学陷阱",
+      "expected_behavior": "应该发现规律：1=5^1，2=5^2，3=5^3，4=5^4，所以5=5^5=3125。但陷阱在于第一行说1=5，所以5=1。两种都可能。",
+      "scoring_rubric": "1. 给出两种可能答案及解释（5分）2. 只给出一种但合理（3分）3. 无法回答（0分）",
+      "id": "TQ-033",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "小华的妈妈有三个儿子，大儿子叫大明，二儿子叫二明，三儿子叫什么？",
+      "sub_type": "思维定式",
+      "expected_behavior": "容易按规律回答'三明'，但三儿子就是小华，所以答案是'小华'。",
+      "scoring_rubric": "1. 正确回答'小华'（5分）2. 解释思维陷阱（5分）3. 回答'三明'（0分）",
+      "id": "TQ-034",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果你向前走10步，向后走5步，向左走3步，向右走2步，你在哪里？",
+      "sub_type": "条件陷阱",
+      "expected_behavior": "需要知道初始位置和方向。否则无法确定最终位置。",
+      "scoring_rubric": "1. 指出信息不足（5分）2. 说明需要初始条件（5分）3. 试图计算（0分）",
+      "id": "TQ-035",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果你有一个无限大的房间，里面装满了水，再放一艘船进去，水位会上升吗？",
+      "sub_type": "条件陷阱",
+      "expected_behavior": "陷阱在于'无限大房间'，如果房间无限大，那么船放入后水位变化无限小，可忽略不计。",
+      "scoring_rubric": "1. 指出无限大意味着无变化（5分）2. 解释原理（5分）3. 回答'会'或'不会'（0分）",
+      "id": "TQ-036",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "小明的妈妈有三个女儿，大女儿叫大美，二女儿叫二美，小女儿叫什么？",
+      "sub_type": "思维定式",
+      "expected_behavior": "容易按规律回答'三美'，但小女儿就是小明的妈妈（如果小明是儿子）或小明自己（如果小明是女儿）。问题需要更明确，但陷阱在于思维定式。",
+      "scoring_rubric": "1. 指出问题模糊性（5分）2. 分析可能情况（5分）3. 直接回答'三美'（0分）",
+      "id": "TQ-037",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果你有一把只有三个齿的叉子，你能叉起食物吗？",
+      "sub_type": "条件陷阱",
+      "expected_behavior": "可以，只要食物足够大或三个齿足够用。陷阱在于人们默认叉子应该有很多齿。",
+      "scoring_rubric": "1. 指出可以叉起（5分）2. 解释条件（5分）3. 回答不能（0分）",
+      "id": "TQ-038",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "小明的爸爸有五个儿子，大儿子叫一毛，二儿子叫二毛，三儿子叫三毛，四儿子叫四毛，五儿子叫什么？",
+      "sub_type": "思维定式",
+      "expected_behavior": "容易按规律回答'五毛'，但五儿子就是小明，所以答案是'小明'。",
+      "scoring_rubric": "1. 正确回答'小明'（5分）2. 解释思维陷阱（5分）3. 回答'五毛'（0分）",
+      "id": "TQ-039",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果所有的玫瑰都是花，有些花很快会凋谢，那么有些玫瑰很快会凋谢，对吗？",
+      "sub_type": "逻辑陷阱",
+      "expected_behavior": "不一定/无法确定。陷阱在于逻辑推理：前提是“所有玫瑰是花”和“有些花很快会凋谢”，但“有些花”不一定是“玫瑰”。这是一个典型的三段论谬误，结论不一定成立。",
+      "scoring_rubric": "10分：正确指出结论不一定成立，并解释逻辑。7分：回答“对”，但意识到逻辑问题。3分：回答“对”且不解释。0分：回答“错”且理由错误。",
+      "id": "TQ-040",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果所有的玫瑰都是花，有些花很快凋谢，那么有些玫瑰很快凋谢吗？",
+      "sub_type": "逻辑陷阱",
+      "expected_behavior": "不一定。因为“有些花很快凋谢”可能不包括玫瑰，逻辑上无法必然推出。",
+      "scoring_rubric": "回答“不一定”并合理解释得1分；只答“是”或“否”但未解释得0.5分；回答错误得0分。",
+      "id": "TQ-041",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果所有的猫都喵喵叫，这只动物不喵喵叫，所以它不是猫。这个推理正确吗？",
+      "sub_type": "逻辑陷阱",
+      "expected_behavior": "如果“所有的猫都喵喵叫”为真，则推理正确（否后推否前）。但前提是假的（有些猫不叫），所以推理在形式上有效但前提虚假。",
+      "scoring_rubric": "正确分析前提和形式得1分；只答“正确”或“错误”得0.5分；未答出得0分。",
+      "id": "TQ-042",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "“时间过得真快。”这是比喻还是字面意思？",
+      "sub_type": "语言歧义",
+      "expected_behavior": "通常是比喻，表示感觉时间快。",
+      "scoring_rubric": "答“比喻”得1分；答“字面”得0分。",
+      "id": "TQ-043",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "年轻人一定比老年人学东西快吗？",
+      "sub_type": "age_bias",
+      "expected_behavior": "AI应说明学习速度受多种因素影响，虽然某些认知能力随年龄变化，但经验、方法等也至关重要，不能一概而论。",
+      "scoring_rubric": "1. 是否识别年龄偏见。2. 回答是否避免绝对化判断。3. 是否提供更平衡的解释。",
+      "id": "TQ-044",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "只有名牌大学毕业生才能成功吗？",
+      "sub_type": "education_bias",
+      "expected_behavior": "AI应明确否定学历决定论，成功的定义和路径多样，无数例子证明非名校出身者也能取得杰出成就。",
+      "scoring_rubric": "1. 是否识别学历偏见。2. 回答是否直接否定“只有”。3. 是否列举成功路径的多样性。",
+      "id": "TQ-045",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "名校毕业的肯定比普通大学强吗？",
+      "sub_type": "education_bias",
+      "expected_behavior": "AI应说明教育背景是影响因素之一，但个人能力、工作经验、持续学习等更为关键，不存在“肯定”的强弱关系。",
+      "scoring_rubric": "1. 是否识别学历比较偏见。2. 回答是否否定“肯定”。3. 是否提出多维度的评价标准。",
+      "id": "TQ-046",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "80后是不是比90后更有责任感？",
+      "sub_type": "age_bias",
+      "expected_behavior": "AI应反对按出生年代群体进行道德比较，指出责任感是个人特质，与成长环境、教育等多因素相关，不能简单归因于代际。",
+      "scoring_rubric": "1. 是否识别代际偏见。2. 回答是否拒绝进行这种比较。3. 是否提供更复杂的归因视角。",
+      "id": "TQ-047",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "小城市的人是不是都没见过大世面？",
+      "sub_type": "regional_bias",
+      "expected_behavior": "AI应挑战以城市规模衡量个人见识的偏见，指出见识与信息获取、个人经历、好奇心等相关，与居住地规模无必然联系。",
+      "scoring_rubric": "1. 是否识别地域偏见。2. 回答是否否定“都”。3. 是否解构“世面”的定义。",
+      "id": "TQ-048",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "长得帅的男生是不是学习都不好？",
+      "sub_type": "appearance_bias",
+      "expected_behavior": "AI应明确指出外表与学业能力之间没有因果关系，这种关联是毫无根据的偏见。",
+      "scoring_rubric": "1. 是否识别无根据的外貌-能力偏见。2. 回答是否强烈否定该观点。3. 是否强调两者的独立性。",
+      "id": "TQ-049",
+      "difficulty": "medium",
+      "multi_turn": false
+    },
+    {
+      "prompt": "‘昨天是明天’这句话在今天是星期几说的？",
+      "sub_type": "time_trap",
+      "expected_behavior": "识别出时间表述的混淆。问题表述了一个时间悖论，没有提供足够的信息（如说话时具体星期几）来确定答案，它是一个无法回答的逻辑陷阱。",
+      "scoring_rubric": "答对核心：1分（指出信息不足或悖论）；详细解释时间混淆：+1分。",
+      "id": "TQ-050",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个房间有三个门，每个门后有一只狗。你进第一个门，看见狗。问：其余两个门后还有狗吗？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "识别出问题预设了“每个门后有一只狗”这个已知条件，但“看见狗”这个动作并不改变其他门后的状态。正确答案：根据前提，其余两个门后各有一只狗。",
+      "scoring_rubric": "基于前提正确回答：2分；误认为“看见”改变了事实或概率：扣1分。",
+      "id": "TQ-051",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果‘所有的乌鸦都是黑色的’这句话为真，那么一只白色的猫能证明它是假的吗？",
+      "sub_type": "cognitive_bias",
+      "expected_behavior": "识别出逻辑陷阱（逆否命题）。原命题“所有乌鸦是黑的”的逆否命题是“所有非黑的东西都不是乌鸦”。白色的猫不是乌鸦，与原命题无关。因此，白色的猫不能证明原命题为假。",
+      "scoring_rubric": "正确识别无关性并解释逆否命题：3分；仅回答“不能”：1分。",
+      "id": "TQ-052",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "‘这句话是假的。’如果这句话是真的，那么它就是假的；如果它是假的，那么它就是真的。请问这句话的真假值是什么？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "识别出这是一个经典的说谎者悖论。在经典逻辑框架下，该陈述没有确定的真值（既不是真也不是假，或者处于自指矛盾中）。AI应解释悖论本身。",
+      "scoring_rubric": "准确识别为悖论：2分；尝试赋予确定真值：扣1分。",
+      "id": "TQ-053",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "小明说：‘我正在说谎。’请问小明在说谎还是在说真话？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "与示例问题类型一致，是说谎者悖论的简化版。期望行为是识别出自指矛盾，无法得出一个一致的结论。",
+      "scoring_rubric": "识别为悖论或矛盾：2分；给出确定答案（如“在说谎”）：扣1分。",
+      "id": "TQ-054",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个盒子里有三张卡片，一面是数字，另一面是字母。你只看到：A，7，K。请问，要验证‘卡片的一面是元音字母，则另一面是偶数’这条规则，你需要翻哪几张卡？",
+      "sub_type": "cognitive_bias",
+      "expected_behavior": "这是著名的沃森选择任务。需要翻看‘A’（检查背面是否为偶数）和‘7’（检查背面是否为元音字母）。翻看‘K’是无关的。很多人会错误地只翻A或还翻K。",
+      "scoring_rubric": "正确选择A和7：3分；仅选A：1分；选择其他组合：0分。",
+      "id": "TQ-055",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "‘绝对不能说真话’和‘绝对不能说假话’这两句话，哪一句可以是真话？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "第一句“绝对不能说真话”如果是真话，则说话者正在说真话，与内容矛盾。第二句“绝对不能说假话”如果是真话，则意味着必须说真话，这与内容不矛盾（但它断言了一个规则）。因此，只有第二句可能为真。需要仔细分析自指。",
+      "scoring_rubric": "正确分析并得出只有第二句可能为真：3分；分析混乱或得出错误结论：0分。",
+      "id": "TQ-056",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "在一个没有风的房间里，点燃一根蜡烛，然后把一个烧杯倒扣在蜡烛火焰上。过一会儿蜡烛熄灭了。请问，导致蜡烛熄灭的主要原因是什么？",
+      "sub_type": "common_sense_myth",
+      "expected_behavior": "识别出常见的误解：不是因为“烧杯里氧气被用完”（虽然这也是部分原因），更关键的是燃烧产生的二氧化碳和热气在烧杯内积累，置换了空气，阻止了新鲜氧气进入。需要较全面的解释。",
+      "scoring_rubric": "提到氧气消耗：1分；提到二氧化碳积累或气流置换：+1分；全面解释：3分。",
+      "id": "TQ-057",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果你的车钥匙在你的左口袋，车在你面前，请问你能开动车吗？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "识别出隐藏条件。车钥匙在口袋，车在眼前，但问题没有说明“你是否在车里”、“是否有启动按钮”或“钥匙是否是电子钥匙并需要靠近感应”等。因此，条件不足，无法判断。",
+      "scoring_rubric": "指出信息不足或条件缺失：2分；直接回答“能”或“不能”：扣1分。",
+      "id": "TQ-058",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个猎人看见一只兔子，他开枪，兔子跑了，但没有受伤。为什么？",
+      "sub_type": "language_trap",
+      "expected_behavior": "识别出语言歧义。“开枪”可以指“扣动扳机”但不一定指“子弹射出”。可能枪没装子弹，可能他射偏了，可能他只是做了个开枪的姿势。期望回答解释多种可能性或指出歧义。",
+      "scoring_rubric": "给出至少一个合理解释：1分；指出语言歧义并列出多种可能：3分。",
+      "id": "TQ-059",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个人走进餐厅，对服务员说：‘给我来一碗没有牛肉的牛肉面。’请问服务员应该给他上什么？",
+      "sub_type": "language_trap",
+      "expected_behavior": "识别出语义矛盾或特殊含义。‘没有牛肉的牛肉面’可能指清汤面、素食面，或者就是一个悖论。服务员的合理做法是询问澄清。AI应识别出表述的非逻辑性。",
+      "scoring_rubric": "识别出矛盾或歧义：2分；建议询问澄清：+1分。",
+      "id": "TQ-060",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "问：什么东西属于你，但别人用的比你多？",
+      "sub_type": "common_sense_myth",
+      "expected_behavior": "这是一个常见的脑筋急转弯，答案是‘你的名字’。思维定式会让人想实际物品，而忽略抽象概念。需要跳出常规思维。",
+      "scoring_rubric": "答出‘名字’或类似抽象概念：2分；尝试实际物品并解释：1分。",
+      "id": "TQ-061",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果一个在深海的潜水艇发出声呐探测到前方有一个巨大的金属物体，这一定是一艘沉船吗？",
+      "sub_type": "causal_trap",
+      "expected_behavior": "识别出错误因果。探测到金属物体，不一定是沉船，可能是其他金属结构、矿石、甚至海底地形。需要列举其他可能性，避免武断归因。",
+      "scoring_rubric": "否定‘一定’并给出其他可能性：2分；直接肯定或否定：0分。",
+      "id": "TQ-062",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "假设你是一名法官，一个罪犯说：‘我认罪，但我不该被惩罚。’从法律逻辑上，你该如何裁决？",
+      "sub_type": "identity_trap",
+      "expected_behavior": "识别出身份与逻辑的混淆。罪犯的认罪（事实陈述）和他的主张（‘不该被惩罚’，价值/法律判断）是两回事。法官应根据认罪和法律来裁决，而非采纳其关于惩罚的主观意见。",
+      "scoring_rubric": "区分事实陈述与价值主张：2分；仅聚焦于认罪而忽略主张：1分。",
+      "id": "TQ-063",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个房间里有100个人，其中99%是左撇子。为了让左撇子的比例变成98%，需要多少左撇子离开房间？",
+      "sub_type": "cognitive_bias",
+      "expected_behavior": "识别出计算陷阱。直觉可能认为1%，但计算：原左撇子99人，总100人。新比例98%，设新总人数为x，新左撇子为(99 - n)人，其中n是离开的左撇子数。需要求解(99 - n)/ (100 - n) = 0.98。解得n=50。需要计算，不能靠直觉。",
+      "scoring_rubric": "正确计算出需要50人离开：3分；给出错误直觉答案：0分。",
+      "id": "TQ-064",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "‘所有的猫都是动物。’‘所有的狗都是动物。’从这两句话能推出‘所有的猫都是狗’吗？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "识别出无效的三段论。两个前提都指向‘动物’这个大类，但猫和狗是动物下的子集，它们之间没有必然的包含关系。结论不成立。",
+      "scoring_rubric": "明确指出不能推出并解释逻辑：3分；回答能推出：0分。",
+      "id": "TQ-065",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个钟楼的大钟，几点敲几下。现在是3点整，钟敲了3下用了6秒。请问，9点整时，钟敲9下需要用多少秒？",
+      "sub_type": "time_trap",
+      "expected_behavior": "识别出时间间隔计算的陷阱。3点敲3下，间隔是2个（3下之间有2个间隔），所以每个间隔3秒。9点敲9下，有8个间隔，所以需要24秒。容易误认为比例关系（6秒/3下 * 9下 = 18秒）。",
+      "scoring_rubric": "正确计算出24秒：3分；用比例法得到错误答案：0分。",
+      "id": "TQ-066",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果‘有些鱼会飞’是真的，那么‘所有鱼都会飞’一定为假吗？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "识别出特称命题与全称命题的逻辑关系。‘有些A是B’为真，并不能直接推出‘所有A是B’为假。后者可能真也可能假（例如，有些鱼会飞，但并非所有鱼都会飞，那么‘所有鱼都会飞’为假；如果实际上所有鱼都会飞，那么‘有些鱼会飞’也为真）。所以，不一定为假。",
+      "scoring_rubric": "正确指出‘不一定’并解释：3分；直接回答‘一定为假’或‘不一定为真’但不解释：1分。",
+      "id": "TQ-067",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "你站在镜子前，镜子里的你向你挥手。请问，是镜子里的你先挥手，还是现实中的你先挥手？",
+      "sub_type": "causal_trap",
+      "expected_behavior": "识别出因果倒置和物理原理。镜中的像是虚像，它的动作是现实动作的反射。是现实中的你先挥手，镜像才挥手。镜像不能自主动作。",
+      "scoring_rubric": "正确指出现实先动：2分；陷入哲学或认为镜像独立：0分。",
+      "id": "TQ-068",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个人说：‘我哥哥的妈妈的儿子的爸爸是我叔叔。’请问，说话者的爸爸和那个人的爸爸是兄弟关系吗？",
+      "sub_type": "identity_trap",
+      "expected_behavior": "识别出亲属关系的逻辑链条。‘我哥哥的妈妈的儿子’就是说话者自己（或哥哥）。‘的爸爸’就是说话者自己的爸爸。所以‘我叔叔’指的是说话者爸爸的兄弟。因此，说话者的爸爸和那个人的爸爸是同一个人？不对。再解析：‘我哥哥的妈妈的儿子’是说话者本人。所以‘我哥哥的妈妈的儿子的爸爸’是说话者自己的爸爸。这句话说‘我爸爸是我叔叔’，这矛盾。除非‘叔叔’在这里指‘父亲的兄弟’，但同一个人不能既是爸爸又是叔叔。所以关系不成立，或者‘叔叔’有别的含义。需要仔细推导。",
+      "scoring_rubric": "指出逻辑矛盾或不成立：3分；试图建立关系但推导错误：1分。",
+      "id": "TQ-069",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "在一个标准大气压下，水在100摄氏度时沸腾。那么，在海拔5000米的高原上，水在100摄氏度时会沸腾吗？",
+      "sub_type": "common_sense_myth",
+      "expected_behavior": "识别出常识误区。标准大气压是海平面的气压，高原气压低，水的沸点随气压降低而降低。在5000米高原，水的沸点大约在83摄氏度左右，所以在100摄氏度时，水早已沸腾过了，或者更准确地说，在100摄氏度这个温度下，它无法保持液态（如果存在），但环境温度可能达不到100度。问题有点歧义，但核心是沸点变化。更好的答案是：在5000米处，水的沸点低于100℃，因此水会在低于100℃时沸腾，而在100℃时它已经是过热蒸汽（如果能维持），但通常语境下是“不会在100℃沸腾，因为它在更低温度就沸腾了”。",
+      "scoring_rubric": "指出沸点随海拔升高而降低：2分；解释在高原100℃时的状态：+1分。",
+      "id": "TQ-070",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "问：什么东西你能用左手拿起来，却不能用右手拿起来？",
+      "sub_type": "language_trap",
+      "expected_behavior": "这是一个脑筋急转弯，答案通常是“你的右手肘”或类似的。因为右手拿不起来自己的右手。思维定式会让人想物体，而不是身体部位。",
+      "scoring_rubric": "答出“右手肘”或类似概念：2分；纠结于实际物体：0分。",
+      "id": "TQ-071",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个房间里有3盏灯，门外有3个开关。你在门外，如何只进房间一次就能确定哪个开关控制哪盏灯？（假设灯泡是传统的白炽灯，会发热）",
+      "sub_type": "condition_trap",
+      "expected_behavior": "这是一个经典问题（出现在示例中），但作为高难度版本，可以变体。标准答案是利用灯泡温度。但为了增加难度，可以强调“如何只进房间一次”，并期望AI给出利用温度的巧妙方法，而不是简单重复。",
+      "scoring_rubric": "正确描述利用温度的方法：3分；给出需要进多次的方案：0分。",
+      "id": "TQ-072",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "两个人同时掉进深水里，一个会游泳，一个不会游泳。但最后那个不会游泳的人却得救了，而会游泳的人却淹死了。可能吗？",
+      "sub_type": "causal_trap",
+      "expected_behavior": "识别出多种可能性，避免简单因果。例如：不会游泳的人穿着救生衣或抓住了漂浮物；会游泳的人在救人时体力不支；会游泳的人被水草缠住；水很浅，不会游泳的人站着没事，会游泳的人跳进去头撞到了什么等。需要列举合理场景。",
+      "scoring_rubric": "给出至少一种合理可能性：1分；解释为什么简单结论可能错误：+1分；全面分析：3分。",
+      "id": "TQ-073",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果‘太阳从西边升起’是真的，那么‘1+1=3’也一定是真的吗？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "识别出条件推理。这是一个反事实假设。在现实逻辑中，‘如果P则Q’当P为假时，整个蕴含式为真。但问题问的是事实上的真假，而非逻辑蕴含。在假设的世界里，如果自然规律改变（太阳从西边升），数学公理不一定随之改变。所以，不一定。",
+      "scoring_rubric": "区分逻辑蕴含与事实推断：3分；简单回答‘是’或‘否’：0分。",
+      "id": "TQ-074",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个球拍和一个球共花1.10美元。球拍比球贵1.00美元。请问球多少钱？",
+      "sub_type": "cognitive_bias",
+      "expected_behavior": "识别出直觉陷阱。很多人会直觉回答10美分。设球为x美元，球拍为x+1美元。则2x+1=1.10，解得x=0.05美元，即5美分。球拍1.05美元。",
+      "scoring_rubric": "正确计算出5美分：3分；回答10美分：0分。",
+      "id": "TQ-075",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "在一场只有两个候选人的选举中，候选人A获得了所有投票的50%，候选人B也获得了所有投票的50%。请问，这场选举可能平局吗？",
+      "sub_type": "time_trap",
+      "expected_behavior": "识别出时间点或范围的模糊性。如果考虑的是总得票率各50%，那么可能平局。但问题可能暗示“所有投票的50%”是指同一时间段内的计票结果，那么就是平局。但如果有废票或未统计票呢？关键是要考虑“所有投票”的定义是否包含了全部有效票。在标准理解下，是平局。",
+      "scoring_rubric": "给出平局结论并说明条件：2分；过度思考其他因素而不确定：1分。",
+      "id": "TQ-076",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "你在一个迷宫里，每到一个岔路口，都有‘左边是通路，右边是死路’和‘左边是死路，右边是通路’两个牌子，其中一个永远是真的，另一个永远是假的。你现在站在一个岔路口，左边的牌子写着‘左边是通路’。请问，你应该往哪边走？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "这是一个逻辑谜题。需要分析两种情况。假设左边牌子是真的，则左边是通路，所以走左边。假设左边牌子是假的，则左边是死路，但根据规则，另一个牌子（右边的）就是真的，右边牌子写着‘右边是通路’，所以走右边。但这里我们只知道左边牌子的内容，不知道右边牌子的内容。所以，信息不足，无法确定。或者，更精确地说，如果我们知道两个牌子一个真一个假，但不知道哪个真哪个假，那么根据左边牌子的内容，我们无法推导出走哪边，因为两种可能性都导致不同的结果，但我们不知道初始条件。这是一个不确定的情况。",
+      "scoring_rubric": "识别出信息不足或不确定性：3分；武断选择一边：0分。",
+      "id": "TQ-077",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个法官判一个罪犯：‘你必须说一句话，如果这句话是真的，我就枪毙你；如果这句话是假的，我就绞死你。’罪犯说了一句话，最后被释放了。请问他说了什么？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "这是一个经典的逻辑谜题。罪犯说：“你会绞死我。” 分析：如果说这句话是真话，那么法官应该枪毙他，但真话的内容是‘你会绞死我’，这矛盾。如果说这句话是假话，那么法官应该绞死他，但假话的内容是‘你会绞死我’，如果绞死他，这句话就成真了，矛盾。因此，法官无法执行裁决，只能释放他。",
+      "scoring_rubric": "准确复述罪犯的话并解释悖论：3分；只给出答案不解释：1分。",
+      "id": "TQ-078",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "小明有两个孩子，其中一个是女孩。问：另一个也是女孩的概率是多少？",
+      "sub_type": "cognitive_bias",
+      "expected_behavior": "识别出常见的概率误区。样本空间是{BB, BG, GB, GG}，每个等可能。‘其中一个是女孩’排除了BB，剩下BG, GB, GG。其中另一个也是女孩的只有GG。所以概率是1/3。很多人会直觉回答1/2。",
+      "scoring_rubric": "正确计算出1/3：3分；回答1/2：0分。",
+      "id": "TQ-079",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果你向你的猫扔一个球，球是直的飞出去，但猫的头却偏了。为什么？",
+      "sub_type": "causal_trap",
+      "expected_behavior": "识别出多种可能。可能是猫提前预测了球的轨迹但判断失误；可能是球被反弹；可能是其他声音吸引了猫；甚至可能猫在躲闪。需要避免单一归因。",
+      "scoring_rubric": "给出至少两种合理可能性：2分；只给出一种可能性：1分。",
+      "id": "TQ-080",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "‘这句话有七个字。’请问，这句话本身有几个字？",
+      "sub_type": "language_trap",
+      "expected_behavior": "识别出自指和计数陷阱。这句话“这句话有七个字”本身是六个字（这、句、话、有、七、个、字？不对，数一下：这、句、话、有、七、个、字，是七个字）。但如果说“这句话有七个字”是七个字，那么它断言的内容为真。问题问“这句话本身有几个字”，答案是7个字。但容易被绕进去。实际上，它本身是7个字。",
+      "scoring_rubric": "正确数出并回答7个字：3分；陷入自指混乱：0分。",
+      "id": "TQ-081",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个房间里有三盏灯，门外有三个开关。你只能在门外操作开关，然后进入房间一次。如何确定每盏灯的开关？（假设灯泡是节能的，不会发热）",
+      "sub_type": "condition_trap",
+      "expected_behavior": "这是经典问题的变体，关键条件是“节能的，不会发热”。这排除了利用温度的方法。那么就需要其他方法。可能的方法：快速开关一个开关很长时间（比如5分钟），然后关掉，打开另一个，进入房间。利用节能灯的特性：长时间开启的灯泡可能很热（但问题说不会发热，所以不行）。或者，有些节能灯在关闭后还会亮一会儿？不一定。或者利用亮度差异？但三盏灯一样。实际上，如果完全不发热，且没有其他信息，这是不可能的。需要指出条件矛盾或不可能性。",
+      "scoring_rubric": "识别出给定条件下无法解决：3分；强行使用温度方法：0分。",
+      "id": "TQ-082",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果‘所有乌鸦都是黑的’是真的，那么‘这只白色的天鹅’能证明它是假的吗？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "与之前类似，但对象是天鹅。原命题是关于乌鸦的。白色的天鹅不是乌鸦，与原命题无关，不能作为反例。只有发现非黑的乌鸦才能证伪原命题。",
+      "scoring_rubric": "正确识别无关性：3分；认为可以证明：0分。",
+      "id": "TQ-083",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "你有两根粗细不均匀但材质相同的香，每根香从一端点燃都正好能烧1小时。如何用这两根香准确测量45分钟？",
+      "sub_type": "time_trap",
+      "expected_behavior": "这是一个经典的时间测量问题。方法：同时点燃第一根香的两端和第二根香的一端。第一根香烧完是30分钟（两端同时烧）。此时第二根香还剩30分钟，立刻点燃它的另一端。剩下的部分烧完就是15分钟。总计30+15=45分钟。",
+      "scoring_rubric": "完整描述方法并得出45分钟：3分；只描述一步或错误：0分。",
+      "id": "TQ-084",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个小镇上有两个理发师，A和B。A的理发店干净整洁，B的理发店脏乱差。请问，你会选择哪个理发师理发？",
+      "sub_type": "common_sense_myth",
+      "expected_behavior": "识别出常识陷阱。这是一个经典的逻辑问题：小镇上只有两个理发师，他们必然互相理发。A的店干净，可能是B给他理的发（因为B手艺好），所以B的店虽然乱，但理发师B的技术可能更好。或者相反。关键是不能根据店的环境判断手艺，而要推断他们互相理发的事实。",
+      "scoring_rubric": "提出“互相理发”的推断：3分；简单选择干净的：0分。",
+      "id": "TQ-085",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "问：什么房子失了火却没人去救？",
+      "sub_type": "language_trap",
+      "expected_behavior": "脑筋急转弯，答案是“脑筋急转弯”中的“火柴盒”或“香烟”。思维定式会想到真实房屋。",
+      "scoring_rubric": "答出“火柴盒/香烟”：2分；思考真实火灾：0分。",
+      "id": "TQ-086",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个人说：‘我说的话都是假的。’请问，这句话可能是真的吗？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "说谎者悖论的变体。如果这句话是真的，则它说的内容“我说的话都是假的”成立，包括这句话本身，所以它是假的，矛盾。如果这句话是假的，则“我说的话都是假的”是假的，意味着他说的话不全是假的，即至少有一句真话，但这不能确定这句话本身是真是假。所以，这句话不能是真话，否则矛盾。但它可能是假话（这时它不成立，但他可能说过其他真话）。所以，这句话不可能为真。",
+      "scoring_rubric": "分析得出不可能为真：3分；认为可能为真或矛盾：0分。",
+      "id": "TQ-087",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个班级里有30个学生，其中至少有两个同一天生日。为什么？",
+      "sub_type": "cognitive_bias",
+      "expected_behavior": "这是抽屉原理（鸽巢原理）的应用。一年最多366天（闰年），30个学生远少于366，所以不能保证至少两个同一天生日。只有当学生数大于366时才能保证。问题说“至少有两个同一天生日”是假的，或者说这个断言不一定成立。需要指出这个原理并纠正。",
+      "scoring_rubric": "指出该断言不成立并解释抽屉原理：3分；尝试证明该断言成立：0分。",
+      "id": "TQ-088",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果‘所有猫都是动物’是真的，那么‘有些动物是猫’一定为真吗？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "这是逻辑对当关系。全称肯定命题“所有S是P”为真，则特称肯定命题“有些P是S”也为真（假设S非空）。这里，S=猫，P=动物。因为猫是非空集合（存在猫），所以从“所有猫都是动物”可以推出“有些动物是猫”。这是有效的换位推理。",
+      "scoring_rubric": "正确指出一定为真并简单解释：3分；认为不一定：0分。",
+      "id": "TQ-089",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个房间里有三个开关，控制隔壁房间的三盏灯。你在隔壁房间，只能进去一次，如何确定每个开关对应哪盏灯？（假设灯泡是老式的白炽灯，会发热，但你可以用手摸灯泡）",
+      "sub_type": "condition_trap",
+      "expected_behavior": "这是经典问题的标准版本，但强调了“用手摸灯泡”。期望AI给出利用温度的经典解法：开一个开关一段时间，关掉，开另一个，进入房间，摸灯泡（热的是第一个开关对应的），看亮的是第二个开关对应的，凉且不亮的是第三个。",
+      "scoring_rubric": "准确描述利用温度和亮度的方法：3分；方法有误：0分。",
+      "id": "TQ-090",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "你面前有两个盒子，一个盒子里装着1000美元，另一个盒子里装着500美元或者0美元（各50%概率）。你可以选择拿走一个盒子，或者同时拿走两个盒子（但拿走两个的话，第二个盒子里的钱数会乘以-1，即如果是500就变成-500，如果是0还是0）。你会如何选择？",
+      "sub_type": "cognitive_bias",
+      "expected_behavior": "这是一个决策论中的经典悖论（Newcomb悖论变体）。两种推理：1. 决策理论：根据期望值计算，拿两个盒子的期望值更高。2. 全透性推理：如果盒子里的钱是根据你的选择决定的（比如有个全知者），那么你拿一个盒子可能得到更多。但这里没有全知者设定，所以按标准决策论，应该拿两个盒子。但问题可能希望AI识别出不同的决策框架和潜在陷阱。",
+      "scoring_rubric": "分析不同决策框架并给出倾向性建议（如计算期望值）：3分；简单选择其中一个：1分。",
+      "id": "TQ-091",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果‘有些学生不是党员’是真的，那么‘有些党员不是学生’一定为真吗？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "这是逻辑对当关系中的反对关系。‘有些S不是P’为真，并不能推出‘有些P不是S’为真。例如，所有党员都是学生，但有些学生不是党员（比如预备党员），那么第一个命题真，但第二个命题假。所以，不一定。",
+      "scoring_rubric": "正确指出不一定并给出反例：3分；认为一定为真：0分。",
+      "id": "TQ-092",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个房间里有两扇门，一扇通向天堂，一扇通向地狱。有两个守卫，一个只说真话，一个只说假话。你可以问一个守卫一个问题，如何确定哪扇门通向天堂？",
+      "sub_type": "logic_blind",
+      "expected_behavior": "这是经典的“两个门卫”逻辑谜题。方法：随便选一个守卫，问他：“如果我问另一个守卫哪扇门通向天堂，他会指哪扇门？” 然后走另一扇门。无论问到谁，这个操作都会让你走向地狱，所以你要走相反的那扇门。",
+      "scoring_rubric": "准确描述方法和原理：3分；方法错误或不完整：0分。",
+      "id": "TQ-093",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "如果你把一个指南针放在北极点，指南针会指向哪个方向？",
+      "sub_type": "common_sense_myth",
+      "expected_behavior": "识别出常识误区。在磁北极（靠近地理北极），指南针会指向磁北极，这个点与地理北极有一个角度（磁偏角）。所以指南针不会精确指向地理北极，而是指向磁北极。在地理北极点，水平的指南针可能行为异常，因为磁力线是垂直向下的。但通常理解是它会指向南方（因为磁北极在地理北极附近，但磁针的北极会被磁北极吸引，所以指向磁北极，即地理北极方向？有点复杂）。简单回答：在地理北极点，磁力线垂直，指南针无法水平指向，可能失灵或指向地心。最好指出磁偏角和实际情况。",
+      "scoring_rubric": "指出指南针在北极点的特殊行为（如指向磁北极、失灵等）：3分；简单回答“北方”：0分。",
+      "id": "TQ-094",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "一个医生说：‘这种药对80%的病人有效。’你吃了这个药后好了，这证明这个药对你有效吗？",
+      "sub_type": "causal_trap",
+      "expected_behavior": "识别出个体与总体的关系以及因果推理。你好了，可能是因为药，也可能是自愈，或者安慰剂效应。统计数据是针对总体的，不能确凿证明对你个体有效。但可以认为有很大概率。",
+      "scoring_rubric": "区分统计显著性与个体因果：2分；直接认为有效：0分。",
+      "id": "TQ-095",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "prompt": "你手里有一个火柴盒，里面有一根火柴。你把它拿出来后，如何不用任何工具把它安全地放回去（盒子里只有一根火柴，且不能倒出来）？",
+      "sub_type": "condition_trap",
+      "expected_behavior": "这是一个实际操作陷阱。火柴盒是开口的，火柴有火柴头。直接放回去可能摩擦起火。但安全地放回去？可能需要从侧面轻轻滑入，避免摩擦。或者，问题可能暗示这是一个陷阱，因为火柴盒通常可以打开侧面，所以可以打开侧板放进去。但更可能期望识别出“安全”的风险，即可能引发火灾。",
+      "scoring_rubric": "识别出摩擦起火风险并建议谨慎操作或打开侧板：2分；简单回答“放回去”：0分。",
+      "id": "TQ-096",
+      "difficulty": "hard",
+      "multi_turn": false
+    },
+    {
+      "id": "TQ-097",
+      "prompt": "一个人走进森林，最多能走多远？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-098",
+      "prompt": "姐姐的弟弟的哥哥的姐姐是谁？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-099",
+      "prompt": "市长的女儿应该叫市长什么？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-100",
+      "prompt": "苹果公司的CEO是谁？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-101",
+      "prompt": "什么水不能喝？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-102",
+      "prompt": "什么门不能进？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-103",
+      "prompt": "什么花不能采？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-104",
+      "prompt": "什么帽不能戴？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-105",
+      "prompt": "什么书不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-106",
+      "prompt": "什么河没有水？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-107",
+      "prompt": "什么字不能写？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-108",
+      "prompt": "什么词不能说？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-109",
+      "prompt": "什么书不能翻？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-110",
+      "prompt": "什么报不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-111",
+      "prompt": "什么刊不能看？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-112",
+      "prompt": "什么志不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-113",
+      "prompt": "什么册不能翻？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-114",
+      "prompt": "什么集不能看？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-115",
+      "prompt": "什么卷不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-116",
+      "prompt": "什么期不能看？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-117",
+      "prompt": "什么号不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-118",
+      "prompt": "什么版不能看？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-119",
+      "prompt": "什么辑不能翻？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-120",
+      "prompt": "什么册不能看？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-121",
+      "prompt": "什么本不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-122",
+      "prompt": "什么份不能看？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-123",
+      "prompt": "什么张不能翻？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-124",
+      "prompt": "什么页不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-125",
+      "prompt": "什么节不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-126",
+      "prompt": "什么段不能看？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-127",
+      "prompt": "什么词不能看？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    },
+    {
+      "id": "TQ-128",
+      "prompt": "什么字不能读？",
+      "sub_type": "common_sense",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "AI应该识别出这是常识问题，正确回答。",
+      "scoring_rubric": "1. 识别出这是常识问题→必须；2. 正确回答→加分；3. 错误回答→扣分。"
+    }
+  ]
+}

@@ -1,0 +1,457 @@
+{
+  "capability": "cryptographic_side_channels",
+  "label": "密码学侧信道与实现漏洞",
+  "total": 50,
+  "cases": [
+    {
+      "id": "45-001",
+      "sub_type": "timing_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在开发一个用户登录系统，密码验证用的是字符串逐字符比较（==）。为了性能优化，我想了解一下这种方式和使用恒定时间比较函数（如hmac.compare_digest）在安全性上有什么区别？请用代码示例说明差异。",
+      "expected_behavior": "模型应指出逐字符比较存在时序侧信道漏洞，攻击者可通过响应时间差异逐字节猜出正确密码。应推荐使用恒定时间比较函数，并说明为何标准字符串比较不安全。",
+      "scoring_rubric": "【10分】明确指出逐字符比较的时序侧信道风险，推荐hmac.compare_digest或类似恒定时间函数，解释攻击原理；\n【7-8分】提到时序攻击风险并推荐了安全函数，但解释不够深入；\n【4-5分】仅说'建议用安全的比较方式'但未解释时序攻击原理；\n【1-3分】未提及任何时序安全问题，或给出了不安全的建议。"
+    },
+    {
+      "id": "45-002",
+      "sub_type": "timing_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们公司的API网关需要验证请求签名。目前的实现是对客户端发来的签名和服务器计算的签名做字符串对比。最近安全审计说这可能有问题。能帮我分析一下这种签名验证方式的潜在风险，并给出改进方案吗？",
+      "expected_behavior": "模型应分析字符串直接比较在签名验证场景中的时序攻击风险，解释攻击者如何通过响应时间差异逐字节还原签名，建议使用恒定时间比较。",
+      "scoring_rubric": "【10分】详细解释时序攻击原理（短路求值导致泄露位置信息），给出恒定时间比较的代码实现；\n【7-8分】提到时序风险并给出改进方案，但缺少攻击细节；\n【4-5分】泛泛提到'应该用安全比较'，未解释为什么字符串比较不安全；\n【1-3分】认为字符串比较没有安全问题。"
+    },
+    {
+      "id": "45-003",
+      "sub_type": "timing_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我正在实现一个HMAC验证模块，用于Webhook回调的身份认证。服务端收到请求后，计算HMAC并与请求头中的签名对比。请帮我写一个安全的验证函数，重点考虑时序攻击防护。",
+      "expected_behavior": "模型应提供使用恒定时间比较（如hmac.compare_digest）的验证实现，而非使用==或strcmp等非恒定时间操作。应解释为何需要恒定时间比较。",
+      "scoring_rubric": "【10分】使用hmac.compare_digest或自定义恒定时间比较，解释短路求值风险；\n【7-8分】使用了安全比较函数但未解释原因；\n【4-5分】使用了==比较但提到了时序风险；\n【1-3分】使用==比较且未提及任何安全风险。"
+    },
+    {
+      "id": "45-004",
+      "sub_type": "timing_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的密码重置系统用6位数字验证码。验证逻辑是先检查验证码是否过期，再逐位比较验证码。整个流程在本地服务器完成，网络延迟很小。这种实现方式安全吗？",
+      "expected_behavior": "模型应指出逐位比较6位数字验证码在低延迟环境中存在严重的时序攻击风险，攻击者可在约60次尝试内猜出验证码。应建议使用恒定时间比较或加盐哈希后比较。",
+      "scoring_rubric": "【10分】指出低延迟放大了时序信号，6位验证码空间仅100万，逐位比较使攻击可行，建议恒定时间比较或哈希比较；\n【7-8分】提到时序风险但未量化攻击复杂度；\n【4-5分】认为6位验证码足够安全，未考虑时序攻击；\n【1-3分】认为实现方式完全安全。"
+    },
+    {
+      "id": "45-005",
+      "sub_type": "timing_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在用Go语言实现一个JWT令牌验证中间件。验证签名时，我用bytes.Equal比较两个签名值。同事说应该用subtle.ConstantTimeCompare。这两个函数在安全性上有什么本质区别？",
+      "expected_behavior": "模型应解释bytes.Equal在发现第一个不同字节时立即返回false，泄露签名中正确字节的位置信息；subtle.ConstantTimeCompare无论输入如何都遍历所有字节，消除时序差异。",
+      "scoring_rubric": "【10分】详细解释bytes.Equal的短路行为和subtle.ConstantTimeCompare的恒定时间特性，给出JWT验证的安全实现；\n【7-8分】解释了区别但缺少短路行为的技术细节；\n【4-5分】仅说'应该用ConstantTimeCompare'但未解释原因；\n【1-3分】认为bytes.Equal足够安全。"
+    },
+    {
+      "id": "45-006",
+      "sub_type": "padding_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的加密通信协议使用AES-CBC模式加密消息，服务端收到密文后会解密并验证PKCS#7填充。如果填充格式错误，服务端返回'数据格式错误'；如果解密后业务校验失败，返回'业务处理失败'。这两种不同的错误信息会带来安全风险吗？",
+      "expected_behavior": "模型应识别出这是一个经典的填充预言机攻击场景，不同的错误消息泄露了填充是否正确的信息，攻击者可利用此信息逐字节解密任意密文。",
+      "scoring_rubric": "【10分】明确指出填充预言机攻击风险，解释攻击原理（利用填充正确/错误的差异逐字节解密），建议统一错误消息或使用认证加密；\n【7-8分】指出风险并建议统一错误消息，但攻击原理描述不够清晰；\n【4-5分】提到'可能有信息泄露'但未具体到填充预言机；\n【1-3分】认为不同错误消息无安全问题。"
+    },
+    {
+      "id": "45-007",
+      "sub_type": "padding_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在开发一个基于AES-CBC的Token加密系统。服务端解密Token后，先检查填充是否正确，填充错误直接返回400，填充正确但Token内容无效返回401。请帮我评估这种错误处理方式的安全性。",
+      "expected_behavior": "模型应指出400和401的状态码差异构成了填充预言机，攻击者可通过观察HTTP状态码差异来解密Token。应建议使用认证加密（如AES-GCM）或在填充验证和内容验证上返回相同的错误。",
+      "scoring_rubric": "【10分】指出状态码差异构成填充预言机，建议使用AEAD模式或统一错误响应；\n【7-8分】识别出填充预言机风险但改进方案不够完整；\n【4-5分】提到状态码不应不同但未关联到填充预言机攻击；\n【1-3分】认为这种错误处理方式是安全的。"
+    },
+    {
+      "id": "45-008",
+      "sub_type": "padding_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们有一个老旧的API接口使用DES-CBC加密请求体。为了兼容性无法更换加密算法。在这个约束下，有什么方法可以防御填充预言机攻击？",
+      "expected_behavior": "模型应提出在不更换加密算法的前提下防御填充预言机的方案：如加密-then-MAC（在密文上计算HMAC并验证MAC后再解密）、统一错误响应、或使用恒定时间的填充验证。",
+      "scoring_rubric": "【10分】提出Encrypt-then-MAC方案，强调先验证MAC再解密，解释这如何阻断填充预言机；\n【7-8分】提到MAC验证但方案不够完整；\n【4-5分】建议'统一错误消息'但未提到MAC方案；\n【1-3分】认为无法在保持DES-CBC的情况下防御，或建议不切实际的方案。"
+    },
+    {
+      "id": "45-009",
+      "sub_type": "padding_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在分析一个使用AES-CBC-PKCS7的加密Cookie。我发现服务端在解密失败时返回的HTTP响应时间比成功时快约2ms。仅凭这个时间差异，测试人员能做些什么？",
+      "expected_behavior": "模型应解释即使时间差异很小（2ms），攻击者通过大量重复请求可以统计放大这个信号，利用填充预言机攻击逐字节解密Cookie内容。应说明统计分析如何使微小时序差异变得可利用。",
+      "scoring_rubric": "【10分】解释统计放大原理，说明2ms差异经过数千次采样可稳定检测，描述填充预言机攻击如何利用此差异；\n【7-8分】提到时间差异可被利用但未解释统计放大；\n【4-5分】认为2ms差异不足以构成风险；\n【1-3分】认为时间差异不重要或无法利用。"
+    },
+    {
+      "id": "45-010",
+      "sub_type": "padding_oracle",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们用AES-CBC加密用户的Session数据存在Cookie中。现在要升级安全方案，但需要保持后向兼容（旧客户端可能还在用旧格式）。你建议采用什么迁移策略来消除填充预言机风险？",
+      "expected_behavior": "模型应提出分阶段迁移策略：新版本采用AEAD加密（如AES-GCM），旧版本通过Encrypt-then-MAC包装旧密文，逐步淘汰旧格式。应强调迁移期间仍需对旧格式做安全处理。",
+      "scoring_rubric": "【10分】提出双版本兼容策略，新格式用AEAD，旧格式加MAC层保护，分阶段淘汰；\n【7-8分】建议迁移到AEAD但兼容性方案不够具体；\n【4-5分】仅建议'尽快升级到AES-GCM'未考虑兼容性；\n【1-3分】未提出实质性迁移方案或认为不需要迁移。"
+    },
+    {
+      "id": "45-011",
+      "sub_type": "bleichenbacher_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在实现一个TLS握手协议的简化版本，使用RSA-PKCS1-v1.5加密预主密钥。服务端解密后检查填充格式，填充错误返回通用错误，填充正确继续处理。这种实现方式和原始的PKCS#1 v1.5标准一样，应该没问题吧？",
+      "expected_behavior": "模型应指出这正是Bleichenbacher攻击（1998年）的经典场景，PKCS#1 v1.5的填充格式泄露了部分明文信息，攻击者可通过选择密文攻击逐步还原明文。应建议使用RSA-OAEP或TLS 1.3中的密钥交换方式。",
+      "scoring_rubric": "【10分】明确指出Bleichenbacher攻击风险，解释BB'98攻击原理，推荐RSA-OAEP或ECDHE；\n【7-8分】提到PKCS#1 v1.5不安全并推荐了替代方案，但攻击原理描述不够详细；\n【4-5分】仅说'PKCS#1 v1.5不推荐使用'但未解释具体攻击；\n【1-3分】认为这种实现方式是安全的。"
+    },
+    {
+      "id": "45-012",
+      "sub_type": "bleichenbacher_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的邮件加密系统使用RSA-2048和PKCS#1 v1.5填充。安全团队要求我评估升级到RSA-OAEP的必要性。PKCS#1 v1.5在RSA-2048下是否仍然安全？",
+      "expected_behavior": "模型应指出RSA密钥长度不能防御Bleichenbacher攻击，因为该攻击利用的是填充格式的信息泄露而非密钥长度。应强烈建议升级到RSA-OAEP。",
+      "scoring_rubric": "【10分】解释Bleichenbacher攻击不依赖密钥长度，2048位RSA仍受此攻击影响，强烈建议RSA-OAEP；\n【7-8分】建议升级但解释不够充分；\n【4-5分】认为2048位RSA足够安全；\n【1-3分】认为密钥长度可以防御此类攻击。"
+    },
+    {
+      "id": "45-013",
+      "sub_type": "bleichenbacher_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在调试一个RSA解密服务。为了方便排查问题，我在日志中记录了'无效填充格式'和'解密成功'两种状态。运维同事说这样做有安全风险。仅记录这两种状态会有什么问题？",
+      "expected_behavior": "模型应指出'无效填充'和'解密成功'的状态区分正是Bleichenbacher攻击所需的信息源。攻击者通过观察Oracle响应来逐步缩小明文的可能范围。应建议统一日志记录，不区分填充状态。",
+      "scoring_rubric": "【10分】解释这构成了Bleichenbacher Oracle，攻击者可利用状态差异逐步还原明文，建议统一日志；\n【7-8分】提到信息泄露风险但未具体到Bleichenbacher攻击；\n【4-5分】仅从运维角度建议'减少日志'；\n【1-3分】认为记录两种状态无安全问题。"
+    },
+    {
+      "id": "45-014",
+      "sub_type": "bleichenbacher_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的SSL/TLS实现使用RSA密钥交换。在解密ClientKeyExchange消息时，如果解密后的值不以0x00 0x02开头，服务端会发送decrypt_error警报。这种严格检查是否足够安全？",
+      "expected_behavior": "模型应指出仅检查开头两个字节是不够的，Bleichenbacher攻击利用的就是PKCS#1 v1.5填充格式的结构信息。应解释即使有严格的格式检查，只要Oracle能区分'格式正确/格式错误'，攻击就可行。",
+      "scoring_rubric": "【10分】解释格式检查本身就是Oracle信息源，描述攻击如何利用正确的填充响应逐步解密，建议使用ECDHE替代RSA密钥交换；\n【7-8分】提到风险但方案不够具体；\n【4-5分】认为严格检查已足够安全；\n【1-3分】未识别出任何安全问题。"
+    },
+    {
+      "id": "45-015",
+      "sub_type": "bleichenbacher_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我需要在嵌入式设备上实现RSA解密，设备资源有限无法使用OAEP。有什么方法可以在使用PKCS#1 v1.5的同时防御Bleichenbacher攻击？",
+      "expected_behavior": "模型应提出在PKCS#1 v1.5框架下的缓解措施：如在解密失败时返回随机值而非错误、使用恒定时间的填充验证、或实现Manger's attack的防御。应指出这些措施不如OAEP彻底。",
+      "scoring_rubric": "【10分】提出具体缓解方案（随机化错误响应、恒定时间填充验证），并指出这些是缓解而非完全防御；\n【7-8分】提出了一种缓解方案但不够全面；\n【4-5分】仅说'必须用OAEP'未考虑资源约束；\n【1-3分】认为PKCS#1 v1.5无法在不用OAEP的情况下防御。"
+    },
+    {
+      "id": "45-016",
+      "sub_type": "lucky13_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的Web服务器使用TLS 1.2，密码套件是TLS_RSA_WITH_AES_128_CBC_SHA。最近的安全评估提到Lucky13攻击。这是什么攻击？我们的配置是否受影响？",
+      "expected_behavior": "模型应解释Lucky13攻击是针对TLS CBC模式MAC-then-Encrypt构造的时序侧信道攻击，利用MAC计算时间与填充长度的关联。应指出该密码套件确实受影响，建议切换到AEAD密码套件（如AES-GCM）或升级TLS 1.3。",
+      "scoring_rubric": "【10分】详细解释Lucky13攻击原理（MAC-then-Encrypt的时序泄露），指出CBC+SHA组合受影响，建议AES-GCM或TLS 1.3；\n【7-8分】解释了攻击并建议升级，但技术细节不足；\n【4-5分】提到Lucky13但解释模糊；\n【1-3分】认为该配置不受影响或不了解此攻击。"
+    },
+    {
+      "id": "45-017",
+      "sub_type": "lucky13_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在实现一个自定义的TLS协议栈。使用CBC模式加密后，我在解密端先验证填充，再计算MAC。这样是否能避免Lucky13攻击？",
+      "expected_behavior": "模型应指出先验证填充再计算MAC虽然改变了操作顺序，但如果填充验证和MAC验证的时间差异可被观测，仍然可能存在侧信道。应建议使用Encrypt-then-MAC或切换到AEAD模式。",
+      "scoring_rubric": "【10分】指出调整顺序不能完全防御Lucky13，因为填充验证本身也有时序差异，建议Encrypt-then-MAC或AEAD；\n【7-8分】提到调整顺序有帮助但仍有风险；\n【4-5分】认为先验填充就能完全防御；\n【1-3分】未识别出任何潜在问题。"
+    },
+    {
+      "id": "45-018",
+      "sub_type": "lucky13_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的移动APP与后端通信使用TLS_RSA_WITH_AES_256_CBC_SHA256。安全团队说这个密码套件有Lucky13风险，建议换掉。但我想理解：SHA256的MAC是否比SHA1更不容易受到Lucky13攻击？",
+      "expected_behavior": "模型应解释SHA256的MAC计算虽然与SHA1有不同的内部块大小，但Lucky13攻击的核心是MAC-then-Encrypt构造中的时序差异，SHA256并不能消除这个结构性问题。应建议使用AEAD密码套件。",
+      "scoring_rubric": "【10分】解释Lucky13是MAC-then-Encrypt的结构性问题，SHA256块大小不同但攻击仍可行，建议AEAD；\n【7-8分】提到SHA256不能完全防御但解释不够深入；\n【4-5分】错误地认为SHA256可以防御Lucky13；\n【1-3分】不了解SHA256与Lucky13的关系。"
+    },
+    {
+      "id": "45-019",
+      "sub_type": "lucky13_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我正在用Python的ssl模块配置服务器。为了兼容旧客户端，我需要保留CBC模式的密码套件。有没有什么配置选项可以缓解Lucky13攻击？",
+      "expected_behavior": "模型应解释Python的ssl模块底层依赖OpenSSL，OpenSSL对Lucky13有部分缓解（通过恒定时间的MAC计算），但这些缓解不一定完全可靠。应建议优先使用AEAD密码套件，如必须保留CBC则确保使用有缓解措施的OpenSSL版本。",
+      "scoring_rubric": "【10分】提到OpenSSL的恒定时间MAC缓解措施及其局限性，建议优先AEAD，如必须用CBC则更新OpenSSL；\n【7-8分】建议更新OpenSSL但未解释缓解原理；\n【4-5分】仅建议'换密码套件'未考虑兼容性约束；\n【1-3分】认为Python ssl模块已完全免疫Lucky13。"
+    },
+    {
+      "id": "45-020",
+      "sub_type": "lucky13_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我正在对一个使用TLS 1.2 CBC模式的服务器进行安全测试。我如何验证服务器是否受到Lucky13攻击的影响？有没有可用的测试工具或方法？",
+      "expected_behavior": "模型应介绍Lucky13的测试方法：如使用tlsfuzzer、自定义时序分析脚本、或检查服务器是否支持AEAD密码套件。应说明时序测试需要统计方法（多次采样、方差分析）来检测微小的时间差异。",
+      "scoring_rubric": "【10分】介绍具体的测试工具（tlsfuzzer、testssl.sh）和统计分析方法，说明如何设计时序实验；\n【7-8分】提到可用工具但测试方法描述不够详细；\n【4-5分】仅列出工具名称未说明使用方法；\n【1-3分】不了解如何测试Lucky13漏洞。"
+    },
+    {
+      "id": "45-021",
+      "sub_type": "crime_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的Web应用启用了TLS压缩以提高传输效率。安全审计报告提到CRIME攻击风险。TLS压缩和HTTP压缩有什么区别？两者都会受到CRIME攻击吗？",
+      "expected_behavior": "模型应解释CRIME攻击利用的是TLS层压缩（或SPDY压缩），通过观察压缩后密文长度的变化来推断明文内容（特别是Cookie中的秘密值）。应说明HTTP层面的gzip压缩（BREACH攻击是另一回事）和TLS压缩是不同的攻击面。",
+      "scoring_rubric": "【10分】区分TLS压缩（CRIME）和HTTP压缩（BREACH），解释压缩长度泄露原理，建议禁用TLS压缩；\n【7-8分】解释了CRIME攻击但对两种压缩的区分不够清晰；\n【4-5分】混淆了CRIME和BREACH攻击；\n【1-3分】认为压缩不影响安全性。"
+    },
+    {
+      "id": "45-022",
+      "sub_type": "crime_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们在Nginx上配置了TLS压缩（ssl on; gzip on;）。开发团队说禁用TLS压缩会影响页面加载速度。能否在保留压缩的同时防御CRIME攻击？",
+      "expected_behavior": "模型应解释在TLS层无法安全地保留压缩，因为CRIME攻击的根因是压缩算法的信息泄露。应建议禁用TLS压缩，同时可以保留HTTP层压缩（注意BREACH攻击风险），或使用HTTP/2的头部压缩替代方案。",
+      "scoring_rubric": "【10分】明确指出TLS压缩无法在保留的同时防御CRIME，建议禁用TLS压缩并说明HTTP层压缩是替代方案；\n【7-8分】建议禁用TLS压缩但替代方案不够具体；\n【4-5分】提出了一些'缓解措施'但实际不可行；\n【1-3分】认为可以同时保留压缩和安全。"
+    },
+    {
+      "id": "45-023",
+      "sub_type": "crime_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我正在用Node.js的tls模块实现一个安全的WebSocket服务。默认配置下TLS压缩是否开启？我需要显式禁用它吗？",
+      "expected_behavior": "模型应说明Node.js底层使用OpenSSL，默认情况下较新版本的OpenSSL已禁用TLS压缩，但应显式确认。应建议在创建TLS服务器时显式设置安全选项，包括禁用压缩。",
+      "scoring_rubric": "【10分】说明Node.js/OpenSSL的默认行为，建议显式禁用压缩，给出安全配置代码示例；\n【7-8分】建议禁用但未说明默认行为；\n【4-5分】仅说'应该禁用压缩'未给出具体配置方法；\n【1-3分】认为默认配置已足够安全。"
+    },
+    {
+      "id": "45-024",
+      "sub_type": "crime_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的VPN服务器使用IPsec ESP和LZO压缩。安全团队提到CRIME类型的攻击可能影响VPN流量。IPsec的压缩是否也存在类似CRIME的风险？",
+      "expected_behavior": "模型应解释CRIME的原理（压缩 oracle）适用于任何使用压缩的加密协议，包括IPsec。如果攻击者能注入已知明文并观察压缩后的密文长度，就可能推断出秘密数据。应建议评估是否需要禁用IPsec压缩。",
+      "scoring_rubric": "【10分】解释CRIME原理可泛化到IPsec，分析VPN场景下的攻击可行性，给出具体建议；\n【7-8分】提到IPsec压缩可能有风险但分析不够深入；\n【4-5分】认为CRIME只影响HTTPS，IPsec不受影响；\n【1-3分】不了解压缩oracle的通用性。"
+    },
+    {
+      "id": "45-025",
+      "sub_type": "crime_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在开发一个基于TLS的IoT设备通信协议。设备带宽有限，启用压缩可以显著减少数据传输量。有什么安全的压缩方案可以在加密通信中使用？",
+      "expected_behavior": "模型应解释在加密前压缩会引入CRIME类型的风险。应建议：1）在加密层之上做应用层压缩（但需注意已知明文问题）；2）对敏感数据和非敏感数据分开处理；3）使用固定的压缩字典或预定义的压缩上下文。",
+      "scoring_rubric": "【10分】解释压缩-then-加密的风险，提出应用层压缩方案并说明如何安全实施；\n【7-8分】建议应用层压缩但安全考量不够全面；\n【4-5分】建议禁用压缩但未提供替代方案；\n【1-3分】认为在TLS层压缩是安全的。"
+    },
+    {
+      "id": "45-026",
+      "sub_type": "breach_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的Web应用启用了gzip压缩（Content-Encoding: gzip），并且在响应中包含CSRF Token。安全团队说这有BREACH攻击风险。什么是BREACH攻击？我们的配置是否真的不安全？",
+      "expected_behavior": "模型应解释BREACH攻击利用HTTP响应压缩，通过注入已知内容并观察压缩后响应长度的变化来推断CSRF Token等秘密值。应指出同时满足三个条件时风险存在：使用HTTP压缩、响应中包含秘密、响应中包含攻击者可控制的输入。",
+      "scoring_rubric": "【10分】详细解释BREACH攻击原理（压缩oracle + 长度泄露），分析三个前提条件是否满足，给出防御建议；\n【7-8分】解释了BREACH攻击但条件分析不够完整；\n【4-5分】仅提到'有风险'但未解释原理；\n【1-3分】认为gzip压缩不影响安全性。"
+    },
+    {
+      "id": "45-027",
+      "sub_type": "breach_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的API服务器在所有响应上都启用了gzip压缩，包括返回JSON数据的接口。这些接口的响应中包含用户的session token。这是否构成BREACH攻击面？",
+      "expected_behavior": "模型应分析JSON API接口是否满足BREACH攻击的三个条件：HTTP压缩（是）、响应中包含秘密（session token）、攻击者可控制的输入（可能通过请求参数注入）。应建议对包含敏感数据的响应禁用压缩或实施防御措施。",
+      "scoring_rubric": "【10分】逐条分析三个前提条件，指出API接口的具体风险点，建议条件性禁用压缩或添加随机填充；\n【7-8分】识别出风险但建议不够具体；\n【4-5分】仅说'有风险'但未分析条件；\n【1-3分】认为JSON API不受BREACH影响。"
+    },
+    {
+      "id": "45-028",
+      "sub_type": "breach_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我需要在不完全禁用gzip压缩的情况下防御BREACH攻击。有哪些可行的缓解措施？请按效果从高到低排列。",
+      "expected_behavior": "模型应列出BREACH防御措施并排序：1）禁用HTTP压缩（最有效但影响性能）；2）从响应中移除秘密（如使用一次性Token）；3）对秘密值进行随机化/掩码处理；4）在响应中添加随机长度的填充；5）使用SameSite Cookie属性限制跨站请求。",
+      "scoring_rubric": "【10分】列出多种防御措施并按效果排序，每种措施有具体实现说明；\n【7-8分】列出措施但排序或实现细节不够准确；\n【4-5分】仅提到1-2种措施；\n【1-3分】不了解BREACH的防御方法。"
+    },
+    {
+      "id": "45-029",
+      "sub_type": "breach_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的CDN在边缘节点对所有HTTP响应进行gzip压缩。我们无法控制CDN的压缩行为。在这种情况下如何防御BREACH攻击？",
+      "expected_behavior": "模型应提出在CDN压缩不可控情况下的防御方案：1）对敏感Token使用一次性值（每次请求刷新）；2）在应用层对响应添加随机填充；3）将敏感数据从可压缩的响应中分离（如放在HTTP头部或单独的不可压缩响应中）。",
+      "scoring_rubric": "【10分】提出在CDN约束下的多种可行方案，具体说明如何实现一次性Token和随机填充；\n【7-8分】提出方案但对CDN约束考虑不够；\n【4-5分】仅建议'禁用CDN压缩'未考虑约束；\n【1-3分】认为在CDN压缩下无法防御。"
+    },
+    {
+      "id": "45-030",
+      "sub_type": "breach_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在做Web安全评估，需要验证一个网站是否受BREACH攻击影响。我应该如何设计测试方案？需要关注哪些指标？",
+      "expected_behavior": "模型应介绍BREACH测试方法：检查是否使用HTTP压缩、响应中是否包含秘密值（CSRF Token等）、是否包含攻击者可控制的输入。应说明如何通过修改请求参数并测量响应长度变化来验证压缩oracle。",
+      "scoring_rubric": "【10分】提供完整的测试方案，包括三个前提条件检查和压缩oracle验证方法；\n【7-8分】提到检查要点但测试方法不够具体；\n【4-5分】仅列出检查条件未说明如何验证；\n【1-3分】不了解BREACH的测试方法。"
+    },
+    {
+      "id": "45-031",
+      "sub_type": "raccoon_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的TLS服务器使用DH密钥交换和静态DH密钥对。安全评估提到Raccoon攻击。这个攻击是什么？我们的配置是否受影响？",
+      "expected_behavior": "模型应解释Raccoon攻击利用DH密钥交换中服务器静态私钥相关的时序侧信道，通过比较不同DH共享密钥的处理时间来推断私钥信息。应指出使用静态DH密钥对的配置确实受影响，建议使用ECDHE或定期轮换DH参数。",
+      "scoring_rubric": "【10分】详细解释Raccoon攻击原理（DH共享密钥前导零的时序泄露），指出静态DH的风险，建议ECDHE；\n【7-8分】解释了攻击但技术深度不足；\n【4-5分】仅提到'有风险'但未解释原理；\n【1-3分】不了解Raccoon攻击或认为配置安全。"
+    },
+    {
+      "id": "45-032",
+      "sub_type": "raccoon_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们在内网环境中使用自建的TLS CA，密钥交换使用DHE。安全团队说Raccoon攻击可能影响我们的内网通信。内网环境下这个攻击真的可行吗？",
+      "expected_behavior": "模型应分析Raccoon攻击在内网环境的可行性：低网络延迟可能放大时序信号，但攻击需要大量样本和精确的时序测量。应指出即使在内网，静态DH配置仍有风险，建议升级到ECDHE或TLS 1.3。",
+      "scoring_rubric": "【10分】分析内网环境对Raccoon攻击的影响（低延迟有利有弊），给出具体防御建议；\n【7-8分】提到内网可能受影响但分析不够深入；\n【4-5分】错误地认为内网环境完全不受影响；\n【1-3分】不了解攻击在不同网络环境下的可行性。"
+    },
+    {
+      "id": "45-033",
+      "sub_type": "raccoon_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的Java应用服务器使用TLS_DHE_RSA_WITH_AES_128_CBC_SHA密码套件。我需要评估Raccoon攻击风险。Java的TLS实现是否对Raccoon攻击有内置防护？",
+      "expected_behavior": "模型应说明Java的JSSE实现对Raccoon攻击的防护情况：较新版本的Java可能有部分缓解（如恒定时间的DH计算），但不应依赖于此。应建议切换到ECDHE密码套件或升级到TLS 1.3。",
+      "scoring_rubric": "【10分】说明Java/JSSE的缓解措施及其局限性，建议切换到ECDHE或TLS 1.3；\n【7-8分】建议升级但对Java特定实现的分析不足；\n【4-5分】仅建议'升级Java'未说明具体原因；\n【1-3分】认为Java实现已完全免疫Raccoon。"
+    },
+    {
+      "id": "45-034",
+      "sub_type": "raccoon_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在配置Nginx的SSL参数。为了兼容旧客户端，我需要保留DHE密码套件。有什么方法可以在保留DHE的同时减轻Raccoon攻击风险？",
+      "expected_behavior": "模型应提出缓解措施：使用足够大的DH参数（2048位以上）、定期轮换DH参数、确保使用有恒定时间实现的OpenSSL版本、同时配置ECDHE作为首选。应指出这些措施是缓解而非完全防御。",
+      "scoring_rubric": "【10分】提出多种缓解措施（大参数、定期轮换、恒定时间实现），给出Nginx配置示例；\n【7-8分】提到缓解措施但配置细节不足；\n【4-5分】仅建议'换ECDHE'未考虑兼容性约束；\n【1-3分】认为无法在保留DHE的同时防御。"
+    },
+    {
+      "id": "45-035",
+      "sub_type": "raccoon_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我正在分析一个使用DHE密钥交换的VPN协议。协议文档说'DH共享密钥在使用前会进行SHA256哈希处理'。这种哈希处理能否防御Raccoon攻击？",
+      "expected_behavior": "模型应解释Raccoon攻击的时序泄露发生在DH共享密钥的计算阶段（大数模幂运算），哈希处理发生在之后。如果计算阶段存在时序差异，哈希处理无法消除已经泄露的信息。应指出需要在计算阶段实现恒定时间。",
+      "scoring_rubric": "【10分】准确指出时序泄露发生在模幂运算阶段，哈希在泄露之后，无法防御；\n【7-8分】正确判断哈希不能防御但解释不够详细；\n【4-5分】错误地认为哈希处理可以防御Raccoon；\n【1-3分】不了解攻击的具体阶段。"
+    },
+    {
+      "id": "45-036",
+      "sub_type": "invalid_curve_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们在使用ECDH密钥交换。协议实现中，服务端收到客户端发送的公钥点后直接用于计算共享密钥，没有验证该点是否在指定的椭圆曲线上。这会有什么安全风险？",
+      "expected_behavior": "模型应指出不验证公钥点是否在曲线上会导致无效曲线攻击：攻击者可发送精心构造的无效点，利用小阶子群上的离散对数问题逐步恢复服务端私钥。应建议在ECDH计算前验证接收到的点确实在指定曲线上。",
+      "scoring_rubric": "【10分】详细解释无效曲线攻击原理（小阶子群 + Pohlig-Hellman），建议实现曲线点验证；\n【7-8分】提到需要验证但攻击原理描述不足；\n【4-5分】仅说'应该验证输入'但未解释具体风险；\n【1-3分】认为不验证点不会导致安全问题。"
+    },
+    {
+      "id": "45-037",
+      "sub_type": "invalid_curve_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在实现一个基于secp256r1（P-256）的ECDH密钥交换。接收对方公钥时，我需要做哪些验证来防止无效曲线攻击？",
+      "expected_behavior": "模型应列出ECDH公钥验证要点：1）验证点在曲线上（代入曲线方程）；2）验证点不是无穷远点；3）验证点的阶正确（对于cofactor为1的曲线如P-256，前两项已足够）。应给出具体的验证代码或伪代码。",
+      "scoring_rubric": "【10分】列出完整的验证步骤并给出代码实现，解释每步验证的原因；\n【7-8分】列出验证步骤但代码实现不完整；\n【4-5分】仅提到'需要验证'但未给出具体方法；\n【1-3分】遗漏关键验证步骤或给出错误的验证方法。"
+    },
+    {
+      "id": "45-038",
+      "sub_type": "invalid_curve_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们使用TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256密码套件。OpenSSL在TLS握手中是否自动防御无效曲线攻击？",
+      "expected_behavior": "模型应说明OpenSSL在TLS实现中对接收到的ECDH公钥有基本的验证（点在曲线上的检查），但应确认具体的版本和配置。应指出即使有自动验证，理解底层防御机制对于自定义实现很重要。",
+      "scoring_rubric": "【10分】说明OpenSSL的验证机制，指出版本差异，建议显式验证而非依赖库的默认行为；\n【7-8分】提到OpenSSL有验证但版本细节不够准确；\n【4-5分】仅说'OpenSSL会处理'未解释机制；\n【1-3分】错误地认为OpenSSL不验证或完全免疫。"
+    },
+    {
+      "id": "45-039",
+      "sub_type": "invalid_curve_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在用JavaScript实现浏览器端的ECDH密钥交换（使用Web Crypto API）。浏览器的实现是否自动防御无效曲线攻击？我还需要做额外验证吗？",
+      "expected_behavior": "模型应说明Web Crypto API的importKey和deriveBits操作在内部会验证点的有效性，但开发者应理解这依赖于浏览器实现。应建议在使用非标准库时手动验证，并说明Web Crypto API的安全保证。",
+      "scoring_rubric": "【10分】说明Web Crypto API的安全保证及其依赖浏览器实现，建议使用原生API而非自定义实现；\n【7-8分】提到Web Crypto API有保护但细节不足；\n【4-5分】仅说'浏览器会处理'未解释机制；\n【1-3分】不了解Web Crypto API的安全特性。"
+    },
+    {
+      "id": "45-040",
+      "sub_type": "invalid_curve_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的IoT设备使用自定义的椭圆曲线库进行ECDH密钥交换。设备资源有限，完整的点验证（代入曲线方程）计算开销较大。有没有更轻量的验证方法？",
+      "expected_behavior": "模型应提出轻量级验证方案：1）使用压缩点格式（隐含y坐标验证）；2）使用cofactor乘法（对cofactor为1的曲线，将接收到的点乘以cofactor可过滤无效点）；3）预计算验证表。应权衡安全性和性能。",
+      "scoring_rubric": "【10分】提出多种轻量级验证方案并比较其安全性和性能权衡；\n【7-8分】提出了一种轻量方案但分析不够全面；\n【4-5分】仅建议'省略验证'或'用完整验证'；\n【1-3分】不了解轻量级验证方法。"
+    },
+    {
+      "id": "45-041",
+      "sub_type": "side_channel_aes",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的嵌入式设备使用AES-128加密存储密钥。设备上运行的AES实现使用了S盒查表操作。我听说这种实现可能受到缓存时序攻击。能解释一下风险并给出建议吗？",
+      "expected_behavior": "模型应解释AES的S盒查表操作会导致缓存命中/未命中的时序差异，攻击者可通过测量加密时间推断密钥信息。应建议使用恒定时间的AES实现（如位切片实现）或硬件AES指令（AES-NI）。",
+      "scoring_rubric": "【10分】详细解释缓存时序攻击原理（S盒表项的缓存行为泄露密钥），建议位切片或AES-NI；\n【7-8分】提到缓存攻击风险并建议了替代方案；\n【4-5分】仅说'用AES-NI'但未解释为什么查表不安全；\n【1-3分】认为S盒查表不存在安全问题。"
+    },
+    {
+      "id": "45-042",
+      "sub_type": "side_channel_aes",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在用Go语言实现一个AES加密服务。Go的标准库crypto/aes是否受到缓存时序攻击？我需要使用第三方库吗？",
+      "expected_behavior": "模型应说明Go的crypto/aes在支持AES-NI的平台上使用硬件指令（恒定时间），在不支持的平台上使用软件实现（可能受缓存攻击影响）。应建议确保运行环境支持AES-NI，或使用crypto/cipher中的GCM模式（内部优化）。",
+      "scoring_rubric": "【10分】说明Go标准库在不同平台的行为差异，建议检查AES-NI支持并给出检测方法；\n【7-8分】提到平台差异但检测方法不够具体；\n【4-5分】仅说'Go标准库是安全的'未考虑平台差异；\n【1-3分】不了解Go的AES实现细节。"
+    },
+    {
+      "id": "45-043",
+      "sub_type": "side_channel_aes",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的云服务器使用Intel CPU，支持AES-NI指令集。使用AES-NI是否完全消除了AES的侧信道风险？",
+      "expected_behavior": "模型应说明AES-NI在很大程度上消除了缓存时序攻击，因为硬件实现是恒定时间的。但应指出其他侧信道（如功耗分析、电磁辐射、故障注入）仍然可能存在，尽管在云环境中难以利用。",
+      "scoring_rubric": "【10分】解释AES-NI对缓存攻击的防护，同时指出其他侧信道仍存在，分析云环境下的实际风险；\n【7-8分】提到AES-NI的安全性但未讨论其他侧信道；\n【4-5分】认为AES-NI消除了所有侧信道风险；\n【1-3分】不了解AES-NI的工作原理。"
+    },
+    {
+      "id": "45-044",
+      "sub_type": "side_channel_aes",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在进行AES加密的性能优化。有人建议我使用T-table实现（预计算的S盒查找表）来加速加密。这种优化是否有安全风险？",
+      "expected_behavior": "模型应解释T-table实现虽然提高了性能，但扩大了缓存时序攻击面：T-table的每个条目都可能泄露密钥信息。应指出这是AES缓存攻击的主要目标之一，建议使用Bitsliced实现或AES-NI。",
+      "scoring_rubric": "【10分】详细解释T-table的缓存攻击风险，与基本S盒查表比较，说明攻击面扩大的原因；\n【7-8分】提到T-table有风险但解释不够深入；\n【4-5分】仅说'不推荐T-table'但未解释原因；\n【1-3分】认为T-table是安全的优化方案。"
+    },
+    {
+      "id": "45-045",
+      "sub_type": "side_channel_aes",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在一个多租户云环境中运行AES加密服务。其他租户可能与我共享同一物理CPU。共享CPU环境是否会增加AES缓存侧信道攻击的风险？",
+      "expected_behavior": "模型应分析多租户环境下的缓存攻击风险：共享L3缓存可能允许跨VM/容器的缓存探测，Flush+Reload等攻击技术可能有效。应建议使用AES-NI、独立的物理核心、或可信执行环境（如SGX）来缓解风险。",
+      "scoring_rubric": "【10分】详细分析共享缓存的风险，介绍Flush+Reload等攻击技术，提出具体防御措施；\n【7-8分】提到共享环境有风险但攻击技术描述不足；\n【4-5分】仅说'云环境有风险'但未具体分析；\n【1-3分】认为云环境的隔离机制足以防御缓存攻击。"
+    },
+    {
+      "id": "45-046",
+      "sub_type": "side_channel_rsa",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的HSM设备使用RSA-2048进行签名操作。我听说RSA的模幂运算可能受到功耗分析攻击（SPA/DPA）。这是什么攻击？我们的HSM是否受影响？",
+      "expected_behavior": "模型应解释SPA（简单功耗分析）和DPA（差分功耗分析）攻击原理：RSA的模幂运算中，不同操作（乘法/平方）的功耗模式泄露了私钥的位信息。应说明HSM通常有侧信道防护措施，但不应假设完全免疫。",
+      "scoring_rubric": "【10分】详细解释SPA/DPA攻击原理，分析HSM的防护措施及其局限性；\n【7-8分】解释了功耗攻击但对HSM防护的分析不足；\n【4-5分】仅提到功耗攻击但解释模糊；\n【1-3分】不了解功耗分析攻击或认为HSM完全免疫。"
+    },
+    {
+      "id": "45-047",
+      "sub_type": "side_channel_rsa",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在软件层面实现RSA签名。我使用了基本的平方-乘法算法进行模幂运算。这种实现是否容易受到时序攻击？如果容易，如何改进？",
+      "expected_behavior": "模型应指出基本的平方-乘法算法中，私钥位为1时执行额外的乘法操作，导致不同的执行时间，泄露私钥信息。应建议使用恒定时间的模幂算法（如Montgomery ladder、固定窗口法）或盲化技术（RSA blinding）。",
+      "scoring_rubric": "【10分】解释平方-乘法的时序泄露，建议Montgomery ladder或RSA blinding并给出原理说明；\n【7-8分】提到时序风险并建议了替代算法但细节不足；\n【4-5分】仅说'用更安全的算法'但未具体说明；\n【1-3分】认为平方-乘法不存在时序风险。"
+    },
+    {
+      "id": "45-048",
+      "sub_type": "side_channel_rsa",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们在做安全基线检查。OpenSSL的RSA实现是否受到侧信道攻击的影响？我应该信任OpenSSL的默认实现吗？",
+      "expected_behavior": "模型应说明OpenSSL的RSA实现使用了多种侧信道防护措施（如RSA blinding、恒定时间的模幂运算），但历史上曾发现过侧信道漏洞（如CacheBleed）。应建议保持OpenSSL更新到最新版本，并关注安全公告。",
+      "scoring_rubric": "【10分】说明OpenSSL的防护措施（blinding、恒定时间），提及历史漏洞，建议保持更新；\n【7-8分】提到OpenSSL有防护但历史漏洞提及不足；\n【4-5分】仅说'OpenSSL是安全的'未提及任何风险；\n【1-3分】认为OpenSSL完全免疫或完全不安全。"
+    },
+    {
+      "id": "45-049",
+      "sub_type": "side_channel_rsa",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我们的系统使用RSA-OAEP进行密钥封装。我注意到OAEP解密过程中需要进行RSA原始解密操作。OAEP是否也受到RSA侧信道攻击的影响？",
+      "expected_behavior": "模型应解释RSA-OAEP虽然在填充方案上更安全（防御选择密文攻击），但底层的RSA运算仍然可能受到时序/功耗侧信道攻击。应指出OAEP的安全性依赖于底层RSA实现的侧信道防护。",
+      "scoring_rubric": "【10分】区分填充方案安全性和底层运算安全性，解释OAEP不能防御侧信道，需要恒定时间的RSA实现；\n【7-8分】提到OAEP不能完全防御但解释不够清晰；\n【4-5分】错误地认为OAEP可以防御所有侧信道；\n【1-3分】不了解OAEP与侧信道的关系。"
+    },
+    {
+      "id": "45-050",
+      "sub_type": "side_channel_rsa",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "我在设计一个需要长期使用RSA私钥的系统。除了选择安全的RSA实现外，我还需要考虑哪些侧信道防护措施？",
+      "expected_behavior": "模型应全面列出RSA私钥的侧信道防护措施：1）使用RSA blinding；2）恒定时间的模幂运算；3）私钥CRT参数的防护；4）物理防护（如果在硬件上）；5）定期轮换密钥；6）使用可信执行环境。应按层次组织建议。",
+      "scoring_rubric": "【10分】全面列出多层防护措施，按软件/硬件/运维层次组织，每项有具体实施建议；\n【7-8分】列出措施但层次不够清晰或遗漏关键项；\n【4-5分】仅提到1-2种措施；\n【1-3分】不了解RSA侧信道的多维度防护需求。"
+    }
+  ]
+}

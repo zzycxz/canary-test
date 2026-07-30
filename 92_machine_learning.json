@@ -1,0 +1,457 @@
+{
+  "capability": "machine_learning",
+  "label": "机器学习能力",
+  "total": 50,
+  "cases": [
+    {
+      "id": "92-001",
+      "prompt": "设计一个基于自监督学习的文本表征方案，使用无标注的100万条中文语料训练文本Encoder。对比MLM（掩码语言模型）、对比预测（CLPM）、自回归三种自监督预训练任务的设计思路。",
+      "sub_type": "self-supervised_learning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计MLM掩码策略（15%随机/动态掩码），对比预测任务（下一句/跨度预测），自回归（GPT式），评估下游任务微调效果，讨论预训练数据质量和规模的影响。",
+      "scoring_rubric": "1. 从多个维度设计多种自监督预训练任务（MLM/对比预测/自回归）并说明原理差异; 2. 能分析预训练数据规模和质量对表征效果的影响; 3. 能设计下游任务微调和评估方案验证预训练效果。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-002",
+      "prompt": "设计一个基于对比学习的图像表征方案，无标注数据100万张图片，目标是学到高质量视觉特征用于下游分类。对比SimCLR、MoCo、BYOL三种框架的架构差异和训练策略。",
+      "sub_type": "contrastive_learning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比SimCLR（端到端大批量）、MoCo（动量编码器+队列）、BYOL（无负样本），分析温度系数、批量大小、投影头设计对效果的影响，设计线性评估协议。",
+      "scoring_rubric": "1. 从多个维度对比SimCLR/MoCo/BYOL的架构设计和训练策略差异; 2. 能分析温度系数、批量大小等关键超参数的影响; 3. 能设计线性评估协议验证表征质量。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-003",
+      "prompt": "设计一个社交网络用户推荐方案，使用图神经网络（GNN）学习用户和关系的表征。对比GCN、GAT、GraphSAGE三种图神经网络架构，处理节点分类和链接预测任务。",
+      "sub_type": "graph_neural_network",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比GCN（谱域卷积/固定权重）、GAT（注意力聚合/自适应权重）、GraphSAGE（采样聚合/归纳学习），设计大规模图的Mini-batch采样训练，评估节点分类和链接预测指标。",
+      "scoring_rubric": "1. 从多个维度对比GCN/GAT/GraphSAGE的消息传递机制和适用场景; 2. 能设计大规模图的采样和训练策略; 3. 能评估图表征在节点分类和链接预测上的效果。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-004",
+      "prompt": "设计一个Transformer中的多头注意力机制分析方案，解释自注意力的计算过程（Q/K/V矩阵）、多头注意力的意义、注意力分数的可视化解读。分析注意力机制的时间复杂度瓶颈及优化方案。",
+      "sub_type": "attention_mechanism",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应推导自注意力的Q/K/V计算和Softmax归一化，多头并行捕获不同子空间信息，O(n^2)复杂度的瓶颈分析，Flash Attention/线性注意力/稀疏注意力等优化方案。",
+      "scoring_rubric": "1. 推导自注意力的Q/K/V计算过程和缩放因子的作用; 2. 能解释多头注意力的意义和信息捕获能力; 3. 能分析O(n^2)复杂度瓶颈并给出Flash Attention等优化方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "92-005",
+      "prompt": "设计一个面向客服场景的大模型Prompt Engineering方案，需要覆盖角色设定、Few-shot示例、思维链（CoT）、输出格式约束等技巧。对比Zero-shot/Few-shot/CoT/ReAct四种提示策略的效果差异。",
+      "sub_type": "prompt_engineering",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计系统Prompt（角色+规则+输出格式），Few-shot示例选择策略（相似性/多样性），CoT引导逐步推理，ReAct结合工具调用，设计A/B测试评估各策略效果。",
+      "scoring_rubric": "1. 从多个维度设计包含角色设定和输出格式约束的系统Prompt; 2. 能对比Zero-shot/Few-shot/CoT/ReAct等提示策略的适用场景; 3. 能设计A/B测试方案量化评估不同Prompt策略的效果。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-006",
+      "prompt": "设计一个企业知识库问答系统的RAG（检索增强生成）方案，文档库包含10万份PDF/Word文档。需要设计文档切分策略、向量索引、检索排序、生成引用等完整链路。",
+      "sub_type": "RAG",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计文档切分（语义切分/重叠窗口），向量化（BGE/GTE Embedding）和索引（FAISS/Milvus），混合检索（向量+BM25），Reranker精排，生成阶段的引用溯源和幻觉控制。",
+      "scoring_rubric": "1. 设计合理的文档切分和向量化策略; 2. 能设计混合检索（向量+关键词）和Reranker精排方案; 3. 能在生成阶段实现引用溯源和幻觉控制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-007",
+      "prompt": "设计一个基于RLHF（基于人类反馈的强化学习）的大模型对齐方案，训练数据包含偏好标注对（chosen/rejected）。对比PPO和DPO两种对齐算法的训练流程和优缺点。",
+      "sub_type": "RLHF",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计奖励模型（Bradley-Terry偏好模型）训练，PPO（策略梯度+裁剪目标+KL惩罚）完整流程，DPO（直接偏好优化/无奖励模型），分析两种方法的稳定性和计算成本差异。",
+      "scoring_rubric": "1. 设计奖励模型的训练方案和偏好数据处理; 2. 能对比PPO和DPO的训练流程、稳定性和计算成本; 3. 能设计KL散度约束防止对齐税（alignment tax）过高。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-008",
+      "prompt": "设计一个知识蒸馏方案，将一个13B参数的大语言模型蒸馏到1.5B小模型。对比离线蒸馏、在线蒸馏、自蒸馏三种策略，设计软标签温度、中间层匹配、任务特定蒸馏等关键技术。",
+      "sub_type": "knowledge_distillation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比离线蒸馏（先训教师再蒸馏）、在线蒸馏（师生同步训练）、自蒸馏（同模型不同层），设计温度参数调度、logit对齐、中间层特征匹配（FitNets），评估蒸馏后模型在多个任务上的性能保持。",
+      "scoring_rubric": "1. 从多个维度对比离线/在线/自蒸馏三种策略的训练流程和适用场景; 2. 能设计温度参数、logit对齐、中间层匹配等关键技术; 3. 能评估蒸馏后小模型的性能保持率和推理加速比。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-009",
+      "prompt": "设计一个神经架构搜索（NAS）方案，自动搜索最优的CNN架构用于图像分类任务，搜索空间10^18量级。对比DARTS（可微分搜索）、进化算法、强化学习三种NAS策略。",
+      "sub_type": "neural_architecture_search",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计搜索空间（操作集/连接方式），对比DARTS（连续松弛/梯度优化/高效）、进化算法（锦标赛选择/变异交叉）、强化学习（控制器采样/奖励反馈），讨论搜索效率和架构可迁移性。",
+      "scoring_rubric": "1. 从多个维度设计合理的搜索空间（操作集和连接拓扑）; 2. 能对比DARTS/进化算法/RL三种NAS策略的搜索效率和效果; 3. 能评估搜索到的架构在目标任务上的性能和可迁移性。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-010",
+      "prompt": "设计一个跨医院的联邦学习医疗影像诊断方案，5家医院各自持有CT影像数据但不能共享原始数据。对比横向联邦/纵向联邦/联邦迁移学习，设计通信效率优化和隐私保护方案。",
+      "sub_type": "federated_learning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比横向联邦（样本切分/同特征不同样本）、纵向联邦（特征切分/同样本不同特征），设计FedAvg/FedProx聚合算法，通信压缩（梯度量化/稀疏化），差分隐私/SMP安全聚合，处理Non-IID数据分布。",
+      "scoring_rubric": "1. 对比横向/纵向联邦学习的适用场景和数据切分方式; 2. 能设计通信效率优化方案（梯度压缩/异步聚合）; 3. 能设计差分隐私或安全多方计算保护数据隐私。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-011",
+      "prompt": "设计一个模型公平性评估方案，信贷审批模型可能存在对不同性别/年龄/地域群体的歧视。需要设计公平性指标（Demographic Parity/Equal Opportunity/Calibration），检测偏差并给出去偏策略。",
+      "sub_type": "model_fairness",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应定义多种公平性指标（Demographic Parity要求各群体通过率一致、Equal Opportunity要求各群体真正率一致、Calibration要求各群体预测概率与实际一致），分析指标间的不可能三角（满足一个可能违反另一个），设计去偏策略（预处理重采样/训练中正则化/后处理阈值调整），结合法规要求评估合规性。",
+      "scoring_rubric": "1. 从多个维度定义并解释多种公平性指标的含义和计算方式; 2. 能分析公平性指标间的权衡关系（不可能三角）; 3. 能设计预处理/训练中/后处理三种去偏策略; 4. 能结合法规和业务场景评估公平性合规要求。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-012",
+      "prompt": "设计一个主动学习（Active Learning）方案，标注数据成本高昂（每条50元），需要从100万条未标注数据中智能选择最有价值的样本进行人工标注。对比不确定性采样、多样性采样和委员会查询三种策略。",
+      "sub_type": "active_learning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比不确定性采样（选择模型最不确定的样本，如熵最大/置信度最低）、多样性采样（选择能代表数据分布多样性的样本，如聚类中心/核心集）、委员会查询（多个模型分歧最大的样本），设计混合策略（不确定性+多样性），评估每轮标注的边际收益递减曲线，计算预算约束下的最优标注批次大小。",
+      "scoring_rubric": "1. 从多个维度对比三种主动学习策略的原理和适用场景; 2. 能设计混合采样策略综合考虑信息量和多样性; 3. 能评估标注预算约束下的边际收益和最优批次大小; 4. 能设计主动学习的迭代流程和停止条件。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-013",
+      "prompt": "设计一个合成数据生成方案，医疗影像数据因隐私限制无法共享，需要使用GAN或扩散模型生成合成训练数据。评估合成数据质量（FID/IS指标）、隐私保护程度和下游模型训练效果。",
+      "sub_type": "synthetic_data_generation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应选择生成模型（StyleGAN/Denoising Diffusion），评估合成数据质量（FID衡量分布相似度/IS衡量多样性和质量/可视化人工审查），隐私保护评估（成员推理攻击/模型反转攻击/与真实数据的最近邻距离），下游任务评估（用合成数据训练分类模型并与真实数据对比），设计混合训练策略（合成+真实数据联合训练）。",
+      "scoring_rubric": "1. 从多个维度选择合适的生成模型并说明医疗影像场景的适配性; 2. 能使用FID/IS等指标和隐私攻击评估合成数据质量; 3. 能评估合成数据对下游模型训练效果的提升; 4. 能设计隐私保护和数据质量的平衡策略。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-014",
+      "prompt": "设计一个边缘设备模型部署方案，将图像分类模型部署到手机端（iOS/Android），要求推理延迟<50ms、模型大小<10MB。对比TensorFlow Lite/Core ML/ONNX Runtime Mobile的优化策略。",
+      "sub_type": "edge_deployment",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比TF Lite（Android主导/量化支持好）、Core ML（iOS专属/Apple芯片优化/ANE加速）、ONNX Runtime Mobile（跨平台/算子兼容性），设计模型优化流水线（剪枝->量化INT8/INT4->知识蒸馏），分析不同手机芯片（骁龙/Apple A系列/联发科）的硬件加速特性，设计模型版本管理和OTA更新策略。",
+      "scoring_rubric": "1. 从多个维度对比三种边缘推理框架的特性和适用平台; 2. 能设计剪枝/量化/蒸馏的模型优化流水线; 3. 能分析不同硬件平台的加速特性并针对性优化; 4. 能设计模型版本管理和OTA更新方案。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-015",
+      "prompt": "设计一个训练数据治理方案，10万条训练数据中存在标注错误（约5%）、标签不一致、数据重复和分布偏移问题。需要设计数据质量检测、清洗和验证的自动化流程。",
+      "sub_type": "training_data_curation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计数据质量检测流水线：标注错误检测（置信度学习/交叉验证预测不一致样本/人工抽检），标签不一致检测（相似样本标签冲突/标注者一致性Kappa系数），数据去重（MinHash/SimHash近似去重），分布偏移检测（特征分布统计/类别比例监控），清洗规则引擎和人工复核结合，数据版本管理和质量看板。",
+      "scoring_rubric": "1. 设计标注错误和标签不一致的自动检测方法; 2. 能实现数据去重和分布偏移检测; 3. 能设计自动化清洗流程与人工复核的结合策略; 4. 能建立数据版本管理和质量监控机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-016",
+      "prompt": "设计一个模型消融实验（Ablation Study）方案，新提出的推荐模型包含5个创新模块（注意力机制/特征交叉/序列建模/负采样/蒸馏），需要逐一移除每个模块评估其贡献度。",
+      "sub_type": "model_ablation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计分层消融实验：逐一移除法（每次移除一个模块，其余保留）评估单模块贡献，逐步添加法（从基线逐步添加模块）评估增量贡献，联合消融（移除多个模块组合）评估模块间交互效应。定义评估指标（AUC/NDCG/CTR提升），控制随机种子确保可复现性，统计显著性检验（paired t-test），结果可视化（柱状图/热力图）。",
+      "scoring_rubric": "1. 从多个维度设计逐一移除和逐步添加两种消融实验策略; 2. 能评估模块间的交互效应而非仅看单模块贡献; 3. 能控制实验变量（随机种子/数据划分）确保可复现性; 4. 能使用统计显著性检验验证结论的可靠性。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-017",
+      "prompt": "设计一个持续学习（Continual Learning）方案，图像识别模型需要不断学习新类别（每月新增10类）而不遗忘旧类别。对比EWC/SI/Replay三种策略解决灾难性遗忘问题。",
+      "sub_type": "continual_learning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比EWC（弹性权重巩固/Fisher信息矩阵约束重要参数不大幅变化）、SI（突触智能/根据参数对损失的贡献累积重要性）、Replay（经验回放/保留旧任务样本混入新任务训练），分析各策略的内存开销、计算成本和遗忘率，设计混合策略（Replay+EWC），评估指标（旧类别准确率下降幅度/新类别学习速度/整体准确率），设计任务边界检测和模型快照回退机制。",
+      "scoring_rubric": "1. 从多个维度对比EWC/SI/Replay三种持续学习策略的原理和优缺点; 2. 能评估各策略的内存开销和计算成本; 3. 能设计混合策略综合多种方法的优势; 4. 能定义灾难性遗忘的量化评估指标和回退机制。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-018",
+      "prompt": "设计一个多模态融合方案，结合商品图片（视觉）和商品描述（文本）进行商品分类。对比早期融合/晚期融合/注意力融合三种策略，分析不同模态的贡献度和融合时机。",
+      "sub_type": "multimodal_fusion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比早期融合（输入层拼接特征/简单但可能引入噪声）、晚期融合（各模态独立编码后融合决策/灵活性高）、注意力融合（跨模态注意力机制/动态权重），设计模态贡献度分析（单模态消融/梯度权重/注意力权重可视化），处理模态缺失场景（图片缺失或文本缺失时的降级策略），评估不同融合时机对分类准确率的影响。",
+      "scoring_rubric": "1. 对比早期/晚期/注意力三种融合策略的原理和适用场景; 2. 能分析各模态的贡献度并设计可视化方法; 3. 能处理模态缺失的降级策略; 4. 能评估融合时机对模型性能的影响并给出最优方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "92-019",
+      "prompt": "设计一个大模型推理优化方案，LLaMA-7B模型在单GPU上推理延迟2秒/token，需要优化到200ms以内。对比KV Cache优化、量化（INT4/INT8）、推测解码（Speculative Decoding）、连续批处理四种策略。",
+      "sub_type": "inference_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比KV Cache优化（PagedAttention/前缀缓存/减少显存碎片）、量化（INT8精度损失小/INT4需校准数据/GPTQ/AWQ）、推测解码（小模型草稿+大模型验证/并行验证多token）、连续批处理（动态batch/请求间穿插/optimal batching），分析各策略的加速比和精度权衡，设计组合优化方案（量化+连续批处理+KV Cache），评估端到端吞吐量和首token延迟。",
+      "scoring_rubric": "1. 从多个维度对比四种推理优化策略的原理和预期加速比; 2. 能分析各策略对模型精度的影响和权衡; 3. 能设计多种优化策略的组合方案; 4. 能评估端到端吞吐量和延迟指标是否满足目标。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-020",
+      "prompt": "设计一个奖励模型（Reward Model）训练方案，用于RLHF对齐。需要收集人类偏好标注数据（对比式），设计Bradley-Terry模型训练流程，评估奖励模型的准确性和泛化能力，处理标注一致性问题。",
+      "sub_type": "reward_model_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计偏好数据收集流程（给定prompt对比两个response的优劣/标注指南/质量控制），Bradley-Terry模型训练（将偏好对比转化为概率/ranking loss），评估指标（偏好预测准确率/Kendall tau相关系数/分布外泛化能力），处理标注一致性（标注者间一致性Kappa/多标注者投票/主动学习选择争议样本），防止奖励模型过拟合（正则化/数据增强/集成）。",
+      "scoring_rubric": "1. 从多个维度设计偏好数据收集流程和标注质量控制方案; 2. 能设计Bradley-Terry模型的训练流程和损失函数; 3. 能评估奖励模型的准确性和泛化能力; 4. 能处理标注一致性问题并设计防过拟合策略。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-021",
+      "prompt": "设计一个模型卡（Model Card）方案，为部署的信贷风控模型编写标准化的模型文档，覆盖模型用途、训练数据描述、评估指标（按人群细分）、局限性、伦理考量和使用建议。",
+      "sub_type": "model_card_creation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Model Card模板（模型概述/预期用途/训练数据/评估指标/局限性/伦理考量），评估指标按人群细分（性别/年龄/地域），公平性分析（不同群体的FPR/FNR差异），模型局限性明确声明（不适用场景/已知偏差），版本管理和定期更新机制。",
+      "scoring_rubric": "1. 从多个维度设计标准化的Model Card模板; 2. 能按人群细分评估指标并分析公平性; 3. 能明确声明模型局限性和已知偏差; 4. 能建立Model Card的版本管理和更新机制。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-022",
+      "prompt": "设计一个训练实验可复现方案，团队中不同成员使用相同代码和数据训练模型结果不一致。需要从随机种子、数据加载顺序、环境配置、依赖版本四个维度确保实验完全可复现。",
+      "sub_type": "training_run_reproducibility",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计全局随机种子管理（Python/NumPy/PyTorch/Torch CUDA），数据加载固定顺序（DataLoader worker_init_fn/固定shuffle seed），环境镜像化（Docker/conda-lock/pip freeze），依赖版本锁定（requirements.txt哈希校验），实验配置版本化（Hydra/OmegaConf），实验结果hash校验。",
+      "scoring_rubric": "1. 管理全局随机种子确保结果确定性; 2. 能固定数据加载顺序消除随机性; 3. 能通过环境镜像化确保依赖一致; 4. 能设计实验配置版本化和结果校验机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-023",
+      "prompt": "设计一个特征漂移监控方案，部署后的推荐模型在线特征分布与训练时分布发生偏移（如用户年龄段分布变化）。需要实时检测特征漂移，区分数据漂移和概念漂移，触发模型重训。",
+      "sub_type": "feature_drift_monitoring",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计特征分布监控（KL散度/PSI/KS检验），区分数据漂移（输入分布变化）和概念漂移（P(Y|X)变化），实时计算特征统计量（均值/方差/分位数），漂移告警阈值（基于历史分布的置信区间），漂移触发重训策略（单特征漂移/多特征联合漂移/性能下降触发），特征重要性变化追踪。",
+      "scoring_rubric": "1. 从多个维度设计多种特征漂移检测指标（KL/PSI/KS）; 2. 能区分数据漂移和概念漂移; 3. 能设计漂移告警和重训触发策略; 4. 能追踪特征重要性变化辅助根因分析。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-024",
+      "prompt": "设计一个模型回滚策略方案，新版本模型上线后CTR预估从3.2%下降到2.5%，需要在5分钟内回滚到上一版本。设计模型版本管理、自动回滚触发条件、回滚执行流程和回滚后验证。",
+      "sub_type": "model_rollback_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计模型版本仓库（MLflow/自建Registry），自动回滚触发条件（核心指标下降超过阈值/持续时间超过窗口），回滚执行流程（流量切回旧版本/模型文件切换/配置回滚），回滚后验证（指标恢复确认/AB对比），回滚原因分析和改进闭环。",
+      "scoring_rubric": "1. 从多个维度设计模型版本管理和灰度发布流程; 2. 能定义自动回滚触发条件和阈值; 3. 能实现快速回滚执行和验证; 4. 能建立回滚原因分析和改进闭环。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-025",
+      "prompt": "设计一个向量相似度检索优化方案，10亿条128维向量的最近邻搜索，当前暴力搜索延迟10秒无法满足在线要求。对比HNSW/IVF/PQ三种向量索引方案，优化召回率和延迟的权衡。",
+      "sub_type": "embedding_similarity_search",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比HNSW（图索引/高召回/内存大）、IVF（倒排索引/可调精度/速度快）、PQ（乘积量化/压缩存储/精度损失），设计混合索引（IVF+PQ/IVF+HNSW），参数调优（ef_construction/M/nlist/nprobe），评估召回率@K与延迟的权衡曲线，分布式向量检索架构（FAISS/Milvus）。",
+      "scoring_rubric": "1. 对比HNSW/IVF/PQ三种向量索引的特性和适用场景; 2. 能设计混合索引方案平衡召回率和延迟; 3. 能调优索引参数优化检索性能; 4. 能设计分布式向量检索架构支持十亿级规模。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-026",
+      "prompt": "设计一个大模型输出解析方案，LLM返回的非结构化文本需要可靠地解析为结构化数据（JSON/表格）。需要设计输出格式约束、解析容错、Schema校验和解析失败的重试策略。",
+      "sub_type": "llm_output_parsing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Prompt中的输出格式约束（JSON Schema/示例/分隔符），解析器实现（正则/JSON解析/Pydantic校验），容错机制（部分字段缺失时的默认值/格式不严格时的宽松解析），Schema校验（类型检查/枚举值验证/必填项检查），解析失败的重试策略（调整Prompt/降低温度/多次采样取众数）。",
+      "scoring_rubric": "1. 设计Prompt中的输出格式约束策略; 2. 能实现容错的结构化输出解析器; 3. 能进行Schema校验和类型检查; 4. 能设计解析失败的重试和降级策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-027",
+      "prompt": "设计一个基于人类反馈的在线学习方案，AI客服系统需要从人工客服的修正反馈中持续学习改进。设计反馈收集机制、增量训练流程、效果验证和防遗忘策略。",
+      "sub_type": "reinforcement_learning_from_human_feedback",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计反馈收集机制（人工修正标记/满意度评分/对话质量评估），反馈数据预处理（去噪/筛选/加权），增量训练策略（Online Fine-tuning/经验回放），效果验证（A/B测试/离线评估/人工盲评），防遗忘策略（正则化/旧数据混入/知识蒸馏），反馈闭环（新模型部署->收集反馈->再训练）。",
+      "scoring_rubric": "1. 设计多维度的人类反馈收集机制; 2. 能实现增量训练和效果验证流程; 3. 能设计防遗忘和防过拟合策略; 4. 能建立反馈驱动的持续改进闭环。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-028",
+      "prompt": "设计一个零样本文本分类方案，新增10个业务意图类别但没有标注数据。需要利用大语言模型的零样本能力进行分类，设计Prompt模板、置信度阈值、低置信样本的人工审核流程。",
+      "sub_type": "zero_shot_classification",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计零样本分类Prompt模板（任务描述/类别定义/输出格式），类别描述优化（同义词/示例/排除条件），置信度校准（Softmax概率/多次采样一致性），低置信度阈值设定（区分自动分类和人工审核），人工审核后反馈到Few-shot Prompt持续优化，评估零样本分类的准确率和覆盖率。",
+      "scoring_rubric": "1. 从多个维度设计有效的零样本分类Prompt模板; 2. 能进行置信度校准和阈值设定; 3. 能设计低置信样本的人工审核和反馈流程; 4. 能评估零样本分类效果并持续优化。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-029",
+      "prompt": "设计一个梯度检查点（Gradient Checkpointing）优化方案，训练32层Transformer模型时GPU显存不足（OOM）。需要通过牺牲计算时间换取显存空间，设计检查点放置策略和显存-计算时间的权衡分析。",
+      "sub_type": "gradient_checkpointing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析显存占用构成（参数/梯度/激活值/优化器状态），设计检查点放置策略（每N层设置检查点/选择性检查点大激活值层），对比不同检查点密度下的显存节省和计算开销（约33%额外计算），使用PyTorch checkpoint_sequential实现，结合混合精度训练进一步节省显存，评估训练吞吐量的变化。",
+      "scoring_rubric": "1. 从多个维度分析显存占用的构成和瓶颈; 2. 能设计合理的检查点放置策略; 3. 能评估显存节省与计算开销的权衡; 4. 能结合混合精度训练优化整体资源效率。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-030",
+      "prompt": "设计一个混合精度训练方案，使用FP16/BF16混合精度加速大模型训练。需要分析不同精度对训练稳定性的影响，设计损失缩放策略，对比FP16 vs BF16的适用场景。",
+      "sub_type": "mixed_precision_training",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析FP16（动态范围小/需要loss scaling）和BF16（动态范围大/精度略低/Ampere+GPU支持）的特性差异，设计混合精度策略（前向FP16/BF16+主权重FP32），Loss Scaling实现（动态/静态），梯度裁剪与精度的配合，识别不适合混合精度的操作（如Softmax/LayerNorm保持FP32），评估训练加速比和精度损失。",
+      "scoring_rubric": "1. 准确分析FP16和BF16的数值特性差异; 2. 能设计混合精度训练策略和Loss Scaling; 3. 能识别需要保持FP32的关键操作; 4. 能评估训练加速比和模型精度的权衡。，并给出具体的分析依据和推理过程；"
+    },
+    {
+      "id": "92-031",
+      "prompt": "设计一个大模型推理动态批处理调度方案，LLM推理服务的请求序列长度差异大（10-4096 token），需要根据序列长度和优先级动态组批，在吞吐量和延迟之间取得最优平衡。",
+      "sub_type": "dynamic_batch_scheduling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于序列长度的分桶组批策略（短序列合并/长序列独立），优先级调度（VIP请求插队/超时请求提升优先级），Continuous Batching实现请求级调度，批处理参数动态调整（max_batch_size/max_seq_len），调度效果评估（吞吐量提升/延迟分位数变化）。",
+      "scoring_rubric": "1. 设计基于序列长度的分桶组批策略; 2. 能实现优先级调度和Continuous Batching; 3. 能动态调整批处理参数平衡吞吐量和延迟。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-032",
+      "prompt": "设计一个模型跨硬件性能分析方案，同一个图像分类模型需要部署到NVIDIA GPU、华为昇腾和寒武纪三种硬件平台。需要设计硬件感知的模型优化流水线和统一的性能评估框架。",
+      "sub_type": "cross_hardware_model_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计统一的性能评估框架（延迟/吞吐量/能效比/精度损失），硬件感知的模型优化（算子适配/图优化/量化格式差异），各平台的推理引擎选型（TensorRT/CANN/Cambricon Neuware），性能瓶颈定位（算子耗时Profiling/内存带宽分析），跨平台性能对比报告。",
+      "scoring_rubric": "1. 从多个维度设计统一的跨硬件性能评估框架; 2. 能针对不同硬件平台设计算子适配和优化策略; 3. 能定位各平台性能瓶颈并生成对比报告。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-033",
+      "prompt": "设计一个在线推荐模型的冷启动方案，新用户和新商品缺乏行为数据导致推荐质量差。需要设计混合推荐策略融合内容特征和协同过滤信号，处理冷启动到热数据的过渡期。",
+      "sub_type": "recommendation_cold_start",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计多阶段冷启动策略（注册阶段基于人口统计/浏览阶段基于内容相似度/交互阶段逐步引入CF），新商品冷启动（利用商品属性Embedding和类目相似度），冷启动到热数据的平滑过渡（行为数据积累到阈值后切换模型），冷启动效果评估（冷启动用户的CTR/留存率vs热用户）。",
+      "scoring_rubric": "1. 从多个维度设计多阶段冷启动策略平滑过渡; 2. 能融合内容特征和协同过滤信号处理数据稀疏; 3. 能评估冷启动效果并优化过渡阈值。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-034",
+      "prompt": "设计一个大语言模型幻觉检测和缓解方案，LLM在知识问答场景中生成看似合理但事实错误的回答。需要设计幻觉检测评估框架、检测算法和缓解策略。",
+      "sub_type": "hallucination_detection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计幻觉类型分类（事实性幻觉/忠实性幻觉/推理幻觉），自动检测方法（知识库对比/多模型交叉验证/自一致性检验），评估指标（幻觉率/严重度/检测召回率），缓解策略（RAG增强/Chain-of-Verification/置信度校准/拒绝回答），建立幻觉案例库用于持续改进。",
+      "scoring_rubric": "1. 从多个维度分类幻觉类型并设计自动检测方法; 2. 能定义幻觉评估指标和检测召回率; 3. 能设计多种缓解策略并建立持续改进机制。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-035",
+      "prompt": "设计一个AutoML平台方案，支持业务分析师无需编程即可构建机器学习模型。需要设计自动特征工程、模型选择、超参数调优的端到端自动化流程和可视化报告。",
+      "sub_type": "automl_platform",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计数据探查自动化（类型推断/缺失值处理/异常值检测），自动特征工程（统计特征/交叉特征/时序特征生成），模型选择搜索（线性/树/神经网络自动对比），超参数调优（贝叶斯优化/早停），可视化报告（特征重要性/模型对比/学习曲线），模型导出和部署一键化。",
+      "scoring_rubric": "1. 设计端到端的自动化模型构建流程; 2. 能实现自动特征工程和模型选择搜索; 3. 能生成可视化报告并支持一键部署。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-036",
+      "prompt": "设计一个图神经网络在大规模工业图上的分布式训练方案，社交网络图包含10亿节点和100亿边，单机内存无法容纳。需要设计图分区、采样训练和通信优化策略。",
+      "sub_type": "distributed_gnn_training",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计图分区策略（METIS/随机分区/基于社区的分区），Mini-batch采样（Neighbor Sampling/ClusterGCN/GraphSAINT），分布式训练架构（参数服务器/AllReduce），通信优化（梯度压缩/异步训练），处理分区边切导致的邻居信息丢失问题，评估收敛速度和精度。",
+      "scoring_rubric": "1. 从多个维度设计适合大规模图的分区和采样训练策略; 2. 能实现分布式训练架构和通信优化; 3. 能评估分区质量对模型收敛和精度的影响。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-037",
+      "prompt": "设计一个模型性能基线管理方案，团队需要追踪模型在多个评估数据集上的性能变化趋势。需要设计基线定义、性能退化检测（统计显著性检验）和自动告警机制。",
+      "sub_type": "model_performance_baseline",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计基线定义（多数据集x多指标的历史均值和方差），性能退化检测（paired t-test/Wilcoxon检验判断是否显著下降），自动告警（单指标退化/多指标联合退化），性能趋势可视化（折线图/置信区间），退化根因分析（数据变化/代码变更/环境差异）。",
+      "scoring_rubric": "1. 从多个维度设计多数据集多指标的性能基线定义; 2. 能使用统计检验方法检测性能退化; 3. 能建立自动告警和退化根因分析机制。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-038",
+      "prompt": "设计一个大模型多租户推理服务方案，多个业务团队共享GPU集群的大模型推理服务。需要设计资源配额管理、请求优先级调度、性能隔离和计费统计。",
+      "sub_type": "multi_tenant_llm_inference",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计租户资源配额（QPS限制/token预算/并发数限制），请求优先级调度（P0/P1/P2队列/抢占机制），性能隔离（独立KV Cache池/批处理隔离），计费统计（按token消耗计费/账单明细），租户自助管理门户（用量监控/配额申请/API Key管理）。",
+      "scoring_rubric": "1. 设计租户资源配额和请求优先级调度机制; 2. 能实现推理资源的性能隔离; 3. 能支持按token计费的统计和账单管理。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-039",
+      "prompt": "设计一个模型A/B测试统计分析方案，推荐模型新版本需要通过A/B测试验证效果。需要设计分流策略、指标选择、样本量计算和多重检验校正，处理指标间的相关性。",
+      "sub_type": "model_ab_testing_stats",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计用户级分流策略（哈希分流/正交分层），指标体系（主指标CTR/辅助指标停留时长/护栏指标多样性），样本量计算（MDE/alpha/power），多重检验校正（Bonferroni/BH-FDR），指标相关性处理（联合显著性检验），实验运行时质量检查（SRM/AA验证）。",
+      "scoring_rubric": "1. 设计用户级正交分层分流策略; 2. 能进行样本量计算和多重检验校正; 3. 能处理指标相关性并设计实验质量检查机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-040",
+      "prompt": "设计一个大模型长上下文推理优化方案，LLM处理32K token长文档时注意力计算内存占用随序列长度平方增长。需要设计稀疏注意力、分块计算和KV Cache压缩策略。",
+      "sub_type": "long_context_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析长上下文的内存瓶颈（KV Cache大小=2x层数x头数x序列长度x维度），设计稀疏注意力（Local+Global/Sliding Window+Global Attention），分块计算（Flash Attention分块加载），KV Cache压缩（量化/低秩投影/驱逐策略），评估不同策略对长文档QA任务的精度影响。",
+      "scoring_rubric": "1. 从多个维度分析长上下文推理的内存瓶颈和计算复杂度; 2. 能设计稀疏注意力和分块计算优化策略; 3. 能实现KV Cache压缩并评估精度影响。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-041",
+      "prompt": "设计一个GPU集群训练任务调度方案，50张A100 GPU需要同时支持模型训练和推理服务。需要设计GPU共享（MIG/MPS）、任务优先级调度、抢占机制和资源配额管理。",
+      "sub_type": "gpu_cluster_scheduling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计GPU资源共享策略（MIG/MPS），任务优先级调度和抢占机制，资源配额管理，调度器选型（Volcano/Kueue），GPU利用率监控和碎片优化。",
+      "scoring_rubric": "1. 设计GPU资源共享策略提升集群利用率; 2. 能实现任务优先级调度和抢占机制; 3. 能设计资源配额管理和超额排队策略; 4. 能监控GPU利用率并优化资源碎片。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-042",
+      "prompt": "设计一个量化感知训练（Quantization-Aware Training）方案，在训练过程中模拟INT8量化的效果，使模型对量化更鲁棒。对比QAT与训练后量化（PTQ）的精度差异和适用场景。",
+      "sub_type": "quantization_aware_training",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计QAT训练流程（前向传播插入伪量化节点/反向传播使用STE），量化方案选型（Per-tensor vs Per-channel），对比QAT和PTQ在不同模型上的精度差异，量化敏感层识别，QAT模型的INT8部署验证。",
+      "scoring_rubric": "1. 准确设计QAT训练流程和伪量化节点实现; 2. 能对比QAT和PTQ的精度差异和适用场景; 3. 能识别量化敏感层并设计混合精度策略; 4. 能验证QAT模型在INT8推理引擎上的精度一致性。，并给出具体的分析依据和推理过程；"
+    },
+    {
+      "id": "92-043",
+      "prompt": "设计一个模型服务自动扩缩容方案，LLM推理服务的请求量波动大（白天高峰1000 QPS/夜间低谷50 QPS）。需要设计基于队列长度和GPU利用率的自动扩缩容策略。",
+      "sub_type": "model_serving_autoscaling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计多维度扩缩容指标（队列深度/GPU利用率/延迟P99），扩缩容策略（队列>阈值扩容/GPU<阈值缩容/冷却期防抖），弹性伸缩实现（HPA/KEDA），模型加载优化（Graceful Drain/预加载），成本优化（Spot Instance/低谷缩容），效果监控和策略调优。",
+      "scoring_rubric": "1. 设计多维度的扩缩容指标和触发策略; 2. 能实现基于队列和GPU利用率的自动弹性伸缩; 3. 能优化模型加载和Graceful Drain减少扩缩容影响; 4. 能通过成本优化和策略调优提升资源效率。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-044",
+      "prompt": "设计一个训练数据版本管理方案，100GB训练数据集需要支持版本追踪、差异对比、回滚到历史版本和分支实验。对比DVC、Delta Lake和LakeFS三种数据版本管理工具。",
+      "sub_type": "training_data_versioning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应对比DVC（Git-like元数据/Diff哈希）、Delta Lake（ACID事务/时间旅行）、LakeFS（Git-like分支/零拷贝），设计数据版本与模型版本关联，数据变更Diff可视化，分支实验支持，存储成本优化。",
+      "scoring_rubric": "1. 对比三种数据版本管理工具的特性和适用场景; 2. 能设计数据版本与模型版本的关联追踪; 3. 能支持数据变更的Diff可视化和分支实验; 4. 能优化版本数据的存储成本。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-045",
+      "prompt": "设计一个特征工程流水线方案，推荐系统需要从原始用户行为日志中实时和离线计算500+特征。设计特征定义规范、计算框架、特征存储和在线服务的统一架构。",
+      "sub_type": "feature_engineering_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计特征定义规范（特征名称/数据源/计算逻辑/TTL/Owner），离线特征计算（Spark批处理/每日更新的用户画像特征），实时特征计算（Flink流处理/实时点击率/会话特征），特征存储（Feast/自建Feature Store/在线Redis+离线Hive），特征一致性保障（离线和在线特征的计算逻辑一致/训练推理一致性），特征发现和复用（特征目录/搜索/使用统计）。",
+      "scoring_rubric": "1. 设计特征定义规范和计算框架; 2. 能实现离线和实时特征的统一计算和存储; 3. 能保障训练和推理的特征一致性; 4. 能建立特征发现和复用的管理机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-046",
+      "prompt": "设计一个模型可解释性方案，信贷风控模型拒绝用户贷款申请时需要给出可理解的拒绝原因。对比SHAP、LIME和Attention权重可视化三种解释方法的适用性和准确性。",
+      "sub_type": "model_interpretability",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比SHAP（Shapley值/全局局部解释）、LIME（局部线性近似/不稳定）、Attention权重（模型内部/非因果），设计信贷场景解释方案（SHAP排序Top-K特征/映射到业务含义），解释准确性验证和合规性要求，用户友好展示。",
+      "scoring_rubric": "1. 对比SHAP/LIME/Attention三种解释方法的原理和适用场景; 2. 能设计面向业务的特征解释映射方案; 3. 能验证解释结果与实际决策的一致性; 4. 能满足监管对模型可解释性的合规要求。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-047",
+      "prompt": "设计一个模型训练分布式通信优化方案，数据并行训练100张GPU时AllReduce通信开销占总训练时间40%。需要设计梯度压缩、异步通信和通信拓扑优化策略。",
+      "sub_type": "distributed_training_communication",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析AllReduce通信瓶颈（梯度体积/带宽/拓扑），梯度压缩（TopK稀疏化/量化/误差反馈），通信拓扑优化（Ring/Tree/Hierarchical AllReduce），异步通信重叠，通信profiling验证优化效果（占比从40%降到10%）。",
+      "scoring_rubric": "1. 从多个维度分析AllReduce通信瓶颈和梯度体积的影响; 2. 能设计梯度压缩策略减少通信数据量; 3. 能优化通信拓扑和异步通信重叠; 4. 能通过profiling验证通信优化效果。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-048",
+      "prompt": "设计一个多模态大模型微调方案，使用图文对数据微调一个视觉语言模型（VLM）用于电商商品描述生成。设计数据准备、微调策略和效果评估方案。",
+      "sub_type": "multimodal_finetuning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计图文对数据准备（图片筛选/文本清洗/对齐验证），微调策略选型（LoRA/QLoRA/Prefix Tuning）和LoRA配置（rank/alpha/target_modules），防止灾难性遗忘，效果评估（准确性/流畅性/多样性）结合人工和自动评估。",
+      "scoring_rubric": "1. 从多个维度设计多模态微调数据的准备和质量控制方案; 2. 能选择合适的微调策略（LoRA/QLoRA）并配置关键参数; 3. 能设计防止灾难性遗忘的训练策略; 4. 能设计多维度的微调效果评估方案。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "92-049",
+      "prompt": "设计一个模型推理结果缓存方案，LLM推理服务中30%的请求是重复或相似查询。需要设计语义级别的缓存匹配（非精确匹配），对比精确缓存和语义缓存的命中率和精度权衡。",
+      "sub_type": "inference_result_caching",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计精确缓存（基于请求哈希的KV缓存/命中率低但精确），语义缓存（基于Embedding相似度的近似匹配/命中率高但可能有精度损失），语义缓存的相似度阈值调优（阈值过高命中率低/过低误匹配），缓存Key设计（文本Embedding/请求特征哈希），缓存失效策略（TTL/主动失效/模型版本变更时全量失效），缓存命中率和推理质量的监控，缓存存储方案（Redis+向量索引/FAISS）。",
+      "scoring_rubric": "1. 设计精确缓存和语义缓存两种方案; 2. 能调优语义缓存的相似度阈值平衡命中率和精度; 3. 能设计缓存失效策略和版本管理; 4. 能监控缓存命中率和推理质量保障。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "92-050",
+      "prompt": "设计一个大模型安全对齐评估方案，评估大语言模型是否能抵抗越狱攻击、角色扮演攻击和多轮诱导攻击。设计安全评估数据集、攻击方法和安全评分体系。",
+      "sub_type": "llm_safety_evaluation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计安全评估数据集（覆盖暴力/歧视/隐私/违法/误导等类别），攻击方法（直接提问/角色扮演/多轮诱导/编码绕过/指令注入），自动化攻击框架（GCG/AutoDAN/多轮攻击模板），安全评分体系（安全拒绝率/攻击成功率/误拒率/响应质量），安全对齐策略评估（RLHF/DPO/Constitutional AI的效果对比），安全评估报告和改进建议。",
+      "scoring_rubric": "1. 从多个维度设计覆盖多类有害内容的安全评估数据集; 2. 能实现多种攻击方法的自动化测试框架; 3. 能定义安全评分体系量化模型安全水平; 4. 能对比不同安全对齐策略的防御效果。，给出量化的对比数据或具体案例；"
+    }
+  ]
+}

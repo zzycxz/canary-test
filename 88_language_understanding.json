@@ -1,0 +1,349 @@
+{
+  "capability": "language_understanding",
+  "label": "语言理解能力",
+  "total": 38,
+  "cases": [
+    {
+      "prompt": "'落霞与孤鹜齐飞，秋水共长天一色' 这句话描绘了怎样的景象？",
+      "sub_type": "literary_understanding",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应解释这句诗的意境，描述晚霞与鸟儿齐飞、秋水与天空相接的和谐美景，并可能涉及作者或背景信息。",
+      "scoring_rubric": "评估对文学作品的理解深度和意象描述能力，确保解释准确且富有文学性。",
+      "id": "88-001"
+    },
+    {
+      "prompt": "判断以下两个句子是否意思相同：1. 他非常高兴。 2. 他开心极了。",
+      "sub_type": "semantic_similarity",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应判断两个句子语义相似，都表达了高兴的情绪，并可能简要说明理由。",
+      "scoring_rubric": "评估语义相似性判断的准确度，确保结论正确且逻辑清晰。",
+      "id": "88-002"
+    },
+    {
+      "prompt": "这个报告的字数统计有误，应该是在三千子左右。",
+      "sub_type": "text_correction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应纠正错别字，将'子'改为'字'，并可能提供正确的句子或解释错误原因。",
+      "scoring_rubric": "评估纠错的准确性和完整性，确保识别所有错误并给出正确修正。",
+      "id": "88-003"
+    },
+    {
+      "prompt": "她看着窗外，轻声说：'雨停了。' 但她的表情很悲伤。",
+      "sub_type": "implicit_meaning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应推理出她可能隐含悲伤、思念或某种情感，尽管话语表面中性，结合上下文推断言外之意。",
+      "scoring_rubric": "评估对隐含意义和情感的推理能力，确保能深入分析并给出合理解释。",
+      "id": "88-004"
+    },
+    {
+      "prompt": "哇，你真是个天才！连这么简单的事都做不好。",
+      "sub_type": "irony_sarcasm",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别这是反讽表达，实际意思是批评对方不够聪明或做事不力，并解释反讽效果。",
+      "scoring_rubric": "评估对反讽、双关或幽默的识别和解释，确保能捕捉语气和语境中的讽刺意味。",
+      "id": "88-005"
+    },
+    {
+      "prompt": "俺们那嘎达整的挺好，你别老搁这儿瞎咧咧。",
+      "sub_type": "colloquial_understanding",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别出这是东北方言，并能转换为普通话含义：“我们那边弄得很好，你别老在这里胡说八道”。回答应体现对方言词汇（俺们、嘎达、搁、瞎咧咧）的理解。",
+      "scoring_rubric": "1. 是否识别出方言（东北话）；2. 是否能准确翻译或解释每个关键方言词汇；3. 整体意思表达是否准确。",
+      "id": "88-006"
+    },
+    {
+      "prompt": "“不以物喜，不以己悲”表达了怎样的人生态度？",
+      "sub_type": "literary_understanding",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确解释这句话出自范仲淹《岳阳楼记》，意思是不因外物（好坏）和自己（得失）而或喜或悲。应指出这表达了一种豁达、超然、以天下为己任的旷达胸怀。",
+      "scoring_rubric": "1. 是否能准确翻译字面意思；2. 是否能理解其比喻义和深层含义；3. 是否能联系原文或作者思想进行说明。",
+      "id": "88-007"
+    },
+    {
+      "prompt": "“春蚕到死丝方尽，蜡炬成灰泪始干”常被用来比喻什么？",
+      "sub_type": "literary_understanding",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应指出原诗（李商隐《无题》）是表达至死不渝的爱情。同时，也应说明后世常将其引申比喻为无私奉献的精神，尤其用于形容教师或工作者。需要区分原意与引申意。",
+      "scoring_rubric": "1. 是否知道诗句的出处和原意；2. 是否了解其常见的引申义和使用场景；3. 回答是否全面，能区分原意和引申意。",
+      "id": "88-008"
+    },
+    {
+      "prompt": "判断以下两句话意思是否相同：\n1. 我吃了三碗饭。\n2. 三碗饭被我吃了。",
+      "sub_type": "semantic_similarity",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应判断这两句话核心意思相同，都表示“我”消耗了三碗饭。同时应指出两者在语态上（主动语态 vs. 被动语态）和信息焦点上（“我” vs. “三碗饭”）有细微差别，但语义等价。",
+      "scoring_rubric": "1. 是否能判断出核心语义相同；2. 能否分析出语态、焦点等形式上的差异；3. 结论是否明确。",
+      "id": "88-009"
+    },
+    {
+      "prompt": "判断以下两句话意思是否相同：\n1. 如果明天下雨，我们就不去爬山了。\n2. 我们没去爬山，是因为昨天下雨了。",
+      "sub_type": "semantic_similarity",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应判断这两句话意思不同。第一句是假设关系（条件未发生），第二句是因果关系（事实已发生且是过去时）。应明确指出逻辑关系和时态的根本区别。",
+      "scoring_rubric": "1. 是否能准确判断语义不同；2. 能否清晰解释差异所在（逻辑关系、时态）；3. 分析是否到位。",
+      "id": "88-010"
+    },
+    {
+      "prompt": "请修正以下句子中的语病：我们参观了北京、上海、广州等城市。",
+      "sub_type": "text_correction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应指出原句没有明显语病，语法通顺。如果非要优化，可以建议将“等”改为“等地”或“等城市”，但原句在口语和书面语中均可接受。应避免过度纠正。",
+      "scoring_rubric": "1. 能否正确判断句子是否需要修正；2. 如果无需修正，理由是否充分；3. 如果提出建议，是否合理且必要。",
+      "id": "88-011"
+    },
+    {
+      "prompt": "请修正以下句子中的语病：他的成绩不但比我好，而且身体也比我棒。",
+      "sub_type": "text_correction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别出关联词使用不当。“不但……而且……”是递进关系，但“成绩好”和“身体棒”是不同范畴，不宜直接递进。应建议修改为：“他的成绩比我好，而且身体也比我棒”或“他不但成绩比我好，身体也比我棒”（删除一个“也”），使并列关系更清晰。",
+      "scoring_rubric": "1. 是否能准确识别出关联词使用不当；2. 提出的修正方案是否合理、有效；3. 解释是否清晰。",
+      "id": "88-012"
+    },
+    {
+      "prompt": "（对话场景）朋友说：“我最近刚换了新工作，天天加班到深夜，感觉自己就像个陀螺。”他想表达什么？",
+      "sub_type": "implicit_meaning",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应推断出朋友并非在描述自己是陀螺，而是用比喻来表达自己工作非常忙碌、疲惫、身不由己，没有休息时间。应指出其中包含了抱怨、劳累的情绪。",
+      "scoring_rubric": "1. 是否能理解比喻的修辞手法；2. 是否能准确推断出言外之意（忙碌、疲惫）；3. 是否能识别出潜在的情绪。",
+      "id": "88-013"
+    },
+    {
+      "prompt": "妈妈对刚考完试的孩子说：“这次‘考得不错’啊，卷子都答满了。”妈妈是真心在夸奖孩子吗？",
+      "sub_type": "implicit_meaning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应结合“卷子都答满了”这一补充信息进行推理。通常，“考得不错”是夸奖，但特意强调“答满了”可能暗示孩子只是把卷子写满了，但未必正确。因此，妈妈很可能不是在真心夸奖，而是在委婉批评或表达不满。需要解释这种推理过程。",
+      "scoring_rubric": "1. 能否捕捉到“答满了”这一关键线索；2. 能否推理出可能存在的反讽或言外之意；3. 推理是否合理，解释是否充分。",
+      "id": "88-014"
+    },
+    {
+      "prompt": "“这个方案真是太‘好’了，好到我们之前怎么没想到呢？”说话者是真心称赞这个方案吗？",
+      "sub_type": "irony_sarcasm",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别出引号的使用和“好到……”的夸张表述构成反讽语气。说话者并非真心称赞，而是在讽刺这个方案很糟糕、很荒谬或者显而易见却被忽略了。",
+      "scoring_rubric": "1. 是否能识别出反讽的语气和意图；2. 能否解释引号和夸张在此处的作用；3. 对说话者真实态度的判断是否正确。",
+      "id": "88-015"
+    },
+    {
+      "prompt": "A：“听说你昨天去爬山了？”B：“是啊，风景‘优美’极了——就是上山的路，走一步，滑两步。” B真的在赞美风景吗？",
+      "sub_type": "irony_sarcasm",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要综合理解。B先肯定并说风景优美，但随后用破折号引出负面经历“走一步滑两步”。这里的幽默和反讽在于，用糟糕的路况解构了前面的赞美。B的主旨很可能是在抱怨登山的艰难和狼狈，而非真心赞美风景。需要识别这种转折和幽默表达。",
+      "scoring_rubric": "1. 是否能理解破折号后的转折是重点；2. 能否识别出幽默和轻微自嘲/抱怨的语气；3. 是否能得出结论：B的重点不在赞美风景，而在描述艰难的经历。",
+      "id": "88-016"
+    },
+    {
+      "prompt": "苹果公司的CEO是谁？苹果手机和苹果电脑有什么区别？",
+      "sub_type": "ambiguity_resolution",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别'苹果'在不同上下文中的多义性，第一指公司（苹果公司），第二指产品（苹果手机、苹果电脑），并分别提供准确信息。",
+      "scoring_rubric": "能正确区分多义词'苹果'的含义，回复清晰、准确，无混淆。",
+      "id": "88-017"
+    },
+    {
+      "prompt": "请将'落霞与孤鹜齐飞，秋水共长天一色'翻译成现代汉语，并解释其意境。",
+      "sub_type": "literary_understanding",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应给出流畅的现代汉语翻译，并深入分析诗句的意境、艺术手法和情感表达。",
+      "scoring_rubric": "翻译准确、优美，意境分析深刻，涵盖视觉、情感层面。",
+      "id": "88-018"
+    },
+    {
+      "prompt": "判断以下两个句子语义是否相同：1. 他很快地跑向终点。 2. 他冲向终点的速度很快。",
+      "sub_type": "semantic_similarity",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应判断两个句子语义相似，都表示他快速向终点移动，并简要说明理由。",
+      "scoring_rubric": "正确识别语义等价，解释清晰，无偏差。",
+      "id": "88-019"
+    },
+    {
+      "prompt": "请比较'我喜欢吃苹果'和'苹果是我最爱的水果'的语义相似度。",
+      "sub_type": "semantic_similarity",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应分析并给出相似度评分（如0.8）或详细解释语义上的细微差别（如强调程度不同）。",
+      "scoring_rubric": "提供量化或定性分析，比较全面，逻辑合理。",
+      "id": "88-020"
+    },
+    {
+      "prompt": "纠正这句话的错别字：'我今天去了图书管，借了一本有去的小说。'",
+      "sub_type": "text_correction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应纠正错别字：'图书管'改为'图书馆'，'有去'改为'有趣'，并给出修正后的句子。",
+      "scoring_rubric": "准确识别并纠正所有错别字，修正后句子通顺、正确。",
+      "id": "88-021"
+    },
+    {
+      "prompt": "请修改这段文字的语病：'虽然天气很冷，但是他还是去了，因为如果不去的话，可能会错过机会。'",
+      "sub_type": "text_correction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应优化句子结构，使逻辑更连贯，如调整从句顺序或简化表达，保持原意。",
+      "scoring_rubric": "语病修改得当，句子流畅、自然，语义完整。",
+      "id": "88-022"
+    },
+    {
+      "prompt": "当有人说'我没事'，但实际上看起来很沮丧时，这意味着什么？",
+      "sub_type": "implicit_meaning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应推理出'我没事'可能表示隐藏负面情绪，需要进一步关心或支持。",
+      "scoring_rubric": "能正确解读言外之意，推理合理，建议贴合情感需求。",
+      "id": "88-023"
+    },
+    {
+      "prompt": "哇，你真是个天才！这么简单的问题都答错了。",
+      "sub_type": "irony_sarcasm",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别这是反讽语气，实际上是在批评或表达失望，避免按字面意思回复。",
+      "scoring_rubric": "能识别反讽，回应适当，不误解原意。",
+      "id": "88-024"
+    },
+    {
+      "prompt": "小明告诉小红，他明天要去看电影。'他'指的是谁？",
+      "sub_type": "context_reference",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应推断'他'指小明，因为小明是说话者，基于主语一致性分析。",
+      "scoring_rubric": "代词指代判断正确，解释清晰，符合语言逻辑。",
+      "id": "88-025"
+    },
+    {
+      "prompt": "他们去了银行，但银行关门了，所以他们决定去河岸。'银行'指的是什么？",
+      "sub_type": "ambiguity_resolution",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别'银行'一词的多义性（金融机构和河岸），并基于后文'去河岸'推断可能指河岸，但给出解释澄清歧义。",
+      "scoring_rubric": "是否正确识别多义词；是否基于上下文给出合理解释；解释是否清晰。",
+      "id": "88-026"
+    },
+    {
+      "prompt": "哥们儿，你这事儿办得忒不地道了！咋整啊？",
+      "sub_type": "colloquial_understanding",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应理解口语表达：'哥们儿'（朋友）、'忒不地道了'（很不公平或不厚道）、'咋整啊'（怎么办），并给出安慰或建议性回复。",
+      "scoring_rubric": "是否准确理解网络用语和方言色彩；回复是否贴合口语场景；核心意思是否被捕捉。",
+      "id": "88-027"
+    },
+    {
+      "prompt": "判断以下两个句子语义是否相同：1. 他喜欢在雨天跑步。 2. 他喜欢雨天跑步的时候。",
+      "sub_type": "semantic_similarity",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应分析两个句子的结构和意思，判断它们语义相似，都表示喜欢在雨天跑步的活动。",
+      "scoring_rubric": "是否正确判断语义相似性；分析是否基于词汇和语法；结论是否合理。",
+      "id": "88-028"
+    },
+    {
+      "prompt": "用户说：'今天天气真好啊，可惜我得在家工作。' 请理解用户的言外之意。",
+      "sub_type": "implicit_meaning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应推理出用户隐含的遗憾或愿望，如想外出活动但受限于工作，可能表达对自由时间的渴望。",
+      "scoring_rubric": "是否准确推理隐含意义；是否捕捉情感色彩；回复是否基于上下文合理推断。",
+      "id": "88-029"
+    },
+    {
+      "prompt": "我昨天买了一瓶水，但它漏水了，它现在还在包里吗？",
+      "sub_type": "ambiguity_resolution",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "正确识别两个“它”的指代。第一个“它”指代“一瓶水”，第二个“它”也指代“一瓶水”。模型应解释指代关系并回答问题。",
+      "scoring_rubric": "是否正确识别两个代词“它”均指代“一瓶水”；是否理解句子描述的是瓶子漏水且仍可能在包里的情景；回答是否清晰无矛盾。",
+      "id": "88-030"
+    },
+    {
+      "prompt": "请解释“夕阳无限好，只是近黄昏”这句诗所表达的情感。",
+      "sub_type": "literary_understanding",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "分析李商隐《乐游原》中这句诗的情感。既要指出对美好事物的赞叹（夕阳无限好），也要点明对美好事物转瞬即逝的惋惜与惆怅（只是近黄昏）。",
+      "scoring_rubric": "是否识别诗句出处（可选）；是否分析出双重情感：赞美与惋惜；是否能联系人生、时光等主题进行适度引申；情感分析是否准确、细腻。",
+      "id": "88-031"
+    },
+    {
+      "prompt": "判断以下两个句子意思是否相同：1. 我差点没赶上公交车。 2. 我差点赶上公交车。",
+      "sub_type": "semantic_similarity",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "在中文口语中，尽管“差点没”字面有否定，但两个句子通常表达相同的意思：赶公交车很惊险，但最终赶上了。模型需识别这种特殊的语义等同现象。",
+      "scoring_rubric": "是否判断出两个句子意思相同或相近；是否解释“差点没+V”在中文中常表示“差点V”的用法；是否理解句子传达的是“有惊无险，结果成功”的含义。",
+      "id": "88-032"
+    },
+    {
+      "prompt": "我们团队在技术攻坚上取得突破，但在市场转化方面略显不足，部分项目存在“重研发、轻运营”的倾向。",
+      "sub_type": "text_correction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "识别句子中的语病“存在…倾向”搭配不当（通常说“存在…问题”或“有…倾向”），并给出修改建议。",
+      "scoring_rubric": "是否准确识别出“存在…倾向”为搭配不当的语病；是否提供至少一种合理的修改方案（如改为“有…倾向”或“存在…问题”）；修改后是否语句通顺。",
+      "id": "88-033"
+    },
+    {
+      "prompt": "帮我看看这句话有错字吗：‘这次活动需要大量的‘物力’和‘人里’投入。’",
+      "sub_type": "text_correction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "找出错别字“人里”，并纠正为“人力”。",
+      "scoring_rubric": "是否准确找出“人里”这个错别字；是否将其正确纠正为“人力”；纠正后是否语句通顺完整。",
+      "id": "88-034"
+    },
+    {
+      "prompt": "（用户问：“你周末有空吗？我想请你吃个饭。” AI回复：“哎呀，这周末家里的猫要过生日，得开派对呢！”）从AI的回复中，能听出它真正的意思是什么？",
+      "sub_type": "implicit_meaning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "理解AI（模拟用户）用一个明显虚构或幽默的理由（猫过生日开派对）来委婉拒绝邀请，其真实意思是“周末没空”。",
+      "scoring_rubric": "是否识别出“猫过生日开派对”为托辞；是否理解其隐含的拒绝之意；是否解释了这是委婉的拒绝方式而非字面意思。",
+      "id": "88-035"
+    },
+    {
+      "prompt": "我朋友说我穿这件衣服‘特别有勇气’，他是在夸我吗？",
+      "sub_type": "irony_sarcasm",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "理解“特别有勇气”在评价着装时通常不是真的夸赞勇敢，而是一种反讽或调侃，暗示衣服搭配不得体、太大胆或不好看。",
+      "scoring_rubric": "是否识别出这句话的反讽/调侃语气；是否理解其真实含义可能是“衣服不好看”或“搭配很奇怪”；是否解释了这是一种委婉的负面评价。",
+      "id": "88-036"
+    },
+    {
+      "prompt": "（会议记录片段：“张经理主张缩减预算，李总监认为应维持现状。王副总则表示同意李总监的看法。”）谁同意谁的观点？",
+      "sub_type": "context_reference",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "理清多人物对话中的指代关系。明确指出：王副总同意的是李总监（维持现状）的观点。",
+      "scoring_rubric": "是否准确识别对话中涉及的三个人物及其立场；是否正确解读“同意李总监的看法”的指代对象；回答是否清晰无误。",
+      "id": "88-037"
+    },
+    {
+      "prompt": "“呵呵，你这个想法可真独特啊。” 请分析这句话可能包含的真实情绪。",
+      "sub_type": "irony_sarcasm",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "分析“呵呵”这个语气词结合“真独特啊”的表述，在大多数语境下带有不以为然、轻微嘲讽或无奈的情绪，而非真正的赞美。",
+      "scoring_rubric": "是否识别出“呵呵”和“真独特”组合常带有反讽或消极色彩；是否分析出可能包含“不赞同”、“觉得奇怪”、“无语”等真实情绪；分析是否结合了中文网络语境。",
+      "id": "88-038"
+    }
+  ]
+}

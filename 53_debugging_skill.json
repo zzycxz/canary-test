@@ -1,0 +1,475 @@
+{
+  "capability": "debugging_skill",
+  "label": "调试与排错能力",
+  "total": 52,
+  "cases": [
+    {
+      "id": "53-001",
+      "prompt": "Node.js服务运行几天后内存持续增长直至OOM崩溃。代码：const EventEmitter = require('events'); const bus = new EventEmitter(); function handleRequest(req) { bus.on('data', (d) => console.log(d, req.id)); } app.get('/api', (req) => { handleRequest(req); res.send('ok'); }); 每次请求都在bus上注册新监听器，请诊断。",
+      "sub_type": "event_listener_leak",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出每次请求都向EventEmitter添加新的'data'事件监听器但从未移除，导致监听器数量无限增长，内存泄漏并触发MaxListenersExceededWarning，建议在请求结束后移除监听器或改用请求级别通信。",
+      "scoring_rubric": "1. 准确识别事件监听器累积泄漏，并给出具体的分析依据和推理过程；2. 准确解释EventEmitter的on与removeListener机制，引用具体的技术原理或标准规范；3. 具体指出监听器数量持续增长导致内存泄漏，避免笼统描述；4. 给出once/off或请求作用域的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-002",
+      "prompt": "多线程程序偶发死锁卡住。代码：import threading; lockA = threading.Lock(); lockB = threading.Lock(); def worker1(): lockA.acquire(); lockB.acquire(); # do work; lockB.release(); lockA.release(); def worker2(): lockB.acquire(); lockA.acquire(); # do work; lockA.release(); lockB.release(); 两个线程分别运行worker1和worker2，偶尔卡死，请诊断。",
+      "sub_type": "mutex_deadlock",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出worker1和worker2以相反顺序获取lockA和lockB，形成循环等待导致死锁，建议统一加锁顺序（如始终先获取lockA再获取lockB）或使用acquire的timeout参数。",
+      "scoring_rubric": "1. 准确识别加锁顺序不一致导致死锁，并给出具体的分析依据和推理过程；2. 准确解释循环等待死锁的四个必要条件，引用具体的技术原理或标准规范；3. 给出统一加锁顺序的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到timeout检测或上下文管理器with语句。，避免笼统描述；"
+    },
+    {
+      "id": "53-003",
+      "prompt": "电商系统偶尔显示过期的商品价格。代码：cache = {}; def get_price(pid): if pid in cache and time.time() - cache[pid]['ts'] < 300: return cache[pid]['price']; price = db.query_price(pid); cache[pid] = {'price': price, 'ts': time.time()}; return price; 用户反馈修改价格后5分钟内偶尔看到旧价格，但缓存TTL是300秒。请诊断。",
+      "sub_type": "stale_cache_bug",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出缓存无失效机制，价格更新后旧缓存仍有效直到TTL过期，存在缓存与数据库不一致的窗口期，建议在价格更新时主动清除或更新缓存（cache-aside模式的写穿透）。",
+      "scoring_rubric": "1. 准确识别缓存与数据源不一致问题，并给出具体的分析依据和推理过程；2. 准确解释TTL窗口期内的脏读，引用具体的技术原理或标准规范；3. 具体指出缺少写时缓存失效机制，避免笼统描述；4. 给出主动失效或事件驱动更新的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-004",
+      "prompt": "跨时区应用中会议时间显示错误。代码：from datetime import datetime; meeting = datetime(2026, 6, 15, 14, 0); # 北京时间UTC+8 utc_time = meeting.replace(tzinfo=None) - timedelta(hours=8); users_in_ny看到的时间差了1小时。请诊断为什么纽约用户看到的时间不对。",
+      "sub_type": "timezone_conversion_bug",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出手动减8小时做时区转换不可靠且忽略了夏令时，纽约EDT是UTC-4而非EST的UTC-5，建议使用pytz或zoneinfo库进行正确的时区转换，避免手动计算。",
+      "scoring_rubric": "1. 准确识别手动时区计算的缺陷，并给出具体的分析依据和推理过程；2. 具体指出夏令时导致的偏差，避免笼统描述；3. 准确解释EST与EDT的区别，引用具体的技术原理或标准规范；4. 给出使用pytz/zoneinfo的标准修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-005",
+      "prompt": "C语言程序计算斐波那契数列时第50项结果为负数。代码：int fib(int n) { if (n <= 1) return n; return fib(n-1) + fib(n-2); } printf(\"%d\", fib(50)); 请诊断为什么结果变成了负数。",
+      "sub_type": "integer_overflow_bug",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出32位int最大值约21亿，fib(50)约125亿远超范围导致有符号整数溢出变为负数，建议使用long long、unsigned long long或大数库来存储结果。",
+      "scoring_rubric": "1. 准确识别有符号整数溢出，并给出具体的分析依据和推理过程；2. 准确解释32位int的范围限制，引用具体的技术原理或标准规范；3. 给出使用更大整数类型的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到语言层面的溢出行为差异。，避免笼统描述；"
+    },
+    {
+      "id": "53-006",
+      "prompt": "用户输入导致正则匹配超时卡死。代码：import re; pattern = re.compile(r'^(a+)+$'); re.match(pattern, 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaab')。对合法输入很快，但某些非法输入会卡住几秒甚至几分钟。请诊断原因。",
+      "sub_type": "regex_backtracking_bug",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出嵌套量词(a+)+导致指数级回溯（ReDoS），正则引擎在不匹配时会尝试所有可能的分组方式，建议改用(a+)+为a+消除嵌套量词，或使用possessive量词/原子组。",
+      "scoring_rubric": "1. 准确识别正则回溯爆炸问题，并给出具体的分析依据和推理过程；2. 准确解释嵌套量词导致的指数级状态空间，引用具体的技术原理或标准规范；3. 具体指出这是ReDoS安全漏洞，避免笼统描述；4. 给出消除嵌套量词的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-007",
+      "prompt": "异步Python程序中HTTP请求并没有并发执行。代码：import asyncio, aiohttp; async def fetch(url): async with aiohttp.ClientSession() as s: async with s.get(url) as r: return await r.text(); results = [await fetch(u) for u in urls]。总耗时等于各请求之和而非最大值。请诊断。",
+      "sub_type": "async_await_bug",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出列表推导式中的await是顺序执行的，每个fetch都在前一个完成后才开始，应使用asyncio.gather或asyncio.create_task实现并发，建议改为await asyncio.gather(*[fetch(u) for u in urls])。",
+      "scoring_rubric": "1. 准确识别await在列表推导式中的顺序执行，并给出具体的分析依据和推理过程；2. 准确解释协程需要显式并发调度，引用具体的技术原理或标准规范；3. 给出asyncio.gather的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到create_task和TaskGroup等替代方案。，避免笼统描述；"
+    },
+    {
+      "id": "53-008",
+      "prompt": "回调层层嵌套的Node.js代码难以维护且错误处理不生效。代码：fs.readFile('a.txt', (e1, d1) => { parse(d1, (e2, d2) => { db.query(d2, (e3, d3) => { fs.writeFile('b.txt', d3, (e4) => { if(e1||e2||e3||e4) handleErr(...); }); }); }); }); 偶尔e2为null但e3非null时错误被吞掉了。请诊断。",
+      "sub_type": "callback_hell_bug",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出回调嵌套（Callback Hell）导致错误处理逻辑复杂且容易遗漏，中间层错误可能未正确传播，建议使用Promise或async/await重构，利用catch统一处理错误。",
+      "scoring_rubric": "1. 准确识别回调地狱的可维护性问题，并给出具体的分析依据和推理过程；2. 具体指出错误传播路径不清晰，避免笼统描述；3. 准确解释每个回调需独立检查error参数，引用具体的技术原理或标准规范；4. 给出Promise/async-await重构方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-009",
+      "prompt": "多线程爬虫偶尔下载到空文件或损坏内容。代码：import threading; downloaded = []; def crawl(url): data = requests.get(url).content; downloaded.append(data); threads = [threading.Thread(target=crawl, args=(u,)) for u in urls]; [t.start() for t in threads]; [t.join() for t in threads]; downloaded列表偶尔长度不等于urls长度。请诊断。",
+      "sub_type": "race_condition_bug",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出list.append虽然在CPython中受GIL保护相对安全，但requests.get和append之间存在竞态窗口，更严重的是如果结果写入共享dict或文件则会出现数据竞争，建议使用线程安全的Queue或加锁保护共享数据结构。",
+      "scoring_rubric": "1. 准确识别多线程共享可变状态的竞态条件，并给出具体的分析依据和推理过程；2. 准确解释GIL的局限性，引用具体的技术原理或标准规范；3. 具体指出并发写入共享列表的风险，避免笼统描述；4. 给出Queue或Lock的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-010",
+      "prompt": "长期运行的C++服务进程RSS内存远超实际数据量。代码持续new/delete大量小对象(16-128字节)，top显示RSS 2GB但实际活跃数据仅500MB。malloc_trim和free都调过了没有改善。请诊断内存去了哪里。",
+      "sub_type": "memory_fragmentation_bug",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出大量小对象频繁分配释放导致堆内存碎片化，操作系统无法将碎片化的物理页归还给系统（即使虚拟地址空间已free），RSS不会下降，建议使用内存池/对象池、自定义分配器或jemalloc/tcmalloc替代默认malloc。",
+      "scoring_rubric": "1. 准确识别堆内存碎片化问题，并给出具体的分析依据和推理过程；2. 准确解释RSS与实际活跃内存的差异，引用具体的技术原理或标准规范；3. 准确说明频繁小对象分配导致碎片化的机制，引用具体的技术原理或标准规范；4. 给出内存池或自定义分配器的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-011",
+      "prompt": "Python程序在处理UTC时间时出错。代码：from datetime import datetime; utc_now = datetime.utcnow(); local_now = utc_now.astimezone(); print(local_now.tzinfo)。utcnow()返回的时间在转本地时间时差了8小时。请诊断。",
+      "sub_type": "naive_datetime_timezone",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出datetime.utcnow()返回的是naive datetime（无时区信息），astimezone()在naive对象上调用时会假设为本地时区而非UTC，导致双重偏移。应使用datetime.now(timezone.utc)替代utcnow()，或先显式设置tzinfo=UTC再转换。",
+      "scoring_rubric": "1. 准确识别utcnow返回naive datetime的问题，并给出具体的分析依据和推理过程；2. 准确解释astimezone对naive对象的默认假设行为，引用具体的技术原理或标准规范；3. 准确说明UTC+8环境下双重偏移的原因，引用具体的技术原理或标准规范；4. 给出使用datetime.now(timezone.utc)的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-012",
+      "prompt": "Go程序偶发panic: concurrent map writes。代码：var cache = make(map[string]string); func handler(w http.ResponseWriter, r *http.Request) { cache[r.URL.Path] = r.RemoteAddr; }。多个goroutine同时写map，请诊断。",
+      "sub_type": "concurrent_map_write",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Go的map不是并发安全的，多个goroutine同时写入会触发runtime panic。应建议使用sync.Mutex保护map读写，或使用sync.Map替代原生map，或使用channel串行化map操作。",
+      "scoring_rubric": "1. 准确识别Go map的非并发安全特性，并给出具体的分析依据和推理过程；2. 准确解释concurrent map write panic的触发条件，引用具体的技术原理或标准规范；3. 给出sync.Mutex或sync.Map的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论不同并发数据结构的适用场景。，避免笼统描述；"
+    },
+    {
+      "id": "53-013",
+      "prompt": "Django ORM查询极慢，日志显示执行了200+条SQL。代码：orders = Order.objects.filter(user=user); for o in orders: print(o.items.all()[0].product.name)。请诊断为什么一个页面请求产生了200多条SQL。",
+      "sub_type": "orm_n_plus_one",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出N+1查询问题：遍历orders时对每个order再次查询items（N条），再查product（N*M条），总查询数为1+N+N*M。应使用select_related（JOIN）或prefetch_related（子查询）进行预加载，将200+条SQL优化为2-3条。",
+      "scoring_rubric": "1. 准确识别N+1查询模式，并给出具体的分析依据和推理过程；2. 具体计算实际SQL查询次数（1+N+N*M），避免笼统描述；3. 给出select_related和prefetch_related的修复方案，方案需具体可执行而非泛泛而谈；4. 准确解释JOIN预加载与子查询预加载的区别。，引用具体的技术原理或标准规范；"
+    },
+    {
+      "id": "53-014",
+      "prompt": "Redis缓存命中率从99%突然降到10%，数据库压力骤增。代码中缓存逻辑：val = redis.get(key); if not val: val = db.query(key); redis.set(key, val, ex=300)。大量key在同一时刻过期。请诊断。",
+      "sub_type": "cache_stampede",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出缓存雪崩（Cache Stampede）问题，大量key在同一时间设置相同的TTL导致集体过期，所有请求同时穿透到数据库。应建议在TTL上添加随机偏移（ex=300+random(0,60)）、使用互斥锁（mutex lock）防止缓存击穿、或使用后台线程异步刷新缓存。",
+      "scoring_rubric": "1. 准确识别缓存雪崩问题，并给出具体的分析依据和推理过程；2. 准确解释TTL相同导致集体过期的机制，引用具体的技术原理或标准规范；3. 给出TTL随机偏移的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到互斥锁或异步刷新等高级防护策略。，避免笼统描述；"
+    },
+    {
+      "id": "53-015",
+      "prompt": "React组件渲染死循环导致页面卡死。代码：function App() { const [data, setData] = useState([]); fetch('/api/data').then(r => r.json()).then(d => setData(d)); return <div>{data.length}</div>; }。页面打开后浏览器标签页直接卡死。请诊断。",
+      "sub_type": "react_infinite_render_loop",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出组件每次渲染都发起fetch请求，setState触发重新渲染，形成无限循环。fetch没有放在useEffect中导致每次渲染都执行。应将fetch包裹在useEffect(fn, [])中，依赖数组为空表示仅在挂载时执行一次。",
+      "scoring_rubric": "1. 准确识别渲染循环中发起请求导致的无限渲染，并给出具体的分析依据和推理过程；2. 准确解释setState触发re-render的机制，引用具体的技术原理或标准规范；3. 给出useEffect(fn, [])的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到AbortController清理请求的副作用。，避免笼统描述；"
+    },
+    {
+      "id": "53-016",
+      "prompt": "Java应用CPU使用率100%，jstack显示大量线程阻塞在HashMap.get()上。代码：static HashMap<String, Object> cache = new HashMap<>(); 多线程同时put和get。请诊断为什么HashMap导致CPU 100%。",
+      "sub_type": "hashmap_infinite_loop",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Java 7及之前版本的HashMap在并发resize时可能形成链表环，导致get操作陷入无限循环（Infinite Loop in HashMap），CPU飙升。应建议使用ConcurrentHashMap替代HashMap，或在Java 8+中虽然不会死循环但仍有数据丢失风险，仍需使用线程安全容器。",
+      "scoring_rubric": "1. 准确识别HashMap并发操作的安全问题，并给出具体的分析依据和推理过程；2. 准确解释Java 7 HashMap链表环导致的CPU 100%，引用具体的技术原理或标准规范；3. 给出ConcurrentHashMap的修复方案，方案需具体可执行而非泛泛而谈；4. 具体区分Java 7和Java 8+中HashMap并发行为的差异。，避免笼统描述；"
+    },
+    {
+      "id": "53-017",
+      "prompt": "TypeScript编译通过但运行时报undefined错误。代码：interface User { name: string; address?: { city: string; }; } function getCity(user: User) { return user.address.city; } 编译无警告但运行时address为undefined时崩溃。请诊断。",
+      "sub_type": "optional_chaining_missing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出address字段标记为可选（?），但代码中直接访问address.city未做空值检查。TypeScript的类型检查不等于运行时安全，可选属性在运行时可能为undefined。应使用可选链user.address?.city或显式判断if(user.address)。",
+      "scoring_rubric": "1. 准确识别可选属性未做空值检查的问题，并给出具体的分析依据和推理过程；2. 准确解释TypeScript类型系统不等于运行时保证，引用具体的技术原理或标准规范；3. 给出可选链?.操作符的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到strictNullChecks编译选项的作用。，避免笼统描述；"
+    },
+    {
+      "id": "53-018",
+      "prompt": "Elasticsearch查询在数据量增长后从50ms变为5秒。查询：{\"query\": {\"bool\": {\"must\": [{\"match\": {\"title\": \"keyword\"}}, {\"range\": {\"date\": {\"gte\": \"2024-01-01\"}}}], \"filter\": [{\"term\": {\"status\": \"published\"}}]}}}。集群有3个节点，单索引5个分片。请诊断性能劣化原因。",
+      "sub_type": "elasticsearch_query_degradation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析可能的原因：match查询在大数据量下评分计算开销大、未使用filter上下文导致重复计算评分、分片数据不均匀导致热点、堆内存不足触发频繁GC。应建议将range和status条件移到filter上下文（跳过评分缓存结果）、检查分片均衡、增加堆内存或优化分片数量。",
+      "scoring_rubric": "1. 具体区分query上下文和filter上下文的性能差异，避免笼统描述；2. 准确识别评分计算不必要的性能浪费，并给出具体的分析依据和推理过程；3. 从多个维度分析分片均衡和堆内存对查询的影响，给出量化的对比数据或具体案例；4. 给出filter优化和分片调优的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-019",
+      "prompt": "Rust编译报错：error[E0382]: borrow of moved value。代码：let s1 = String::from(\"hello\"); let s2 = s1; println!(\"{}\", s1); 为什么s1不能再使用？请诊断。",
+      "sub_type": "rust_ownership_move",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Rust的所有权转移（move）语义，let s2 = s1将s1的所有权转移给s2，s1不再有效。应解释Rust的单一所有权规则防止双重释放。应建议使用s1.clone()进行深拷贝保留所有权，或使用&s1借用而不转移。",
+      "scoring_rubric": "1. 准确识别Rust所有权转移的编译错误，并给出具体的分析依据和推理过程；2. 准确解释move语义和单一所有权规则，引用具体的技术原理或标准规范；3. 给出clone()或引用借用的修复方案，方案需具体可执行而非泛泛而谈；4. 说明所有权机制防止内存安全问题的设计意图。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "53-020",
+      "prompt": "PHP应用在高并发下Session数据错乱，用户A看到了用户B的购物车内容。代码：session_start(); $_SESSION['cart'] = $cart_data; session没有配置锁定策略。请诊断。",
+      "sub_type": "php_session_race",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出PHP默认Session文件锁机制下同一用户的并发请求会串行化，但使用Redis/Memcached存储Session时默认不锁定，并发请求可读到中间状态。应建议使用Session锁（session_start时的lock参数）、将Session存储改为带锁的实现、或将购物车等高频写数据移出Session使用数据库存储。",
+      "scoring_rubric": "1. 准确识别Session并发写入的数据错乱问题，并给出具体的分析依据和推理过程；2. 准确解释PHP不同Session存储后端的锁定行为差异，引用具体的技术原理或标准规范；3. 给出Session锁或数据迁移的修复方案，方案需具体可执行而非泛泛而谈；4. 讨论Session数据设计的最佳实践。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "53-021",
+      "prompt": "Kubernetes Pod频繁OOMKilled但应用日志无异常。Pod配置：resources.limits.memory=256Mi，应用JVM参数-Xmx200m。容器内top显示Java进程RSS约300MB。请诊断为什么设置了200MB堆限制但RSS达到300MB。",
+      "sub_type": "jvm_memory_beyond_heap",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出JVM内存不仅包含堆（Heap），还包含Metaspace、线程栈、直接内存（Direct Buffer）、JIT代码缓存等堆外内存。200MB堆+Metaspace+线程栈+直接内存可轻松超过256Mi限制。应建议将limits.memory设为Xmx的1.5-2倍（如512Mi），使用-XX:MaxRAMPercentage替代固定Xmx值。",
+      "scoring_rubric": "1. 准确识别JVM堆外内存组成（Metaspace/栈/直接内存），并给出具体的分析依据和推理过程；2. 准确解释RSS远超Xmx的原因，引用具体的技术原理或标准规范；3. 给出合理的memory limits设置建议，方案需具体可执行而非泛泛而谈；4. 具体提到-XX:MaxRAMPercentage等容器感知的JVM参数。，避免笼统描述；"
+    },
+    {
+      "id": "53-022",
+      "prompt": "前端页面白屏，控制台无报错。代码：const App = React.lazy(() => import('./HeavyComponent')); function Page() { return <Suspense fallback={<div>Loading...</div>}> <App /> </Suspense>; }。开发环境正常但生产部署后白屏。请诊断。",
+      "sub_type": "dynamic_import_chunk_failure",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出动态import的chunk加载失败问题，生产环境的CDN/Nginx配置可能未正确返回JS文件的MIME类型或CORS头，导致chunk加载被浏览器拒绝。也可能是部署时旧版本chunk文件被清理，用户浏览器缓存了旧的入口文件引用了不存在的chunk。应建议检查网络请求、配置正确的静态资源路径和缓存策略。",
+      "scoring_rubric": "1. 准确识别动态import chunk加载失败的白屏问题，并给出具体的分析依据和推理过程；2. 从多个维度分析CDN/Nginx配置对chunk加载的影响，给出量化的对比数据或具体案例；3. 具体指出版本部署与缓存不一致的常见原因，避免笼统描述；4. 给出网络排查和缓存策略优化的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-023",
+      "prompt": "Go程序中goroutine数量持续增长直至OOM。代码：func handler(w http.ResponseWriter, r *http.Request) { ch := make(chan int); go func() { ch <- doSlowWork() }(); select { case v := <-ch: fmt.Fprintf(w, \"%d\", v); case <-time.After(1*time.Second): http.Error(w, \"timeout\", 504) } }。超时后goroutine仍在运行，请诊断。",
+      "sub_type": "goroutine_leak_timeout",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出超时后doSlowWork()的goroutine仍在运行且永远不会退出（因为ch是无缓冲channel，没有接收方），导致goroutine泄漏。应建议使用带context取消的方案，当请求超时时通过context.Cancel通知goroutine退出，或使用带缓冲的channel让goroutine可以发送后退出。",
+      "scoring_rubric": "1. 准确识别超时后goroutine无法退出的泄漏问题，并给出具体的分析依据和推理过程；2. 准确解释无缓冲channel在无接收方时的永久阻塞，引用具体的技术原理或标准规范；3. 给出context取消机制的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到goroutine泄漏的监控和检测方法。，避免笼统描述；"
+    },
+    {
+      "id": "53-024",
+      "prompt": "Python程序中使用multiprocessing.Pool处理任务，程序偶尔卡死不退出。代码：from multiprocessing import Pool; def process(item): if item == 'bad': raise RuntimeError('fatal'); return item * 2; pool = Pool(4); results = pool.map(process, items); pool.close(); pool.join()。当items中包含'bad'时程序偶尔卡死，请诊断。",
+      "sub_type": "multiprocessing_pool_hang",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出子进程抛出异常可能导致Pool内部状态异常，特别是当异常发生在某些特定时机时。应分析pool.close()后join()等待所有工作进程完成，但如果子进程异常退出且Pool未正确处理，join()可能永久等待。应建议使用pool.map的异常传播机制或改用concurrent.futures.ProcessPoolExecutor。",
+      "scoring_rubric": "1. 准确识别子进程异常导致Pool挂起的问题，并给出具体的分析依据和推理过程；2. 准确解释Pool内部进程管理的状态机，引用具体的技术原理或标准规范；3. 给出使用ProcessPoolExecutor或异常处理的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到设置超时和强制终止的兜底机制。，避免笼统描述；"
+    },
+    {
+      "id": "53-025",
+      "prompt": "Java应用在G1 GC下偶发长时间停顿（>5秒），GC日志显示'Humongous allocation'频繁出现。代码中有一个缓存存储序列化后的JSON字符串，单个值最大可达5MB。请诊断为什么GC停顿时间远超预期。",
+      "sub_type": "g1gc_humongous_allocation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出G1GC中大对象（Humongous Object，超过Region大小一半即0.5 Region）分配的特殊行为，大对象直接分配到专门的Humongous Region，不经过Young GC，频繁分配和回收会导致Region碎片化和Full GC。应建议减小单个缓存值大小（分片存储）、调整Region大小、或使用堆外缓存（如OffHeapCache）。",
+      "scoring_rubric": "1. 准确识别G1GC Humongous对象分配的特殊机制，并给出具体的分析依据和推理过程；2. 准确解释大对象导致的Region碎片化和GC停顿，引用具体的技术原理或标准规范；3. 给出减小对象大小或使用堆外缓存的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到Region大小调整和GC参数优化。，避免笼统描述；"
+    },
+    {
+      "id": "53-026",
+      "prompt": "Rust程序编译报错：error[E0499]: cannot borrow `v` as mutable more than once at a time。代码：let mut v = vec![1,2,3]; let first = &v[0]; v.push(4); println!(\"{}\", first); 为什么push会导致first失效？请诊断。",
+      "sub_type": "rust_borrow_checker_push",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Rust借用检查器的规则：v.push(4)需要可变借用v，而first持有v的不可变借用，两者不能同时存在。应解释push可能导致Vec重新分配内存，此时first指向的旧内存将悬空（dangling pointer）。应建议在push之前不再使用first，或使用索引而非引用。",
+      "scoring_rubric": "1. 准确识别Rust借用检查器的冲突，并给出具体的分析依据和推理过程；2. 准确解释Vec重新分配导致悬空引用的风险，引用具体的技术原理或标准规范；3. 给出先完成不可变借用再进行可变操作的修复方案，方案需具体可执行而非泛泛而谈；4. 说明Rust所有权系统防止内存安全问题的设计意图。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "53-027",
+      "prompt": "前端React应用中useEffect依赖数组导致无限请求。代码：function SearchResults({ query }) { const [results, setResults] = useState([]); useEffect(() => { fetchResults(query).then(setResults); }, [query, results]); return <div>{results.map(...)}</div>; } 每次请求完成后又触发新的请求。请诊断。",
+      "sub_type": "useeffect_dependency_loop",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出useEffect的依赖数组中包含results，每次setResults更新results后触发useEffect重新执行，形成无限循环。应分析依赖数组的作用是告诉React何时重新执行effect，results作为依赖会导致每次数据更新都重新请求。应建议从依赖数组中移除results，仅保留query作为依赖。",
+      "scoring_rubric": "1. 准确识别useEffect依赖数组导致的无限循环，并给出具体的分析依据和推理过程；2. 准确解释setState触发re-render和effect重新执行的机制，引用具体的技术原理或标准规范；3. 给出移除不必要依赖的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到useCallback/useMemo等避免不必要依赖的技巧。，避免笼统描述；"
+    },
+    {
+      "id": "53-028",
+      "prompt": "微服务间调用偶发Connection reset by peer错误。代码中HTTP客户端配置：timeout=5s，连接池maxsize=10，未配置keep-alive和retry。高并发时错误率从0.1%飙升到5%。请诊断根因。",
+      "sub_type": "http_connection_pool_exhaustion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出连接池耗尽问题：maxsize=10在高并发时不够用，超出的请求需等待或创建新连接。未配置keep-alive导致每次请求都重新建立TCP连接，服务端可能在连接空闲时主动关闭导致客户端写入已关闭连接。应建议增大连接池、启用keep-alive、配置retry和连接健康检查。",
+      "scoring_rubric": "1. 准确识别连接池耗尽导致的连接拒绝问题，并给出具体的分析依据和推理过程；2. 从多个维度分析缺少keep-alive导致的频繁建连和连接失效，给出量化的对比数据或具体案例；3. 准确解释服务端主动关闭连接与客户端写入的时序冲突，引用具体的技术原理或标准规范；4. 给出连接池调优和retry配置的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-029",
+      "prompt": "C++程序在特定输入下崩溃，core dump显示double free or corruption。代码：std::vector<std::string> items; for(auto& s : items) { if(s.empty()) items.erase(items.begin() + (&s - &items[0])); } 请诊断崩溃原因。",
+      "sub_type": "iterator_invalidation_erase",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出在range-based for循环中erase导致迭代器失效，erase后&s指向的内存可能已被移动或释放，继续遍历会导致未定义行为（UB）。应解释std::vector的erase会导致后续元素前移，所有指向被移除元素及之后的迭代器都失效。应建议使用erase-remove惯用法或收集待删除索引后反向删除。",
+      "scoring_rubric": "1. 准确识别循环中erase导致的迭代器失效，并给出具体的分析依据和推理过程；2. 准确解释vector内存移动导致的未定义行为，引用具体的技术原理或标准规范；3. 给出erase-remove idiom或反向删除的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到其他容器（如list）的erase不影响其他迭代器的特性。，避免笼统描述；"
+    },
+    {
+      "id": "53-030",
+      "prompt": "Python异步程序中aiohttp请求偶尔超时但服务端日志显示请求已正常处理。代码：async def fetch(url): session = aiohttp.ClientSession(); resp = await session.get(url, timeout=10); data = await resp.text(); return data。每次请求都创建新的ClientSession。请诊断。",
+      "sub_type": "aiohttp_session_not_closed",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出每次请求都创建新的ClientSession但从未关闭，导致底层TCP连接和SSL资源泄漏。随着连接数增长，文件描述符耗尽或连接池溢出，新请求超时。应建议使用async with aiohttp.ClientSession()作为上下文管理器确保资源释放，或复用全局Session。",
+      "scoring_rubric": "1. 准确识别ClientSession未关闭导致的连接资源泄漏，并给出具体的分析依据和推理过程；2. 准确解释文件描述符耗尽与请求超时的因果关系，引用具体的技术原理或标准规范；3. 给出使用上下文管理器或复用Session的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到aiohttp的连接池配置和资源监控。，避免笼统描述；"
+    },
+    {
+      "id": "53-031",
+      "prompt": "Kubernetes Pod间歇性CrashLoopBackOff，kubectl logs显示应用正常启动但liveness probe失败。Pod配置：livenessProbe: httpGet: path: /health, port: 8080; initialDelaySeconds: 5; periodSeconds: 10。应用实际需要15秒才能启动完成。请诊断。",
+      "sub_type": "k8s_liveness_probe_timing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出liveness probe的initialDelaySeconds=5小于应用启动时间15秒，导致应用还在启动时就被探针判定为失败并重启。应分析liveness probe失败会触发Pod重启，重启后又在5秒内被探测，形成CrashLoopBackOff循环。应建议增大initialDelaySeconds到20-30秒，或使用startupProbe单独处理启动阶段。",
+      "scoring_rubric": "1. 准确识别probe时序与应用启动时间不匹配的问题，并给出具体的分析依据和推理过程；2. 准确解释CrashLoopBackOff的形成机制，引用具体的技术原理或标准规范；3. 给出调整initialDelaySeconds或使用startupProbe的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到readinessProbe与livenessProbe的区别和配置策略。，避免笼统描述；"
+    },
+    {
+      "id": "53-032",
+      "prompt": "Spring Boot应用在Kubernetes中运行一段时间后响应变慢，jstack显示大量线程阻塞在logback的AppenderBase.doAppend()上。日志配置使用了AsyncAppender但队列大小设置为10，且overflowDiscardingThreshold=0。请诊断为什么异步日志反而导致了线程阻塞。",
+      "sub_type": "async_logging_queue_contention",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出AsyncAppender队列大小仅为10且不丢弃溢出日志（overflowDiscardingThreshold=0），当日志产生速度超过消费速度时队列满，后续日志写入会阻塞调用线程直到队列有空位。应分析大量业务线程同时被日志阻塞导致请求处理变慢。应建议增大队列容量、设置合理的丢弃阈值、或使用Log4j2的AsyncLogger替代。",
+      "scoring_rubric": "1. 准确识别异步日志队列满导致的线程阻塞，并给出具体的分析依据和推理过程；2. 准确解释overflowDiscardingThreshold=0的阻塞语义，引用具体的技术原理或标准规范；3. 给出增大队列和设置丢弃阈值的修复方案，方案需具体可执行而非泛泛而谈；4. 具体对比Logback AsyncAppender和Log4j2 AsyncLogger的性能差异。，避免笼统描述；"
+    },
+    {
+      "id": "53-033",
+      "prompt": "Python程序中使用defaultdict(list)作为缓存，程序运行几天后内存持续增长。代码：cache = defaultdict(list); def add_data(key, value): cache[key].append(value)。数据只增不减，请诊断内存增长原因。",
+      "sub_type": "unbounded_cache_growth",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出defaultdict无限增长问题，key不断新增且append只增不减导致内存持续膨胀。应建议使用LRU缓存（functools.lru_cache或cachetools.TTLCache）替代，或设置缓存大小上限和过期策略，定期清理不再使用的key。",
+      "scoring_rubric": "1. 准确识别缓存无上限导致的内存增长，并给出具体的分析依据和推理过程；2. 准确解释defaultdict只增不减的特性，引用具体的技术原理或标准规范；3. 给出LRU缓存或TTL缓存的修复方案，方案需具体可执行而非泛泛而谈；4. 设计缓存大小限制和过期清理机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "53-034",
+      "prompt": "前端React应用中useState更新后获取的值是旧值。代码：const [count, setCount] = useState(0); function handleClick() { setCount(count + 1); console.log(count); }。点击按钮后console输出0而非1，请诊断。",
+      "sub_type": "stale_closure_state",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出闭包捕获了渲染时的count值（0），setCount触发重新渲染但当前闭包中的count仍是旧值。应解释React的状态更新是异步的，当前函数执行上下文中的变量不会被更新。应建议使用函数式更新setCount(prev => prev + 1)或使用useRef保存最新值。",
+      "scoring_rubric": "1. 准确识别闭包捕获旧状态值的问题，并给出具体的分析依据和推理过程；2. 准确解释React状态更新的异步机制，引用具体的技术原理或标准规范；3. 给出函数式更新setCount(prev => prev+1)的修复方案，方案需具体可执行而非泛泛而谈；4. 具体提到useRef作为替代方案。，避免笼统描述；"
+    },
+    {
+      "id": "53-035",
+      "prompt": "Java应用在生产环境偶发ClassCastException，但开发环境从未复现。代码：List list = new ArrayList(); list.add(\"hello\"); Integer num = (Integer) list.get(0); 使用了原始类型List而非List<String>。请诊断。",
+      "sub_type": "raw_type_class_cast",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出使用原始类型List（无泛型参数）导致编译器无法检查类型安全，运行时强制转换失败。应解释原始类型绕过了泛型的类型擦除检查，开发环境可能因测试数据巧合未触发。应建议始终使用泛型参数List<String>、开启编译器的原始类型警告、使用-Weffc等严格检查。",
+      "scoring_rubric": "1. 准确识别原始类型导致的类型安全缺失，并给出具体的分析依据和推理过程；2. 准确解释泛型类型擦除和运行时检查机制，引用具体的技术原理或标准规范；3. 给出使用泛型参数的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议编译器警告配置和代码规范。，避免笼统描述；"
+    },
+    {
+      "id": "53-036",
+      "prompt": "Go程序中defer在循环中导致资源延迟释放。代码：for _, f := range files { fh, _ := os.Open(f); defer fh.Close(); process(fh) }。处理1000个文件后fd耗尽，请诊断。",
+      "sub_type": "defer_in_loop_fd_exhaustion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出defer在函数返回时才执行而非循环体结束时，循环中累积的defer导致所有文件句柄在函数返回前都不会关闭，1000个文件耗尽fd限制。应建议将循环体提取为独立函数（defer在函数返回时释放）、或使用fh.Close()显式关闭而非defer、或使用os.Open后在循环末尾立即Close。",
+      "scoring_rubric": "1. 准确识别defer在循环中的延迟释放问题，并给出具体的分析依据和推理过程；2. 准确解释defer绑定到函数而非代码块的机制，引用具体的技术原理或标准规范；3. 给出提取子函数或显式关闭的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论fd耗尽的系统限制和监控方法。，避免笼统描述；"
+    },
+    {
+      "id": "53-037",
+      "prompt": "TypeScript代码编译通过但运行时出现undefined is not a function。代码：interface Logger { log(msg: string): void; } const logger: Logger = { log: (msg) => console.log(msg) }; const fn = logger['warn']; fn('test'); 请诊断。",
+      "sub_type": "typescript_interface_excess_property",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出TypeScript接口只定义了log方法但代码通过字符串索引访问了warn方法，TypeScript的类型检查不覆盖动态属性访问。应解释接口类型只保证已定义属性的存在，不阻止访问未定义属性。应建议使用严格索引签名、添加warn到接口定义、或使用Map替代对象存储方法。",
+      "scoring_rubric": "1. 准确识别动态属性访问绕过类型检查的问题，并给出具体的分析依据和推理过程；2. 准确解释TypeScript接口类型检查的边界，引用具体的技术原理或标准规范；3. 给出添加接口方法或使用Map的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论noUncheckedIndexedAccess编译选项。，避免笼统描述；"
+    },
+    {
+      "id": "53-038",
+      "prompt": "Python多进程共享变量未生效。代码：counter = 0; def increment(): global counter; counter += 1; procs = [Process(target=increment) for _ in range(10)]; 启动并join后print(counter)输出0。请诊断。",
+      "sub_type": "multiprocessing_global_not_shared",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出multiprocessing.Process在独立进程中运行，每个进程有独立的内存空间，global counter的修改不会反映到主进程。应解释multiprocessing与threading的区别：进程间内存隔离。应建议使用multiprocessing.Value或multiprocessing.Manager共享状态、或使用multiprocessing.Pool返回结果。",
+      "scoring_rubric": "1. 准确识别进程间内存隔离导致的共享变量失效，并给出具体的分析依据和推理过程；2. 准确解释multiprocessing与threading的本质区别，引用具体的技术原理或标准规范；3. 给出multiprocessing.Value或Manager的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论进程间通信的多种机制。，避免笼统描述；"
+    },
+    {
+      "id": "53-039",
+      "prompt": "Node.js应用中Promise链的错误被吞掉。代码：fetchUser(id).then(user => fetchOrders(user.id)).then(orders => processOrders(orders)).catch(err => logger.error(err)); 偶尔orders为空导致processOrders抛出异常但catch未触发。请诊断。",
+      "sub_type": "promise_chain_error_swallowed",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出then链中某个环节返回了undefined而非抛出异常，导致后续then接收到undefined但未进入catch。应分析如果fetchOrders返回空数组而非reject，processOrders内部的异常可能被其自身的try-catch吞掉。应建议在每个then中添加参数校验、使用async/await替代Promise链以便更清晰地追踪错误。",
+      "scoring_rubric": "1. 准确识别Promise链中异常被内部吞掉的问题，并给出具体的分析依据和推理过程；2. 从多个维度分析then返回值与catch触发条件的关系，给出量化的对比数据或具体案例；3. 给出参数校验和async/await的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论Promise链中错误传播的最佳实践。，避免笼统描述；"
+    },
+    {
+      "id": "53-040",
+      "prompt": "C++程序在特定平台上输出不同的浮点数结果。代码：double a = 0.1 + 0.2; if (a == 0.3) printf(\"equal\"); else printf(\"not equal: %f\", a); x86上输出not equal但ARM上可能输出equal。请诊断跨平台差异。",
+      "sub_type": "floating_point_cross_platform",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出IEEE 754浮点精度问题和x86扩展精度（80位）的差异，x86的FPU使用80位中间结果而ARM使用64位，导致舍入行为不同。应解释0.1+0.2在二进制浮点中无法精确表示，不同平台的舍入模式产生不同结果。应建议使用epsilon比较（fabs(a-0.3) < 1e-9）、使用decimal库处理精确计算。",
+      "scoring_rubric": "1. 准确识别IEEE 754浮点精度问题，并给出具体的分析依据和推理过程；2. 准确解释x86扩展精度与ARM标准精度的差异，引用具体的技术原理或标准规范；3. 给出epsilon比较或decimal库的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论浮点比较的最佳实践。，避免笼统描述；"
+    },
+    {
+      "id": "53-041",
+      "prompt": "Kubernetes中Pod间歇性无法解析DNS。kubectl exec进Pod执行nslookup返回connection timed out，但CoreDNS Pod正常运行。网络策略配置了ingress规则但未配置egress。请诊断DNS解析失败原因。",
+      "sub_type": "k8s_network_policy_dns",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出NetworkPolicy仅配置了ingress规则但未显式允许egress流量，默认行为取决于CNI插件（如Calico默认拒绝所有egress）。DNS查询需要Pod到CoreDNS的出站UDP 53端口访问被策略阻断。应建议在NetworkPolicy中添加egress规则允许到kube-system命名空间CoreDNS的53端口流量。",
+      "scoring_rubric": "1. 准确识别NetworkPolicy egress规则缺失导致的DNS阻断，并给出具体的分析依据和推理过程；2. 准确解释CNI插件对默认策略行为的影响，引用具体的技术原理或标准规范；3. 给出添加egress规则允许DNS流量的修复方案，方案需具体可执行而非泛泛而谈；4. 讨论NetworkPolicy的ingress/egress对称性设计。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "53-042",
+      "prompt": "Python asyncio程序中CPU密集任务阻塞事件循环。代码：async def handle(req): return heavy_computation(); await asyncio.gather(*[handle(r) for r in reqs])。多个请求串行而非并发，请诊断。",
+      "sub_type": "asyncio_cpu_bound_blocking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出heavy_computation()是CPU密集型同步函数，在协程中直接调用会阻塞事件循环，导致其他协程无法并发执行。应解释asyncio的事件循环是单线程的，CPU密集任务会占据GIL阻止其他协程调度。应建议使用asyncio.to_thread()或loop.run_in_executor()将CPU密集任务移到线程池、或使用multiprocessing.Pool处理。",
+      "scoring_rubric": "1. 准确识别CPU密集任务阻塞asyncio事件循环的问题，并给出具体的分析依据和推理过程；2. 准确解释单线程事件循环和GIL的调度机制，引用具体的技术原理或标准规范；3. 给出run_in_executor或to_thread的修复方案，方案需具体可执行而非泛泛而谈；4. 具体区分IO密集和CPU密集任务的并发策略。，避免笼统描述；"
+    },
+    {
+      "id": "53-043",
+      "prompt": "Go程序中context.WithTimeout设置5秒超时，但HTTP请求偶尔在10秒后才返回。代码：ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second); defer cancel(); resp, err := http.DefaultClient.Do(req.WithContext(ctx))。请诊断超时未生效的原因。",
+      "sub_type": "context_timeout_not_propagated",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出http.DefaultClient未设置Transport超时配置，context.WithTimeout仅控制请求的上下文取消但不中断底层TCP连接。应分析HTTP客户端有多个超时层次（Transport.TLSHandshakeTimeout、ResponseHeaderTimeout、整体Timeout），context取消需要服务端配合关闭连接。应建议使用http.Client{Timeout: 5*time.Second}或配置Transport的各层超时。",
+      "scoring_rubric": "1. 准确识别context超时与HTTP客户端超时的区别，并给出具体的分析依据和推理过程；2. 准确解释DefaultClient默认无超时配置的问题，引用具体的技术原理或标准规范；3. 给出HTTP客户端多层超时配置的修复方案，方案需具体可执行而非泛泛而谈；4. 说明context取消的底层实现机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "53-044",
+      "prompt": "Python程序中使用try-except-finally，finally块中的return覆盖了except块中的异常。代码：def divide(a, b): try: return a/b; except ZeroDivisionError: return 'error'; finally: return 0。调用divide(10, 0)返回0而非'error'。请诊断。",
+      "sub_type": "finally_return_overrides_exception",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出finally块中的return会覆盖try和except块中的返回值，这是Python的语义规定：finally中的return/expression总会执行并覆盖之前的返回。应解释finally的设计初衷是资源清理而非控制流，return放在finally中是反模式。应建议将finally仅用于资源释放（如关闭文件），控制逻辑放在try/except中。",
+      "scoring_rubric": "1. 准确识别finally中return覆盖之前返回值的行为，并给出具体的分析依据和推理过程；2. 准确解释Python中finally的执行语义和优先级，引用具体的技术原理或标准规范；3. 具体指出在finally中return是反模式，避免笼统描述；4. 给出正确的try-except-finally结构建议。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-045",
+      "prompt": "Node.js应用在生产环境偶发ENFILE: too many open files错误。代码中创建大量临时文件但使用fs.unlink删除，未在finally中关闭文件描述符。请诊断文件描述符泄漏的根因。",
+      "sub_type": "file_descriptor_leak",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出fs.open打开文件后未在所有代码路径中调用fs.close，unlink仅删除目录项但不关闭已打开的fd。应分析异常路径中fd更易泄漏（抛出异常跳过close）。应建议使用fs.promises.open的上下文管理模式、在finally中确保close、或使用临时文件库自动管理生命周期。",
+      "scoring_rubric": "1. 准确识别unlink不等于close的fd泄漏问题，并给出具体的分析依据和推理过程；2. 从多个维度分析异常路径中的fd泄漏场景，给出量化的对比数据或具体案例；3. 准确解释操作系统fd限制和ENFILE错误含义，引用具体的技术原理或标准规范；4. 给出使用上下文管理模式的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "53-046",
+      "prompt": "Kubernetes集群中一个Deployment的Pod数量从3个突增到50个，但CPU和内存使用率都很低。HPA配置为 cpu utilization: 50, minReplicas: 3, maxReplicas: 50。请诊断HPA为何不断扩容。",
+      "sub_type": "hpa_metric_miscalibration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出HPA的目标CPU利用率设置过低（50%），如果Pod的requests.cpu设置过小而实际使用量略高于50%就会触发扩容。应分析metrics-server采集的精度问题（默认30秒窗口内抖动可触发扩容）。应建议增大目标利用率到70-80%、调整Pod的requests.cpu到合理值、设置behavior.scaleUp.stabilizationWindowSeconds减少抖动。",
+      "scoring_rubric": "1. 准确识别HPA目标利用率与requests设置不匹配的问题，并给出具体的分析依据和推理过程；2. 从多个维度分析metrics采集精度导致的扩容抖动，给出量化的对比数据或具体案例；3. 给出requests调整和利用率目标的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议stabilizationWindow减少扩容抖动。，避免笼统描述；"
+    },
+    {
+      "id": "53-047",
+      "prompt": "TypeScript项目中使用了const enum，编译后的JavaScript代码在运行时报TypeError: Cannot read property 'xxx' of undefined。代码：const enum Status { Active = 1, Inactive = 2 } const s = Status.Active; 跨模块使用时出错。请诊断。",
+      "sub_type": "const_enum_cross_module",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出const enum在TypeScript编译时会内联替换值，但跨模块（isolatedModules或Babel编译时）const enum不被支持，运行时访问Status.Active返回undefined。应分析这是TypeScript特有行为，Babel和esbuild不完整支持const enum。应建议改用常规enum或字面量联合类型（type Status = 1 | 2），在tsconfig中开启isolatedModules检测此问题。",
+      "scoring_rubric": "1. 准确识别const enum的内联替换和跨模块兼容性问题，并给出具体的分析依据和推理过程；2. 准确解释Babel/esbuild对const enum的支持差异，引用具体的技术原理或标准规范；3. 给出常规enum或联合类型的替代方案，方案需具体可执行而非泛泛而谈；4. 准确说明isolatedModules配置的作用。，引用具体的技术原理或标准规范；"
+    },
+    {
+      "id": "53-048",
+      "prompt": "Java应用在升级到Spring Boot 3.x后，所有数据库写操作报错TransactionRequiredException: no transaction is in progress。代码中使用@Transactional注解，升级前正常。请诊断。",
+      "sub_type": "spring_boot_upgrade_transaction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Spring Boot 3.x基于Jakarta EE 9+，javax.persistence包迁移到jakarta.persistence。如果代码中混用了javax和jakarta注解，Spring的事务管理器可能无法识别旧的@Transactional注解。应分析包名迁移导致的注解不匹配问题。应建议全局替换javax为jakarta、检查第三方库的Jakarta兼容版本、使用Spring Boot迁移工具自动处理。",
+      "scoring_rubric": "1. 能识别Spring Boot 3.x的Jakarta EE迁移变更；2. 能解释javax到jakarta包名迁移对事务注解的影响；3. 能给出全局包名替换和依赖检查的修复方案；4. 能提到Spring Boot迁移工具的使用。"
+    },
+    {
+      "id": "53-049",
+      "prompt": "Rust程序编译报错：error[E0716]: temporary value dropped while borrowed。代码：let r: &String = &String::from(\"hello\"); println!(\"{}\", r); 为什么创建临时String并借用会报错？请诊断。",
+      "sub_type": "rust_temporary_lifetime",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出String::from(\"hello\")创建的临时值在语句结束时被释放，但r持有了对该临时值的借用，导致悬垂引用。应解释Rust的临时值生命周期规则：临时值在所属语句末尾drop。应建议将String绑定到变量延长生命周期（let s = String::from(\"hello\"); let r = &s;），或直接使用字符串字面量&str。",
+      "scoring_rubric": "1. 准确识别临时值生命周期与借用生命周期的冲突，并给出具体的分析依据和推理过程；2. 准确解释Rust临时值在语句末尾drop的规则，引用具体的技术原理或标准规范；3. 给出绑定变量延长生命周期的修复方案，方案需具体可执行而非泛泛而谈；4. 准确说明&str与&String的区别和适用场景。，引用具体的技术原理或标准规范；"
+    },
+    {
+      "id": "53-050",
+      "prompt": "前端React应用中useRef保存的WebSocket实例在StrictMode下创建了两个连接。代码：const wsRef = useRef(new WebSocket('ws://server')); useEffect(() => { wsRef.current.onmessage = handler; }, []); 开发环境看到两条连接。请诊断。",
+      "sub_type": "react_strict_mode_double_mount",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出React 18的StrictMode在开发模式下会故意双挂载组件检测副作用，useRef的初始值在每次渲染时都会执行new WebSocket。应分析useRef(initialValue)的初始值仅在首次渲染时使用，但StrictMode的双挂载导致组件卸载再挂载。应建议将WebSocket创建移到useEffect内部、在cleanup中关闭连接、使用懒初始化函数。",
+      "scoring_rubric": "1. 准确识别React 18 StrictMode的双挂载行为，并给出具体的分析依据和推理过程；2. 准确解释useRef初始值执行时机与StrictMode的关系，引用具体的技术原理或标准规范；3. 给出将副作用移入useEffect的修复方案，方案需具体可执行而非泛泛而谈；4. 讨论StrictMode检测副作用问题的设计意图。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "53-051",
+      "prompt": "Docker容器内应用偶尔报错getaddrinfo ENOTFOUND，但宿主机DNS正常。容器使用默认bridge网络，/etc/resolv.conf配置了nameserver 127.0.0.11。请诊断DNS解析失败的原因。",
+      "sub_type": "docker_dns_resolution_failure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Docker内置DNS服务器（127.0.0.11）的并发请求限制：Docker的DNS代理在高并发DNS查询时可能丢失请求导致ENOTFOUND。应分析容器内大量服务同时启动发起DNS查询超出Docker DNS代理处理能力。应建议使用host网络模式、配置外部DNS服务器（如8.8.8.8）、或在应用层添加DNS缓存和重试机制。",
+      "scoring_rubric": "1. 准确识别Docker内置DNS代理的并发限制问题，并给出具体的分析依据和推理过程；2. 从多个维度分析容器启动风暴导致的DNS查询洪峰，给出量化的对比数据或具体案例；3. 给出使用外部DNS或应用层DNS缓存的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论Docker不同网络模式的DNS行为差异。，避免笼统描述；"
+    },
+    {
+      "id": "53-052",
+      "prompt": "Python程序使用signal.SIGALRM实现超时控制，但在多线程环境中偶尔导致主线程意外退出。代码：signal.signal(signal.SIGALRM, timeout_handler); signal.alarm(5); result = do_work(); signal.alarm(0)。请诊断线程安全问题。",
+      "sub_type": "signal_handler_thread_safety",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Python的signal.signal只能在主线程中调用，且信号处理也只在主线程中执行。在多线程环境中SIGALRM信号可能中断非目标线程的工作，且signal.alarm(0)取消定时器时如果工作已完成但signal已经触发会导致意外的信号处理。应建议使用threading.Timer或asyncio.wait_for替代signal实现超时控制。",
+      "scoring_rubric": "1. 准确识别signal只能在主线程使用的限制，并给出具体的分析依据和推理过程；2. 从多个维度分析多线程中信号中断的不确定性，给出量化的对比数据或具体案例；3. 给出threading.Timer或asyncio.wait_for的替代方案，方案需具体可执行而非泛泛而谈；4. 准确说明信号处理与线程调度的交互行为。，引用具体的技术原理或标准规范；"
+    }
+  ]
+}

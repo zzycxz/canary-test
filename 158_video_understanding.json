@@ -1,0 +1,547 @@
+{
+  "capability": "video_understanding",
+  "label": "视频理解能力",
+  "total": 54,
+  "cases": [
+    {
+      "prompt": "描述视频中智能手机产品介绍的场景，包括出现的元素和文字。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "scene_description",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应详细描述视频中的场景，如产品展示、参数显示、人物互动等。",
+      "scoring_rubric": "描述是否具体、准确，涵盖主要视觉和文字元素。",
+      "id": "158-001"
+    },
+    {
+      "prompt": "识别并转录视频中出现的所有文字信息，包括参数和价格。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "text_in_video",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确识别并转录视频中的所有文字，包括数字、符号和多语言内容。",
+      "scoring_rubric": "转录是否完整、正确，无遗漏或错误。",
+      "id": "158-002"
+    },
+    {
+      "prompt": "按视频中展示的顺序，描述番茄炒鸡蛋的烹饪步骤。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应按正确顺序列出所有6个烹饪步骤，并简要描述每个步骤。",
+      "scoring_rubric": "步骤顺序是否正确，描述是否清晰、完整。",
+      "id": "158-003"
+    },
+    {
+      "prompt": "根据视频内容，经济新闻中提到了哪个国家的GDP增长？",
+      "video": "videos/news_report.mp4",
+      "sub_type": "question_answering",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应基于视频内容准确回答问题，提供具体国家名称。",
+      "scoring_rubric": "答案是否正确、相关，基于视频证据。",
+      "id": "158-004"
+    },
+    {
+      "prompt": "分析这个新闻播报视频的整体情感基调和风格定位。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "sentiment_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应分析视频的情感（如中性、积极、消极）和风格（如正式、娱乐），并基于内容解释。",
+      "scoring_rubric": "分析是否合理、深入，基于视频中的语言和内容。",
+      "id": "158-005"
+    },
+    {
+      "prompt": "识别视频中出现的智能手机品牌、型号和主要功能。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "object_recognition",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确识别产品品牌、型号，并描述关键功能。",
+      "scoring_rubric": "识别是否准确、详细，与视频内容一致。",
+      "id": "158-006"
+    },
+    {
+      "prompt": "请简要总结这个视频的核心内容，它主要介绍了什么？",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "video_summary",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型能够识别视频是关于一款智能手机的介绍，并概括其主要卖点（如性能、摄像头、价格等）。",
+      "scoring_rubric": "1. 正确识别视频主题为智能手机产品介绍。 2. 概括出视频中提到的至少2-3个关键信息点（如处理器、摄像头、价格范围）。",
+      "id": "158-007"
+    },
+    {
+      "prompt": "详细描述视频开头和结尾的场景，包括出现的文字、背景和主要物体。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "scene_description",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能够区分并描述视频的开场（新闻演播室/片头）和结尾场景，准确识别演播室背景、新闻主播、以及屏幕下方滚动的字幕条或台标。",
+      "scoring_rubric": "1. 准确描述视频开头场景（如演播室、新闻主播、背景屏幕内容）。 2. 准确描述视频结尾场景（如主播总结、片尾动画或logo）。 3. 提及场景中识别到的文字元素（如新闻标题、频道名）。",
+      "id": "158-008"
+    },
+    {
+      "prompt": "识别并列出视频中展示的所有菜谱步骤，以及每个步骤提到的关键厨具或食材。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "text_in_video",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能够识别视频中叠加的步骤编号和文字说明，并关联到对应的操作画面，提取出如“打鸡蛋”、“切番茄”、“热锅”等步骤和相关的“碗”、“刀”、“锅”等物体。",
+      "scoring_rubric": "1. 正确识别出视频中的步骤文字（如Step 1, 2...）。 2. 将步骤文字与视频中展示的实际操作动作正确对应。 3. 列出步骤中提到或画面中出现的关键食材（番茄、鸡蛋）和厨具（锅、铲、碗）。",
+      "id": "158-009"
+    },
+    {
+      "prompt": "这个柱状图视频中，1月、3月、5月的销售额分别是多少万元？环比增长率最高的是哪个月份？",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "data_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型能够从动态图表中准确提取指定月份的销售额数值（如1月300万，3月350万，5月420万），并计算或识别出环比增长率最高的月份。",
+      "scoring_rubric": "1. 准确提取出1月、3月、5月的销售额具体数值（单位：万元）。 2. 正确判断或计算出环比增长率最高的月份（如从4月到5月）。",
+      "id": "158-010"
+    },
+    {
+      "prompt": "请按顺序，用简洁的语言描述视频中演示的“番茄炒鸡蛋”的完整烹饪流程。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能够按照视频展示的时间顺序，提取并组织成一个连贯的步骤列表，如：1. 打散鸡蛋；2. 切番茄；3. 热油炒蛋；4. 炒番茄；5. 混合翻炒；6. 出锅。",
+      "scoring_rubric": "1. 提取出的步骤顺序与视频演示完全一致。 2. 描述清晰、无重大遗漏（覆盖主要的6个步骤）。 3. 步骤描述准确反映了视频中的动作（如“炒”、“切”、“打散”）。",
+      "id": "158-011"
+    },
+    {
+      "prompt": "这款手机的最高配置版本售价是多少？它的摄像头像素参数是多少？",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "question_answering",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型能够从视频旁白或字幕中定位并提取关于手机特定配置（如最高配）的价格信息，以及摄像头模组的具体像素参数。",
+      "scoring_rubric": "1. 正确回答最高配置版本的具体售价（如5999元）。 2. 正确回答摄像头的具体参数（如“5000万像素主摄+800万超广角”）。",
+      "id": "158-012"
+    },
+    {
+      "prompt": "这段新闻播报的整体基调是严肃正式的还是轻松活泼的？它试图向观众传递怎样的信息氛围？",
+      "video": "videos/news_report.mp4",
+      "sub_type": "sentiment_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能够通过分析主播的语调、用词、背景音乐以及新闻内容的组合，判断出视频的整体情感基调（如权威、客观、严肃），并分析其风格定位（如综合性晚间新闻）。",
+      "scoring_rubric": "1. 正确判断视频的情感基调（严肃/正式）。 2. 分析出视频的风格定位（如权威新闻播报）。 3. 说明判断依据（如主播语调平稳、内容涵盖硬新闻、无娱乐化特效）。",
+      "id": "158-013"
+    },
+    {
+      "prompt": "视频中出现的主要品牌logo是什么？识别画面中展示的智能手机的外观设计特点（如颜色、摄像头布局）。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "object_recognition",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型能够识别视频中反复出现的品牌标识（如“中国移动 九天”），并能从视频画面中描述出手机的主要外观特征，如机身颜色、后置摄像头的排列形状。",
+      "scoring_rubric": "1. 准确识别并指出视频中的主要品牌logo。 2. 描述出手机的1-2个关键外观特征（如“黑色机身”、“矩形摄像头模组”）。",
+      "id": "158-014"
+    },
+    {
+      "prompt": "视频中提到的‘A15仿生芯片’主要用在了这款手机的哪些方面？价格从多少元起？",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "data_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能够从视频解说中分离出两个独立的信息点：1. 芯片（A15）的应用场景（如“驱动强大的图形性能”、“支持高级摄影功能”）。2. 手机的起售价格（如“4999元起”）。",
+      "scoring_rubric": "1. 正确提取芯片应用的至少一个具体方面（性能、摄影等）。 2. 准确提取手机的起始价格。",
+      "id": "158-015"
+    },
+    {
+      "prompt": "请分析，这段烹饪视频最可能的目标观众是谁？它采用了怎样的风格来吸引观众？",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "sentiment_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要综合分析视频的节奏（快剪）、旁白风格（轻松）、背景音乐（轻快）以及内容（家常菜），推断其目标观众可能是烹饪新手或寻求快手菜谱的家庭用户，风格是活泼、亲切、实用的。",
+      "scoring_rubric": "1. 基于视频风格（非专业、快节奏）合理推测目标观众群体。 2. 分析出视频采用的吸引观众的风格特点（如使用特写镜头、欢快音乐、简洁步骤）。",
+      "id": "158-016"
+    },
+    {
+      "prompt": "视频开头画面的左上角有什么文字标识？视频中新闻提要部分的背景音乐是怎样的？",
+      "video": "videos/news_report.mp4",
+      "sub_type": "scene_description",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型能够精准定位并识别视频帧特定位置（左上角）的文字（如频道名称），并能感知和描述音频特征（如新闻提要背景音乐的节奏、情绪，通常是急促、有悬念感的）。",
+      "scoring_rubric": "1. 准确识别视频左上角的文字内容。 2. 正确描述新闻提要背景音乐的听觉特征（如“节奏紧凑”、“有冲击力”）。",
+      "id": "158-017"
+    },
+    {
+      "prompt": "根据图表动画，哪个月的销售额突破了400万元？全年销售额大致是多少？",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "question_answering",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要先通过数据提取找到突破400万的月份（如5月），然后对上半年各月数据进行心算求和，得出全年（上半年）总销售额的近似值。",
+      "scoring_rubric": "1. 正确指出销售额突破400万的月份。 2. 对上半年总销售额的估算误差在合理范围内（如正负10%）。",
+      "id": "158-018"
+    },
+    {
+      "prompt": "在这个智能手机介绍视频中，反复出现的品牌标识是什么？视频结尾的促销标语是什么？",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "object_recognition",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要跨视频片段识别反复出现的相同logo，并能在视频结尾画面中定位并读取促销标语（如“限时优惠”、“立即抢购”等）。",
+      "scoring_rubric": "1. 识别出视频中出现的核心品牌标识（与品牌一致）。 2. 准确提取视频结尾出现的促销类标语文字。",
+      "id": "158-019"
+    },
+    {
+      "prompt": "请先描述这个柱状图的动画展示方式，然后告诉我，从1月到6月，销售额的整体趋势是上升、下降还是波动？",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能够描述动画的呈现逻辑（如“柱子依次从低到高生长”、“对应月份标签亮起”），并基于所有月份的数据点，分析出整体的趋势（本例为持续上升）。",
+      "scoring_rubric": "1. 描述出图表是“动态逐月展示”的动画形式。 2. 正确判断出从1月到6月销售额整体呈上升趋势。",
+      "id": "158-020"
+    },
+    {
+      "prompt": "视频中6月份的销售额是多少万元？与去年同期相比，销售额是增长还是下降？",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "data_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "从柱状图动画中准确定位并提取6月份的销售额数值，并基于图表信息判断同比变化（增长/下降），给出具体数据或定性结论。",
+      "scoring_rubric": "1. 数值提取准确性；2. 同比变化判断正确性；3. 回答是否清晰、直接。",
+      "id": "158-021"
+    },
+    {
+      "prompt": "请用不超过100字概括这个视频的核心信息，并提炼出图表中展示的最重要的一个商业结论。",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "video_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "对视频内容进行高度概括，涵盖主体（销售数据）、时间范围（上半年）和整体趋势。能从中提炼出有业务价值的洞察，如销售高峰、低谷或整体增长态势。",
+      "scoring_rubric": "1. 概括的完整性与简洁性；2. 提炼结论的合理性和商业相关性；3. 是否准确捕捉到视频核心数据主题。",
+      "id": "158-022"
+    },
+    {
+      "prompt": "请按顺序详细描述这个烹饪教程的每一个操作步骤，包括所使用的主要食材和工具。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "能够按时间顺序完整、正确地复述视频中展示的6个烹饪步骤。每个步骤的描述应包含关键动作、涉及的主要食材（如番茄、鸡蛋）和工具（如锅、铲）。",
+      "scoring_rubric": "1. 步骤顺序的正确性；2. 步骤内容的完整性（无遗漏关键步骤）；3. 关键元素（食材、工具）识别的准确性。",
+      "id": "158-023"
+    },
+    {
+      "prompt": "视频中介绍的是哪个品牌的智能手机？请列举视频中明确提到的两个核心硬件参数。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "object_recognition",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "准确识别并输出视频中展示的手机品牌（如华为、小米等），并从视频信息中提取至少两个核心硬件参数（如处理器型号、屏幕尺寸、电池容量等）。",
+      "scoring_rubric": "1. 品牌识别的准确性；2. 硬件参数提取的准确性和相关性；3. 回答是否直接针对问题。",
+      "id": "158-024"
+    },
+    {
+      "prompt": "这段新闻播报的整体情感基调和风格是怎样的？请综合所有板块的内容进行分析。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "sentiment_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "能够综合分析科技、经济、体育、天气等多个新闻板块的播报，判断整体情感基调是客观、权威、积极还是其他，并描述播报风格（如正式、平稳、富有感染力）。",
+      "scoring_rubric": "1. 情感基调判断的准确性与合理性；2. 风格描述是否贴合视频；3. 分析是否综合了多个板块内容而非单一判断。",
+      "id": "158-025"
+    },
+    {
+      "prompt": "请总结这个新闻播报视频的主要内容，包括提到的所有新闻类型和关键细节。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "video_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该提供视频中科技、经济、体育和天气新闻的概括，提及具体例子如产品发布、市场数据、赛事结果和天气预报。",
+      "scoring_rubric": "总结覆盖所有新闻类别，关键细节准确，语言流畅，逻辑清晰。",
+      "id": "158-026"
+    },
+    {
+      "prompt": "描述视频中番茄炒鸡蛋烹饪过程的场景，包括使用的厨具、食材和环境。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "scene_description",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应该详细描述视频中的厨房场景，包括可见的厨具（如锅、铲）、食材（番茄、鸡蛋）和环境布置。",
+      "scoring_rubric": "场景描述具体准确，提到正确元素，顺序合理，无遗漏关键细节。",
+      "id": "158-027"
+    },
+    {
+      "prompt": "识别并转录视频中显示的智能手机参数、功能和价格信息。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "text_in_video",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该从视频帧中提取文本信息，如屏幕上的参数列表（屏幕尺寸、处理器等）和价格标签。",
+      "scoring_rubric": "转录准确无误，覆盖所有关键信息点，格式清晰，无错别字。",
+      "id": "158-028"
+    },
+    {
+      "prompt": "按顺序列出视频中展示的烹饪步骤，包括每个步骤的具体动作和使用的工具。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应该准确列出6个步骤，描述每个步骤中的动作（如打蛋、切番茄、翻炒）和工具使用（如刀、锅）。",
+      "scoring_rubric": "步骤顺序正确，动作描述详细，工具提及准确，无步骤遗漏。",
+      "id": "158-029"
+    },
+    {
+      "prompt": "分析这个新闻播报视频的情感基调和整体风格定位。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "sentiment_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该判断视频情感为中性、正式，风格为新闻播报，基于主播语气、内容和结构。",
+      "scoring_rubric": "情感分析准确（中性），风格描述恰当（正式新闻），基于视频具体元素。",
+      "id": "158-030"
+    },
+    {
+      "prompt": "请总结这个视频的主要内容，包括视频展示的数据类型、核心结论和关键数字。",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "video_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能准确概括视频为销售数据动画，说明其展示了上半年（1-6月）的月度销售额，并可能提及整体趋势或最高/最低月份等关键结论。",
+      "scoring_rubric": "1. 准确识别视频类型（数据图表动画）；2. 概括视频核心内容（展示上半年月度销售额）；3. 能提炼出关键信息，如数据范围（1-6月）、可能的整体趋势或最值。",
+      "id": "158-031"
+    },
+    {
+      "prompt": "请按视频中演示的顺序，列出制作这道菜的每个步骤。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应能按顺序提取并列出视频中展示的六个烹饪步骤，如准备食材、打蛋、切番茄、炒鸡蛋、炒番茄、混合出锅等。",
+      "scoring_rubric": "1. 步骤数量正确（共6步）；2. 步骤顺序与视频演示一致；3. 每个步骤的描述准确，符合“番茄炒鸡蛋”的常规做法。",
+      "id": "158-032"
+    },
+    {
+      "prompt": "根据视频中的产品介绍，请列出该智能手机的核心参数，包括处理器型号、屏幕尺寸、存储配置和价格。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "data_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能从产品介绍视频中精准提取并结构化输出所要求的四个具体参数：处理器、屏幕、存储、价格。",
+      "scoring_rubric": "1. 提取的参数类别完整（处理器、屏幕、存储、价格）；2. 每个参数的数值或具体信息与视频内容一致；3. 信息组织清晰，易于阅读。",
+      "id": "158-033"
+    },
+    {
+      "prompt": "视频中提到了哪些不同领域的新闻？请为每条新闻提供一句话的核心信息摘要。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "question_answering",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要识别并区分视频中播报的多条新闻（科技、经济、体育、天气），并针对每一条，用一句话概括其核心内容。",
+      "scoring_rubric": "1. 正确识别出新闻涉及的不同领域（至少3个）；2. 为每个领域新闻都提供了核心摘要；3. 摘要准确抓住了新闻要点，无事实性错误。",
+      "id": "158-034"
+    },
+    {
+      "prompt": "请分析这段新闻播报视频整体的情感基调和风格定位。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "sentiment_analysis",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应能判断该新闻播报视频整体呈现出客观、正式、平稳的基调，符合标准新闻节目的风格。",
+      "scoring_rubric": "1. 准确判断视频的整体情感基调（如客观、正式、中立）；2. 正确描述视频风格（如新闻播报、专业）；3. 分析能结合视频形式（如主播语调、画面风格）进行简要说明。",
+      "id": "158-035"
+    },
+    {
+      "prompt": "视频中展示了哪几个月份的销售数据？其中，哪个月的销售额最高？具体是多少万元？",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "data_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应能准确识别出柱状图动画展示的月份范围（如1-6月），并精确读出最高销售额对应的月份和具体数值。",
+      "scoring_rubric": "月份范围是否正确；最高销售额的月份判断是否正确；具体数值（单位：万元）是否与视频中显示的完全一致。",
+      "id": "158-036"
+    },
+    {
+      "prompt": "请按照视频展示的顺序，详细描述制作“番茄炒鸡蛋”这道菜的全部步骤。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要准确识别视频中的6个烹饪步骤，并按时间顺序（如第一步：准备食材和切菜；第二步：打鸡蛋...）进行清晰、有条理的描述，步骤间逻辑连贯。",
+      "scoring_rubric": "是否完整列出了视频中展示的所有关键步骤（共6步）；步骤顺序是否与视频完全一致；每一步的描述是否准确（如番茄切块、鸡蛋加盐打散等细节）。",
+      "id": "158-037"
+    },
+    {
+      "prompt": "这个新闻播报视频整体给人的感觉是怎样的？主播的语气和视频的剪辑风格传递了什么样的基调？",
+      "video": "videos/news_report.mp4",
+      "sub_type": "sentiment_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要超越简单的事实提取，对视频的整体氛围、主播的语调（严肃、客观、轻松等）、以及画面剪辑的节奏进行综合分析，判断其情感基调或风格定位（如：权威客观的资讯传递、轻松的生活服务等）。",
+      "scoring_rubric": "能否识别出新闻播报通常具有的客观、正式基调；是否能结合主播的语速、表情和视频的转场、配乐等因素进行分析；分析结论是否合理且能从视频中找到支撑依据。",
+      "id": "158-038"
+    },
+    {
+      "prompt": "请总结这个新闻播报视频的主要内容和涉及的新闻主题。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "video_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确概括视频中新闻的主要话题，如科技、经济、体育和天气新闻的要点。",
+      "scoring_rubric": "概括完整性、关键主题提及、逻辑清晰性。",
+      "id": "158-039"
+    },
+    {
+      "prompt": "描述视频中番茄炒鸡蛋烹饪过程中的场景变化和关键元素。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "scene_description",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应描述视频中显示的厨房场景、食材、工具和烹饪环境。",
+      "scoring_rubric": "场景描述准确性、元素识别全面性、语言生动性。",
+      "id": "158-040"
+    },
+    {
+      "prompt": "识别并转录视频中智能手机产品介绍页面上显示的所有文字信息。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "text_in_video",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提取并转录视频中出现的文本，如产品名称、参数、价格等。",
+      "scoring_rubric": "转录准确性、完整性、格式正确性。",
+      "id": "158-041"
+    },
+    {
+      "prompt": "从销售数据柱状图动画中提取每个月的销售额，并计算上半年总销售额和平均月销售额。",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "data_extraction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应从视频中准确提取每个月的销售数值，并进行正确计算。",
+      "scoring_rubric": "数据提取准确性、计算正确性、结果清晰呈现。",
+      "id": "158-042"
+    },
+    {
+      "prompt": "按时间顺序详细描述番茄炒鸡蛋烹饪视频中的每个操作步骤。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应按顺序列出所有6个烹饪步骤，并描述每个步骤的动作。",
+      "scoring_rubric": "步骤顺序正确性、描述详细程度、与视频内容一致性。",
+      "id": "158-043"
+    },
+    {
+      "prompt": "请总结这个视频的主要内容，包括涉及的关键数字和结论。",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "video_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供对销售数据柱状图动画的概括，提及月度销售趋势、最高/最低销售额等关键点，并给出结论性描述。",
+      "scoring_rubric": "准确性：是否正确反映视频内容；完整性：是否涵盖主要元素如趋势和关键数字；简洁性：总结是否简洁明了。",
+      "id": "158-044"
+    },
+    {
+      "prompt": "描述视频中展示的智能手机产品的外观和功能介绍场景。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "scene_description",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应详细描述视频中出现的场景，包括手机外观、功能演示的布置、背景元素等。",
+      "scoring_rubric": "描述准确性：是否与视频场景一致；细节丰富度：是否提供足够细节如颜色、布局；语言流畅性：描述是否自然流畅。",
+      "id": "158-045"
+    },
+    {
+      "prompt": "识别并转录视频中所有出现的新闻标题和关键信息文字。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "text_in_video",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确转录视频中显示的所有新闻标题、关键数据、文字信息，并保持原格式。",
+      "scoring_rubric": "转录准确性：文字是否正确无误；完整性：是否覆盖所有主要文字内容；格式保持：是否尽量保持原视频中的文字样式。",
+      "id": "158-046"
+    },
+    {
+      "prompt": "视频中1月份的销售额是多少？3月份的同比增长率是多少？",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "data_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应提取并返回1月份销售额的准确数值和3月份同比增长率的百分比，确保数字和单位正确。",
+      "scoring_rubric": "数值正确性：数字是否准确；单位正确：是否带正确单位如万元或百分比；上下文理解：是否正确理解同比变化概念。",
+      "id": "158-047"
+    },
+    {
+      "prompt": "按顺序列出视频中展示的番茄炒鸡蛋的烹饪步骤。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "action_sequence",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应按时间顺序清晰列出所有6个步骤，如准备食材、打蛋、炒制等，描述具体动作。",
+      "scoring_rubric": "顺序正确性：步骤顺序是否准确无误；步骤完整性：是否列出所有6个步骤；描述清晰度：步骤描述是否具体易懂。",
+      "id": "158-048"
+    },
+    {
+      "prompt": "请总结这个视频的主要内容，包括涉及的新闻条目和关键信息。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "video_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供视频的全面总结，涵盖科技、经济、体育、天气等所有新闻条目及其要点。",
+      "scoring_rubric": "总结的准确性、覆盖的完整性、表达的简洁性和逻辑性。",
+      "id": "158-049"
+    },
+    {
+      "prompt": "描述视频中烹饪番茄炒鸡蛋的场景，包括人物、动作、环境和食材细节。",
+      "video": "videos/cooking_recipe.mp4",
+      "sub_type": "scene_description",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应详细描述场景中的视觉元素，如厨师的动作、厨房环境、使用的工具和食材列表。",
+      "scoring_rubric": "描述的详细性、准确性、视觉元素的识别和逻辑组织。",
+      "id": "158-050"
+    },
+    {
+      "prompt": "识别并转录视频中显示的所有文字信息，包括产品参数、功能和价格。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "text_in_video",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确提取并列出视频中出现的所有文字和数字，如屏幕上的文字、标牌等。",
+      "scoring_rubric": "文字识别的准确性、转录的完整性、格式的一致性和清晰度。",
+      "id": "158-051"
+    },
+    {
+      "prompt": "判断这个新闻报道视频的情感基调和整体风格，例如是否中立、积极或消极，以及是否正式。",
+      "video": "videos/news_report.mp4",
+      "sub_type": "sentiment_analysis",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应分析视频的整体情感倾向和风格定位，提供合理的判断和解释。",
+      "scoring_rubric": "情感判断的准确性、风格定位的合理性、分析的深度和基于内容的推理。",
+      "id": "158-052"
+    },
+    {
+      "prompt": "请总结这个销售数据柱状图动画视频的主要内容，包括上半年销售额的整体趋势。",
+      "video": "videos/chart_animation.mp4",
+      "sub_type": "video_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供视频的整体概括，突出逐月销售数据的变化、关键月份的表现和上半年总结。",
+      "scoring_rubric": "准确性：总结是否正确反映视频中的销售数据；完整性：是否覆盖所有月份和关键数字；清晰度：语言是否简洁明了，逻辑连贯。",
+      "id": "158-053"
+    },
+    {
+      "prompt": "请识别并转录视频中出现的所有文字信息，包括产品参数、功能和价格。",
+      "video": "videos/product_demo.mp4",
+      "sub_type": "text_in_video",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确识别并列出视频中显示的文字，如品牌、型号、功能描述、价格等。",
+      "scoring_rubric": "准确性：文字识别是否正确无误；完整性：是否覆盖所有可见文字；格式：是否以清晰列表或结构化形式呈现。",
+      "id": "158-054"
+    }
+  ]
+}

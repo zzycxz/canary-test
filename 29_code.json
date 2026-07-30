@@ -1,0 +1,520 @@
+{
+  "capability": "code",
+  "label": "代码能力",
+  "total": 57,
+  "cases": [
+    {
+      "prompt": "用Python写一个函数，接收一个列表，返回其中所有偶数的平方和。",
+      "sub_type": "code_writing",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "正确编写一个函数，使用列表推导或循环计算偶数平方和。",
+      "scoring_rubric": "函数定义正确；正确识别偶数并平方；返回值正确；代码风格良好。",
+      "id": "29-001"
+    },
+    {
+      "prompt": "以下Python代码想检查字符串是否为回文，但逻辑有错误，请修复：\ndef is_palindrome(s):\n    return s == s[::-1] if len(s) > 1 else False",
+      "sub_type": "code_debugging",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "指出代码错误（对长度1的字符串返回False，实际应回文），并给出修复版本。",
+      "scoring_rubric": "正确识别逻辑错误；提供修复方案；修复后代码正确处理所有边界情况。",
+      "id": "29-002"
+    },
+    {
+      "prompt": "解释以下Python代码的输出：\nfor i in range(3):\n    for j in range(3):\n        if i == j:\n            print(i, j)",
+      "sub_type": "code_explanation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "解释代码会打印出(0,0), (1,1), (2,2)三行，说明当i和j相等时才打印。",
+      "scoring_rubric": "准确描述输出内容；正确解释循环和条件逻辑。",
+      "id": "29-003"
+    },
+    {
+      "prompt": "补全以下Python函数，计算斐波那契数列第n项：\ndef fibonacci(n):\n    # 请补全代码\n    pass",
+      "sub_type": "code_completion",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "提供正确的斐波那契数列计算实现（递归或迭代）。",
+      "scoring_rubric": "代码能正确计算斐波那契数；处理边界情况（n<=0）；时间复杂度合理。",
+      "id": "29-004"
+    },
+    {
+      "prompt": "将以下Python列表去重代码转换为JavaScript：\noriginal = [1, 2, 2, 3, 4, 4, 5]\nunique = list(set(original))",
+      "sub_type": "code_conversion",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "转换为等效的JavaScript代码，使用Set或过滤方法去重。",
+      "scoring_rubric": "代码功能正确；使用合适JavaScript特性；保持原始顺序（可选）。",
+      "id": "29-005"
+    },
+    {
+      "prompt": "编写SQL查询，从employees表中找出工资高于公司平均工资的员工姓名和部门。",
+      "sub_type": "sql_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确使用子查询计算平均工资并进行比较，返回所需字段。",
+      "scoring_rubric": "查询语法正确；子查询逻辑正确；返回结果符合要求；考虑NULL值。",
+      "id": "29-006"
+    },
+    {
+      "prompt": "写一个正则表达式，匹配中国手机号码（11位数字，以1开头）。",
+      "sub_type": "regex",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "提供正确的正则表达式，如^1[3-9]\\d{9}$，并解释各部分含义。",
+      "scoring_rubric": "正则表达式准确匹配手机号；考虑有效号段；解释清晰易懂。",
+      "id": "29-007"
+    },
+    {
+      "prompt": "实现二分查找算法，输入一个已排序的数组和目标值，返回目标值的索引（不存在则返回-1）。",
+      "sub_type": "algorithm",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "提供正确的二分查找Python实现，处理边界条件。",
+      "scoring_rubric": "算法逻辑正确；边界条件处理得当；时间复杂度为O(log n)；代码清晰。",
+      "id": "29-008"
+    },
+    {
+      "prompt": "用Python写一个简单的爬虫，抓取指定URL的所有图片链接（假设URL返回HTML页面）。",
+      "sub_type": "code_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用requests和BeautifulSoup等库，正确解析HTML并提取img标签的src属性。",
+      "scoring_rubric": "代码能正常运行；正确使用库；处理异常情况（如网络错误）；输出图片链接列表。",
+      "id": "29-009"
+    },
+    {
+      "prompt": "以下Python代码想计算列表元素平均值，但有bug：\ndef average(lst):\n    return sum(lst) / len(lst)\n当传入空列表时会报错，请修复。",
+      "sub_type": "code_debugging",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "添加空列表检查，返回0或抛出有意义的异常，并解释错误原因。",
+      "scoring_rubric": "正确识别错误原因；提供健壮的修复方案；修复后代码处理边界情况。",
+      "id": "29-010"
+    },
+    {
+      "prompt": "解释以下Python代码的输出结果，并说明其用途：\nimport functools\nresult = functools.reduce(lambda x, y: x*y, range(1, 6))\nprint(result)",
+      "sub_type": "code_explanation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "解释代码计算5! = 120，说明reduce函数和lambda的作用。",
+      "scoring_rubric": "正确计算输出值；准确解释函数组合逻辑；说明实际应用场景。",
+      "id": "29-011"
+    },
+    {
+      "prompt": "补全以下Python类，实现一个简单的栈结构，包含push、pop和peek方法：\nclass Stack:\n    def __init__(self):\n        # 请补全初始化\n        pass\n\n    def push(self, item):\n        # 请补全\n        pass\n\n    def pop(self):\n        # 请补全\n        pass\n\n    def peek(self):\n        # 请补全\n        pass",
+      "sub_type": "code_completion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确实现栈的各个方法，使用列表作为底层数据结构，处理空栈情况。",
+      "scoring_rubric": "所有方法功能正确；处理边界情况（如空栈pop）；代码符合Python风格。",
+      "id": "29-012"
+    },
+    {
+      "prompt": "将以下Python函数转换为JavaScript版本：\ndef factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n-1)",
+      "sub_type": "code_conversion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "转换为功能等效的JavaScript递归函数，保持相同逻辑。",
+      "scoring_rubric": "功能正确；语法正确；考虑JavaScript的递归栈限制（可选）。",
+      "id": "29-013"
+    },
+    {
+      "prompt": "给定用户表users(id, name, email, created_at)和订单表orders(id, user_id, amount, order_date)，写SQL查询每个用户的总消费金额，并按总金额降序排列。",
+      "sub_type": "sql_writing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确使用JOIN和GROUP BY，计算总和并排序，处理可能为NULL的用户。",
+      "scoring_rubric": "JOIN条件正确；分组和聚合正确；排序正确；处理未下单用户（可选）。",
+      "id": "29-014"
+    },
+    {
+      "prompt": "写一个正则表达式，匹配有效的电子邮件地址（简单版本，包含字母、数字、@和域名）。",
+      "sub_type": "regex",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "提供相对严谨的正则表达式，如^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$，并解释。",
+      "scoring_rubric": "正则表达式能匹配大多数有效邮箱；解释清晰；考虑常见格式。",
+      "id": "29-015"
+    },
+    {
+      "prompt": "用Python实现动态规划算法，解决背包问题：给定物品重量列表weights和价值列表values，以及背包容量capacity，返回可装入物品的最大总价值。",
+      "sub_type": "algorithm",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "实现正确的动态规划解法，使用二维数组或一维优化，处理边界条件。",
+      "scoring_rubric": "算法正确；时间复杂度O(n*capacity)；空间复杂度合理；代码清晰可读。",
+      "id": "29-016"
+    },
+    {
+      "prompt": "用Python写一个函数，计算斐波那契数列的前n项，例如n=5时返回[0, 1, 1, 2, 3]",
+      "sub_type": "code_writing",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供正确的Python函数，能够处理输入n并返回列表，包括边界情况处理。",
+      "scoring_rubric": "代码正确性、效率、可读性、错误处理。",
+      "id": "29-017"
+    },
+    {
+      "prompt": "用Python写一个简单的爬虫，使用requests和BeautifulSoup从给定的URL提取所有href链接，要求包含异常处理。",
+      "sub_type": "code_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供完整的代码，包括导入库、发送请求、解析HTML、错误处理，代码结构清晰。",
+      "scoring_rubric": "代码功能完整性、错误处理、代码风格、可运行性。",
+      "id": "29-018"
+    },
+    {
+      "prompt": "以下Python代码试图计算列表的平均值，但结果不对。请找出并修复bug。\ndef average(lst):\n    sum = 0\n    for i in lst:\n        sum += i\n    return sum / len(lst)\nprint(average([1, 2, 3]))  # 预期2.0，实际输出1.0",
+      "sub_type": "code_debugging",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别sum变量名与内置函数冲突的问题，并给出修复方案，如使用不同变量名。",
+      "scoring_rubric": "问题诊断能力、解决方案合理性、代码修改建议。",
+      "id": "29-019"
+    },
+    {
+      "prompt": "解释以下Python代码的输出：\nx = [1, 2, 3]\nprint(x[::-1])",
+      "sub_type": "code_explanation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应解释切片操作x[::-1]会反转列表，输出为[3, 2, 1]。",
+      "scoring_rubric": "解释清晰度、准确性、术语使用。",
+      "id": "29-020"
+    },
+    {
+      "prompt": "解释以下递归函数的逻辑，并说明其时间和空间复杂度：\ndef fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)",
+      "sub_type": "code_explanation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应详细解释递归过程，分析时间复杂度为O(2^n)、空间复杂度为O(n)，并提及可能的优化。",
+      "scoring_rubric": "解释深度、复杂度分析准确性、易懂性。",
+      "id": "29-021"
+    },
+    {
+      "prompt": "补全以下Python函数，使其返回两个数的最大值：\ndef max(a, b):\n    # 你的代码\n    pass",
+      "sub_type": "code_completion",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供return a if a > b else b或类似逻辑的代码。",
+      "scoring_rubric": "补全正确性、简洁性、可读性。",
+      "id": "29-022"
+    },
+    {
+      "prompt": "补全以下Python类中的方法，使其能计算矩形面积：\nclass Rectangle:\n    def __init__(self, width, height):\n        self.width = width\n        self.height = height\n    def area(self):\n        # 你的代码\n        pass",
+      "sub_type": "code_completion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应实现area方法返回self.width * self.height，并确保代码符合Python类结构。",
+      "scoring_rubric": "代码功能正确、符合类设计、可维护性。",
+      "id": "29-023"
+    },
+    {
+      "prompt": "将以下Python代码转换为JavaScript，保持功能一致：\ndef greet(name):\n    print('Hello, ' + name)",
+      "sub_type": "code_conversion",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供等效的JavaScript函数，如function greet(name) { console.log('Hello, ' + name); }。",
+      "scoring_rubric": "转换准确性、语法正确性、代码风格。",
+      "id": "29-024"
+    },
+    {
+      "prompt": "将以下Python二分查找代码转换为Java，保持逻辑一致：\ndef binary_search(arr, target):\n    low, high = 0, len(arr) - 1\n    while low <= high:\n        mid = (low + high) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            low = mid + 1\n        else:\n            high = mid - 1\n    return -1",
+      "sub_type": "code_conversion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供Java版本的二分查找，包括类结构和方法，逻辑与Python版本一致。",
+      "scoring_rubric": "语言转换正确、逻辑保持不变、Java语法规范。",
+      "id": "29-025"
+    },
+    {
+      "prompt": "给定表students(id, name, age)，写一个SQL查询找出所有年龄大于20的学生。",
+      "sub_type": "sql_writing",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应写出SELECT * FROM students WHERE age > 20;。",
+      "scoring_rubric": "SQL语法正确、查询逻辑准确、可执行性。",
+      "id": "29-026"
+    },
+    {
+      "prompt": "给定两个表：orders(order_id, customer_id, amount) 和 customers(customer_id, name)。写一个SQL查询，列出每个客户的订单总金额，包括没有订单的客户（总金额为0）。",
+      "sub_type": "sql_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应使用LEFT JOIN连接表，并用GROUP BY和COALESCE处理NULL值，输出客户名称和总金额。",
+      "scoring_rubric": "查询复杂度处理、SQL最佳实践、结果正确性。",
+      "id": "29-027"
+    },
+    {
+      "prompt": "写一个正则表达式匹配常见的电子邮件地址。",
+      "sub_type": "regex",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供正则表达式如^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$。",
+      "scoring_rubric": "正则正确性、覆盖常见格式、可解释性。",
+      "id": "29-028"
+    },
+    {
+      "prompt": "用Python实现冒泡排序算法，对列表进行升序排序，要求代码高效且包含注释。",
+      "sub_type": "algorithm",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供冒泡排序的Python实现，包括循环、比较和交换，代码有适当注释。",
+      "scoring_rubric": "算法正确性、效率、代码可读性、注释质量。",
+      "id": "29-029"
+    },
+    {
+      "prompt": "用Python实现动态规划解决背包问题：给定容量W和物品列表（每个物品有重量和价值），求最大价值。要求解释状态转移方程。",
+      "sub_type": "algorithm",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供动态规划解法，包括二维数组状态定义、转移方程和最终结果提取，并解释算法思路。",
+      "scoring_rubric": "算法设计合理性、代码正确性、效率分析、解释清晰度。",
+      "id": "29-030"
+    },
+    {
+      "prompt": "用Python写一个函数，使用二分查找算法在一个已排序的整数列表中查找目标值，返回目标值的索引。如果目标值不在列表中，返回-1。",
+      "sub_type": "algorithm",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应该生成一个实现二分查找算法的Python函数，包含清晰的循环或递归逻辑，处理边界情况（如空列表、目标值不存在），代码风格良好，有必要的注释。",
+      "scoring_rubric": "1. 算法逻辑正确（每次将搜索范围减半）。2. 代码无语法错误，能直接运行。3. 正确处理目标值不存在和列表为空的情况。4. 有注释或清晰的变量命名，可读性好。",
+      "id": "29-031"
+    },
+    {
+      "prompt": "下面的Python代码旨在找出列表中的最大值，但运行结果不对。请找出错误并修复它。\n```python\ndef find_max(numbers):\n    max_num = numbers[0]\n    for num in numbers:\n        if num < max_num:\n            max_num = num\n    return max_num\n\nprint(find_max([3, 1, 4, 1, 5, 9]))  # 期望输出9，实际输出3\n```",
+      "sub_type": "code_debugging",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "应该准确指出代码中的逻辑错误（比较符号方向错误，`<`应为`>`），并提供修复后的正确代码。同时可以解释原代码错误的原因。",
+      "scoring_rubric": "1. 准确识别出比较运算符`<`是错误的，应为`>`。2. 提供修复后的完整代码。3. 解释错误原因（将最大值判断变成了最小值判断）。",
+      "id": "29-032"
+    },
+    {
+      "prompt": "请解释以下Python代码的功能和输出结果。\n```python\ndef mystery(n):\n    result = []\n    for i in range(1, n+1):\n        if n % i == 0:\n            result.append(i)\n    return result\n\nprint(mystery(12))\n```",
+      "sub_type": "code_explanation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "应该清晰解释该函数的功能是找出数字n的所有正因数（约数），并按顺序返回。能正确计算并给出`print(mystery(12))`的输出结果 `[1, 2, 3, 4, 6, 12]`。",
+      "scoring_rubric": "1. 正确解释函数功能（查找所有因数）。2. 正确预测代码的输出结果。3. 解释清晰，无逻辑错误。",
+      "id": "29-033"
+    },
+    {
+      "prompt": "请补全以下Python斐波那契数列生成器的代码，使其能正确返回第n项斐波那契数列的值。\n```python\ndef fibonacci(n):\n    if n <= 0:\n        return 0\n    elif n == 1:\n        return 1\n    else:\n        # 请补全递归或迭代实现\n        pass\n```",
+      "sub_type": "code_completion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应在`else`分支中实现正确的斐波那契数列计算逻辑，可以使用递归（`return fibonacci(n-1) + fibonacci(n-2)`）或迭代循环。代码应能处理非负整数n。",
+      "scoring_rubric": "1. 补全的代码逻辑正确（递归或迭代）。2. 实现能正确返回第n项值（如fibonacci(6)返回8）。3. 代码无语法错误。4. 若使用递归，能处理基本效率问题或提及；若使用迭代，实现高效。",
+      "id": "29-034"
+    },
+    {
+      "prompt": "将以下Python函数转换为功能相同的JavaScript函数，函数名和逻辑保持一致。\n```python\ndef is_palindrome(s):\n    s = s.lower()\n    return s == s[::-1]\n```",
+      "sub_type": "code_conversion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应该生成一个功能相同的JavaScript函数`isPalindrome(s)`。关键点包括：将字符串转为小写（使用`toLowerCase()`），然后比较字符串与其反转是否相等（需要手动或通过数组反转实现字符串反转）。",
+      "scoring_rubric": "1. 函数功能与原Python函数完全一致（检查是否是回文，忽略大小写）。2. 使用正确的JavaScript语法和字符串方法。3. 代码无语法错误，可直接在JS环境中运行。",
+      "id": "29-035"
+    },
+    {
+      "prompt": "有一个`employees`表（字段：id, name, department, salary）和一个`departments`表（字段：id, dept_name, location）。请用SQL写出查询：找出每个部门中工资最高的员工姓名及其工资，如果部门没有员工则也显示部门名称。请使用LEFT JOIN。",
+      "sub_type": "sql_writing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应该生成一个使用窗口函数（如ROW_NUMBER()或RANK()）或子查询结合GROUP BY的SQL语句，以正确筛选每个部门的最高工资员工。必须包含LEFT JOIN以确保没有员工的部门也被列出。",
+      "scoring_rubric": "1. SQL语法正确。2. 使用了指定的表连接（LEFT JOIN）。3. 能正确找出每个部门工资最高的员工。4. 能处理没有员工的部门（显示部门信息，员工信息为NULL）。5. 查询逻辑清晰，效率考虑合理。",
+      "id": "29-036"
+    },
+    {
+      "prompt": "请用Python编写一个正则表达式，用于从一段HTML代码中提取所有的图片链接（即<img>标签的src属性值）。例如，对于`<img src=\"http://example.com/a.jpg\">`，应提取出`http://example.com/a.jpg`。",
+      "sub_type": "regex",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应该提供一个Python的`re.findall()`调用，正则表达式模式能够匹配`<img>`标签中的`src`属性值。模式应具有一定的通用性（如处理src前后的空格），并能匹配引号内的URL。",
+      "scoring_rubric": "1. 正则表达式模式正确，能匹配`<img ... src=\"...\">`中的URL。2. 提供完整的Python代码示例（使用`re`模块）。3. 正则表达式有一定的健壮性（如处理单双引号、空格）。4. 能正确从示例文本中提取出URL。",
+      "id": "29-037"
+    },
+    {
+      "prompt": "用Python写一个函数，读取一个文本文件并统计每个单词的出现次数，忽略大小写。",
+      "sub_type": "code_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供完整的Python代码，包括文件读取、单词分割、使用字典或collections.Counter进行计数，并处理大小写统一。",
+      "scoring_rubric": "代码正确性（能运行并统计）、处理边界情况（如空文件、特殊字符）、效率（使用合适的数据结构）、代码风格清晰。",
+      "id": "29-038"
+    },
+    {
+      "prompt": "以下Python代码试图计算斐波那契数列的第n项，但有错误：def fib(n): return fib(n-1) + fib(n-2) 调用fib(5)导致无限递归。请找出并修复错误。",
+      "sub_type": "code_debugging",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别出缺少基准条件（如if n <= 1: return n），并提供修复后的代码，解释递归的基准情况。",
+      "scoring_rubric": "准确定位错误（缺少基准条件）、修复正确（添加if语句）、解释清晰（说明递归终止条件）。",
+      "id": "29-039"
+    },
+    {
+      "prompt": "解释以下Python代码的输出：x = [1, 2, 3]; y = x; y.append(4); print(x)",
+      "sub_type": "code_explanation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应解释输出为[1, 2, 3, 4]，并说明y和x引用同一列表对象，因此修改y会影响x。",
+      "scoring_rubric": "解释准确（输出正确）、逻辑清晰（解释引用和列表可变性）、完整（覆盖关键概念）。",
+      "id": "29-040"
+    },
+    {
+      "prompt": "补全以下Python代码的缺失部分，使其能够验证URL格式：def is_valid_url(url):\n    import re\n    pattern = r''  # 请补全正则表达式以匹配http或https开头的URL\n    return re.match(pattern, url) is not None",
+      "sub_type": "code_completion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供合适的正则表达式，如r'^https?://[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}.*$'，并可能解释模式。",
+      "scoring_rubric": "正则表达式正确（匹配常见URL）、代码完整（无语法错误）、解释（可选，但加分）。",
+      "id": "29-041"
+    },
+    {
+      "prompt": "用Python实现二分查找算法，输入一个排序列表和目标值，返回目标值的索引，如果不存在返回-1。",
+      "sub_type": "algorithm",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供二分查找的Python实现，包括循环或递归、边界处理。",
+      "scoring_rubric": "算法正确性（逻辑正确）、效率（时间复杂度O(log n)）、代码清晰（注释和变量命名）。",
+      "id": "29-042"
+    },
+    {
+      "prompt": "给定一个表employees，包含列id, name, salary, department_id，写一个SQL查询找出每个部门的平均工资，只显示平均工资大于5000的部门。",
+      "sub_type": "sql_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供正确的SQL查询，使用GROUP BY department_id、AVG(salary)和HAVING子句。",
+      "scoring_rubric": "SQL语法正确（GROUP BY和HAVING使用）、查询逻辑正确（聚合和过滤）、输出格式（列名和排序可选）。",
+      "id": "29-043"
+    },
+    {
+      "prompt": "写一个正则表达式匹配中国手机号码，例如13812345678或15698765432。",
+      "sub_type": "regex",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供正则表达式如r'^1[3-9]\\d{9}$'，并可能解释模式（1开头，第二位3-9，后跟9位数字）。",
+      "scoring_rubric": "正则表达式正确（匹配常见手机号）、解释清晰（覆盖模式）、健壮性（考虑边界情况）。",
+      "id": "29-044"
+    },
+    {
+      "prompt": "用Python写一个代码，实现一个函数，计算两个数的和。",
+      "sub_type": "code_writing",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应该提供一个正确的Python函数，例如 def add(a, b): return a + b，并确保代码可运行。",
+      "scoring_rubric": "代码正确性、简洁性、可读性、函数定义准确。",
+      "id": "29-045"
+    },
+    {
+      "prompt": "这段Python代码有一个bug，它应该打印出列表中的所有元素，但只打印了第一个：\nitems = [1, 2, 3]\nfor i in items\n    print(i)\n请找出并修复错误。",
+      "sub_type": "code_debugging",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该指出错误在于for语句缺少冒号，并提供修复后的代码： for i in items: print(i)。",
+      "scoring_rubric": "错误识别正确性、修复代码的正确性、解释清晰度。",
+      "id": "29-046"
+    },
+    {
+      "prompt": "解释以下Python代码的功能：\ndef factorial(n):\n    if n == 0:\n        return 1\n    else:\n        return n * factorial(n-1)",
+      "sub_type": "code_explanation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应该解释这是一个递归函数，用于计算非负整数n的阶乘，例如 factorial(5) 返回120。",
+      "scoring_rubric": "解释的准确性、清晰度、是否提及递归和阶乘概念。",
+      "id": "29-047"
+    },
+    {
+      "prompt": "补全以下Python函数，使其能够反转字符串：\ndef reverse_string(s):\n    # 你的代码",
+      "sub_type": "code_completion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该提供完整的函数实现，例如 return s[::-1] 或使用循环，并确保代码正确反转字符串。",
+      "scoring_rubric": "补全代码的正确性、效率、代码风格。",
+      "id": "29-048"
+    },
+    {
+      "prompt": "将以下JavaScript代码转换为等效的Python代码：\nfunction greet(name) {\n    console.log('Hello, ' + name);\n}",
+      "sub_type": "code_conversion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应该提供Python函数，例如 def greet(name): print('Hello, ' + name)，并适应Python的语法和输出方式。",
+      "scoring_rubric": "转换正确性、语言特性适应、输出等效性。",
+      "id": "29-049"
+    },
+    {
+      "prompt": "假设有一个SQL表 'employees'，包含列 id (整数), name (字符串), department (字符串), salary (整数)。写出一个查询，找出每个部门中工资最高的员工。",
+      "sub_type": "sql_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该提供正确的SQL查询，可能使用子查询、JOIN或窗口函数（如 RANK()）来识别每个部门的最高工资员工。",
+      "scoring_rubric": "查询正确性、效率、语法正确性、逻辑清晰度。",
+      "id": "29-050"
+    },
+    {
+      "prompt": "用Python实现二分查找算法，输入一个排序列表和目标值，返回目标值的索引，如果不存在则返回-1。",
+      "sub_type": "algorithm",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应该提供正确的二分查找实现，处理边界情况，如空列表或目标不在列表中，并返回正确的索引或-1。",
+      "scoring_rubric": "算法正确性、边界处理、时间复杂度O(log n)、代码清晰度。",
+      "id": "29-051"
+    },
+    {
+      "prompt": "用Python写一个函数，实现冒泡排序，对一个列表进行排序。",
+      "sub_type": "code_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应写出正确的冒泡排序函数，包括循环和交换逻辑，并可能包含测试代码或示例。",
+      "scoring_rubric": "代码正确性、效率、代码风格和可读性。",
+      "id": "29-052"
+    },
+    {
+      "prompt": "下面的Python代码尝试打印斐波那契数列的前10项，但有bug：\ndef fib(n):\n    if n == 0: return 0\n    elif n == 1: return 1\n    else: return fib(n-1) + fib(n-2)\nfor i in range(10): print(fib(i)) 但输出不正确，如何修复？",
+      "sub_type": "code_debugging",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别递归效率问题或输出格式问题，并提供修复方案，如添加memoization或调整打印逻辑。",
+      "scoring_rubric": "正确识别bug类型，提供有效且优化的修复方案。",
+      "id": "29-053"
+    },
+    {
+      "prompt": "解释以下Python代码的功能和输出：\nfor i in range(1, 11):\n    if i % 2 == 0:\n        print(i)",
+      "sub_type": "code_explanation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应解释代码遍历1到10，打印所有偶数，并说明输出结果。",
+      "scoring_rubric": "解释准确、完整、易于理解。",
+      "id": "29-054"
+    },
+    {
+      "prompt": "补全以下Python函数，使其返回输入字符串的反转：\ndef reverse_string(s):\n    # 你的代码\n    return",
+      "sub_type": "code_completion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应完成函数体，例如使用切片 s[::-1] 或其他方法。",
+      "scoring_rubric": "补全代码正确、高效、符合Python风格。",
+      "id": "29-055"
+    },
+    {
+      "prompt": "将以下JavaScript代码转换为Python：\nfunction greet(name) {\n    console.log('Hello, ' + name);\n}",
+      "sub_type": "code_conversion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供Python等效代码，使用print函数和字符串格式化，保持功能一致。",
+      "scoring_rubric": "转换准确，功能一致，语法正确。",
+      "id": "29-056"
+    },
+    {
+      "prompt": "假设有一个员工表employees，包含id, name, salary字段。写一个SQL查询，找出薪资高于平均薪资的所有员工。",
+      "sub_type": "sql_writing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应写出SQL查询，使用子查询或窗口函数计算平均薪资并筛选员工。",
+      "scoring_rubric": "SQL语法正确，逻辑正确，能返回预期结果。",
+      "id": "29-057"
+    }
+  ]
+}

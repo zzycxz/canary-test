@@ -1,0 +1,457 @@
+{
+  "capability": "performance_optimization",
+  "label": "性能优化能力",
+  "total": 50,
+  "cases": [
+    {
+      "id": "113-001",
+      "prompt": "一个电商系统的商品搜索SQL执行计划显示全表扫描，原始SQL包含多个OR条件和子查询。请对SQL进行查询重写优化，消除OR条件和冗余子查询，使优化器能够利用已有索引。",
+      "sub_type": "query_rewrite",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应将OR条件改写为UNION ALL以利用各分支索引，将相关子查询改写为JOIN，消除SELECT *只取必要字段，对比重写前后的执行计划差异。",
+      "scoring_rubric": "1. 正确将OR条件改写为UNION ALL并说明各分支如何命中对应索引; 2. 准确将相关子查询改写为等价JOIN语句，消除嵌套循环执行; 3. 给出重写前后EXPLAIN执行计划的具体对比（扫描行数/type列/key列变化）。"
+    },
+    {
+      "id": "113-002",
+      "prompt": "一个MySQL表有5个独立索引分别覆盖不同的等值查询，但联合查询时无法同时利用。请设计索引合并优化方案，将多个单列索引合并为最优联合索引，减少索引数量和维护开销。",
+      "sub_type": "index_merge",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析各查询的WHERE条件和排序需求，识别索引合并机会，设计覆盖多查询场景的联合索引，评估合并后对写入性能的影响。",
+      "scoring_rubric": "1. 逐一分析5个查询的WHERE条件和排序需求，列出各查询当前使用的索引; 2. 设计至少1个联合索引方案，明确列顺序（等值条件在前、范围条件在后），覆盖至少3个查询场景; 3. 量化评估合并后索引数量减少幅度及INSERT/UPDATE操作的写放大开销。"
+    },
+    {
+      "id": "113-003",
+      "prompt": "一个Java Web应用频繁出现数据库连接耗尽告警，但连接池配置的maxActive为200，活跃连接数统计只有50。请设计连接泄漏检测方案，定位未正确关闭连接的代码路径。",
+      "sub_type": "connection_leak_detection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应配置连接池泄漏检测（removeAbandoned/leakDetectionThreshold），使用动态代理包装Connection记录获取堆栈，定时扫描超时未归还的连接并打印调用链路。",
+      "scoring_rubric": "1. 给出removeAbandonedTimeout和leakDetectionThreshold的具体配置值及调参依据; 2. 通过动态代理包装Connection实现获取/释放的完整堆栈记录，输出示例包含调用链路; 3. 设计定时扫描频率、告警阈值（如超过N个未归还连接触发告警）和自动回收机制。"
+    },
+    {
+      "id": "113-004",
+      "prompt": "一个高并发接口请求一个不存在的Key，每次都穿透到数据库，导致数据库QPS从500飙升到5000。请设计缓存穿透防护方案，对比布隆过滤器、空值缓存、互斥锁三种策略。",
+      "sub_type": "cache_penetration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计布隆过滤器前置拦截不存在的Key，空值缓存短TTL防止单Key重复穿透，互斥锁防止缓存重建时的并发击穿，对比各策略的内存和实现复杂度。",
+      "scoring_rubric": "1. 设计布隆过滤器方案，给出误判率（如0.1%）、哈希函数数量和预期元素数的计算公式; 2. 实现空值缓存（TTL建议30-60秒）和互斥锁（含锁超时和降级逻辑）的具体代码; 3. 从内存开销、实现复杂度、并发安全性三个维度对比三种策略，给出至少2种业务场景的选型建议。"
+    },
+    {
+      "id": "113-005",
+      "prompt": "一个MySQL业务表从InnoDB迁移到不同存储引擎后写入性能下降50%。请对比InnoDB/MyISAM/RocksDB引擎特性，根据业务读写模式选择最优引擎并给出参数调优方案。",
+      "sub_type": "storage_engine_tuning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析业务的读写比例、事务需求、并发特征，对比InnoDB（事务/行锁/聚簇索引）、MyISAM（读密集/表锁）、RocksDB（写密集/LSM-Tree）的适用场景，调优innodb_flush_log_at_trx_commit等参数。",
+      "scoring_rubric": "1. 量化分析业务读写比例（如读70%/写30%）、事务需求和并发特征，匹配至少2个候选引擎; 2. 从事务支持、锁粒度、索引结构、压缩能力4个维度对比InnoDB/MyISAM/RocksDB，给出对比表格; 3. 针对选定引擎列出至少5个关键参数（如innodb_flush_log_at_trx_commit/innodb_buffer_pool_size）的具体调优值和理由。"
+    },
+    {
+      "id": "113-006",
+      "prompt": "一台双路服务器（2颗CPU，每颗24核）运行Java应用，性能测试发现跨NUMA节点访问内存延迟增加40%。请设计NUMA优化方案，确保线程和内存分配在同一NUMA节点。",
+      "sub_type": "NUMA_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用numactl/numastat诊断NUMA拓扑和内存分布，配置JVM使用numactl绑定到特定节点，设置-XX:+UseNUMA让GC感知NUMA结构，优化线程亲和性减少跨节点访问。",
+      "scoring_rubric": "1. 使用numactl --hardware和numastat诊断NUMA拓扑，量化跨节点访问延迟增加比例（如40%）; 2. 给出numactl --cpunodebind和--membind的具体命令，以及JVM -XX:+UseNUMA参数配置; 3. 设计GC线程亲和性和内存分配策略，使用numastat验证优化后跨节点访问量减少。"
+    },
+    {
+      "id": "113-007",
+      "prompt": "一个微服务集群内部RPC调用延迟抖动严重，抓包分析发现大量TCP重传和拥塞窗口收缩。请设计网络层优化方案，涵盖TCP参数调优、连接复用、协议升级（HTTP/2/gRPC）。",
+      "sub_type": "network_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应优化TCP内核参数（tcp_tw_reuse/tcp_fin_timeout/keepalive），启用HTTP/2多路复用减少连接数，使用gRPC流式通信降低延迟，配置连接池和健康检查。",
+      "scoring_rubric": "1. 通过tcpdump/Wireshark分析重传率和拥塞窗口变化，给出具体的瓶颈指标（如重传率>5%）; 2. 列出至少4个TCP内核参数调优（tcp_tw_reuse/tcp_fin_timeout/tcp_keepalive_time/tcp_max_syn_backlog）的具体值和sysctl命令; 3. 对比HTTP/1.1 vs HTTP/2 vs gRPC在连接数、延迟、吞吐量方面的量化差异，给出选型结论。"
+    },
+    {
+      "id": "113-008",
+      "prompt": "一个高并发Go服务在高负载下CPU利用率仅30%但吞吐量不增长，perf分析显示大量上下文切换（>10万次/秒）。请设计上下文切换优化方案，减少goroutine调度开销。",
+      "sub_type": "context_switch_reduction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用perf/GODEBUG=schedtrace分析调度开销，减少goroutine数量（合并小任务/复用goroutine），调整GOMAXPROCS，避免不必要的channel操作和系统调用，批处理减少调度频率。",
+      "scoring_rubric": "1. 使用perf sched record或GODEBUG=schedtrace分析上下文切换热点来源（channel操作/系统调用/锁竞争），给出量化数据; 2. 设计goroutine池化方案（如ants库），将10万+goroutine降至可控数量（如1000个worker）; 3. 给出GOMAXPROCS的最优值建议和批处理大小配置，量化优化后上下文切换次数（目标降至<1万次/秒）和吞吐量提升比例。"
+    },
+    {
+      "id": "113-009",
+      "prompt": "一个嵌入式C++服务在栈空间受限环境（主线程栈256KB，子线程栈128KB）下运行，频繁出现栈溢出。请设计栈空间优化方案，减少函数调用深度和局部变量占用。",
+      "sub_type": "stack_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应使用-fstack-usage编译选项分析各函数栈帧大小，将深递归改为迭代，将大局部变量移到堆上，减少函数内联以降低栈帧复制，使用栈空间分析工具验证优化效果。",
+      "scoring_rubric": "1. 使用-fstack-usage或valgrind --tool=massif给出各函数栈帧大小（字节数）和最大调用深度; 2. 至少采用2种优化手段（递归转迭代/大局部变量移至堆/减少内联），给出具体的代码改造示例; 3. 用工具验证优化后主线程栈峰值<200KB、子线程栈峰值<100KB，满足限制要求。"
+    },
+    {
+      "id": "113-010",
+      "prompt": "一个游戏服务器每秒创建和销毁数万个子弹/特效对象，频繁GC导致帧率波动。请设计对象池（Object Pool）复用方案，对比new/delete、内存池、自定义对象池的性能差异。",
+      "sub_type": "object_pool_reuse",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计固定大小对象池，预分配对象数组避免运行时分配，实现acquire/release接口管理对象生命周期，对比new/delete的分配/释放开销和GC压力。",
+      "scoring_rubric": "1. 设计固定大小对象池的完整数据结构（含预分配数组/空闲链表/容量配置），给出acquire/release的接口签名; 2. 实现对象归还时的reset逻辑（清空状态字段），处理池耗尽时的策略（阻塞等待/扩容/拒绝）; 3. 用benchmark量化对比对象池 vs new/delete的分配耗时（ns/op）和GC暂停时间，给出至少2倍性能提升的数据。"
+    },
+    {
+      "id": "113-011",
+      "prompt": "设计一个数据库查询结果缓存方案，同一个复杂报表查询被多个用户频繁请求（每秒500次），每次查询耗时3秒。需要设计查询结果缓存策略，支持缓存失效、参数化缓存和并发请求合并。",
+      "sub_type": "query_result_caching",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于查询参数哈希的缓存Key生成策略，支持TTL和主动失效两种缓存过期机制，使用singleflight模式合并并发相同查询，缓存预热和分层缓存（本地+Redis），监控缓存命中率和查询延迟。",
+      "scoring_rubric": "1. 设计缓存Key生成规则（如query_hash+params_hash），给出Key冲突处理和最大Key长度控制策略; 2. 实现TTL过期（如5分钟）和主动失效（如数据变更事件触发删除）两种机制的具体代码; 3. 用singleflight模式实现并发相同查询合并，给出等待者数量和合并率的监控指标; 4. 设计缓存预热流程（启动时加载Top-100高频查询）和命中率监控仪表盘（目标命中率>80%）。"
+    },
+    {
+      "id": "113-012",
+      "prompt": "设计一个HTTP/2连接多路复用优化方案，微服务间RPC调用使用HTTP/1.1导致大量TCP连接（每服务200+），升级到HTTP/2后需要优化流控窗口、最大并发流数和连接管理策略。",
+      "sub_type": "connection_multiplexing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计HTTP/2多路复用的连接池配置（单连接多流），优化SETTINGS_INITIAL_WINDOW_SIZE和SETTINGS_MAX_CONCURRENT_STREAMS参数，流控窗口动态调整策略，连接健康检测和故障切换，对比HTTP/1.1和HTTP/2的连接数和延迟。",
+      "scoring_rubric": "1. 设计单连接多流的连接池配置（如单连接最大100并发流，超过则新建连接），给出流的生命周期管理策略; 2. 给出SETTINGS_INITIAL_WINDOW_SIZE（如1MB）和SETTINGS_MAX_CONCURRENT_STREAMS（如100）的具体值及调参依据; 3. 实现连接健康检测（PING帧心跳/超时断开）和故障切换（连接失败自动重连+请求重试）逻辑; 4. 量化对比HTTP/1.1（200+连接）vs HTTP/2（1-2连接）的连接数减少比例和P99延迟改善幅度。"
+    },
+    {
+      "id": "113-013",
+      "prompt": "设计一个低延迟系统的GC调优方案，金融交易系统要求P99延迟<1ms，当前使用G1GC的STW暂停导致超时。对比ZGC/Shenandoah在亚毫秒延迟场景的配置和调优策略。",
+      "sub_type": "GC_tuning_low_latency",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析G1GC STW暂停的根因（Mixed GC/Full GC），对比ZGC（亚毫秒暂停/支持TB级堆）和Shenandoah（并发压缩/低暂停）的适用性，设计堆大小、并发标记线程、内存分配速率等参数调优策略，使用JFR/GC日志验证调优效果。",
+      "scoring_rubric": "1. 分析G1GC STW暂停的具体根因（Mixed GC/Full GC/并发标记Remark），给出各阶段暂停时间占比; 2. 从暂停时间（目标<1ms）、吞吐量损失、堆大小支持3个维度对比ZGC和Shenandoah，给出适用场景表格; 3. 给出ZGC或Shenandoah的具体JVM参数配置（如-XX:+UseZGC -XX:ZCollectionInterval=N）及调优理由; 4. 用GC日志和JFR验证P99延迟从>1ms降至<1ms，给出暂停时间分布直方图数据。"
+    },
+    {
+      "id": "113-014",
+      "prompt": "设计一个异步框架性能对比方案，Java项目需要选择Reactor/RxJava/Vert.x/Kotlin Coroutines四种异步框架之一。设计基准测试对比吞吐量、延迟、内存占用和编程模型易用性。",
+      "sub_type": "async_framework_comparison",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计统一的基准测试场景（HTTP服务/数据库查询/消息处理），使用JMH对比各框架的吞吐量和P99延迟，监控内存分配和GC压力，评估编程模型的学习曲线和调试便利性，给出选型建议。",
+      "scoring_rubric": "1. 设计至少3个基准测试场景（HTTP服务/数据库查询/消息处理），给出JMH测试用例的伪代码; 2. 对比Reactor/RxJava/Vert.x/Coroutines的QPS、P99延迟（ms）和每请求内存分配（bytes）指标; 3. 从学习曲线、调试便利性、生态成熟度3个维度给出1-5分评分表; 4. 根据IO密集型和CPU密集型场景分别给出选型结论，附带理由。"
+    },
+    {
+      "id": "113-015",
+      "prompt": "设计一个IO调度器优化方案，混合存储架构（NVMe SSD + HDD）下，数据库的随机读写和日志的顺序写入共享IO通道。需要优化IO调度策略（mq-deadline/bfq/none）减少延迟抖动。",
+      "sub_type": "IO_scheduler_tuning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析不同IO调度器（mq-deadline/bfq/none/kyber）的特性差异，根据存储设备类型（NVMe用none/mq-deadline，HDD用bfq）配置调度器，设计IO优先级和带宽隔离策略，使用blktrace/fio验证延迟抖动改善效果。",
+      "scoring_rubric": "1. 对比mq-deadline/bfq/none/kyber四种调度器的队列深度、合并策略和适用设备类型，给出对比表格; 2. 明确NVMe SSD使用none调度器、HDD使用bfq调度器的配置命令（echo xxx > /sys/block/xxx/queue/scheduler）; 3. 设计IO优先级（cgroups blkio）和带宽隔离（读写限速Mbps）方案; 4. 用blktrace对比优化前后的IO延迟分布（P50/P99），量化抖动改善比例。"
+    },
+    {
+      "id": "113-016",
+      "prompt": "设计一个JIT编译优化方案，Java热点方法在C2编译后性能仍不理想，需要分析JIT编译日志，识别内联失败、逃逸分析不充分、循环优化不足等问题，通过JMH和JITWatch定位优化机会。",
+      "sub_type": "JIT_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用-XX:+PrintCompilation和-XX:+PrintInlining分析JIT编译日志，使用JITWatch可视化分析编译决策，识别内联失败（方法过大/递归）和逃逸分析不充分（对象逃逸导致无法栈分配）的原因，通过JMH验证代码重构对JIT优化的促进效果。",
+      "scoring_rubric": "1. 使用-XX:+PrintCompilation和-XX:+PrintInlining分析至少3个热点方法的编译层级（C1/C2）和内联决策; 2. 识别内联失败的具体原因（方法体>325字节/虚方法调用/递归深度>2），给出至少2个案例; 3. 用JITWatch定位逃逸分析未触发栈分配的对象，给出对象逃逸路径分析; 4. 给出代码重构方案（拆分大方法/final修饰/消除虚调用），用JMH验证重构后性能提升至少10%。"
+    },
+    {
+      "id": "113-017",
+      "prompt": "设计一个容器化应用的资源调优方案，Kubernetes中Java应用频繁被OOM Kill但实际堆内存使用率仅60%。需要分析容器内存限制与JVM堆+非堆+堆外内存的关系，优化资源配置。",
+      "sub_type": "container_resource_tuning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析容器内存构成（JVM堆+Metaspace+线程栈+直接内存+GC开销），使用-XX:MaxRAMPercentage控制堆占比，配置-XX:+UseContainerSupport让JVM感知容器限制，优化Requests/Limits设置，设计VPA推荐策略。",
+      "scoring_rubric": "1. 分析容器内存构成（堆+Metaspace+线程栈+直接内存+GC开销），给出各区域的典型占比计算公式; 2. 给出-XX:MaxRAMPercentage=75.0和-XX:+UseContainerSupport的具体配置，解释为什么堆占比不设为100%; 3. 设计Requests/Limits的合理比值（如Requests=512Mi/Limits=1Gi），给出OOMKill阈值计算方法; 4. 设计VPA推荐策略，给出最小/最大资源边界和更新策略配置。"
+    },
+    {
+      "id": "113-018",
+      "prompt": "设计一个数据库水平分片策略，用户表增长到10亿行，单库写入QPS达到上限。需要设计分片键选择、数据路由、跨分片查询、数据迁移扩容的完整方案。",
+      "sub_type": "database_sharding_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计分片键选择策略（用户ID取模/一致性哈希），数据路由中间件（ShardingSphere/Vitess），跨分片查询的聚合和排序优化，扩容时的数据迁移方案（双写+切换），分片后的分布式事务处理。",
+      "scoring_rubric": "1. 给出分片键选择的评估维度（基数/查询覆盖率/数据倾斜度），用user_id取模或一致性哈希举例说明路由逻辑; 2. 设计跨分片聚合查询的并行执行方案（各分片并行查询+中间层合并），给出排序和分页的具体实现策略; 3. 设计扩容迁移方案（双写+灰度切换），给出数据校验和回滚机制，量化迁移窗口时间; 4. 给出分布式事务处理方案（如Saga/TCC），说明最终一致性的保障机制。"
+    },
+    {
+      "id": "113-019",
+      "prompt": "设计一个数据预取（Prefetch）策略，用户浏览商品详情页时需要预加载关联数据（推荐/评价/相似商品）。需要设计预取触发时机、预取粒度控制、缓存命中率优化和带宽成本控制。",
+      "sub_type": "prefetch_strategy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于用户行为预测的预取触发策略（页面加载时/滚动到可视区域前），预取粒度控制（按优先级分层加载），预取结果缓存和过期策略，带宽成本控制（限制并发预取数/压缩传输），预取命中率监控和策略调优。",
+      "scoring_rubric": "1. 设计至少2种预取触发策略（页面加载时预取/滚动到可视区域前200ms预取），给出触发时机的具体判断逻辑; 2. 定义预取优先级（P0推荐数据/P1评价数据/P2相似商品），限制并发预取数（如最多3个）和单次预取数据量; 3. 设计预取结果缓存TTL（如5分钟）和LRU淘汰策略，给出缓存Key生成规则; 4. 定义预取命中率指标（目标>60%）和带宽成本指标，设计A/B测试框架持续优化。"
+    },
+    {
+      "id": "113-020",
+      "prompt": "设计一个请求合并（Request Coalescing）方案，缓存失效瞬间1000个并发请求同时查询同一个Key导致数据库压力激增。需要设计singleflight模式的实现，确保同一时刻只有一个请求穿透到数据库。",
+      "sub_type": "request_coalescing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于Key的请求合并机制（singleflight），使用互斥锁+结果共享确保同一Key只有一个请求穿透，等待者阻塞后共享结果，超时和异常处理（失败时唤醒所有等待者），合并统计和监控指标。",
+      "scoring_rubric": "1. 设计基于Key的请求合并数据结构（map[string]*call），给出acquire/release的完整并发控制逻辑; 2. 实现等待者阻塞（sync.WaitGroup或channel）和结果共享机制，确保1000个并发请求只穿透1次数据库; 3. 处理超时（等待超过N秒直接穿透）和异常（失败时唤醒所有等待者重试）的代码逻辑; 4. 给出合并率监控指标（合并率=(总请求数-穿透请求数)/总请求数，目标>95%）和数据库QPS下降的量化数据。"
+    },
+    {
+      "id": "113-021",
+      "prompt": "设计一个线程竞争分析方案，Java服务通过jstack发现大量线程BLOCKED在数据库连接池获取上。需要分析锁竞争热点、等待链路、持锁时长分布，给出连接池参数和代码层面的优化建议。",
+      "sub_type": "thread_contention_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用jstack/async-profiler采集线程转储，分析BLOCKED线程的锁对象和等待链路，统计持锁时长分布和竞争频率，定位连接池配置瓶颈（maxActive/minIdle/waitTimeout），给出连接池参数调优和代码优化（减少事务范围/异步化）建议。",
+      "scoring_rubric": "1. 用jstack或async-profiler采集至少3次线程转储，分析BLOCKED线程的锁对象ID和等待链路深度; 2. 统计持锁时长分布（P50/P99）和竞争频率（每秒BLOCKED次数），给出量化数据; 3. 给出连接池参数调优建议（maxActive从20调至50/minIdle从5调至15/waitTimeout从30s调至5s）; 4. 给出至少2种代码优化方案（缩小事务范围/异步化非关键查询），量化优化后BLOCKED线程数减少比例。"
+    },
+    {
+      "id": "113-022",
+      "prompt": "设计一个GC日志深度分析方案，通过分析G1GC的详细日志，定位导致P99延迟飙升的GC阶段（Mixed GC/Full GC/并发标记），分析Region回收效率和Humongous对象分配问题，给出针对性调优参数。",
+      "sub_type": "gc_log_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用GCViewer/GCEasy解析GC日志，分析各阶段耗时分布（Initial Mark/Remark/Cleanup/Evacuation），识别Humongous对象分配频率和Region回收效率下降，调整-XX:G1HeapRegionSize/-XX:InitiatingHeapOccupancyPercent/-XX:MaxGCPauseMillis等参数，验证P99延迟改善。",
+      "scoring_rubric": "1. 用GCViewer/GCEasy解析GC日志，给出各阶段（Initial Mark/Remark/Cleanup/Evacuation）的耗时占比分布; 2. 识别Humongous对象分配频率（占Region数比例）和Region回收效率（存活对象/总Region空间），给出量化指标; 3. 给出至少3个G1GC调优参数的具体值（-XX:G1HeapRegionSize/-XX:InitiatingHeapOccupancyPercent/-XX:MaxGCPauseMillis）及调参依据; 4. 对比调优前后P99延迟数据（目标从>100ms降至<20ms），给出GC暂停时间分布对比。"
+    },
+    {
+      "id": "113-023",
+      "prompt": "设计一个数据库连接池容量规划方案，微服务集群有50个实例，每个实例配置maxActive=20，数据库最大连接数500。需要分析连接使用模式（峰值/均值/长事务），动态调整连接池参数避免连接耗尽和浪费。",
+      "sub_type": "connection_pool_sizing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析连接使用模式（活跃连接数时序分布/长事务占比/连接获取等待时间），计算理论最优连接数（N*(T_wait/T_use+1)），设计动态连接池（HikariCP动态调整/Druid监控），设置连接泄漏检测和告警阈值，模拟峰值压力验证连接池容量。",
+      "scoring_rubric": "1. 分析连接使用模式（峰值QPS/均值QPS/长事务占比>5秒的比例），给出连接活跃数时序分布图描述; 2. 使用公式N*(T_wait/T_use+1)计算理论最优连接数，给出50实例*20连接=1000总连接 vs 数据库上限500的风险分析; 3. 设计HikariCP动态参数（maxPoolSize=15/minIdle=5/leakDetectionThreshold=60000），给出连接泄漏检测和告警阈值; 4. 设计峰值压力测试场景（模拟1000 QPS），验证连接池无耗尽且平均获取等待时间<50ms。"
+    },
+    {
+      "id": "113-024",
+      "prompt": "设计一个缓存预热（Cache Warming）方案，电商系统每天凌晨重启后缓存为空，首个请求的延迟从50ms飙升到5秒。需要设计启动时自动预加载热点数据，控制预热对数据库的冲击。",
+      "sub_type": "cache_warming_strategy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计热点数据识别策略（Top-K高频Key/历史访问日志分析），分批预加载（控制并发度避免DB压力），预热进度监控和就绪探针（Readiness Probe延迟注册），支持灰度预热（按流量百分比逐步接入），预热效果监控（缓存命中率/首请求延迟）。",
+      "scoring_rubric": "1. 设计热点数据识别策略（Top-100高频Key/历史访问日志分析），给出分批预加载的批次大小（如每批1000条）和间隔时间（如每批间隔100ms）; 2. 限制预热并发度（如最多10个并发DB查询），给出数据库CPU不超过80%的保护策略; 3. 设计Readiness Probe延迟注册（预热完成前返回503）和灰度接入（按10%/30%/100%流量比例逐步切入）; 4. 给出预热效果监控指标（缓存命中率从0%升至>80%/首请求延迟从5秒降至<100ms）。"
+    },
+    {
+      "id": "113-025",
+      "prompt": "设计一个MySQL查询计划调优方案，复杂报表SQL的执行计划不稳定，相同SQL在不同时间走不同的索引（优化器选错索引）。需要分析统计信息过期原因，使用FORCE INDEX或优化器提示稳定执行计划。",
+      "sub_type": "query_plan_hints",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析统计信息采集频率和准确性（ANALYZE TABLE/innodb_stats_persistent），识别优化器选错索引的条件（数据倾斜/统计采样偏差），使用FORCE INDEX/USE INDEX/optimizer_hint稳定执行计划，设计统计信息定期更新策略，对比hint前后执行计划和性能差异。",
+      "scoring_rubric": "1. 分析innodb_stats_persistent和innodb_stats_auto_recalc配置，说明统计信息采集频率（默认200页采样）对执行计划的影响; 2. 识别优化器选错索引的具体根因（数据倾斜/统计采样偏差/索引选择性差异），给出至少1个案例分析; 3. 给出FORCE INDEX/USE INDEX/optimizer_hint的具体SQL示例，对比hint前后的执行计划差异（type列从ALL变为ref）; 4. 设计统计信息定期更新策略（如每天凌晨ANALYZE TABLE），给出执行计划回归检测机制。"
+    },
+    {
+      "id": "113-026",
+      "prompt": "设计一个内存映射文件（Memory-Mapped File）IO优化方案，日志分析服务需要随机读取50GB的日志文件，传统read()调用导致大量内核态切换。对比mmap和传统IO的性能差异，给出适用场景建议。",
+      "sub_type": "memory_mapped_io",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析mmap（零拷贝/用户态直接访问/页缓存共享）和传统IO（read/write系统调用/内核缓冲区拷贝）的性能差异，设计大文件的mmap分段映射策略（避免地址空间耗尽），处理mmap的预读（readahead）和写回（msync/fsync）策略，评估随机读vs顺序读场景下mmap的收益。",
+      "scoring_rubric": "1. 对比mmap（零拷贝/用户态直接访问）和传统read()（内核缓冲区拷贝）的系统调用次数和CPU上下文切换差异，给出适用场景（随机读用mmap/顺序读用传统IO）; 2. 设计50GB文件的分段映射策略（如每段1GB），给出地址空间耗尽的防护措施; 3. 给出madvise(MADV_SEQUENTIAL/MADV_RANDOM)和msync的配置策略; 4. 用benchmark对比随机读场景下mmap vs read()的吞吐量差异（如mmap提升2-5倍）。"
+    },
+    {
+      "id": "113-027",
+      "prompt": "设计一个批量API接口优化方案，客户端需要调用100次单条查询接口获取用户详情，每次调用耗时20ms，总耗时2秒。需要设计批量查询接口，支持一次请求获取多条记录，同时处理部分失败场景。",
+      "sub_type": "batch_api_design",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计批量查询接口（支持IN查询/分页返回），控制单次批量大小（防止SQL过长/响应体过大），处理部分失败（返回成功和失败的分离结果），客户端适配（自动分批/并发请求/结果合并），对比单条调用和批量调用的延迟和吞吐量差异。",
+      "scoring_rubric": "1. 设计批量查询API接口（POST /users/batch），给出请求/响应的JSON Schema和最大批量大小限制（如100条/次）; 2. 处理部分失败场景，返回结构中包含success_ids和failed_ids，给出HTTP 207 Multi-Status的响应设计; 3. 设计客户端自动分批逻辑（每批50条/并发3批），给出结果合并和去重的代码逻辑; 4. 量化对比优化前（100次*20ms=2秒）和优化后（2批*30ms=60ms）的延迟和吞吐量改善。"
+    },
+    {
+      "id": "113-028",
+      "prompt": "设计一个异步背压（Backpressure）方案，消息处理系统中生产者速率10万条/秒但消费者处理能力仅3万条/秒，导致队列积压和OOM。需要设计端到端流控机制协调生产者和消费者速率。",
+      "sub_type": "async_backpressure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于队列水位的背压信号（低水位/高水位/满水位），生产者端动态限速（信号量/令牌桶/阻塞发送），消费者端弹性伸缩（基于积压量动态调整并发数），端到端流控（TCP式滑动窗口），过载保护（丢弃策略/降级处理），监控积压趋势和背压触发频率。",
+      "scoring_rubric": "1. 设计三级水位线（低水位30%/高水位70%/满水位100%）的队列容量阈值，给出各级触发的背压动作; 2. 实现生产者端动态限速（令牌桶/信号量），给出限速因子计算公式（当前队列使用率/目标使用率）; 3. 设计消费者弹性伸缩策略（基于积压量动态调整worker数，如每积压1000条增加1个worker，上限20个）; 4. 给出积压趋势监控指标（积压增长速率/背压触发频率/端到端延迟），量化优化后队列不再OOM且延迟稳定。"
+    },
+    {
+      "id": "113-029",
+      "prompt": "设计一个SIMD指令集优化方案，图像处理服务中像素级运算（灰度转换/卷积/直方图统计）占CPU时间80%。需要使用AVX2/AVX-512 SIMD指令优化循环计算，对比标量和向量化实现的性能差异。",
+      "sub_type": "simd_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析热点循环的计算模式，使用intrinsics（_mm256_loadu_si256/_mm256_mullo_epi32等）实现向量化，处理对齐和尾部元素，对比标量vs AVX2 vs AVX-512的吞吐量提升，使用perf验证SIMD指令利用率，评估不同CPU架构的兼容性。",
+      "scoring_rubric": "1. 分析灰度转换/卷积/直方图统计的计算模式，判断向量化可行性（如灰度转换每像素3通道运算可同时处理8/16个像素）; 2. 给出AVX2 intrinsics代码示例（如_mm256_loadu_si256/_mm256_mullo_epi32/_mm256_srli_epi32实现灰度转换）; 3. 处理内存对齐（_mm256_load_si256要求32字节对齐）和尾部元素（标量处理剩余像素）的代码逻辑; 4. 用benchmark对比标量vs AVX2 vs AVX-512的吞吐量，给出至少4倍加速比数据。"
+    },
+    {
+      "id": "113-030",
+      "prompt": "设计一个PGO（Profile-Guided Optimization）方案，C++编译服务性能未达预期，需要通过采集运行时Profile数据指导编译器优化内联决策、分支预测、代码布局。对比有无PGO的性能差异。",
+      "sub_type": "profile_guided_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计PGO流水线（Instrumented Build->Profile采集->Optimized Build），使用LLVM PGO/GCC FDO采集分支频率和函数调用热度，分析编译器利用Profile数据的优化决策（热路径代码布局/冷函数out-of-line/分支提示），对比PGO前后的指令缓存命中率和分支预测准确率。",
+      "scoring_rubric": "1. 设计PGO三阶段流水线（Instrumented Build->Profile采集->Optimized Build），给出GCC -fprofile-generate/-fprofile-use或LLVM PGO的具体编译命令; 2. 采集运行时Profile数据（分支频率/函数调用热度/基本块执行次数），给出Profile文件的格式和关键字段说明; 3. 分析PGO对热路径代码布局（热函数集中放置减少i-cache miss）和分支预测（__builtin_expect标记）的优化效果; 4. 用benchmark对比PGO前后的指令缓存命中率和执行时间，给出至少10%性能提升数据。"
+    },
+    {
+      "id": "113-031",
+      "prompt": "设计一个生产环境延迟诊断方案，API P99延迟从50ms间歇性飙升到2秒，但CPU和内存使用率正常。需要使用分布式追踪和pprof定位延迟根因，覆盖网络、锁竞争、GC、外部依赖等维度。",
+      "sub_type": "latency_diagnosis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用分布式追踪（Jaeger/Tempo）定位慢请求链路，pprof分析CPU/内存/锁竞争Profile，分析GC日志排查STW暂停，检查外部依赖延迟和连接池等待，建立延迟归因模型区分各因素贡献。",
+      "scoring_rubric": "1. 使用Jaeger/Tempo定位慢请求链路，给出各Span耗时占比，识别延迟飙升的具体环节（如DB查询/外部HTTP调用/锁等待）; 2. 用pprof采集CPU/内存/锁竞争Profile，给出Top-5热点函数及其占用比例; 3. 建立延迟归因模型（网络/锁竞争/GC/外部依赖各维度贡献百分比），给出至少3条针对性优化建议。"
+    },
+    {
+      "id": "113-032",
+      "prompt": "设计一个内存分配热点分析方案，Go服务GC频率过高（每秒20次），需要定位高频内存分配的代码路径。使用go tool pprof分析堆Profile，识别分配热点并设计对象池复用策略。",
+      "sub_type": "memory_allocation_profiling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用go tool pprof -alloc_objects分析堆分配Profile，按分配来源排序识别热点函数，分析临时对象分配模式（循环内分配/大对象/切片扩容），设计sync.Pool对象复用策略，验证优化后GC频率和暂停时间改善。",
+      "scoring_rubric": "1. 用go tool pprof -alloc_objects分析堆分配Profile，给出Top-5热点函数的分配次数和字节数; 2. 分析临时对象分配模式（循环内分配/切片扩容/大对象），设计sync.Pool复用策略，给出具体的代码改造示例; 3. 量化验证优化后GC频率从20次/秒降至<5次/秒，GC暂停时间从>10ms降至<2ms。"
+    },
+    {
+      "id": "113-033",
+      "prompt": "设计一个异步编程框架性能对比方案，Java项目需要在Reactor WebFlux和传统Servlet之间选型。设计基准测试对比在IO密集型和混合负载场景下的吞吐量、延迟和资源占用。",
+      "sub_type": "async_framework_benchmark",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计IO密集型（HTTP调用外部API）和混合负载（CPU计算+IO）两种场景，使用wrk/k6压测对比Reactor和Servlet的QPS/P99/线程数/内存占用，分析背压机制和背压失控场景，给出选型建议和适用边界。",
+      "scoring_rubric": "1. 设计IO密集型（调用外部API响应100ms）和混合负载（50ms CPU计算+50ms IO）两种测试场景，给出wrk/k6压测脚本配置; 2. 对比Reactor和Servlet的QPS、P99延迟（ms）、线程数和内存占用（MB），给出量化对比表格; 3. 分析Reactor背压机制在高负载下的表现（有背压 vs 无背压时的内存增长差异），给出基于场景的选型结论。"
+    },
+    {
+      "id": "113-034",
+      "prompt": "设计一个GC停顿对业务延迟影响的量化分析方案，金融交易系统要求P99延迟<5ms但GC停顿偶尔导致超时。需要建立GC停顿与请求延迟的关联模型，量化GC对业务指标的影响。",
+      "sub_type": "GC_latency_correlation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计GC事件与请求延迟的关联采集（JFR事件+请求Trace关联），统计GC停顿期间的请求超时率和延迟分布变化，建立GC频率/时长与P99延迟的回归模型，基于模型预测不同GC参数下的业务延迟改善幅度。",
+      "scoring_rubric": "1. 设计GC事件与请求延迟的关联采集方案（JFR事件+TraceID关联），给出GC停顿期间请求超时率的计算方法; 2. 量化GC对业务延迟的影响（如GC停顿5ms期间P99延迟从3ms飙升到8ms，超时率从0.1%升到5%）; 3. 建立GC频率/时长与P99延迟的回归模型，预测切换ZGC后P99延迟从>5ms降至<1ms的业务收益。"
+    },
+    {
+      "id": "113-035",
+      "prompt": "设计一个微服务线程池隔离方案，订单服务调用物流服务时物流服务响应变慢，导致订单服务线程池耗尽影响所有接口。需要设计基于信号量和线程池的双重隔离策略。",
+      "sub_type": "thread_pool_isolation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计按依赖服务的线程池隔离（物流/支付/库存各自独立线程池），信号量隔离作为轻量替代方案，线程池参数动态调整（核心线程/队列/拒绝策略），隔离指标监控（活跃线程/队列深度/拒绝率），与熔断器配合实现自动降级。",
+      "scoring_rubric": "1. 设计按依赖服务（物流/支付/库存）的独立线程池架构，给出各池的corePoolSize/maxPoolSize/queueCapacity具体配置值; 2. 实现信号量隔离（轻量级/无线程切换）和线程池隔离（支持超时/独立队列）两种策略，给出各自的适用场景; 3. 给出隔离监控指标（活跃线程数/队列深度/拒绝率），设计与熔断器（如Sentinel/Resilience4j）配合的自动降级逻辑（拒绝率>50%触发熔断）。"
+    },
+    {
+      "id": "113-036",
+      "prompt": "设计一个JVM JIT编译日志分析方案，热点方法经过C1/C2编译后性能仍低于预期。需要分析JIT编译日志识别内联失败和逃逸分析不足，通过代码重构促进JIT优化。",
+      "sub_type": "JIT_compilation_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用-XX:+PrintCompilation和-XX:+PrintInlining分析编译决策，识别内联失败原因（方法体过大/虚方法调用/递归），分析逃逸分析结果（对象逃逸导致无法栈分配），设计代码重构方案（拆分大方法/final修饰/消除虚调用），JMH验证重构效果。",
+      "scoring_rubric": "1. 使用-XX:+PrintCompilation和-XX:+PrintInlining分析热点方法的编译层级（C1/C2）和内联决策，给出至少2个方法的分析结果; 2. 识别内联失败的具体原因（方法体>325字节/虚方法调用/递归），分析逃逸分析结果（对象逃逸导致无法栈分配）; 3. 给出代码重构方案（拆分大方法/final修饰/消除虚调用），用JMH验证重构后性能提升至少10%，给出ns/op对比数据。"
+    },
+    {
+      "id": "113-037",
+      "prompt": "设计一个容器CPU Throttling优化方案，Kubernetes中Java应用容器CPU Limit设为2核，实际使用仅1.5核但出现严重延迟抖动，分析发现CPU Throttling率超过30%。",
+      "sub_type": "container_cpu_throttling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析CFS带宽限流机制（CPU quota/period），监控Throttling率指标（container_cpu_cfs_throttled_periods_total），优化策略（调整Limit/增大Burst/使用Request而非Limit），评估JVM线程数与CPU Limit的匹配关系，设计CPU资源的渐进式调优验证方案。",
+      "scoring_rubric": "1. 分析CFS带宽限流机制（CPU quota/period），解释Throttling率>30%的根因（JVM线程数>CPU Limit导致频繁quota耗尽）; 2. 给出Throttling率监控方法（container_cpu_cfs_throttled_periods_total/total_periods），设计优化策略（CPU Limit从2核调至4核/使用Request而非Limit）; 3. 分析JVM线程数（如200个线程）与CPU Limit（2核）的不匹配关系，给出线程数优化建议（减少至50个线程）。"
+    },
+    {
+      "id": "113-038",
+      "prompt": "设计一个磁盘IO瓶颈分析方案，数据库服务器的写入延迟从1ms飙升到50ms，需要使用blktrace和iostat定位IO瓶颈，分析IO调度器、文件系统和磁盘层面的优化空间。",
+      "sub_type": "disk_io_profiling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应使用iostat监控磁盘利用率和await，blktrace分析IO请求的排队和调度延迟，识别IO瓶颈层面（调度器/文件系统/磁盘硬件），给出IO调度器选型（mq-deadline/bfq/none）、文件系统参数调优和RAID配置优化建议。",
+      "scoring_rubric": "1. 用iostat监控磁盘利用率（%util）和await，用blktrace分析IO请求的排队深度和调度延迟，定位瓶颈层面（调度器/文件系统/磁盘硬件）; 2. 分析IO调度器（mq-deadline vs bfq）对延迟的影响，给出ext4文件系统参数调优（如noatime/nobarrier/data=writeback）; 3. 给出IO优化方案（调整调度器/RAID配置/SSD升级），用blktrace对比优化前后await从50ms降至<5ms的量化数据。"
+    },
+    {
+      "id": "113-039",
+      "prompt": "设计一个Kubernetes QoS资源争用分析方案，集群中BestEffort Pod抢占Guaranteed Pod的CPU资源导致关键服务延迟抖动。需要设计QoS策略优化和资源预留方案。",
+      "sub_type": "k8s_qos_resource_contention",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析Kubernetes QoS等级（Guaranteed/Burstable/BestEffort）的资源分配机制，监控CPU压 throttling和OOM事件，设计ResourceQuota限制低优先级命名空间，使用PriorityClass和抢占机制保障关键服务，评估CPU Manager的静态策略对关键服务的隔离效果。",
+      "scoring_rubric": "1. 分析Guaranteed/Burstable/BestEffort三种QoS等级的资源分配优先级和OOM Kill顺序，说明BestEffort抢占Guaranteed CPU的原因; 2. 设计ResourceQuota限制低优先级命名空间（如BestEffort最多使用2核），给出PriorityClass配置（关键服务priorityClassName: system-cluster-critical）; 3. 评估CPU Manager静态策略（static policy）对关键服务的CPU亲和性隔离效果，给出kubelet配置和验证方法。"
+    },
+    {
+      "id": "113-040",
+      "prompt": "设计一个数据库查询缓存失效风暴防护方案，缓存大批量过期时所有请求同时穿透到数据库导致CPU飙升到100%。需要设计缓存过期策略分散和并发请求合并机制。",
+      "sub_type": "cache_storm_protection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计缓存过期时间随机化（TTL加随机偏移避免集中失效），singleflight并发请求合并（相同Key只放一个请求穿透），缓存预刷新（在过期前异步更新），多级缓存降级（本地缓存兜底），缓存击穿监控（穿透率/数据库QPS突增告警）。",
+      "scoring_rubric": "1. 设计缓存TTL随机化策略（基础TTL+random(0,300s)偏移），给出避免集中失效的数学原理和示例计算; 2. 实现singleflight并发请求合并，给出1000个并发请求只穿透1次数据库的具体代码逻辑; 3. 设计多级缓存（本地缓存+Redis+DB）降级方案，给出缓存击穿监控指标（穿透率>10%触发告警/数据库QPS突增>200%触发预刷新）。"
+    },
+    {
+      "id": "113-041",
+      "prompt": "设计一个无锁数据结构优化方案，高并发计数器服务使用synchronized导致线程竞争严重。需要对比AtomicLong、LongAdder、ConcurrentHashMap分段计数三种方案的吞吐量差异。",
+      "sub_type": "lock_free_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析synchronized的锁竞争瓶颈，对比AtomicLong（CAS操作/低竞争最优）、LongAdder（Cell数组分散写入/高竞争最优）、分段计数（段锁/中等竞争）的性能特征，使用JMH基准测试对比不同竞争程度下的吞吐量，给出基于竞争级别的选型建议。",
+      "scoring_rubric": "1. 分析synchronized锁竞争的性能瓶颈（CAS失败率/线程阻塞/上下文切换），给出高竞争下的吞吐量下降曲线描述; 2. 对比AtomicLong（CAS操作/低竞争最优）、LongAdder（Cell数组分散写入/高竞争最优）、分段计数（段锁/中等竞争）的实现原理和适用线程数范围; 3. 用JMH基准测试对比1/10/100/1000线程下的吞吐量（ops/ms），给出量化数据表格; 4. 基于竞争程度（低<10线程/中10-100线程/高>100线程）给出最优数据结构选型结论。"
+    },
+    {
+      "id": "113-042",
+      "prompt": "设计一个缓存行（Cache Line）友好的数据布局方案，游戏引擎中ECS架构的实体组件遍历因缓存未命中导致帧率下降。需要优化数据布局从AoS到SoA提升CPU缓存命中率。",
+      "sub_type": "cache_friendly_layout",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析AoS（Array of Structures）布局导致的缓存行浪费（遍历单字段需加载无关字段），设计SoA（Structure of Arrays）布局使同类字段连续存储，使用perf stat验证L1/L2缓存未命中率改善，评估SoA对代码复杂度和维护性的影响，对比AoS和SoA在不同遍历模式下的性能差异，考虑padding对齐避免false sharing。",
+      "scoring_rubric": "1. 分析AoS布局（如struct Entity{float x,y,z,hp;}数组）遍历单字段时加载无关字段导致的缓存行浪费（64字节缓存行只利用16字节）; 2. 设计SoA布局（struct Entities{float x[N],y[N],z[N],hp[N];}），给出代码示例，说明缓存行利用率从25%提升到100%; 3. 用perf stat验证L1/L2缓存未命中率改善（如从30%降至<5%），给出量化对比数据; 4. 处理false sharing（padding对齐到64字节边界）和内存对齐优化（alignas(64)），给出具体代码。"
+    },
+    {
+      "id": "113-043",
+      "prompt": "设计一个数据库慢查询治理方案，MySQL中200条慢查询占总查询量5%但消耗60%的数据库CPU。需要设计慢查询发现、分析、优化和验证的闭环治理流程。",
+      "sub_type": "slow_query_governance",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计慢查询自动发现机制（slow_query_log/performance_schema），分析方法（EXPLAIN执行计划/索引使用/扫描行数），优化手段分类（索引/SQL重写/Schema），效果验证和治理看板（Top-N排名/进度追踪），长效预防（SQL Review门禁/执行计划回归检测）。",
+      "scoring_rubric": "1. 设计慢查询自动发现机制（slow_query_log设置long_query_time=0.5秒/performance_schema），给出Top-N慢查询排名的SQL查询语句; 2. 将优化手段分为3类（索引优化/SQL重写/Schema变更），每类给出至少1个具体优化案例和预期效果; 3. 建立治理看板指标（慢查询数量/CPU占用比例/治理进度百分比），给出优化前后慢查询数量从200条降至<20条的验证方法; 4. 设计SQL Review门禁（EXPLAIN扫描行数>10000阻断上线）和执行计划回归检测（定期对比执行计划hash）。"
+    },
+    {
+      "id": "113-044",
+      "prompt": "设计一个JVM预热（Warm-up）优化方案，Java微服务冷启动后前5分钟的P99延迟是稳态的10倍。需要分析冷启动性能瓶颈（JIT编译/类加载/连接池/缓存）并设计加速预热策略。",
+      "sub_type": "jvm_warmup_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析冷启动性能瓶颈构成（JIT解释执行/类加载和验证/连接池建立/缓存空窗期/框架初始化），设计JIT预热策略（指定编译方法清单/预热请求模拟），连接池预热（启动时预建连接），缓存预热（热点数据预加载），流量灰度接入（Readiness Probe延迟注册/流量渐进式切入），使用JFR对比冷启动和稳态的性能指标差异。",
+      "scoring_rubric": "1. 分析冷启动瓶颈构成（JIT解释执行/类加载/连接池建立/缓存空窗期各维度耗时占比），给出各阶段的典型耗时数据; 2. 设计JIT预热（指定编译方法清单+模拟请求100次）、连接池预热（启动时预建N个连接）、缓存预热（加载Top-100热点数据）的具体方案; 3. 设计流量灰度接入策略（Readiness Probe延迟注册/流量按10%-50%-100%逐步切入），给出切入间隔和健康检查配置; 4. 用JFR对比冷启动和稳态的P99延迟数据，给出预热完成后延迟从10倍降至1.5倍以内的量化验证。"
+    },
+    {
+      "id": "113-045",
+      "prompt": "设计一个CPU缓存优化方案，数据处理服务遍历大型数组时L3缓存未命中率高达30%。需要分析数据访问模式，通过循环分块（Loop Tiling/Blocking）和预取指令优化缓存利用率。",
+      "sub_type": "cpu_cache_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用perf stat/cachegrind分析缓存未命中率和访问模式，设计循环分块策略（将大数组遍历按缓存大小分块减少cache miss），使用__builtin_prefetch插入预取指令提前加载数据，对比分块前后的L1/L2/L3缓存未命中率和执行时间，分析不同分块大小对性能的影响（找到最优块大小），评估预取距离和预取时机的调优。",
+      "scoring_rubric": "1. 用perf stat/cachegrind分析L3缓存未命中率（当前30%）和数据访问模式（顺序/随机/跨步），给出量化指标; 2. 设计循环分块策略（如块大小=L3缓存大小/数据元素大小），给出代码示例和分块前后cache miss对比; 3. 使用__builtin_prefetch预取指令，给出预取距离（如提前2-3个缓存行）和预取时机的具体配置; 4. 通过实验对比不同分块大小（如1KB/4KB/16KB/64KB）的性能，找到最优块大小，给出L3未命中率从30%降至<5%的验证数据。"
+    },
+    {
+      "id": "113-046",
+      "prompt": "设计一个异步IO批量提交优化方案，存储引擎每秒需要执行10万次随机写入，逐条fsync导致IO吞吐量瓶颈。需要对比io_uring批量提交和传统AIO的性能差异。",
+      "sub_type": "async_io_batching",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析逐条fsync的瓶颈（系统调用/磁盘寻道），设计io_uring批量提交方案（Submission Queue入队/Completion Queue收割），对比io_uring和libaio吞吐量差异，优化批量大小和提交时机，评估批量提交对数据持久性的影响，设计WAL保障关键数据不丢失。",
+      "scoring_rubric": "1. 分析逐条fsync的瓶颈（每次fsync系统调用开销+磁盘寻道延迟），给出单次IO操作的典型耗时（如1ms/次，10万次=100秒不可行）; 2. 设计io_uring批量提交方案（Submission Queue批量入队/Completion Queue批量收割），给出批量大小（如1024条/批）和提交时机（定时/满批）的配置; 3. 对比io_uring vs libaio的吞吐量差异（如io_uring提升3-5倍），给出量化数据; 4. 设计WAL（Write-Ahead Log）机制保障关键数据不丢失，说明批量提交对数据持久性的影响（最多丢失N条）。"
+    },
+    {
+      "id": "113-047",
+      "prompt": "设计一个大堆GC调优方案，Java应用使用32GB堆内存运行批处理作业，Full GC暂停时间超过30秒。需要设计G1GC的Region大小、Mixed GC触发阈值和并发标记线程数的调优策略。",
+      "sub_type": "large_heap_gc_tuning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析32GB堆下G1GC的Region数量和Full GC触发原因（Humongous对象/碎片化/并发标记不及时），调优G1HeapRegionSize和InitiatingHeapOccupancyPercent等参数减少暂停时间，使用GCViewer分析调优前后暂停时间分布，评估切换到ZGC的可行性。",
+      "scoring_rubric": "1. 分析32GB堆下G1GC Full GC的触发原因（Humongous对象分配频率/Region碎片化/并发标记不及时），给出各原因的占比分析; 2. 给出G1HeapRegionSize（如32MB）和InitiatingHeapOccupancyPercent（如45%）的具体调优值，解释调参对暂停时间的影响; 3. 用GCViewer分析调优前后Full GC暂停时间分布（从>30秒降至<5秒），给出暂停时间直方图数据; 4. 评估ZGC在32GB堆场景的适用性（暂停时间<10ms/吞吐量损失<5%），给出切换ZGC的JVM参数配置。"
+    },
+    {
+      "id": "113-048",
+      "prompt": "设计一个数据库连接复用优化方案，微服务每次HTTP请求都创建新的数据库连接（非连接池模式），在1000 QPS下数据库连接数达到上限导致服务不可用。需要设计连接池化和连接共享策略。",
+      "sub_type": "connection_reuse_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析无连接池的性能开销（重复TCP握手/认证/SSL协商），设计连接池方案（HikariCP参数调优：maxPoolSize/minIdle/idleTimeout），连接健康检查和泄漏检测，对比池化前后的数据库连接数和请求延迟。",
+      "scoring_rubric": "1. 分析无连接池模式的性能开销（每次请求TCP握手+认证+SSL协商耗时约5ms，1000 QPS=5000ms/秒浪费），给出连接耗尽的根因分析; 2. 设计HikariCP参数调优方案（maxPoolSize=20/minIdle=5/idleTimeout=30000ms/connectionTimeout=5000ms），给出各参数的调参依据; 3. 实现连接健康检查（connectionTestQuery/keepalive）和泄漏检测（leakDetectionThreshold=60000ms），给出告警配置; 4. 量化对比池化前（连接数=QPS=1000，延迟5ms+）和池化后（连接数=20，延迟<1ms）的改善效果。"
+    },
+    {
+      "id": "113-049",
+      "prompt": "设计一个字符串处理性能优化方案，日志分析服务中字符串拼接和正则匹配占CPU时间60%。需要对比StringBuilder/StringBuffer/StringJoiner的拼接性能，优化正则表达式编译和匹配策略。",
+      "sub_type": "string_processing_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析字符串拼接的性能差异（String拼接创建大量临时对象/StringBuilder预分配缓冲区/StringBuffer线程安全开销/StringJoiner内部StringBuilder），优化正则表达式（预编译Pattern/避免回溯的原子组和占有量词/简化正则逻辑改用indexOf），使用JMH对比各方案的吞吐量和内存分配，分析热点代码的JIT编译情况，给出字符串处理的最佳实践规范。",
+      "scoring_rubric": "1. 对比String拼接（产生N个临时对象）/StringBuilder（预分配缓冲区）/StringBuffer（同步开销）/StringJoiner的吞吐量（ops/ms）和每操作内存分配（bytes）; 2. 优化正则表达式（预编译Pattern.compile/避免回溯的原子组(?>)/占有量词++/简化正则改用indexOf），给出优化前后正则匹配耗时对比; 3. 用JMH基准测试验证各方案的性能差异，给出ns/op和GC次数的量化数据表格; 4. 给出字符串处理最佳实践规范（至少5条规则），如：循环内禁止String拼接、大文本用StringBuilder初始容量、正则必须预编译。"
+    },
+    {
+      "id": "113-050",
+      "prompt": "设计一个网络IO模型选型方案，高并发网关服务需要处理10万并发连接。对比epoll/select/poll和Reactor/Proactor模式的性能特征，设计最优的IO线程模型和缓冲区管理策略。",
+      "sub_type": "io_model_selection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析select/poll/epoll的性能差异（O(n)遍历vs事件驱动），对比Reactor和Proactor编程模型，设计IO线程模型（单Reactor多Worker/多Reactor多Worker），缓冲区管理（零拷贝/mmap），连接管理（空闲检测/心跳），压测验证10万连接下的延迟和吞吐量。",
+      "scoring_rubric": "1. 对比select（O(n)遍历/1024连接限制）/poll（O(n)/无限制）/epoll（事件驱动/O(1)）的性能特征，给出10万连接场景下各方案的可行性分析; 2. 设计IO线程模型（单Reactor多Worker vs 多Reactor多Worker），给出线程数配置（如1个Acceptor线程+4个IO线程+8个Worker线程）; 3. 优化缓冲区管理（零拷贝sendfile/splice、mmap映射）和连接管理（空闲检测超时N秒/心跳间隔M秒），给出具体配置; 4. 用压测验证10万并发连接下的P99延迟（目标<10ms）和吞吐量（目标>10万QPS），给出压测工具配置和结果数据。"
+    }
+  ]
+}

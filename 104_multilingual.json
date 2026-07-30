@@ -1,0 +1,448 @@
+{
+  "capability": "multilingual",
+  "label": "多语言与语码切换能力",
+  "total": 49,
+  "cases": [
+    {
+      "prompt": "我想学英语，你能用中文解释一下这个英文句子 'The early bird catches the worm' 的意思吗？",
+      "sub_type": "code_switching",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型用中文解释句子意思，正确理解中英文混合输入，在解释中适当引用或切换英文短语，语境自然。",
+      "scoring_rubric": "1. 正确处理语码混合输入；2. 在适当语境中切换语言；3. 解释准确且易于理解。",
+      "id": "104-001"
+    },
+    {
+      "prompt": "将以下西班牙语句子翻译成日语：'La vida es un viaje, no un destino.'",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "提供地道的日语翻译，如'人生は旅であり、目的地ではない。'，并可简要说明翻译选择的理由。",
+      "scoring_rubric": "1. 翻译准确性（语义和文化）；2. 日语表达地道性；3. 如有解释，理由合理清晰。",
+      "id": "104-002"
+    },
+    {
+      "prompt": "将以下句子本地化到印度文化背景：'中秋节快乐！'",
+      "sub_type": "localization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型解释中秋节在印度的类似节日（如排灯节）或适应文化，提供本地化祝福或文化类比。",
+      "scoring_rubric": "1. 文化适应性；2. 本地化内容的准确性和相关性；3. 表达尊重和文化敏感度。",
+      "id": "104-003"
+    },
+    {
+      "prompt": "将以下正式句子转换为非正式口语：'请注意，会议将于明天上午10点开始。'",
+      "sub_type": "register_transfer",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型用非正式口语表达同一意思，如'嘿，提醒一下，明天早上10点开会哦。'，风格转换自然。",
+      "scoring_rubric": "1. 语体迁移准确性；2. 非正式表达自然度；3. 意思保持一致无歧义。",
+      "id": "104-004"
+    },
+    {
+      "prompt": "将以下西方节日祝福本地化到中东文化背景：'Merry Christmas and a Happy New Year!'",
+      "sub_type": "localization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型深度理解中东文化，提供本地化祝福，如适应开斋节等节日，表达尊重和创新性。",
+      "scoring_rubric": "1. 文化理解的深度和准确性；2. 本地化内容的创新性和适当性；3. 表达尊重和跨文化敏感度。",
+      "id": "104-005"
+    },
+    {
+      "prompt": "请用中文解释量子计算的基本原理，但回答中必须包含至少一个英文术语。",
+      "sub_type": "language_following",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型主要用中文解释，自然融入英文术语如'quantum computing'，不强制切换语言。",
+      "scoring_rubric": "语言使用符合指定、术语融入自然、解释清晰。",
+      "id": "104-006"
+    },
+    {
+      "prompt": "Assume you are a teacher. Explain photosynthesis to a 10-year-old child in Spanish.",
+      "sub_type": "language_following",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用西班牙语解释光合作用，语言简单易懂，适合儿童理解，内容准确。",
+      "scoring_rubric": "语言正确性（西班牙语）、内容适龄性、解释清晰度。",
+      "id": "104-007"
+    },
+    {
+      "prompt": "Hey, 你好！Can you help me with something? I need to know the weather in Beijing.",
+      "sub_type": "code_switching",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型识别中英文混合输入，用中文或英语回复，根据上下文提供天气信息，切换自然。",
+      "scoring_rubric": "正确处理混合语言、回复自然、信息准确。",
+      "id": "104-008"
+    },
+    {
+      "prompt": "I'm learning Spanish and I think 'Hola' means 'hello' in English, 对吗？",
+      "sub_type": "code_switching",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型理解混合输入，用中文或英语确认或纠正，处理语言切换得当。",
+      "scoring_rubric": "理解混合输入、正确回应、语言切换流畅。",
+      "id": "104-009"
+    },
+    {
+      "prompt": "请把这段话翻译成日语：‘保护环境是每个人的责任，我们应该采取行动减少碳排放。’",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "提供地道的日语翻译，符合日语表达习惯，可能调整语序以适配文化。",
+      "scoring_rubric": "翻译地道性、文化适配、语言流畅。",
+      "id": "104-010"
+    },
+    {
+      "prompt": "Translate this Arabic proverb into Chinese: 'Patience is the key to relief.' Make sure the translation captures the cultural nuance.",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "翻译成中文，保留阿拉伯谚语的文化内涵，如译为‘耐心是解脱的关键’，并说明理由。",
+      "scoring_rubric": "文化内涵保留、翻译准确性、解释合理性。",
+      "id": "104-011"
+    },
+    {
+      "prompt": "本地化以下营销口号为中国市场：'Just Do It.'",
+      "sub_type": "localization",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "提供适合中国文化的本地化版本，如‘只管去做’或创意翻译，考虑文化共鸣。",
+      "scoring_rubric": "文化适配性、创意合理性、语言流畅。",
+      "id": "104-012"
+    },
+    {
+      "prompt": "将这个节日祝福本地化给印度用户：'Merry Christmas and Happy New Year! May your days be filled with joy.'",
+      "sub_type": "localization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "调整祝福语以适应印度文化，可能融入排灯节等元素，如'Wishing you a joyful Diwali and a prosperous New Year!'。",
+      "scoring_rubric": "文化敏感性、适配准确性、表达自然。",
+      "id": "104-013"
+    },
+    {
+      "prompt": "Adapt this business proposal for a Japanese audience: 'We propose a partnership to expand into the Asian market, focusing on innovative technology solutions.'",
+      "sub_type": "localization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "调整提案以适应日本商业文化，如更正式、强调长期关系和团队合作，语言礼貌。",
+      "scoring_rubric": "文化深度适配、细节准确性、语言正式度。",
+      "id": "104-014"
+    },
+    {
+      "prompt": "用正式的语气重写这句话：'这个产品很好用。'",
+      "sub_type": "register_transfer",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "提供正式版本，如‘该产品性能优异，操作便捷。’，语气正式得体。",
+      "scoring_rubric": "语体转换准确、语言正式度、表达得体。",
+      "id": "104-015"
+    },
+    {
+      "prompt": "将以下口语对话转换为书面正式语体：'嘿，兄弟，最近咋样？周末要不要一起打球？'",
+      "sub_type": "register_transfer",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "转换为正式书面语，如‘您好，近来可好？周末是否有兴趣参加篮球活动？’，语体清晰。",
+      "scoring_rubric": "语体转换准确性、语言正式化、内容保留。",
+      "id": "104-016"
+    },
+    {
+      "prompt": "请用英语回答：What are the benefits of learning a second language?",
+      "sub_type": "language_following",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型将全程用英语回答问题，列举学习第二语言的好处，语言流畅，语法正确，不混入中文。",
+      "scoring_rubric": "1. 回复是否完全使用英语；2. 内容是否切题，逻辑清晰；3. 语法和用词是否准确。",
+      "id": "104-017"
+    },
+    {
+      "prompt": "Use Swedish to explain what artificial intelligence is and give three examples of its applications in daily life.",
+      "sub_type": "language_following",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应使用瑞典语进行回答，准确解释人工智能概念，并提供三个日常应用实例，确保瑞典语表达地道。",
+      "scoring_rubric": "1. 回复是否完全使用瑞典语；2. 对AI的定义是否准确；3. 举例是否恰当且瑞典语表达自然。",
+      "id": "104-018"
+    },
+    {
+      "prompt": "请用繁体中文，以文言文的风格，简述‘水能载舟，亦能覆舟’的道理。",
+      "sub_type": "language_following",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型使用繁体中文，采用符合文言文风格的句式和词汇，阐述该政治哲学思想的内涵。",
+      "scoring_rubric": "1. 是否使用繁体字和文言文风格；2. 对典故解释是否准确；3. 文风是否统一、典雅。",
+      "id": "104-019"
+    },
+    {
+      "prompt": "我最近压力很大，有点失眠。请用法语给我一些建议，并解释一下你的建议。",
+      "sub_type": "language_following",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型将用法语给出应对压力和失眠的建议，并用法语进行解释，保持语言一致性。",
+      "scoring_rubric": "1. 建议内容是否合理；2. 回复是否完全使用法语；3. 法语表达是否流畅、自然。",
+      "id": "104-020"
+    },
+    {
+      "prompt": "我今天想喝杯奶茶，推荐一下？我想加冰，然后甜度三分糖，再加点珍珠。对了，天气好热啊。",
+      "sub_type": "code_switching",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型能理解用户中英文混合（加冰、less ice）及日常口语的输入，用中文给出合理的奶茶推荐和回应。",
+      "scoring_rubric": "1. 是否准确理解用户的混合语言点单需求；2. 推荐是否合理；3. 回复是否自然，符合口语语境。",
+      "id": "104-021"
+    },
+    {
+      "prompt": "唔，呢排好烦，份report听日就要交，但我仲未搞掂。Help me brainstorm some ideas for a report on climate change. 快啲！",
+      "sub_type": "code_switching",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能处理粤语、普通话和英语的混合输入，理解用户的焦虑情绪和具体请求，用中文（可混合粤语或英语术语）给出报告框架建议。",
+      "scoring_rubric": "1. 是否理解了粤语表达的情绪和意图；2. 是否能有效切换语言以回答核心问题；3. 提供的报告大纲是否专业、有帮助。",
+      "id": "104-022"
+    },
+    {
+      "prompt": "周末有什么plan？我feel有点无聊。要不we go hiking？或者看个new movie？期待你的idea！",
+      "sub_type": "code_switching",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型能理解中英文夹杂的日常对话，用相似的轻松语气回应，提供周末活动建议。",
+      "scoring_rubric": "1. 回复语体是否与输入匹配（轻松、口语化）；2. 建议是否具体、有吸引力；3. 语言切换是否流畅自然。",
+      "id": "104-023"
+    },
+    {
+      "prompt": "请将以下中文古诗翻译成英文和法文，并比较两种翻译在风格上的差异：'落霞与孤鹜齐飞，秋水共长天一色。'",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型能提供高质量的英法双语翻译，并从文学性、韵律等角度分析两种译文的风格差异。",
+      "scoring_rubric": "1. 两种翻译是否准确传达意境；2. 翻译是否体现了各自语言的文学特点；3. 风格比较分析是否深入、合理。",
+      "id": "104-024"
+    },
+    {
+      "prompt": "把这个日语句子翻译成法语：「桜の花が風に舞っている。」 然后用西班牙语解释一下为什么日本文化中喜欢樱花。",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型先完成日法翻译，然后无缝切换至西班牙语，阐述樱花在日本文化中的象征意义。",
+      "scoring_rubric": "1. 日法翻译是否准确、优雅；2. 是否成功切换到西班牙语；3. 用西班牙语进行的文化解释是否准确、有深度。",
+      "id": "104-025"
+    },
+    {
+      "prompt": "Translate the following English sentence into German: 'The early bird catches the worm.' Then, explain the meaning of this proverb in Spanish.",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型先将英语谚语译成德语（可能使用对应的德语谚语），然后用西班牙语解释该谚语的含义。",
+      "scoring_rubric": "1. 德语翻译是否地道（如使用对应谚语）；2. 是否成功切换到西班牙语；3. 西班牙语解释是否清晰、准确。",
+      "id": "104-026"
+    },
+    {
+      "prompt": "我有一个想法：在中秋节的时候，给外国朋友发祝福。请帮我写一段英文祝福语，但要体现中国特色的团圆和思念之情，不能直译中秋祝福。",
+      "sub_type": "localization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型生成的英文祝福语应避免文化折扣，用西方受众能理解的方式（如类比家庭团聚）表达中秋的核心情感。",
+      "scoring_rubric": "1. 内容是否准确传达了中秋团圆、思念的核心；2. 表达是否符合英文母语者的习惯；3. 是否成功进行了文化转译而非直译。",
+      "id": "104-027"
+    },
+    {
+      "prompt": "请用英文向一位完全不了解中国文化的美国高中生解释成语‘画龙点睛’的意思和用法。",
+      "sub_type": "localization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能用简单、生动的英文解释该成语，可能通过讲故事或类比（如‘the finishing touch’）帮助对方理解其精髓和应用场景。",
+      "scoring_rubric": "1. 解释是否通俗易懂，适合目标受众；2. 是否抓住了成语的比喻核心；3. 举例是否恰当。",
+      "id": "104-028"
+    },
+    {
+      "prompt": "假设你是一位日本旅游宣传大使，请用中文（但语气和内容要符合日本服务业的‘款待之心’和美学特点）介绍京都的茶道体验。",
+      "sub_type": "localization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型在中文回复中融入日本‘おもてなし’（款待）服务精神，用语礼貌、细腻，描述茶道时体现‘和敬清寂’的美学理念。",
+      "scoring_rubric": "1. 语气是否体现了日式服务的谦逊与细致；2. 对茶道的描述是否蕴含其哲学内涵；3. 整体是否成功进行了文化适配。",
+      "id": "104-029"
+    },
+    {
+      "prompt": "把下面这段正式的学术报告摘要，改写成一段适合发布在微信朋友圈、吸引大众点击的轻松口语化文案：‘本研究通过对照实验证实，规律的有氧运动能显著改善轻度抑郁症患者的认知功能与情绪状态。’",
+      "sub_type": "register_transfer",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型将专业、书面化的学术语言转化为活泼、有吸引力的口语化文案，可能使用网络用语、比喻或提问式开头。",
+      "scoring_rubric": "1. 语言风格是否成功转为轻松口语化；2. 核心信息是否准确保留；3. 文案是否具有吸引力和传播性。",
+      "id": "104-030"
+    },
+    {
+      "prompt": "请将以下法律条款解释给一个10岁的小朋友听：‘因不可抗力不能履行合同的，根据不可抗力的影响，部分或者全部免除责任。’",
+      "sub_type": "register_transfer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型能用极其简单、具体的比喻（如天气原因导致旅行取消）来解释复杂的法律概念‘不可抗力’和责任免除。",
+      "scoring_rubric": "1. 用语是否极其简单，符合儿童认知水平；2. 是否使用了恰当的比喻；3. 是否传达了条款的核心意思。",
+      "id": "104-031"
+    },
+    {
+      "prompt": "用‘怼人’但又不失幽默的网络口语风格，回复这条评论：‘就这？我上我也行。’",
+      "sub_type": "register_transfer",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能生成符合特定网络亚文化语境的回复，语气调侃、犀利但不恶毒，可能包含网络流行梗。",
+      "scoring_rubric": "1. 语气和用词是否符合‘网络怼人’的风格；2. 是否具有幽默感；3. 回复是否贴合原评论内容。",
+      "id": "104-032"
+    },
+    {
+      "prompt": "What is the meaning of life? Please answer this question entirely in German, including the question itself.",
+      "sub_type": "language_following",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型首先将问题用德语复述（例如：'Was ist der Sinn des Lebens?'），然后用德语提供对生命意义的哲学性或日常性回答，全程不使用中文或英文。",
+      "scoring_rubric": "1. 是否将问题翻译成德语并重新提问。2. 回答内容是否全部使用德语。3. 德语表达是否自然、准确，语法正确。",
+      "id": "104-033"
+    },
+    {
+      "prompt": "帮我把下面这句中文歌词翻译成英文，要保留诗意和韵律：'当花瓣离开花朵，暗香残留'。",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "提供一句富有诗意和韵律感的英文翻译，可能通过选择特定词汇（如 'linger'、'faint'、'fragrance'）和调整语序来实现，并可简要说明翻译时的考量（如对意境和音乐性的平衡）。",
+      "scoring_rubric": "1. 翻译是否准确传达了原句的核心意象。2. 英文表达是否具有诗意和美感。3. 是否考虑了韵律或节奏感。",
+      "id": "104-034"
+    },
+    {
+      "prompt": "用非常正式的书面语，为我们的新产品（一款环保咖啡杯）撰写一段200字左右的中文产品简介，重点强调其可持续性和高端设计。",
+      "sub_type": "register_transfer",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "生成一段正式、专业的书面语产品简介。语言严谨、优雅，使用书面语词汇（如“致力于”、“秉承”、“匠心”、“卓越”）和完整句式，避免口语化表达，并清晰传达环保与设计卖点。",
+      "scoring_rubric": "1. 语体是否严格符合正式书面语要求。2. 内容是否完整覆盖“可持续性”和“高端设计”两个重点。3. 语言是否专业、流畅、有说服力。",
+      "id": "104-035"
+    },
+    {
+      "prompt": "Hey buddy, 猜猜我今天在超市 see了啥？一个巨无霸西瓜，瓜皮绿得发亮，瓜瓤红彤彤的，看着就 sweet！你觉得我该不该 buy来尝尝？",
+      "sub_type": "code_switching",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型能自然理解这段中英文夹杂（code-mixing）的、偏口语化的对话，并用风格一致的、夹杂着英文或中文口语词汇的方式进行回应，例如：“哈哈，听起来确实很诱人！买来试试呗，这么好的瓜不尝尝可惜了！”",
+      "scoring_rubric": "1. 是否准确理解了用户混合语言表达的意思。2. 回复是否自然地保持了相同的语码混合风格。3. 回应是否符合朋友间闲聊的语境和语气。",
+      "id": "104-036"
+    },
+    {
+      "prompt": "请将以下句子翻译成韩语，并确保敬语使用得当：‘老师，我想请教您关于昨天课上的一个问题。’",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "提供正确的韩语翻译，关键是根据“学生对老师”的语境，使用合适的敬语阶（如“-요”或“-습니다”），翻译应准确且符合韩语表达习惯。",
+      "scoring_rubric": "1. 翻译内容是否准确。2. 敬语等级是否恰当（体现对老师的尊敬）。3. 韩语表达是否自然流畅。",
+      "id": "104-037"
+    },
+    {
+      "prompt": "我想给我的美国朋友送一份有中国特色的生日祝福，但我不想用“龙”或者“灯笼”这种太老套的符号。请你帮我写一段英文祝福语，要体现中国哲学思想（比如“知足常乐”、“道法自然”）和现代生活气息。",
+      "sub_type": "localization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "生成一段英文生日祝福，内容避免使用刻板的中国符号，而是巧妙地融入“知足常乐”、“道法自然”等哲学思想的英文解释或应用（如“May you find endless joy in the simple, natural flow of life”），并结合现代生活的例子，使其对外国朋友既独特又易于理解。",
+      "scoring_rubric": "1. 是否成功避免了老套的中国符号。2. 哲学思想的融入是否自然、巧妙，而非生硬翻译。3. 整体祝福是否符合英语表达习惯，且对目标文化背景的接收者友好。",
+      "id": "104-038"
+    },
+    {
+      "prompt": "请用日语帮我规划一个东京三日游行程，要求：1. 用日语列出每天的行程。2. 在每个景点后用中文备注一句实用小贴士（如交通、排队提示等）。",
+      "sub_type": "code_switching",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能按指令生成结构化的日语行程，并在每条日语行程后，附上一段简短的中文实用贴士。两种语言在格式上清晰区分，内容上各自服务于不同功能（日语规划，中文提示）。",
+      "scoring_rubric": "1. 日语行程部分是否完整、合理。2. 中文贴士是否实用、切合对应景点。3. 两种语言是否清晰分离，没有混淆。",
+      "id": "104-039"
+    },
+    {
+      "prompt": "把这段非常口语化的中文对话转写成正式的会议纪要要点：'老王说了，那个项目啊，不能再拖了，下周五之前必须出方案。小李呢，你赶紧把预算表再核一遍，别出岔子。还有啊，记得把客户上周提的那几个意见也得考虑进去。'",
+      "sub_type": "register_transfer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型将口语化、零碎的对话转换成条理清晰、语言正式的会议纪要。例如：'1. 项目进度：王经理重申项目时限，要求下周五前提交方案。2. 任务分配：李负责复核预算表，确保数据准确。3. 客户反馈：需将上周客户提出的意见纳入方案考虑。'",
+      "scoring_rubric": "1. 是否将口语内容准确概括为正式要点。2. 语言是否客观、简洁、符合会议纪要格式。3. 关键信息（责任人、时限、任务）是否完整无误地提取。",
+      "id": "104-040"
+    },
+    {
+      "prompt": "Translate the following French poem into Chinese, and then write a short analysis (in English) of the translation choices you made, especially regarding cultural adaptation.",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "提供一首法语诗的中文翻译，并在翻译后附上一段英文分析。分析部分应解释在翻译过程中如何处理文化特定意象、韵律等，以及为使中文读者理解所做的文化适配（如将法式花园比喻转换为中文读者熟悉的意象）。",
+      "scoring_rubric": "1. 中文翻译是否流畅、优美，且贴近原诗意境。2. 英文分析是否深入、有见地。3. 分析是否清晰阐述了文化适配的具体考量。",
+      "id": "104-041"
+    },
+    {
+      "prompt": "我老板让我写一份项目风险评估报告。请你用中文，以‘首席风险官’的口吻，帮我写报告摘要部分（约150字），要点要突出、措辞要专业严谨。",
+      "sub_type": "register_transfer",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "生成一段高度专业、正式的中文报告摘要。语气应冷静、权威，使用风险管理领域的术语（如“潜在风险”、“规避策略”、“综合评估”），句子结构紧凑、逻辑性强。",
+      "scoring_rubric": "1. 语体是否完全符合‘首席风险官’的专业身份和正式报告场景。2. 内容是否聚焦于‘风险’，逻辑清晰。3. 用词是否精准、专业，无口语化或随意表达。",
+      "id": "104-042"
+    },
+    {
+      "prompt": "我正在和一个西班牙语母语的朋友聊天，我想用夹杂着简单西班牙语的中文回复他，显得亲切点。他说：‘Hola! ¿Qué tal tu día?’ (你好！你今天过得怎么样？)。请帮我用中文构思一句回复，里面自然地包含1-2个简单的西班牙语单词或短语。",
+      "sub_type": "code_switching",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "构思一句自然、友好的中文回复，其中巧妙嵌入如‘¡Muy bien!’(很好)、‘Gracias’(谢谢)、‘mañana’(明天)等基础西班牙语词汇，例如：“我今天过得¡Muy bien！刚忙完工作，谢谢关心。你那边呢？mañana有空吗？”",
+      "scoring_rubric": "1. 西班牙语词汇使用是否正确、简单。2. 混合使用是否自然，符合朋友间聊天的亲切语气。3. 整句中文语法是否正确，意思表达清晰。",
+      "id": "104-043"
+    },
+    {
+      "prompt": "将以下中文网络流行语翻译成地道的西班牙语，并解释每个翻译背后的考量：'卷' (内卷)、'躺平'、'破防了'。",
+      "sub_type": "localization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "为每个中文网络词提供贴切的西班牙语对等翻译或解释性短语。例如：‘卷’可能译为‘hipercompetencia’(过度竞争)并解释；‘躺平’可能译为‘desengancharse del sistema’(脱离系统)或使用‘quieto’(静止不动)加解释；‘破防了’可能译为‘me derrumbé emocionalmente’(情绪崩溃)。每个翻译后需简要说明为何选择此表达。",
+      "scoring_rubric": "1. 翻译是否捕捉到了每个中文流行语的核心社会/情绪含义。2. 选择的西班牙语表达是否地道、能引起母语者共鸣。3. 解释是否清晰，展示了对文化语境的理解。",
+      "id": "104-044"
+    },
+    {
+      "prompt": "Please explain the concept of 'quantum computing' to a 10-year-old child in simple, everyday English.",
+      "sub_type": "register_transfer",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用极其简单、生动的英语词汇和比喻（如‘魔法骰子’、‘同时尝试所有路径’）来解释量子计算，避免任何专业术语。句子短小，语气活泼，可能使用拟声词或互动式提问来吸引儿童注意力。",
+      "scoring_rubric": "1. 语言是否真正适合10岁儿童的理解水平（词汇、句子复杂度）。2. 比喻或解释是否直观、有趣，能激发孩子的好奇心。3. 是否完全避免了专业术语。",
+      "id": "104-045"
+    },
+    {
+      "prompt": "以下是一句带有浓厚河南方言特色的中文：“俺这儿可得劲儿，弄啥啥中！” 请将它翻译成标准普通话，并用英文解释这句话所表达的情感和文化含义。",
+      "sub_type": "localization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "首先将方言准确翻译成标准普通话（如：“我这里很舒服/很棒，做什么都很顺/都行！”），然后用英文解释这句话传达的乐观、自信、满足的地方性格情感，以及‘得劲儿’、‘中’等方言词的文化内涵。",
+      "scoring_rubric": "1. 方言到普通话的翻译是否准确传神。2. 英文解释是否清晰地传达了情感和文化背景。3. 整体是否展示了从地方语码到标准语再到外语的转换能力。",
+      "id": "104-046"
+    },
+    {
+      "prompt": "我是市场部经理，需要给法国合作伙伴写一封非常正式的商务邀请函邮件，邀请他们参加下月的行业峰会。请用法语撰写邮件正文（包括问候、目的、活动信息、邀请表述和结尾敬语），用中文标注出每一句的中文含义和写作要点（如‘此句表达了期待，语气需谦逊’）。",
+      "sub_type": "cross_lingual_translation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "生成一封符合法国商务礼仪的正式法语邮件。同时，在每一段法语句子下方或旁边，用中文提供精准的直译和意译，并分析该句在商务书信中的功能、语气和文化注意事项（如使用‘Veuillez agréer...’作为敬语结尾）。",
+      "scoring_rubric": "1. 法语邮件是否格式正确、语气正式得体、符合商务规范。2. 中文标注是否准确，对句子功能的分析是否到位。3. 整体是否清晰展示了跨语言商务沟通的考量。",
+      "id": "104-047"
+    },
+    {
+      "prompt": "我正在学习英语。请用中文详细解释英语句子 ‘I have been meaning to call you, but I haven't gotten around to it yet.’ 的语法结构（特别是现在完成进行时态）和使用场景，并造一个结构类似的中文句子来帮助我理解。",
+      "sub_type": "code_switching",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "用清晰的中文解释该英语句子的语法（现在完成进行时表示‘从过去持续到现在、可能还要继续的意图或未完成动作’），分析各部分含义（如 ‘have been meaning to’ 表示‘一直打算’）。然后，构造一个使用‘一直...但还没...’结构的中文例句（如：“我一直想去那家新开的餐厅，但还没抽出时间去”），以建立两种语言间的概念桥梁。",
+      "scoring_rubric": "1. 语法解释是否准确、通俗易懂。2. 使用场景的说明是否贴切。3. 所造的中文句子是否在结构和功能上与原英语句对应，能有效辅助理解。",
+      "id": "104-048"
+    },
+    {
+      "prompt": "Please explain what artificial intelligence is in Japanese and provide a practical application example.",
+      "sub_type": "language_following",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应全程用日语回答，准确解释人工智能的定义并给出一个应用例子，日语表达自然流畅，不切换到其他语言。",
+      "scoring_rubric": "语言遵守性（全日语）、内容准确性、日语表达自然度、无语言切换。",
+      "id": "104-049"
+    }
+  ]
+}

@@ -1,0 +1,430 @@
+{
+  "capability": "database_design",
+  "label": "数据库设计能力",
+  "total": 47,
+  "cases": [
+    {
+      "id": "52-001",
+      "prompt": "设计一个数据库Schema版本管理方案，团队有20人协作开发，需要支持多人同时编写DDL迁移脚本、冲突检测、按环境（dev/staging/prod）顺序执行、回滚能力。对比Flyway和Liquibase工具。",
+      "sub_type": "database_versioning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于时间戳+序号的版本号命名规则（如V20260629_01__add_user_index.sql），对比Flyway（纯SQL，简单轻量）和Liquibase（XML/YAML，支持回滚和changelog）的优劣，设计CI/CD流水线中的数据库迁移集成，处理多人并行冲突（基线合并或lock机制）。",
+      "scoring_rubric": "1. 设计合理的迁移脚本版本号命名和目录规范，需包含关键细节和边界条件处理；2. 具体对比Flyway和Liquibase的适用场景和功能差异，避免笼统描述；3. 设计CI/CD流水线中数据库迁移的集成流程，需包含关键细节和边界条件处理；4. 具体处理多人并行开发的迁移冲突检测和解决策略。，避免笼统描述；"
+    },
+    {
+      "id": "52-002",
+      "prompt": "设计一个数据脱敏方案，用户表包含手机号、身份证号、银行卡号、邮箱等敏感字段，需要在测试环境和数据导出场景下自动脱敏。要求脱敏不可逆、保持数据格式合法、支持不同脱敏规则。",
+      "sub_type": "data_masking",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计分层脱敏规则（手机号保留前3后4、身份证保留前6后4、邮箱保留首字符），实现方式包括视图层脱敏、ETL脱敏、动态脱敏（代理层拦截），对比静态脱敏（一次性替换）和动态脱敏（查询时实时处理）的适用场景，确保脱敏后数据无法还原。",
+      "scoring_rubric": "1. 设计针对不同敏感字段的脱敏规则和算法，需包含关键细节和边界条件处理；2. 具体对比静态脱敏和动态脱敏的适用场景，避免笼统描述；3. 实现脱敏后数据的格式合法性和业务可用性验证，需包含关键细节和边界条件处理；4. 设计脱敏方案的权限控制和审计机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-003",
+      "prompt": "设计一个Schema迁移的回滚方案，生产环境执行了一个添加列+创建索引+修改默认值的复合迁移，执行到一半索引创建失败。需要实现安全回滚，同时确保已执行的部分DDL正确撤销。",
+      "sub_type": "schema_migration_rollback",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计每步迁移配套回滚脚本（up/down模式），添加列可直接DROP COLUMN，创建索引可DROP INDEX，修改默认值需记录旧值用于恢复。处理非幂等操作（如AUTO_INCREMENT值回退不可行时需标记警告），设计迁移状态表记录每步执行状态和进度。",
+      "scoring_rubric": "1. 设计每步迁移对应的回滚脚本和执行顺序，需包含关键细节和边界条件处理；2. 具体处理不可逆DDL操作的回滚策略和风险提示，避免笼统描述；3. 设计迁移状态记录表追踪每步执行进度，需包含关键细节和边界条件处理；4. 实现部分失败场景的断点续传或安全中止机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-004",
+      "prompt": "分析一条慢SQL的执行计划：SELECT o.order_id, o.amount, u.name FROM orders o JOIN users u ON o.user_id = u.id WHERE o.status = 'pending' AND o.create_time > '2026-06-01' ORDER BY o.amount DESC LIMIT 50。EXPLAIN显示全表扫描和filesort，请优化。",
+      "sub_type": "query_plan_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应解读EXPLAIN各列含义（type=ALL全表扫描、Extra=Using filesort），识别缺少联合索引的问题，设计(status, create_time, amount)联合索引覆盖WHERE和ORDER BY，分析JOIN顺序和驱动表选择，优化后EXPLAIN应显示ref/range+Using index。",
+      "scoring_rubric": "1. 具体正确解读EXPLAIN执行计划中各字段含义，避免笼统描述；2. 准确识别全表扫描和filesort的根因并给出索引优化方案，并给出具体的分析依据和推理过程；3. 从多个维度分析JOIN的驱动表选择和连接算法（NLJ/Hash Join），给出量化的对比数据或具体案例；4. 给出优化前后的EXPLAIN对比和预期性能提升。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "52-005",
+      "prompt": "设计一个数据库连接池的动态调整方案，系统在高峰期（白天QPS 8000）和低谷期（凌晨QPS 200）负载差异巨大，需要连接池大小随负载自动伸缩，避免高峰期连接不足和低谷期资源浪费。",
+      "sub_type": "connection_pooling_v2",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于指标（活跃连接数、等待队列长度、平均响应时间）的动态伸缩策略，设置min/max连接数边界和缩容冷却时间，对比HikariCP（固定大小）和Druid（支持动态调整）的实现差异，监控连接池使用率和健康状态。",
+      "scoring_rubric": "1. 设计基于负载指标的连接池动态伸缩策略，需包含关键细节和边界条件处理；2. 具体设置合理的伸缩边界、步长和冷却时间参数，避免笼统描述；3. 具体对比不同连接池组件的动态调整能力，避免笼统描述；4. 设计连接池健康监控和告警机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-006",
+      "prompt": "设计一个数据库代理层方案，50个微服务直接连接数据库导致连接数爆炸（50服务x10实例x20连接=10000），需要在应用和数据库之间引入代理层，统一管理连接、实现读写分离、SQL审计和限流。",
+      "sub_type": "database_proxy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计ProxySQL/MaxScale/自研代理架构，代理层维护与数据库的少量长连接，对应用暴露虚拟地址，实现SQL路由（读写分离）、连接复用、SQL限流（QPS/并发控制）、慢SQL拦截和审计日志，分析代理层单点故障和高可用设计。",
+      "scoring_rubric": "1. 设计数据库代理层的架构和连接复用方案，需包含关键细节和边界条件处理；2. 实现读写分离路由和SQL限流策略，需包含关键细节和边界条件处理；3. 设计SQL审计日志和慢查询拦截机制，需包含关键细节和边界条件处理；4. 具体解决代理层单点故障的高可用问题。，避免笼统描述；"
+    },
+    {
+      "id": "52-007",
+      "prompt": "设计一个数据一致性校验方案，MySQL主库数据通过CDC同步到Elasticsearch后，需要定期校验两边数据是否一致。数据量5000万行，校验窗口为凌晨2-5点，需要高效完成且不影响白天业务。",
+      "sub_type": "data_consistency_check",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计分批校验策略（按主键范围分片，每批1万行），使用CRC32或MD5对整行数据计算校验和进行对比，记录不一致记录到差异表，支持自动修复（以MySQL为准覆盖ES），控制校验速度避免影响业务，设计校验报告和告警。",
+      "scoring_rubric": "1. 设计高效的数据分片校验策略控制资源消耗，需包含关键细节和边界条件处理；2. 具体使用校验和（checksum）方式快速定位数据差异，避免笼统描述；3. 设计差异记录和自动修复机制，需包含关键细节和边界条件处理；4. 具体控制校验任务对在线业务的影响（限速/错峰）。，避免笼统描述；"
+    },
+    {
+      "id": "52-008",
+      "prompt": "设计一个数据库监控告警方案，需要覆盖MySQL的连接数、QPS、慢查询数、主从延迟、锁等待、磁盘空间、缓冲池命中率等核心指标，支持阈值告警和趋势预测。",
+      "sub_type": "database_monitoring",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Prometheus+Grafana监控架构，采集SHOW GLOBAL STATUS/VARIABLES、SHOW PROCESSLIST、SHOW SLAVE STATUS等指标，设置多级告警阈值（Warning/Critical），使用历史数据做趋势预测（如磁盘空间按当前增长率将在N天后耗尽），设计告警收敛和升级机制。",
+      "scoring_rubric": "1. 设计完整的数据库核心监控指标体系，需包含关键细节和边界条件处理；2. 实现Prometheus采集和Grafana可视化方案，需包含关键细节和边界条件处理；3. 具体设置合理的多级告警阈值和趋势预测，避免笼统描述；4. 设计告警收敛（防止告警风暴）和升级机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-009",
+      "prompt": "线上MySQL数据库CPU飙升到90%，SHOW PROCESSLIST显示大量Waiting for table metadata lock状态。请设计一个完整的慢查询诊断流程，从发现告警到定位根因再到给出解决方案。",
+      "sub_type": "slow_query_diagnosis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计系统化诊断流程：先查SHOW PROCESSLIST定位阻塞会话，再查SHOW ENGINE INNODB STATUS分析锁争用，检查是否DDL操作持有metadata lock，分析slow_query_log中TOP SQL的执行计划，排查索引缺失/全表扫描/锁升级等常见根因，给出短期止血（kill阻塞会话）和长期优化（加索引/拆分事务）方案。",
+      "scoring_rubric": "1. 准确设计系统化的慢查询诊断排查流程，并给出具体的分析依据和推理过程；2. 从多个维度分析metadata lock和行锁的争用场景和根因，给出量化的对比数据或具体案例；3. 具体使用slow_query_log和EXPLAIN定位问题SQL，避免笼统描述；4. 给出短期止血和长期优化的分层解决方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "52-010",
+      "prompt": "设计一个数据库容量规划方案，业务预计未来一年用户量从100万增长到1000万，日订单从10万增长到100万。需要评估存储空间、CPU/内存/IO需求、连接数、分库分表临界点，给出分阶段扩容计划。",
+      "sub_type": "database_capacity_planning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应基于当前单行大小和日增量计算存储空间增长曲线（考虑索引和碎片），评估CPU/内存/IO瓶颈点（如Buffer Pool命中率低于95%时需扩容内存），计算连接数需求，确定单库性能上限（如单表超过2000万行时考虑分表），设计分阶段扩容路线图（垂直扩容-读写分离-分库分表）。",
+      "scoring_rubric": "1. 具体基于业务增长预测计算存储和性能需求，避免笼统描述；2. 从多个维度评估CPU/内存/IO/连接数等关键资源的瓶颈点，给出量化的对比数据或具体案例；3. 具体确定分库分表的触发条件和临界点，避免笼统描述；4. 设计分阶段扩容路线图和成本预算。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-011",
+      "prompt": "设计一个支持历史数据版本的数据库方案，用户信息表需要保留所有历史修改记录，支持查询任意时间点的数据快照、字段级别的变更对比、批量回滚到指定版本。请给出基于Temporal Table或自建版本管理的方案。",
+      "sub_type": "temporal_data_versioning",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计主表+历史表的双表结构，主表存储当前状态，历史表记录每次变更（含valid_from/valid_to时间范围）。说明变更记录的触发方式（触发器/CDC/应用层）、时间点查询的SQL写法（AS OF TIMESTAMP）、版本对比和回滚的实现方案。",
+      "scoring_rubric": "1. 设计主表+历史表的版本管理数据模型，需包含关键细节和边界条件处理；2. 实现变更记录的自动采集和时间范围管理，需包含关键细节和边界条件处理；3. 具体支持任意时间点的快照查询和字段级对比，避免笼统描述；4. 设计批量回滚的实现方案和数据一致性保障。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-012",
+      "prompt": "设计一个向量数据库的存储方案，用于AI应用的语义搜索，需要存储1000万条文本的Embedding向量（1536维），支持Top-K相似度查询（K=10），查询延迟<100ms。对比PostgreSQL pgvector和Milvus方案。",
+      "sub_type": "vector_database_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计向量存储模型（主键+元数据+向量列），对比pgvector（IVFFlat/HNSW索引，与关系型数据共存）和Milvus（专用向量数据库，支持分布式和GPU加速）的适用场景。说明索引类型选择（HNSW vs IVF_FLAT）、距离度量（余弦/欧氏/L2）、元数据过滤与向量搜索的结合策略。",
+      "scoring_rubric": "1. 设计向量存储的数据模型和索引策略，需包含关键细节和边界条件处理；2. 具体对比pgvector和Milvus的性能和适用场景，避免笼统描述；3. 具体选择合适的索引类型和距离度量算法，避免笼统描述；4. 设计元数据过滤与向量搜索的混合查询方案。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-013",
+      "prompt": "设计一个数据库的在线Schema变更方案，需要在不停服的情况下给一张10亿行的大表添加一个带默认值的新列，并创建索引。对比pt-online-schema-change、gh-ost和MySQL 8.0 Instant DDL三种方案。",
+      "sub_type": "online_schema_change",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比三种方案的实现原理：pt-osc使用触发器+影子表+重命名、gh-ost使用binlog解析+影子表+原子切换、MySQL 8.0 Instant DDL直接修改元数据。分析各方案的锁行为、复制延迟影响、回滚能力和适用场景（如Instant DDL仅支持ADD COLUMN DEFAULT）。",
+      "scoring_rubric": "1. 对比三种在线DDL方案的实现原理和锁行为，需包含关键细节和边界条件处理；2. 从多个维度分析各方案对复制延迟和业务的影响，给出量化的对比数据或具体案例；3. 具体根据变更类型选择最优方案，避免笼统描述；4. 设计变更前后的数据校验和回滚策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-014",
+      "prompt": "设计一个数据湖的存储分层方案，原始数据每天增量1TB（JSON格式），需要支持数据科学家的交互式查询、分析师的报表查询、算法团队的特征工程三种场景。请给出基于S3+Iceberg的分层架构。",
+      "sub_type": "data_lake_layering",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计三层数据湖架构：Bronze层（原始JSON，保留全量历史）、Silver层（清洗后Parquet，去重脱敏）、Gold层（聚合宽表，面向分析）。说明Apache Iceberg的ACID事务、时间旅行（Time Travel）和Schema Evolution能力。各层的ETL调度和数据质量校验。",
+      "scoring_rubric": "1. 设计Bronze/Silver/Gold三层数据湖架构，需包含关键细节和边界条件处理；2. 利用Iceberg实现ACID事务和Schema Evolution，需包含关键细节和边界条件处理；3. 为三种使用场景提供最优的存储格式和查询引擎，方案需具体可执行而非泛泛而谈；4. 设计ETL调度和数据质量校验机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-015",
+      "prompt": "设计一个分布式数据库的全局二级索引方案，使用TiDB或CockroachDB存储订单数据，需要支持按user_id查询（分区键）和按order_no查询（非分区键）。请分析全局二级索引的性能影响和维护机制。",
+      "sub_type": "global_secondary_index",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计全局二级索引（Global Secondary Index）的创建方案，order_no索引独立于数据分片存储在所有节点。分析写放大（每次写入需同时更新数据和索引）、一致性保障（异步还是同步更新索引）、查询路由优化（通过索引定位数据分片避免全表扫描）、索引维护的开销评估。",
+      "scoring_rubric": "1. 设计全局二级索引的创建和维护方案，需包含关键细节和边界条件处理；2. 从多个维度分析索引写放大对写入性能的影响，给出量化的对比数据或具体案例；3. 实现通过索引定位数据分片的查询优化，需包含关键细节和边界条件处理；4. 从多个维度评估索引一致性和维护开销的权衡。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "52-016",
+      "prompt": "设计一个支持多模型查询的数据库方案，同一份用户数据需要支持关系型查询（SQL）、文档查询（JSON字段内嵌套查询）、图查询（社交关系三跳查询）。对比使用PostgreSQL多模能力和多数据库组合方案。",
+      "sub_type": "polyglot_persistence",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应对比PostgreSQL（JSONB+pg_trgm+Apache AGE扩展）一站式方案和MySQL+MongoDB+Neo4j多数据库组合方案的优劣。分析数据同步复杂度、事务一致性、运维成本、查询性能的差异。给出按场景选择存储引擎的决策框架。",
+      "scoring_rubric": "1. 具体对比单数据库多模和多数据库组合方案的优劣，避免笼统描述；2. 从多个维度分析数据同步和一致性的挑战，给出量化的对比数据或具体案例；3. 设计按查询场景选择存储引擎的决策框架，需包含关键细节和边界条件处理；4. 从多个维度评估运维成本和团队技能要求的差异。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "52-017",
+      "prompt": "设计一个数据库的行列混合存储方案，同一张订单表需要支持OLTP场景（按订单ID的点查和更新）和OLAP场景（按时间+品类的聚合分析）。对比MySQL行存+列存副本和TiDB/TiFlash行列混合方案。",
+      "sub_type": "htap_hybrid_storage",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计HTAP架构：TiDB行存引擎处理OLTP，TiFlash列存副本实时同步处理OLAP。说明数据同步延迟（Raft Log复制秒级延迟）、列存的物化视图策略、资源隔离（OLTP和OLAP负载互不影响）、成本对比（vs MySQL+ClickHouse双系统）。",
+      "scoring_rubric": "1. 设计行存和列存的混合存储架构，需包含关键细节和边界条件处理；2. 实现OLTP和OLAP的数据实时同步机制，需包含关键细节和边界条件处理；3. 设计资源隔离保障两种负载互不影响，需包含关键细节和边界条件处理；4. 具体对比HTAP方案与双系统方案的成本和复杂度。，避免笼统描述；"
+    },
+    {
+      "id": "52-018",
+      "prompt": "设计一个支持模糊搜索的数据库索引方案，用户表的name字段需要支持前缀搜索（'张%'）、包含搜索（'%三%')、拼音搜索（'zhangsan'匹配'张三'）。对比MySQL全文索引、Elasticsearch和pg_trgm方案。",
+      "sub_type": "fuzzy_search_index",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计多层搜索方案：前缀搜索使用B+Tree索引（LIKE '张%'可走索引），包含搜索使用pg_trgm的GIN索引或Elasticsearch的ngram分词，拼音搜索维护拼音字段并建索引。对比各方案的查询性能、存储开销和维护复杂度。给出按场景选择方案的决策矩阵。",
+      "scoring_rubric": "1. 设计前缀、包含、拼音三种搜索的索引方案，需包含关键细节和边界条件处理；2. 具体对比MySQL/PostgreSQL/Elasticsearch各方案的适用场景，避免笼统描述；3. 从多个维度分析索引存储开销和查询性能的权衡，给出量化的对比数据或具体案例；4. 给出按搜索需求组合多种索引的架构方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "52-019",
+      "prompt": "设计一个数据库的读写分离中间件方案，在应用和数据库之间引入代理层，自动将写操作路由到主库、读操作路由到从库。需要处理事务内的读写一致性、强制走主库的hint机制、从库延迟感知路由。",
+      "sub_type": "read_write_split_middleware",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计SQL解析层识别读写类型，事务内所有SQL强制走主库，支持/*master*/hint强制指定。说明从库延迟检测（Seconds_Behind_Master或pt-heartbeat）和延迟超过阈值时自动切主库的策略。对比ProxySQL/MaxScale/ShardingSphere-Proxy的实现差异和HA设计。",
+      "scoring_rubric": "1. 设计SQL解析和读写路由的中间件架构，需包含关键细节和边界条件处理；2. 实现事务内的读写一致性保障，需包含关键细节和边界条件处理；3. 设计从库延迟检测和自动切主库的策略，需包含关键细节和边界条件处理；4. 对比主流中间件方案的优劣并设计高可用方案。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-020",
+      "prompt": "设计一个支持数据血缘追踪的ETL元数据管理方案，需要记录每个数据字段从源表到目标表的转换链路，支持影响分析（修改源字段会影响哪些下游报表）和溯源分析（目标字段的数据来自哪些源表）。请给出表结构和查询方案。",
+      "sub_type": "data_lineage_tracking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计血缘元数据表（源表、源字段、目标表、目标字段、转换规则、ETL任务ID、执行时间），使用有向无环图（DAG）建模数据流转关系。说明影响分析的正向查询（BFS/DFS遍历下游）和溯源分析的反向查询，血缘数据的自动采集（SQL解析/日志分析）和可视化展示方案。",
+      "scoring_rubric": "1. 设计血缘元数据的存储模型和DAG关系结构，需包含关键细节和边界条件处理；2. 从多个维度实现影响分析（正向）和溯源分析（反向）的查询算法，给出量化的对比数据或具体案例；3. 从多个维度设计血缘数据的自动采集机制（SQL解析或日志分析），给出量化的对比数据或具体案例；4. 设计血缘关系的可视化展示和变更通知方案。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-021",
+      "prompt": "设计一个支持多版本并发控制（MVCC）的数据库应用方案，用户编辑文档时需要支持查看历史版本、版本对比、回滚到任意版本。需要处理并发编辑冲突和版本存储空间优化。",
+      "sub_type": "mvcc_application_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计文档版本存储模型（当前版本+增量差异链或全量快照），使用乐观锁（version字段）处理并发编辑冲突，比较当前版本与提交版本的差异。说明版本存储的空间优化（增量存储或定期压缩）、版本查询和对比的SQL实现、回滚操作的原子性保障。",
+      "scoring_rubric": "1. 设计文档版本的存储模型和增量差异方案，需包含关键细节和边界条件处理；2. 实现乐观锁处理并发编辑冲突，需包含关键细节和边界条件处理；3. 设计版本对比和回滚的SQL实现，需包含关键细节和边界条件处理；4. 具体优化版本存储空间（增量存储/定期压缩）。，避免笼统描述；"
+    },
+    {
+      "id": "52-022",
+      "prompt": "设计一个支持Schema-on-Read的数据湖查询方案，原始数据为JSON格式存储在S3上，每天增量500GB。需要支持数据分析师用SQL查询、自动推断Schema、处理Schema演化（字段类型变更、新增字段）。对比AWS Athena和Trino方案。",
+      "sub_type": "schema_on_read_query",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于Parquet/ORC的列式存储方案（从JSON转换），使用Hive Metastore或AWS Glue Catalog管理Schema元数据。说明Schema演化处理（Parquet支持列添加和类型提升）、自动Schema推断的实现、Athena（serverless，按扫描量计费）vs Trino（自建集群，适合高频查询）的选型分析。",
+      "scoring_rubric": "1. 设计JSON到列式存储的转换和Schema管理方案，需包含关键细节和边界条件处理；2. 具体处理Schema演化（字段添加/类型变更）的兼容性，避免笼统描述；3. 具体对比Athena和Trino的适用场景和成本，避免笼统描述；4. 具体优化查询性能（分区裁剪、列裁剪、压缩）。，避免笼统描述；"
+    },
+    {
+      "id": "52-023",
+      "prompt": "设计一个支持数据库连接池健康检查和自动恢复的方案，当数据库主从切换或网络抖动时，连接池中的失效连接需要被快速检测和替换，应用层无感知。对比HikariCP和Druid的健康检查机制。",
+      "sub_type": "connection_pool_health_check",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计连接池的健康检查策略（空闲连接定期验证、借出时验证、归还时验证），失效连接的自动剔除和补充机制。说明HikariCP的isConnectionValid（轻量级验证）vs Druid的keepAlive（定期心跳）的实现差异。分析主从切换场景下连接池的快速恢复策略（检测到连接失效后批量清除并重建）。",
+      "scoring_rubric": "1. 设计连接池健康检查的多层验证策略，需包含关键细节和边界条件处理；2. 实现失效连接的自动剔除和快速补充，需包含关键细节和边界条件处理；3. 具体对比HikariCP和Druid的健康检查机制差异，避免笼统描述；4. 设计主从切换场景下的连接池快速恢复方案。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-024",
+      "prompt": "设计一个支持数据库SQL审计和慢查询分析的方案，需要采集所有SQL执行记录、执行时间、影响行数、执行计划，支持自动识别慢查询并告警，支持SQL指纹（相似SQL归类）分析。请给出方案。",
+      "sub_type": "sql_audit_slow_query_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计SQL采集方案（MySQL General Log/Performance Schema或代理层拦截），SQL指纹算法（去除参数值、归一化为模板），慢查询告警（超过阈值自动捕获EXPLAIN）。说明审计日志的存储和索引设计（按时间+SQL指纹+执行时间），TOP SQL分析和优化建议生成，审计数据的保留和清理策略。",
+      "scoring_rubric": "1. 设计SQL采集和指纹归一化方案，需包含关键细节和边界条件处理；2. 实现慢查询自动检测和EXPLAIN采集，需包含关键细节和边界条件处理；3. 从多个维度设计TOP SQL分析和优化建议生成，给出量化的对比数据或具体案例；4. 具体处理审计数据的存储、索引和生命周期管理。，避免笼统描述；"
+    },
+    {
+      "id": "52-025",
+      "prompt": "设计一个支持分布式事务的TCC（Try-Confirm-Cancel）方案，电商下单场景需要同时扣减库存、冻结余额、创建订单。需要处理空回滚、幂等、悬挂三个异常场景。请给出完整方案。",
+      "sub_type": "tcc_distributed_transaction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计TCC三阶段的接口定义：Try（预留资源）、Confirm（确认扣减）、Cancel（释放预留）。说明三个异常场景的处理：空回滚（Try未执行时收到Cancel需直接返回成功）、幂等（Confirm/Cancel需支持重复调用）、悬挂（Cancel先于Try到达时需阻止Try执行）。使用事务日志表记录状态和重试机制。",
+      "scoring_rubric": "1. 设计TCC三阶段的接口定义和状态流转，需包含关键细节和边界条件处理；2. 具体处理空回滚、幂等、悬挂三个异常场景，避免笼统描述；3. 设计事务日志表和重试/补偿机制，需包含关键细节和边界条件处理；4. 从多个维度分析TCC与Saga模式的适用场景差异。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "52-026",
+      "prompt": "设计一个支持数据库读写分离的中间件配置方案，应用使用Spring Boot + MyBatis，需要在不修改业务代码的前提下实现读写分离。从库延迟超过1秒时自动降级读主库。对比ShardingSphere-JDBC和自研AOP方案。",
+      "sub_type": "spring_boot_read_write_split",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于AbstractRoutingDataSource的动态数据源切换方案，使用AOP拦截Mapper方法自动判断读写。说明从库延迟检测（pt-heartbeat或Seconds_Behind_Master）、延迟超阈值时自动切主库的降级策略。对比ShardingSphere-JDBC（功能完整、配置化）vs自研AOP（轻量可控）的优劣。",
+      "scoring_rubric": "1. 设计基于Spring的动态数据源路由方案，需包含关键细节和边界条件处理；2. 准确实现AOP自动判断读写并切换数据源，并给出具体的分析依据和推理过程；3. 设计从库延迟检测和自动降级策略，需包含关键细节和边界条件处理；4. 具体对比ShardingSphere-JDBC和自研方案的适用场景。，避免笼统描述；"
+    },
+    {
+      "id": "52-027",
+      "prompt": "设计一个支持数据库Schema自动对比和同步的方案，需要对比开发环境和生产环境的表结构差异（列、索引、约束、存储过程），自动生成DDL迁移脚本并支持dry-run预览。请给出方案。",
+      "sub_type": "schema_diff_and_sync",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Schema对比引擎（解析INFORMATION_SCHEMA获取表元数据，逐表对比列、索引、约束差异），DDL生成器（根据差异生成ALTER TABLE语句）。说明dry-run模式（仅输出SQL不执行）、依赖排序（先建表再加外键）、不安全操作的警告（如删除列、修改类型）。对比Liquibase diff和SchemaSync工具。",
+      "scoring_rubric": "1. 设计Schema对比引擎和差异检测算法，需包含关键细节和边界条件处理；2. 具体自动生成安全的DDL迁移脚本，避免笼统描述；3. 实现dry-run预览和不安全操作警告，需包含关键细节和边界条件处理；4. 具体处理DDL依赖排序和回滚脚本生成。，避免笼统描述；"
+    },
+    {
+      "id": "52-028",
+      "prompt": "设计一个支持数据库冷热数据自动分层的方案，订单表1年内的数据为热数据（高频查询），1年前的数据为冷数据（偶尔查询）。需要自动将冷数据迁移到低成本存储，查询时透明访问。请给出方案。",
+      "sub_type": "cold_hot_data_tiering",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计冷热数据分层架构：热数据在MySQL主库，冷数据迁移到TiDB/Cold storage（如S3+Parquet）。说明自动分层策略（基于时间阈值定时迁移）、透明查询层（视图或联邦查询引擎合并冷热数据）、迁移过程的业务无感知（异步迁移+双写保障）。分析迁移对写入性能的影响和迁移窗口选择。",
+      "scoring_rubric": "1. 设计冷热数据的分层存储架构，需包含关键细节和边界条件处理；2. 实现自动分层迁移策略和定时任务，需包含关键细节和边界条件处理；3. 设计透明查询层合并冷热数据，需包含关键细节和边界条件处理；4. 具体处理迁移过程的数据一致性和业务无感知。，避免笼统描述；"
+    },
+    {
+      "id": "52-029",
+      "prompt": "设计一个支持数据库权限精细化管理的方案，需要支持表级、行级、列级三层权限控制。不同角色（DBA、开发、运营、审计）有不同的访问权限，所有查询操作可审计追溯。请给出方案。",
+      "sub_type": "fine_grained_db_permission",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计三层权限模型：表级（GRANT/REVOKE控制可访问的表）、行级（Row Security Policy或视图过滤控制可见行）、列级（列级GRANT或动态脱敏控制可见列）。说明RBAC角色定义和权限矩阵、查询审计日志的采集和分析、权限变更的审批流程和审计记录。对比MySQL原生权限和代理层权限方案。",
+      "scoring_rubric": "1. 设计表级/行级/列级三层权限控制模型，需包含关键细节和边界条件处理；2. 实现RBAC角色和权限矩阵的管理方案，需包含关键细节和边界条件处理；3. 从多个维度设计查询审计日志的采集和分析机制，给出量化的对比数据或具体案例；4. 具体对比数据库原生权限和代理层权限方案的优劣。，避免笼统描述；"
+    },
+    {
+      "id": "52-030",
+      "prompt": "设计一个支持数据库变更影响分析的方案，当开发者提交ALTER TABLE语句时，系统需要自动分析该变更对现有查询、索引、外键、存储过程的影响范围，并给出风险评估和优化建议。请给出方案。",
+      "sub_type": "schema_change_impact_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计变更影响分析引擎：解析DDL语句提取变更内容（加列/改类型/加索引等），与现有查询日志（slow_query_log）交叉分析受影响的SQL，评估变更风险（如修改列类型可能导致数据截断、加索引可能锁表）。说明影响报告的生成（受影响的SQL列表、风险等级、建议的在线DDL工具）、与CI/CD集成的阻断策略。",
+      "scoring_rubric": "1. 从多个维度设计DDL解析和变更影响分析引擎，给出量化的对比数据或具体案例；2. 从多个维度与查询日志交叉分析受影响的SQL范围，给出量化的对比数据或具体案例；3. 给出风险评估等级和优化建议，方案需具体可执行而非泛泛而谈；4. 集成到CI/CD流水线设计阻断和审批策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-031",
+      "prompt": "设计一个数据库的物化视图（Materialized View）方案，订单表有10亿行，需要支持按天、按品类、按区域的实时销售额统计报表。要求报表查询延迟<1秒，数据延迟<5分钟。请给出方案。",
+      "sub_type": "materialized_view_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计物化视图的增量刷新策略（基于binlog或触发器捕获变更），预聚合表按维度组合存储（天+品类、天+区域等）。说明刷新频率与数据延迟的权衡、增量计算的SQL实现（MERGE INTO或INSERT ON DUPLICATE KEY UPDATE）、物化视图的索引设计和分区策略。",
+      "scoring_rubric": "1. 设计物化视图的增量刷新策略，需包含关键细节和边界条件处理；2. 实现预聚合表的多维度组合设计，需包含关键细节和边界条件处理；3. 具体控制数据延迟在5分钟以内，避免笼统描述；4. 设计物化视图的索引和分区优化。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-032",
+      "prompt": "设计一个数据库的游标分页方案，替代传统的LIMIT OFFSET分页，解决深度分页性能问题（OFFSET 1000000很慢）。需要支持向前翻页、向后翻页、跳页显示总条数。请给出schema和查询方案。",
+      "sub_type": "cursor_pagination_schema",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于主键或排序列的游标分页（WHERE id > last_id ORDER BY id LIMIT N），使用(id, sort_column)联合索引。说明向前/向后翻页的游标方向切换、总条数的高效获取（缓存或近似计数）、游标编码（Base64编码包含排序值和主键）防篡改。",
+      "scoring_rubric": "1. 设计基于游标的分页查询方案解决深度分页，需包含关键细节和边界条件处理；2. 实现双向游标和跳页的索引支持，需包含关键细节和边界条件处理；3. 设计总条数的高效缓存策略，需包含关键细节和边界条件处理；4. 实现游标的编码和防篡改机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-033",
+      "prompt": "设计一个主键生成方案，对比自增序列（AUTO_INCREMENT）和UUID（v7有序UUID）作为主键的优劣。需要分析对B+Tree索引的影响、分布式ID生成、数据迁移场景。请给出方案。",
+      "sub_type": "primary_key_strategy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析自增ID的顺序写入优势和分布式生成瓶颈（步长分配），分析UUID v4的随机写入导致的页分裂问题，推荐UUID v7（时间有序），设计Snowflake或Leaf分布式ID方案。",
+      "scoring_rubric": "1. 具体对比自增ID和UUID对B+Tree索引性能的影响，避免笼统描述；2. 从多个维度分析UUID v4随机性导致的页分裂问题，给出量化的对比数据或具体案例；3. 具体推荐有序UUID或Snowflake等分布式ID方案，避免笼统描述；4. 全面考虑数据迁移和合并场景的ID冲突处理。，给出各因素的权重分析和取舍理由；"
+    },
+    {
+      "id": "52-034",
+      "prompt": "设计一个读写分离的路由方案，应用层需要自动将写操作路由到主库、读操作路由到从库。需要处理主从延迟导致的数据不一致问题（如写后立即读）。请给出方案。",
+      "sub_type": "read_write_routing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于SQL类型的路由规则（INSERT/UPDATE/DELETE走主库，SELECT走从库），事务内所有操作强制走主库。说明写后立即读的一致性保障（hint标记强制走主库、延迟感知路由），从库延迟检测和自动切主库策略。",
+      "scoring_rubric": "1. 设计基于SQL类型的读写分离路由规则，需包含关键细节和边界条件处理；2. 具体处理事务内的读写路由一致性问题，避免笼统描述；3. 具体解决写后立即读的主从延迟问题，避免笼统描述；4. 设计从库延迟监控和自动切主库机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-035",
+      "prompt": "设计一个基于binlog的CDC（Change Data Capture）方案，将MySQL的数据变更实时同步到Elasticsearch和数据仓库。需要处理DDL变更、断点续传、数据一致性校验。请给出方案。",
+      "sub_type": "binlog_cdc_sync",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计binlog解析+消息队列+消费写入架构，对比Canal/Debezium/Maxwell三种CDC工具的特性差异。说明DDL变更的兼容处理、断点续传（基于binlog位点）、数据一致性校验（定期对比MySQL和ES的记录数和校验和）。",
+      "scoring_rubric": "1. 设计基于binlog的CDC数据同步架构，需包含关键细节和边界条件处理；2. 具体对比主流CDC工具的优劣并选型，避免笼统描述；3. 具体处理断点续传和数据一致性保障，避免笼统描述；4. 设计DDL变更的兼容处理和监控告警。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-036",
+      "prompt": "设计一个物料路径（Materialized Path）方案，存储无限层级的组织架构树（部门-团队-小组-岗位），需要支持查询某节点的所有子节点、计算层级深度、兄弟节点排序。请给出方案。",
+      "sub_type": "hierarchical_data_path",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计path字段存储祖先路径（如/001/002/003/），使用LIKE '/001/002/%'查询所有子孙节点，用LENGTH和REPLACE计算层级深度。对比闭包表和嵌套集方案的优劣，设计节点移动和路径更新的维护策略。",
+      "scoring_rubric": "1. 设计物料路径的存储格式和编码方案，需包含关键细节和边界条件处理；2. 实现子孙节点查询和层级计算，需包含关键细节和边界条件处理；3. 具体对比物料路径与闭包表、嵌套集的适用场景，避免笼统描述；4. 设计节点移动和路径更新的维护策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-037",
+      "prompt": "设计一个多态关联（Polymorphic Association）的数据库方案，评论系统需要支持对文章、视频、商品等多种类型的内容评论。对比单表多态外键、反向外键、中间关联表三种方案。请给出方案。",
+      "sub_type": "polymorphic_comment_design",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计commentable_type+commentable_id多态外键方案，分析无法使用数据库外键约束的缺点。对比反向外键（每种类型一个评论表）和中间关联表方案，推荐中间关联表保证引用完整性。设计索引优化和查询性能方案。",
+      "scoring_rubric": "1. 设计多态关联的三种数据库实现方案，需包含关键细节和边界条件处理；2. 从多个维度分析各方案在外键约束和查询性能上的差异，给出量化的对比数据或具体案例；3. 具体推荐适合业务场景的最优方案，避免笼统描述；4. 具体处理多态关联下的索引优化。，避免笼统描述；"
+    },
+    {
+      "id": "52-038",
+      "prompt": "设计一个数据库的自动扩缩容方案，业务流量有明显的峰谷特征（白天QPS 5000、凌晨QPS 100），需要数据库在高峰期自动扩容读副本、低谷期自动缩容，降低成本。请给出基于云数据库的方案。",
+      "sub_type": "auto_scaling_read_replica",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于监控指标的自动扩缩容策略：CPU使用率超过70%时自动添加只读副本、低于30%持续30分钟时自动移除副本。说明扩缩容的冷却时间（避免频繁操作）、连接池的自动更新（新副本加入后应用层感知）、缩容时的连接迁移（确保无活跃查询时才移除）。设计扩缩容的上限和下限保护、成本优化的预测模型。",
+      "scoring_rubric": "1. 设计基于监控指标的自动扩缩容策略和阈值，需包含关键细节和边界条件处理；2. 实现连接池对副本变更的自动感知，需包含关键细节和边界条件处理；3. 设计扩缩容的冷却时间和安全保护机制，需包含关键细节和边界条件处理；4. 具体优化成本的预测模型和调度策略。，避免笼统描述；"
+    },
+    {
+      "id": "52-039",
+      "prompt": "设计一个数据库的逻辑复制方案，将MySQL主库的变更实时同步到ClickHouse用于OLAP分析。需要处理DDL变更的兼容性、大表的全量初始化、数据一致性校验。请给出方案。",
+      "sub_type": "mysql_to_clickhouse_sync",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于binlog的CDC同步架构：Canal/Debezium解析MySQL binlog写入Kafka，消费端将变更写入ClickHouse的ReplacingMergeTree表。说明DDL变更的兼容处理（ClickHouse不支持的DDL需转换或跳过）、全量初始化策略（先快照导入再增量追加）、数据一致性校验（定期对比记录数和关键字段校验和）。分析ClickHouse ReplacingMergeTree的去重机制和最终一致性。",
+      "scoring_rubric": "1. 设计MySQL到ClickHouse的CDC同步架构，需包含关键细节和边界条件处理；2. 具体处理DDL变更的兼容性转换，避免笼统描述；3. 实现全量初始化和增量追加的双阶段同步，需包含关键细节和边界条件处理；4. 设计数据一致性校验和修复机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-040",
+      "prompt": "设计一个支持多租户数据导出的方案，需要支持按租户维度导出其全部数据（可能包含20+张关联表），导出格式支持CSV和SQL，大数据量租户的导出需要异步处理。请给出方案。",
+      "sub_type": "tenant_data_export",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计按租户的数据导出引擎：基于外键关系自动发现关联表并生成导出顺序（拓扑排序避免外键依赖问题）。说明异步导出的任务队列设计、流式写入避免OOM、导出文件的压缩和临时存储。设计导出的权限校验（仅租户管理员或DBA可触发）、导出审计日志、数据脱敏选项（导出时可选择是否脱敏敏感字段）。",
+      "scoring_rubric": "1. 设计按租户维度的关联表自动发现和导出顺序，需包含关键细节和边界条件处理；2. 实现大数据量的异步导出和流式写入，需包含关键细节和边界条件处理；3. 设计导出权限校验和审计日志，需包含关键细节和边界条件处理；4. 具体支持导出时的数据脱敏选项。，避免笼统描述；"
+    },
+    {
+      "id": "52-041",
+      "prompt": "设计一个数据库的死锁检测和自动恢复方案，生产环境MySQL偶发死锁导致事务回滚，需要实时检测死锁、自动重试、生成死锁分析报告。请给出方案。",
+      "sub_type": "deadlock_detection_recovery",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计死锁监控方案：定期采集SHOW ENGINE INNODB STATUS中的死锁信息、解析死锁日志提取涉及的SQL和表。说明自动重试机制（应用层捕获死锁异常后指数退避重试）、死锁分析报告（死锁的SQL、表、索引、等待关系图）、根因优化建议（缺少索引导致全表扫描锁升级）。设计死锁告警阈值（如每分钟超过3次触发告警）。",
+      "scoring_rubric": "1. 设计死锁日志的采集和解析方案，需包含关键细节和边界条件处理；2. 实现应用层的自动重试机制，需包含关键细节和边界条件处理；3. 从多个维度生成死锁分析报告和等待关系图，给出量化的对比数据或具体案例；4. 给出基于死锁模式的根因优化建议。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "52-042",
+      "prompt": "设计一个支持数据库SQL性能回归检测的方案，每次代码发布前自动检测新增或变更的SQL是否引入性能退化，与基线对比后阻断有风险的发布。请给出方案。",
+      "sub_type": "sql_performance_regression",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计SQL性能基线管理：从慢查询日志中提取TOP SQL的执行计划和耗时作为基线。说明回归检测流程：CI/CD中集成SQL分析器，从代码变更中提取新增/修改的SQL，在测试环境执行EXPLAIN并与基线对比（如全表扫描新增、索引未使用）。设计风险评估等级（低/中/高）和阻断策略（高风险自动阻断、中风险需审批）。",
+      "scoring_rubric": "1. 设计SQL性能基线的采集和管理方案，需包含关键细节和边界条件处理；2. 从多个维度实现代码变更中SQL的自动提取和分析，给出量化的对比数据或具体案例；3. 从多个维度设计执行计划对比和风险评估算法，给出量化的对比数据或具体案例；4. 集成到CI/CD设计阻断和审批策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-043",
+      "prompt": "设计一个支持数据库连接泄漏检测的方案，应用偶尔出现连接池耗尽但监控显示活跃连接数正常。需要自动检测未正确关闭的数据库连接并定位泄漏代码。请给出方案。",
+      "sub_type": "connection_leak_detection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计连接泄漏检测机制：在连接池中记录每个连接的借出时间和调用栈（borrowingStackTraceEnabled），超过阈值未归还的连接标记为泄漏嫌疑。说明泄漏检测的告警机制（连接借出超过60秒未归还告警）、泄漏代码定位（记录借出时的调用栈信息）、连接池的自动回收（leakDetectionThreshold强制回收超时连接）。对比HikariCP和Druid的泄漏检测能力。",
+      "scoring_rubric": "1. 设计连接借出追踪和调用栈记录机制，需包含关键细节和边界条件处理；2. 实现泄漏嫌疑的检测和告警，需包含关键细节和边界条件处理；3. 设计超时连接的自动回收策略，需包含关键细节和边界条件处理；4. 具体对比主流连接池的泄漏检测能力。，避免笼统描述；"
+    },
+    {
+      "id": "52-044",
+      "prompt": "设计一个支持数据库ShardingSphere分片的迁移方案，当前单表3亿行需要按用户ID分16个片，要求在线迁移不停服，迁移完成后应用层无感知切换。请给出方案。",
+      "sub_type": "sharding_migration_online",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计在线分片迁移方案：先部署ShardingSphere代理层对应用透明，配置分片规则但初始时所有数据在一个片上。说明全量数据迁移（按用户ID哈希分批导出到各片）、增量同步（binlog实时同步迁移期间的变更）、数据一致性校验（双写验证或校验和对比）。设计流量切换策略（代理层灰度切分片规则）和回滚方案。",
+      "scoring_rubric": "1. 设计ShardingSphere代理层的透明接入方案，需包含关键细节和边界条件处理；2. 实现全量迁移和增量同步的双阶段策略，需包含关键细节和边界条件处理；3. 设计数据一致性校验和双写验证，需包含关键细节和边界条件处理；4. 制定灰度切换和回滚方案。，包含明确的时间节点、责任人和验收标准；"
+    },
+    {
+      "id": "52-045",
+      "prompt": "设计一个支持数据库全局唯一序列号生成的方案，需要支持每天生成1亿个序列号，序列号要求递增有序、不重复、可按业务类型自定义格式（如ORD2026062900001）。请给出方案。",
+      "sub_type": "custom_sequence_generator",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计号段模式的序列号生成器：从数据库批量获取号段（如每次获取1000个号），本地分配耗尽后再获取新号段。说明自定义格式的模板设计（业务前缀+日期+序号）、号段的双Buffer预加载（一个号段使用时预取下一个）、并发安全的原子分配。对比数据库自增序列、Redis INCR和号段模式的性能差异。",
+      "scoring_rubric": "1. 设计号段模式的序列号生成架构，需包含关键细节和边界条件处理；2. 实现自定义格式模板和业务类型区分，需包含关键细节和边界条件处理；3. 设计双Buffer预加载的性能优化，需包含关键细节和边界条件处理；4. 具体对比不同序列号生成方案的性能和可用性。，避免笼统描述；"
+    },
+    {
+      "id": "52-046",
+      "prompt": "设计一个支持数据库表结构自动文档生成的方案，从数据库元数据自动生成表结构文档（字段说明、索引、外键关系、ER图），支持版本对比和变更日志。请给出方案。",
+      "sub_type": "schema_documentation_generator",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Schema文档自动生成引擎：从INFORMATION_SCHEMA提取表/列/索引/外键元数据，结合列注释生成文档。说明ER图的自动生成（基于外键关系构建实体关系图）、版本对比（对比两个版本的Schema差异生成变更日志）、文档的多格式输出（Markdown/HTML/PDF）。设计文档与代码仓库的集成（CI/CD中自动更新文档）。",
+      "scoring_rubric": "1. 设计从元数据提取表结构信息的方案，需包含关键细节和边界条件处理；2. 实现ER图的自动生成和可视化，需包含关键细节和边界条件处理；3. 设计Schema版本对比和变更日志生成，需包含关键细节和边界条件处理；4. 集成到CI/CD实现文档自动更新。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "52-047",
+      "prompt": "设计一个支持数据库慢查询自动优化建议的方案，系统自动采集慢查询日志，分析执行计划，生成索引优化建议（如缺失索引、冗余索引、索引合并），DBA确认后自动创建索引。请给出方案。",
+      "sub_type": "auto_index_recommendation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计慢查询分析引擎：解析EXPLAIN执行计划识别全表扫描、filesort、临时表等性能问题。说明索引建议算法（分析WHERE/JOIN/ORDER BY条件推导候选索引）、冗余索引检测（已有(A,B)联合索引则A单列索引冗余）、索引合并建议（多个单列索引可合并为联合索引）。设计建议的审批流程（DBA确认后通过在线DDL工具创建）、索引效果验证（创建前后对比查询耗时）。",
+      "scoring_rubric": "1. 准确设计执行计划解析和性能问题识别算法，并给出具体的分析依据和推理过程；2. 实现缺失索引和冗余索引的自动检测，需包含关键细节和边界条件处理；3. 从多个维度生成索引优化建议和预期效果评估，给出量化的对比数据或具体案例；4. 设计审批流程和索引效果验证机制。，需包含关键细节和边界条件处理；"
+    }
+  ]
+}

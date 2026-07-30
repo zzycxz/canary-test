@@ -1,0 +1,511 @@
+{
+  "capability": "structured_output",
+  "label": "结构化输出格式遵循",
+  "total": 56,
+  "cases": [
+    {
+      "prompt": "将以下信息转换为JSON：姓名：李四，年龄：28，职业：工程师。只输出纯JSON，不含任何markdown代码块或额外文本。",
+      "sub_type": "json_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出合法的JSON对象，包含name、age、job字段，类型为字符串、整数、字符串，无额外内容。",
+      "scoring_rubric": "JSON语法正确；字段名匹配指定名称；数据类型正确；输出为纯JSON，无其他文本。",
+      "id": "142-001"
+    },
+    {
+      "prompt": "根据以下数据生成JSON Schema并输出数据。Schema：用户对象包含id（整数，必须）、name（字符串，必须）、email（字符串，必须）、preferences（对象，可选，包含theme（字符串）和language（字符串））。数据：用户id为1001，name为'王五'，email为'wangwu@example.com'，preferences为{theme:'dark', language:'zh-CN'}。只输出符合Schema的JSON，不要任何其他内容。",
+      "sub_type": "json_output",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON，严格遵循指定的Schema，所有必须字段存在，可选字段正确包含，数据类型匹配。",
+      "scoring_rubric": "JSON结构完全符合Schema；必须字段id、name、email齐全；可选字段preferences正确嵌套；数据类型无误；无额外文本。",
+      "id": "142-002"
+    },
+    {
+      "prompt": "将以下配置信息转换为YAML格式：服务器地址：192.168.1.1，端口：8080，启用SSL：true，证书路径：/etc/cert.pem。输出纯YAML，不要代码块或任何解释。",
+      "sub_type": "yaml_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出YAML格式的配置，键值对正确，缩进合理，数据类型保持原样（字符串、整数、布尔值）。",
+      "scoring_rubric": "YAML语法正确；缩进一致；键名匹配指定字段；数据类型准确；输出为纯YAML，无额外说明。",
+      "id": "142-003"
+    },
+    {
+      "prompt": "用CSV格式输出以下员工列表（含表头）：员工编号、姓名、部门。数据：E001张三销售部；E002李四技术部；E003王五市场部。输出标准CSV，使用逗号分隔，包含表头行。",
+      "sub_type": "csv_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出CSV格式，第一行为表头'员工编号,姓名,部门'，后续为3条数据行，字段正确分隔，无多余文本。",
+      "scoring_rubric": "CSV格式正确；表头存在且匹配；数据行完整；分隔符为逗号；无额外内容。",
+      "id": "142-004"
+    },
+    {
+      "prompt": "用Markdown表格输出以下学生成绩：学生姓名、数学、英语、科学。数据：小明95、88、92；小红85、90、80。输出纯Markdown表格，不要其他内容。",
+      "sub_type": "markdown_table",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出Markdown表格，包含表头行和数据行，列对齐正确，语法符合Markdown规范。",
+      "scoring_rubric": "Markdown表格语法正确；表头和数据行存在；列对齐合理；无额外文本或代码块标记。",
+      "id": "142-005"
+    },
+    {
+      "prompt": "根据给定的Schema输出产品信息。Schema：产品必须包含id（字符串）、name（字符串）、price（浮点数）。数据：id='P101'，name='手机'，price=1999.99。输出纯JSON，严格遵循Schema。",
+      "sub_type": "schema_compliance",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON对象，包含id、name、price字段，类型为字符串、字符串、浮点数，所有必须字段齐全。",
+      "scoring_rubric": "JSON符合Schema；必须字段完整；数据类型正确；无缺失或多余字段。",
+      "id": "142-006"
+    },
+    {
+      "prompt": "设计一个复杂Schema并输出数据。Schema：用户组必须包含groupId（字符串，必须）、name（字符串，必须）、members（数组，必须，每个成员有userId（整数，必须）和role（枚举：'admin'或'member'，必须））。数据：groupId='G001'，name='项目组'，members=[{userId:1, role:'admin'}, {userId:2, role:'member'}]。输出纯JSON，确保枚举值正确，无任何额外内容。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON，严格遵循Schema，所有必须字段存在，枚举值仅限于指定选项，数组结构正确。",
+      "scoring_rubric": "JSON结构完全符合Schema；groupId、name、members字段齐全；枚举值role正确；数组元素结构匹配；无额外文本。",
+      "id": "142-007"
+    },
+    {
+      "prompt": "将以下学生信息转换为JSON格式，字段：student_id(字符串)、name(字符串)、enrolled(布尔值)、scores(数字数组)。数据：学号20230101，姓名李四，已入学，成绩为88, 92, 76。只输出纯JSON对象，不要任何解释。",
+      "sub_type": "json_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出格式正确、语法合法的JSON对象，包含指定的四个字段，数据类型符合要求（scores为数字数组），且无任何多余文本。",
+      "scoring_rubric": "JSON语法正确；包含所有指定字段；字段名拼写正确；数据类型正确（scores为数字数组）；无额外文本或注释。",
+      "id": "142-008"
+    },
+    {
+      "prompt": "用YAML格式表示以下服务器配置信息：服务器名称web-server-01，IP地址192.168.1.100，端口8080，运行状态为active，监控指标包括CPU使用率75%和内存使用率60%。请输出纯YAML，不要代码块。",
+      "sub_type": "yaml_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出符合YAML语法的结构化数据，正确表示键值对和嵌套的监控指标对象，缩进正确。",
+      "scoring_rubric": "YAML语法正确；键名拼写正确；包含所有给定信息；监控指标正确嵌套；无额外标记或说明。",
+      "id": "142-009"
+    },
+    {
+      "prompt": "将以下商品数据整理为CSV格式，需要包含表头：商品ID, 商品名称, 单价, 库存。数据如下：1001，'高端机械键盘'，599.99，200；1002，'无线鼠标'，199，500；1003，'USB-C转接头'，35，1000。注意商品名称可能包含逗号，请确保格式标准。",
+      "sub_type": "csv_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出标准CSV，第一行为表头，后续为数据行。字段使用逗号分隔，商品名称中若有逗号则用双引号括起。",
+      "scoring_rubric": "表头行存在且字段名正确；数据行数正确；字段分隔符为逗号；包含逗号的商品名称被正确引用（双引号）；无多余空格或文本。",
+      "id": "142-010"
+    },
+    {
+      "prompt": "使用Markdown表格展示以下天气预报数据：日期、城市、天气、最高温度、最低温度。今天：北京，晴，28℃，18℃；明天：上海，多云，25℃，19℃；后天：广州，阵雨，31℃，24℃。表格需对齐。",
+      "sub_type": "markdown_table",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出格式正确的Markdown表格，包含表头、分隔行和三行数据，列对齐。",
+      "scoring_rubric": "Markdown表格语法正确；表头行存在；分隔行正确（|---|）；数据完整；格式对齐。",
+      "id": "142-011"
+    },
+    {
+      "prompt": "根据以下JSON Schema验证并输出用户信息。Schema要求：必须包含`user_id`(整数)和`name`(字符串)，可选`email`(字符串，格式需含@)。用户信息：ID为12345，名字王五，邮箱wangwu@example.com。请严格输出符合Schema的JSON对象。",
+      "sub_type": "schema_compliance",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON对象严格包含必须字段`user_id`和`name`，并且如果提供了`email`则格式正确。数据类型符合Schema定义。",
+      "scoring_rubric": "JSON格式正确；必须字段`user_id`和`name`存在且类型正确（整数、字符串）；可选字段`email`存在且格式有效；无违反Schema的多余字段。",
+      "id": "142-012"
+    },
+    {
+      "prompt": "将以下任务清单转换为JSON数组，每个任务是一个对象，包含：task_id(整数)，title(字符串)，completed(布尔值)，tags(字符串数组)。清单：1. 设计原型图，未完成，标签['UI','设计']；2. 编写单元测试，已完成，标签['测试']；3. 部署到测试环境，未完成，标签['DevOps','运维']。只输出JSON数组。",
+      "sub_type": "json_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出合法的JSON数组，包含三个对象，每个对象字段齐全，数据类型正确，特别是tags为字符串数组。",
+      "scoring_rubric": "输出为合法JSON数组；数组包含三个对象；每个对象包含指定字段；`tags`字段为字符串数组；无额外内容。",
+      "id": "142-013"
+    },
+    {
+      "prompt": "用YAML格式描述一个包含两个数据库节点的集群配置。每个节点需要有：hostname(字符串)，port(整数)，is_primary(布尔值)，allowed_replication_ips(字符串数组)。节点1: 'db-node-1', 5432, true, ['192.168.1.0/24', '10.0.0.0/8']；节点2: 'db-node-2', 5432, false, []。请以‘cluster_nodes’为顶层键输出。",
+      "sub_type": "yaml_output",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出结构清晰的YAML，顶层为‘cluster_nodes’，其下为包含两个节点的列表，每个节点的字段和数据类型正确，嵌套的数组格式正确。",
+      "scoring_rubric": "YAML语法正确；顶层键‘cluster_nodes’存在；其下为列表；列表包含两个节点对象；每个节点包含指定字段；`allowed_replication_ips`为列表格式；数据类型正确。",
+      "id": "142-014"
+    },
+    {
+      "prompt": "将以下会议记录摘要为CSV，列：参会人，发言次数，主要观点(每个观点占一行，需用分号分隔)。参会人：张三，发言5次，观点‘市场潜力大’，‘需要优化成本’；李四，发言3次，观点‘技术方案可行’；王五，发言2次，观点‘时间紧迫’，‘资源不足’。",
+      "sub_type": "csv_output",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出CSV，正确处理包含分号的‘主要观点’字段（可能需要用引号包裹），确保每行数据对应一个参会人，观点在字段内用分号分隔。",
+      "scoring_rubric": "CSV格式正确；表头行存在；数据行数正确；包含分号的字段被正确引用；字段内观点分隔符正确；无格式错误。",
+      "id": "142-015"
+    },
+    {
+      "prompt": "请为以下产品设计一个Markdown表格，展示其技术规格：参数名称、值、单位。产品：智能手表。数据：重量 52 克；显示屏分辨率 454x454 像素；电池容量 420 毫安时；防水等级 5ATM。",
+      "sub_type": "markdown_table",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出标准的Markdown表格，包含三列，四行数据，参数、值、单位对应准确。",
+      "scoring_rubric": "Markdown表格语法正确；表头和数据完整；列对齐；无拼写错误。",
+      "id": "142-016"
+    },
+    {
+      "prompt": "根据以下API响应Schema，生成一个符合要求的JSON示例。Schema要求：包含`status`(字符串，枚举值为'success'或'error')，`data`(对象，包含`count`(整数)和`items`(对象数组))，`message`(字符串，可选)。请生成一个成功响应，包含2个物品。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON示例严格遵循Schema：`status`为’success’；`data`对象存在且包含`count`(值为2)和`items`(数组长度2)；`message`可选，若提供则类型正确；无多余字段。",
+      "scoring_rubric": "JSON格式正确；`status`字段值为’success’；`data`对象结构正确（含`count`和`items`）；`items`为数组且长度匹配`count`；若包含`message`则类型为字符串；无额外字段。",
+      "id": "142-017"
+    },
+    {
+      "prompt": "用CSV格式输出上周每日销售汇总，表头：星期, 销售额(元), 订单量, 平均客单价(元)。数据：周一 12500 150 83.33；周二 11800 140 84.29；周三 14200 180 78.89；周四 9800 120 81.67；周五 16500 200 82.50。",
+      "sub_type": "csv_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出标准CSV，包含表头行和五行数据，数字和文本正确分隔。",
+      "scoring_rubric": "CSV格式正确；表头准确；五行数据完整；字段分隔正确；无多余说明。",
+      "id": "142-018"
+    },
+    {
+      "prompt": "设计一个Markdown表格来比较三种编程语言的特性。列：特性, Python, Java, C++。特性行：类型系统（动态/静态）、内存管理（自动/手动）、主要用途（请列举1-2个）。请填充表格。",
+      "sub_type": "markdown_table",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出格式正确的Markdown表格，包含四列（特性、三种语言），三行数据（每个特性一行），信息准确。",
+      "scoring_rubric": "Markdown语法正确；表头和列名正确；数据完整准确；表格对齐。",
+      "id": "142-019"
+    },
+    {
+      "prompt": "根据以下YAML配置模板，填写具体的值生成最终配置。模板：\ndatabase:\n  host: {{HOST}}\n  port: {{PORT}}\n  name: {{DB_NAME}}\nlogging:\n  level: {{LOG_LEVEL}}\n  file: {{LOG_FILE}}\n\n已知参数：HOST='10.0.0.5'，PORT=3306，DB_NAME='production'，LOG_LEVEL='info'，LOG_FILE='/var/log/app.log'。输出完整的YAML配置。",
+      "sub_type": "yaml_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出正确的YAML，模板中的占位符被替换为提供的具体值，保持原有的结构和缩进。",
+      "scoring_rubric": "YAML格式正确；占位符全部被替换；结构和键名与模板一致；值的数据类型正确（端口号为数字）；无额外文本。",
+      "id": "142-020"
+    },
+    {
+      "prompt": "我们来讨论系统监控指标。请用JSON格式输出当前服务器状态，字段必须包含：timestamp(ISO 8601格式字符串)、host_name(字符串)、metrics(对象，包含cpu_usage_percent(数字)、memory_usage_percent(数字)、disk_io(读写速率，对象，包含read_kbps(数字)和write_kbps(数字)))。请根据你的理解生成合理的数据。",
+      "sub_type": "json_output",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出符合指定结构的JSON对象，字段完整，嵌套结构正确，timestamp格式符合ISO 8601，数值合理。",
+      "scoring_rubric": "JSON语法正确；字段完整且名称正确；嵌套结构正确（metrics -> disk_io）；timestamp为有效ISO 8601字符串；数值类型为数字。",
+      "id": "142-021"
+    },
+    {
+      "prompt": "为一个物联网设备设计数据上报的JSON Schema。要求：必须字段`device_id`(字符串，非空)、`timestamp`(数字，Unix时间戳)、`telemetry`(对象数组)。`telemetry`数组中的每个对象必须包含`metric_name`(字符串)、`value`(数字)、`unit`(字符串)。请生成一个包含两个遥测数据的符合此Schema的JSON实例。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出的JSON实例严格满足给定的Schema：包含所有必须字段，`telemetry`为包含两个对象的数组，每个遥测对象包含所有必须字段，字段名和数据类型正确，无多余字段。",
+      "scoring_rubric": "JSON格式正确；包含所有顶级必须字段；`telemetry`为数组且包含两个对象；每个遥测对象包含所有必须字段；字段名拼写正确；数据类型正确；无额外字段。",
+      "id": "142-022"
+    },
+    {
+      "prompt": "将以下用户信息转换为JSON格式：姓名：张三，年龄：30，爱好：篮球、读书。输出纯JSON，字段为name(string), age(integer), hobbies(array of strings)。不要包含任何额外文本。",
+      "sub_type": "json_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出合法的JSON对象，包含name、age、hobbies字段，类型正确，无额外说明或代码块。",
+      "scoring_rubric": "JSON语法正确；字段名和数据类型匹配；数组正确表示多个爱好；无额外内容。",
+      "id": "142-023"
+    },
+    {
+      "prompt": "为学生信息生成JSON：学生ID:1001，姓名：王五，课程：[数学, 英语]，地址：{城市：上海，邮编：200000}。只输出JSON，字段：id(integer), name(string), courses(array of strings), address(object with city and zipcode)。",
+      "sub_type": "json_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出嵌套JSON对象，包含id、name、courses数组和address对象，所有字段类型正确。",
+      "scoring_rubric": "JSON结构完整；嵌套对象和数组格式正确；数据类型匹配；无额外文本。",
+      "id": "142-024"
+    },
+    {
+      "prompt": "创建一个产品目录的JSON输出：产品1：ID:P001，名称：手机，规格：{颜色：黑色，内存：128GB}，价格：5999，库存：100；产品2：ID:P002，名称：耳机，规格：{颜色：白色，类型：无线}，价格：399，库存：500。输出JSON数组，每个元素有id(string), name(string), specs(object), price(float), stock(integer)。",
+      "sub_type": "json_output",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON数组，包含两个产品对象，嵌套specs对象和数组结构正确，所有字段类型匹配。",
+      "scoring_rubric": "JSON数组格式正确；对象嵌套无误；价格使用浮点数；库存使用整数；无额外说明。",
+      "id": "142-025"
+    },
+    {
+      "prompt": "将以下配置信息转换为YAML格式：服务器地址：localhost，端口：8080，调试模式：开启。输出纯YAML，字段为address(string), port(integer), debug(boolean)。不要有其他文本。",
+      "sub_type": "yaml_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出合法的YAML，键值对正确，缩进适当，字段类型匹配。",
+      "scoring_rubric": "YAML语法正确；缩进一致；字段名和值类型匹配；无额外内容。",
+      "id": "142-026"
+    },
+    {
+      "prompt": "用YAML表示数据库连接配置：主机：db.example.com，端口：3306，用户名：admin，密码：secret，数据库列表：[users, products, orders]。输出YAML，字段：host(string), port(integer), user(string), password(string), databases(array of strings)。",
+      "sub_type": "yaml_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出YAML，列表使用YAML序列语法表示，所有字段正确。",
+      "scoring_rubric": "YAML格式正确；列表用破折号或适当语法；嵌套无误；无额外说明。",
+      "id": "142-027"
+    },
+    {
+      "prompt": "生成一个微服务架构的YAML描述：服务1：name: auth-service, port: 8081, dependencies: [database, cache]; 服务2：name: api-gateway, port: 8082, dependencies: [auth-service]。输出YAML，使用映射和序列。",
+      "sub_type": "yaml_output",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出结构化的YAML，正确表示两个服务的依赖关系，使用嵌套映射和数组。",
+      "scoring_rubric": "YAML结构清晰；依赖列表正确；映射和序列语法无误；无额外文本。",
+      "id": "142-028"
+    },
+    {
+      "prompt": "用CSV格式输出以下水果列表（含表头）：名称、价格、数量。数据：苹果5元10个；香蕉3元20个；橙子4元15个。输出纯CSV，不要任何其他内容。",
+      "sub_type": "csv_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出CSV格式，包含表头行和数据行，字段用逗号分隔。",
+      "scoring_rubric": "CSV语法正确；表头存在；数据行数匹配；分隔符为逗号；无多余文本。",
+      "id": "142-029"
+    },
+    {
+      "prompt": "输出员工信息CSV，字段：姓名、职位、部门、备注。数据：张三，经理，销售部，'负责市场推广'；李四，工程师，技术部，无备注。注意：如果字段包含逗号或引号，使用双引号包裹。输出纯CSV。",
+      "sub_type": "csv_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出CSV，备注字段中引号正确处理，表头和数据行正确。",
+      "scoring_rubric": "CSV格式正确；引号包裹适当；字段分隔符正确；无额外内容。",
+      "id": "142-030"
+    },
+    {
+      "prompt": "生成一个包含10行数据的CSV文件，字段：ID, Name, Description, Price。使用示例数据：ID为数字，Name为字符串，Description为包含逗号和换行的文本，Price为浮点数。确保CSV转义正确。只输出CSV内容。",
+      "sub_type": "csv_output",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出10行数据的CSV，特殊字符正确转义，所有字段类型匹配。",
+      "scoring_rubric": "CSV完整性；转义字符处理正确；数据行数为10；无语法错误。",
+      "id": "142-031"
+    },
+    {
+      "prompt": "用Markdown表格输出以下书籍信息：标题、作者、出版年份。数据：'Python编程'，'张三'，2020；'数据科学'，'李四'，2021。输出表格，包含表头。",
+      "sub_type": "markdown_table",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出Markdown表格语法，表头和数据行对齐，无额外内容。",
+      "scoring_rubric": "Markdown表格格式正确；列分隔符正确；表头存在；无多余文本。",
+      "id": "142-032"
+    },
+    {
+      "prompt": "创建Markdown表格展示产品库存：产品名称、数量、状态（用✓或✗表示上架）。数据：手机100✓，耳机200✓，充电器50✗。表格应右对齐数字列。",
+      "sub_type": "markdown_table",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出Markdown表格，带对齐标记（如:---:），列内容正确。",
+      "scoring_rubric": "Markdown表格语法正确；对齐指定实现；数据匹配；无额外说明。",
+      "id": "142-033"
+    },
+    {
+      "prompt": "用Markdown表格输出课程表，字段：时间、周一、周二、周三、周四、周五。数据示例：上午9点：数学、英语、数学、英语、数学。确保表格结构清晰。",
+      "sub_type": "markdown_table",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出完整的课程表Markdown表格，所有列填充数据，结构完整。",
+      "scoring_rubric": "Markdown表格格式正确；列数匹配；数据无误；无语法错误。",
+      "id": "142-034"
+    },
+    {
+      "prompt": "给定Schema：{ type: 'object', properties: { name: { type: 'string' }, age: { type: 'integer' } }, required: ['name', 'age'] }。请为用户'赵六'，年龄25生成符合此Schema的JSON输出。只输出JSON。",
+      "sub_type": "schema_compliance",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON，包含required字段name和age，类型正确，符合Schema。",
+      "scoring_rubric": "JSON符合Schema；required字段存在；类型匹配；无额外字段。",
+      "id": "142-035"
+    },
+    {
+      "prompt": "Schema定义：{ type: 'object', properties: { color: { type: 'string', enum: ['red', 'blue', 'green'] }, size: { type: 'string', enum: ['S', 'M', 'L'] } }, required: ['color'] }。生成一个对象，color为'blue'，size为'M'。输出JSON。",
+      "sub_type": "schema_compliance",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON，color和size在枚举值内，required字段color存在。",
+      "scoring_rubric": "枚举值遵守；字段可选处理正确；类型匹配；无额外文本。",
+      "id": "142-036"
+    },
+    {
+      "prompt": "Schema: { type: 'array', items: { type: 'object', properties: { id: { type: 'integer' }, tags: { type: 'array', items: { type: 'string' } } }, required: ['id'] } }。生成两个项目：id=1, tags=['a','b']; id=2, tags=['c']。输出JSON数组。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON数组，每个对象符合items Schema，id为整数，tags为字符串数组。",
+      "scoring_rubric": "数组和对象结构符合Schema；required字段id存在；tags数组正确；类型匹配。",
+      "id": "142-037"
+    },
+    {
+      "prompt": "根据以下JSON Schema生成一条用户记录：Schema: {\"$schema\": \"http://json-schema.org/draft-07/schema#\", \"type\": \"object\", \"properties\": {\"user_id\": {\"type\": \"integer\", \"description\": \"用户唯一标识\"}, \"username\": {\"type\": \"string\", \"minLength\": 3, \"maxLength\": 20}, \"email\": {\"type\": \"string\", \"format\": \"email\"}, \"roles\": {\"type\": \"array\", \"items\": {\"type\": \"string\", \"enum\": [\"admin\", \"user\", \"guest\"]}}, \"is_active\": {\"type\": \"boolean\"}}, \"required\": [\"user_id\", \"username\", \"email\", \"is_active\"]}。生成一个user_id为1001、username为'tester01'、email为'tester@example.com'、roles为['user', 'guest']、is_active为true的记录。输出纯JSON，不含任何markdown代码块、注释或额外说明文字。",
+      "sub_type": "schema_compliance",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出严格符合给定JSON Schema的JSON对象，包含所有required字段（user_id、username、email、is_active），字段类型正确（如user_id为整数、email为字符串且格式有效），roles字段为包含枚举值的数组，无多余字段或格式错误，语法完全合法。",
+      "scoring_rubric": "1. 输出为纯JSON格式，无额外字符或说明；2. 包含user_id、username、email、is_active四个required字段，且可选字段roles也存在；3. 字段类型匹配Schema：user_id为整数，username为字符串（长度符合），email为字符串（格式有效），roles为字符串数组（元素在枚举内），is_active为布尔值；4. 数据值与要求一致：user_id=1001, username='tester01', email='tester@example.com', roles=['user', 'guest'], is_active=true；5. 无语法错误，如缺少括号、引号或逗号。",
+      "id": "142-038"
+    },
+    {
+      "prompt": "将以下用户信息转换为JSON格式，字段：name(字符串)、age(整数)、hobbies(字符串数组)、address(含city和zipcode的对象)。用户：李四，25岁，爱好游泳和旅行，上海市浦东新区，邮编200120。只输出JSON，不含任何markdown代码块或额外说明。",
+      "sub_type": "json_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出严格合法的JSON对象，包含name、age、hobbies和address字段，address内嵌对象含city和zipcode，所有数据类型正确，无注释或多余文本。",
+      "scoring_rubric": "JSON语法有效；字段名和结构匹配要求；数据类型正确（字符串、整数、数组、嵌套对象）；无额外字段或内容。",
+      "id": "142-039"
+    },
+    {
+      "prompt": "用YAML格式输出以下服务器配置：服务器名称-backend01，IP地址-10.0.0.5，端口-8080，超时时间-30秒，启用日志-true。输出纯YAML，不要使用markdown代码块或添加注释。",
+      "sub_type": "yaml_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出有效YAML语法的数据，包含所有指定字段，数据类型适当（如字符串、整数、布尔值），格式整洁无错误。",
+      "scoring_rubric": "YAML语法正确；字段名server_name、ip_address、port、timeout、enable_log存在；数据类型匹配（如端口为整数）；无额外说明或标记。",
+      "id": "142-040"
+    },
+    {
+      "prompt": "输出以下销售数据的CSV格式，包含表头：产品名称、销售额、利润率、地区。数据：手机50000元15%华北；平板30000元12%华东；笔记本80000元20%华南。CSV以逗号分隔，表头在第一行，只输出CSV内容。",
+      "sub_type": "csv_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出标准CSV格式，包含表头行和3条数据行，字段正确分隔，无多余空格或引号（除非必要），无额外文本。",
+      "scoring_rubric": "CSV格式有效；表头与数据列匹配；分隔符为逗号；数据准确无误；无markdown或其他内容。",
+      "id": "142-041"
+    },
+    {
+      "prompt": "将以下员工信息转换为Markdown表格，列：员工ID、姓名、部门、入职日期。数据：E001张三销售部2020-01-15；E002李四技术部2019-05-20；E003王五财务部2021-03-10。只输出Markdown表格，不要添加其他文本。",
+      "sub_type": "markdown_table",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出有效的Markdown表格，表头行和分隔行正确，数据对齐，无额外内容。",
+      "scoring_rubric": "Markdown表格语法正确；列名和行数匹配；分隔线使用短横线；数据内容准确；无多余说明。",
+      "id": "142-042"
+    },
+    {
+      "prompt": "根据以下JSON Schema输出产品数据：Schema要求必须字段为id(整数)、name(字符串)、price(浮点数)；可选字段为description(字符串)和tags(字符串数组)；枚举字段status必须为'available'或'out_of_stock'。产品信息：id=1001，name=无线耳机，price=299.99，status=available，tags=['electronics','audio']。严格按Schema输出JSON，确保所有required字段存在且类型正确。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出JSON对象，严格遵循Schema：包含所有required字段，枚举值正确，无额外字段，数据类型匹配。",
+      "scoring_rubric": "JSON有效；required字段id、name、price、status齐全；枚举值status为'available'或'out_of_stock'；数据类型正确；无额外字段或修改。",
+      "id": "142-043"
+    },
+    {
+      "prompt": "用CSV格式输出以下订单数据，字段：订单ID、客户姓名、商品列表、总价。数据：ORD001张三['苹果手机','耳机']6399元；ORD002李四['笔记本']8500元。输出CSV时，商品列表字段用分号分隔并加引号，总价保留两位小数。",
+      "sub_type": "csv_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出CSV格式，包含表头，商品列表字段使用引号和分号分隔，总价格式正确，无多余内容。",
+      "scoring_rubric": "CSV语法正确；表头和数据列匹配；商品列表字段引号处理和分号分隔正确；总价为浮点数且两位小数；无额外文本。",
+      "id": "142-044"
+    },
+    {
+      "prompt": "将以下学生信息转换为JSON格式。字段要求：student_id (字符串，必填)， name (字符串，必填)， grade (整数，必填)， is_active (布尔值，必填)， courses (字符串数组，可选)。学生数据：学号S20240101，张三，10年级，在读，选修数学和物理。只输出纯JSON，不含任何代码块标记或说明。",
+      "sub_type": "json_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出一个合法的JSON对象，包含所有指定字段，数据类型正确（grade为整数，is_active为布尔值，courses为数组），即使courses数组为空也需存在。不包含任何额外文本。",
+      "scoring_rubric": "1. 输出为合法JSON格式。2. 包含所有要求的字段名。3. 字段数据类型正确。4. 嵌套的courses为数组类型。5. 无多余内容（如markdown代码块）。",
+      "id": "142-045"
+    },
+    {
+      "prompt": "请将以下设备信息整理为YAML格式输出。字段定义：device_type (字符串，枚举值: 'sensor', 'gateway', 'server')， hostname (字符串，必填)， ip_address (字符串，必填)， config (嵌套对象，包含 threshold (整数，必填) 和 timeout (浮点数，可选))。设备数据：类型为sensor，主机名sensor-001，IP为192.168.1.100，配置阈值为30，超时为2.5秒。只输出YAML内容，无需代码块包裹。",
+      "sub_type": "yaml_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出符合YAML语法的结构化数据。device_type值为'sensor'，config为嵌套对象。格式正确，缩进合理。不包含markdown标记或额外解释。",
+      "scoring_rubric": "1. 输出为合法YAML格式。2. 字段名和嵌套结构正确。3. device_type值为有效枚举值。4. 数据类型正确（整数、浮点数、字符串）。5. 无多余文本或代码块标记。",
+      "id": "142-046"
+    },
+    {
+      "prompt": "将以下订单数据转换为标准的CSV格式，包含表头。字段：订单编号(字符串)，商品名称(字符串)，数量(整数)，单价(浮点数)，是否完成(布尔值)。数据：订单A001，无线路由器，1，199.99，已完成；订单A002，网线，3，15.5，未完成。输出纯CSV文本。",
+      "sub_type": "csv_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出包含一行表头和两行数据的CSV。使用英文逗号分隔。字段顺序与指定一致。布尔值可能输出为'True'/'False'或'true'/'false'（保持一致即可）。不包含额外说明。",
+      "scoring_rubric": "1. 输出为有效CSV格式，含表头行。2. 字段名称和顺序正确。3. 数据用逗号正确分隔。4. 数值类型（整数、浮点数）在上下文中可识别。5. 无多余空行或文本。",
+      "id": "142-047"
+    },
+    {
+      "prompt": "请用Markdown表格展示以下团队成员信息。表头：姓名、职位、邮箱、工号。数据：李明，工程师，lm@example.com，E1001；王芳，产品经理，wf@example.com，E1002；赵强，设计师，zq@example.com，E1003。只输出表格，不要其他文字。",
+      "sub_type": "markdown_table",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出一个结构正确的Markdown表格，包含表头分隔行（|---|）和三行数据。列对齐，信息完整。不包含代码块标记或其他文字。",
+      "scoring_rubric": "1. 输出为有效的Markdown表格语法。2. 表头列名正确。3. 数据行数正确。4. 列对齐格式正确。5. 无额外文本或代码块标记。",
+      "id": "142-048"
+    },
+    {
+      "prompt": "根据以下JSON Schema生成一条符合要求的数据。Schema要求：type: object，properties: status (string, enum: [\"pending\", \"active\", \"closed\"])， created_at (string, format: date-time，必填)， priority (integer, minimum: 1, maximum: 5，必填)， tags (array of strings，最小1个，最大3个，必填)， assignee (object, properties: id (string)， name (string)， required: [\"id\"]))。请基于以上Schema，填充一条数据（你可以合理假设字段值）。严格遵循Schema，输出纯JSON。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出一个严格符合给定Schema的JSON对象。status值为枚举值之一。created_at为有效的ISO格式日期时间字符串。priority为1-5之间的整数。tags为包含1-3个字符串的数组。assignee为包含必填字段id的对象。所有必须字段都存在。",
+      "scoring_rubric": "1. 输出为合法JSON。2. 所有required字段均存在。3. status字段值为枚举值之一。4. priority在指定范围内。5. tags数组长度符合约束。6. assignee对象包含id字段。7. 数据类型完全符合Schema定义。",
+      "id": "142-049"
+    },
+    {
+      "prompt": "将以下会议记录转换为Markdown表格。要求表格包含三列：议题（字符串）、负责人（字符串）、决议状态（枚举：通过/待议/否决）。数据：议题一关于预算，负责人张经理，状态通过；议题二关于人员扩充，负责人李主管，状态待议；议题三关于技术路线，负责人王工，状态否决。输出纯Markdown表格。",
+      "sub_type": "markdown_table",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出Markdown表格，表头为'议题'、'负责人'、'决议状态'。决议状态列的值必须是指定的三个枚举值之一。格式正确，无多余内容。",
+      "scoring_rubric": "1. Markdown表格语法正确。2. 表头列名正确。3. 数据行数正确。4. 决议状态列的值严格为指定枚举值。5. 无多余文本或格式错误。",
+      "id": "142-050"
+    },
+    {
+      "prompt": "请生成一段符合以下复杂Schema的JSON数据。Schema定义：data (object, required)， properties: company (object, required, properties: name (string, required)， registration_number (string, pattern: ^CN-\\d{8}$, required)， departments (array, minItems: 1, required))， metadata (object, required, properties: version (integer, const: 2)， last_updated (string, format: date-time, required))。你需要为company填充一个公司信息（名称和注册号自拟），为departments填充至少一个部门对象（包含name和budget字段），并填充完整的metadata。输出纯JSON。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出符合多层嵌套、多个required字段、模式匹配和常量约束的JSON。registration_number匹配正则表达式^CN-\\d{8}$。metadata.version恒等于2。departments数组至少有一个元素。所有required字段齐全。",
+      "scoring_rubric": "1. 输出为合法JSON。2. 顶层和嵌套的required字段均存在。3. registration_number匹配指定正则模式。4. metadata.version严格等于整数2。5. departments数组长度>=1。6. 整体结构完全符合Schema定义。",
+      "id": "142-051"
+    },
+    {
+      "prompt": "将以下服务器配置信息转换为YAML格式。服务器：hostname为'web-prod-01'，port为8080，features包含logging为true，cache为false，max_connections为200。只输出YAML语法数据，不要使用markdown代码块包裹，不要有任何额外说明。",
+      "sub_type": "yaml_output",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "输出一个合法的YAML格式数据块，正确使用缩进和键值对语法，包含所有指定字段及正确的布尔值和整数类型，不包含markdown代码块标记（如```yaml）或其他文字。",
+      "scoring_rubric": "1. 格式为纯YAML，无额外标记或说明。2. 缩进正确，符合YAML语法。3. 字段名与数据类型完全匹配（hostname字符串，port整数，features为嵌套对象）。4. 布尔值 true/false 格式正确。",
+      "id": "142-052"
+    },
+    {
+      "prompt": "请用标准Markdown表格语法输出以下学生成绩单。列名：姓名、语文、数学、英语、总分。数据：张三：95, 88, 92; 李四：82, 91, 78; 王五：88, 85, 90。只输出表格，不要其他任何文字。",
+      "sub_type": "markdown_table",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出一个符合Markdown语法的表格，包含正确的列名表头、分隔符行（|---|）和三行数据行。数据对齐正确，无任何解释性文字。",
+      "scoring_rubric": "1. 表格以Markdown标准语法开始（第一行是表头，第二行是分隔符）。2. 所有列（姓名、语文、数学、英语、总分）存在且顺序正确。3. 数据正确填入对应单元格，数值计算（总分）正确。4. 表格格式整洁，没有多余内容。",
+      "id": "142-053"
+    },
+    {
+      "prompt": "请根据以下Schema定义，将给定的用户数据输出为严格符合要求的JSON。Schema：user对象为必需，包含：name(字符串，必需)，email(字符串，必需)，role(枚举值：'admin', 'editor', 'viewer'，必需)，age(整数，可选)。用户数据：用户名Alice，邮箱alice@example.com，角色admin，年龄30。输出必须是合法JSON，且严格遵守Schema的所有约束（如required字段），不能遗漏任何必需字段。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出一个合法的JSON对象，其结构完全符合给定的Schema。必须包含 'user' 对象，且该对象内部必须包含 'name', 'email', 'role' 三个必需字段，且 'role' 的值必须是 'admin', 'editor', 'viewer' 之一。'age' 字段也应存在。",
+      "scoring_rubric": "1. 输出为合法JSON。2. 顶层包含 'user' 对象。3. 'user' 对象内包含所有三个必需字段：name, email, role。4. 'role' 的值 'admin' 是允许的枚举值之一。5. 'age' 字段也存在且类型正确。6. 没有输出任何额外字段或注释。",
+      "id": "142-054"
+    },
+    {
+      "prompt": "将以下书籍信息转换为JSON格式。要求：title(字符串)， authors(字符串数组)， publication_year(整数)， publisher(对象，包含name(字符串)和city(字符串))。数据：书名《人工智能导论》，作者是李明和王芳，2021年出版，出版社是清华大学出版社，位于北京市。只输出JSON，不要其他内容。",
+      "sub_type": "json_output",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输出一个合法的JSON对象，包含四个指定字段。authors为包含两个字符串的数组，publisher为包含name和city两个字段的嵌套对象。所有数据类型正确，无额外字段或注释。",
+      "scoring_rubric": "1. 输出为合法JSON。2. 包含title, authors, publication_year, publisher四个字段。3. authors字段为数组，且包含'李明'和'王芳'两个元素。4. publisher字段为对象，包含name和city字段，值正确。5. 数据类型与要求一致（整数、字符串等）。",
+      "id": "142-055"
+    },
+    {
+      "prompt": "请严格按照以下JSON Schema输出一个订单对象。Schema：order_id(字符串，必需)， status(枚举：'pending', 'shipped', 'delivered'，必需)， items(数组，必需)，每个item包含 product_id(字符串，必需)和 quantity(整数，必需)， total_amount(数字，必需)。给定数据：订单ID'ORD_123'，状态'pending'，商品列表[{'product_id':'P001', 'quantity':3}, {'product_id':'P002', 'quantity':1}]，总金额299.99。只输出JSON，不要任何额外说明。",
+      "sub_type": "schema_compliance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "输出一个合法的JSON对象，其结构严格符合给定的Schema。所有必需字段（order_id, status, items, total_amount）都必须存在且类型正确。items数组中的每个对象也必须符合其子Schema。",
+      "scoring_rubric": "1. 输出为合法JSON。2. 包含所有四个必需顶层字段。3. status字段的值'pending'是允许的枚举值之一。4. items字段为数组，包含两个对象，每个对象都有product_id和quantity字段，且类型正确。5. total_amount为数字类型299.99。6. 没有遗漏任何字段，也没有添加额外字段。",
+      "id": "142-056"
+    }
+  ]
+}

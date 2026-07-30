@@ -1,0 +1,511 @@
+{
+  "capability": "instruction_following",
+  "label": "指令遵循精度",
+  "total": 56,
+  "cases": [
+    {
+      "id": "81-001",
+      "prompt": "请介绍深度学习的基本概念，要求：每句话不能超过20个字，总共不超过10句话，每句话必须以不同的汉字开头（不能重复）。",
+      "sub_type": "word_limit_per_sentence",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应同时满足三个约束：每句不超过20字、总共不超过10句、每句首字不重复。需要精确控制每句长度和首字选择。",
+      "scoring_rubric": "1. 每句话确实不超过20个汉字；2. 总句数不超过10句；3. 每句话的首字各不相同；4. 内容准确覆盖深度学习基本概念。"
+    },
+    {
+      "id": "81-002",
+      "prompt": "请写一段产品描述，要求：第一个句子和最后一个句子完全相同，中间描述不少于50字，整体形成首尾呼应的结构。",
+      "sub_type": "bookend_identical_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出首句和尾句完全相同（逐字一致）的产品描述，中间内容不少于50字，整体逻辑通顺形成首尾呼应。常见错误是首尾句有细微差异。",
+      "scoring_rubric": "1. 首句和尾句逐字完全一致；2. 中间描述不少于50字；3. 整体逻辑通顺，首尾呼应有意义；4. 产品描述内容具体且有吸引力。"
+    },
+    {
+      "id": "81-003",
+      "prompt": "请写一段代码注释，解释以下Python装饰器的作用。要求：注释中不能使用'函数'两个字，但必须让读者理解这是一个装饰器。",
+      "sub_type": "synonym_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用'可调用对象'、'方法'、'过程'等同义词替代'函数'，同时准确解释装饰器的功能。需要在词汇受限的情况下保持技术描述的准确性。",
+      "scoring_rubric": "1. 全文不出现'函数'两个字；2. 使用替代词汇准确描述装饰器功能；3. 注释清晰易懂，读者能理解装饰器的作用；4. 技术描述准确无误。"
+    },
+    {
+      "id": "81-004",
+      "prompt": "请用倒叙（从结论到原因）的方式解释为什么数据库需要索引。每段以数字开头，共3段，每段不超过50字。",
+      "sub_type": "reverse_reasoning_structure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应先给出结论（数据库需要索引），再倒推原因，形成3段倒叙结构。每段以数字开头，每段不超过50字。需要精确控制每段长度和结构。",
+      "scoring_rubric": "1. 采用倒叙结构，从结论到原因；2. 共3段，每段以数字开头；3. 每段不超过50字；4. 内容逻辑清晰，倒叙推理合理。"
+    },
+    {
+      "id": "81-005",
+      "prompt": "请写一段关于云计算的介绍，要求：每句话的第一个字和最后一个字必须相同（如'算云计算算'）。至少写5句。",
+      "sub_type": "palindrome_sentence_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出至少5句话，每句的首字和末字必须是同一个字，且内容围绕云计算主题。例如'算力驱动未来之算'（首尾均为'算'）、'云上承载万物之云'（首尾均为'云'）。注意是单句内部首尾同字，而非上一句末字接下一句首字的接龙。",
+      "scoring_rubric": "1. 至少5句话；2. 每句首字和末字确实相同；3. 内容围绕云计算主题；4. 句子语法通顺、语义合理。"
+    },
+    {
+      "id": "81-006",
+      "prompt": "请用表格形式对比Python和Go语言，但表格中每个单元格的内容不能超过6个字。",
+      "sub_type": "cell_length_constraint",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应输出Markdown表格，每个单元格内容不超过6个汉字，覆盖Python和Go的关键差异。需要极度精简每个描述。",
+      "scoring_rubric": "1. Markdown表格格式正确；2. 每个单元格内容不超过6个汉字；3. 对比内容准确反映两语言差异；4. 至少覆盖5个对比维度。"
+    },
+    {
+      "id": "81-007",
+      "prompt": "请写一段技术方案评审意见，要求：必须包含'优点'、'不足'、'建议'三个部分，每个部分用一句话概括，总共不超过80字。语气要委婉。",
+      "sub_type": "structured_brief_feedback",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应写出包含优点、不足、建议三部分的评审意见，每部分一句话，总字数不超过80字，语气委婉不伤人。三个部分缺一不可。",
+      "scoring_rubric": "1. 包含优点、不足、建议三个部分；2. 每部分用一句话概括；3. 总字数不超过80字；4. 语气委婉，批评有建设性。"
+    },
+    {
+      "id": "81-008",
+      "prompt": "请回答'什么是微服务架构'，要求：每个自然段的第一句话必须是一个问句，全文至少3个自然段。",
+      "sub_type": "question_opening_paragraph",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出至少3个自然段，每段第一句是问句（如'什么是微服务？'），后续句子回答该问题。整体连贯地解释微服务架构。",
+      "scoring_rubric": "1. 至少3个自然段；2. 每段第一句确实是问句；3. 问句后的内容是对该问题的回答；4. 整体连贯解释微服务架构。"
+    },
+    {
+      "id": "81-009",
+      "prompt": "请写一个Python类，类名必须用中文命名（如class 数据处理器），方法名也必须用中文。功能是解析JSON数据。",
+      "sub_type": "chinese_identifier_constraint",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应使用中文标识符编写Python类，包括中文类名、中文方法名和中文变量名，代码语法正确可运行，功能是解析JSON数据。",
+      "scoring_rubric": "1. 类名使用中文；2. 方法名和变量名使用中文；3. 代码语法正确可运行；4. 功能正确实现JSON解析。"
+    },
+    {
+      "id": "81-010",
+      "prompt": "请介绍Kubernetes的核心组件，格式要求：每个组件用一行描述，每行必须是'组件名 | 一句话功能 | 一个类比'的格式，至少列出6个组件。",
+      "sub_type": "pipe_delimited_format",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应列出至少6个Kubernetes核心组件，每行使用竖线分隔的三元组格式：组件名、功能描述、生活类比。格式统一，内容准确。",
+      "scoring_rubric": "1. 至少列出6个核心组件；2. 每行格式严格为'组件名 | 功能 | 类比'；3. 竖线分隔符使用一致；4. 类比恰当且功能描述准确。"
+    },
+    {
+      "id": "81-011",
+      "prompt": "请用Python写一个装饰器，要求：1）装饰器名为log_execution 2）被装饰函数执行前后各打印一行日志 3）日志格式必须是'[时间戳] 函数名 开始/结束' 4）时间戳格式为YYYY-MM-DD HH:MM:SS 5）代码中不能使用任何第三方库。",
+      "sub_type": "multi_constraint_decorator",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应严格满足所有5个约束：装饰器名为log_execution、使用标准库datetime生成时间戳、格式精确匹配[YYYY-MM-DD HH:MM:SS]、在函数执行前后各打印一行、不使用任何第三方库。常见错误是时间戳格式不对或遗漏开始/结束日志。",
+      "scoring_rubric": "1. 装饰器名严格为log_execution；2. 时间戳格式精确为[YYYY-MM-DD HH:MM:SS]；3. 执行前后各一行日志且格式包含函数名；4. 不使用任何第三方库。"
+    },
+    {
+      "id": "81-012",
+      "prompt": "请写一段产品介绍，要求：1）每句话必须恰好12个汉字（标点不算）2）共5句话 3）第一句话的第一个字和第五句话的最后一个字必须相同 4）主题是智能手表。",
+      "sub_type": "exact_length_palindrome_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出5句产品介绍，每句恰好12个汉字（不含标点），首句首字与末句末字相同，主题围绕智能手表。需要精确控制每句字数和首尾字。",
+      "scoring_rubric": "1. 每句恰好12个汉字（不含标点）；2. 共5句话不多不少；3. 首句首字与末句末字相同；4. 内容围绕智能手表主题。"
+    },
+    {
+      "id": "81-013",
+      "prompt": "请用代码回答：写一个Python函数，函数体内只能出现一次return语句，不能使用if-else条件表达式（三元运算符也不行），实现判断一个数是否为正数的功能（正数返回True，否则返回False）。",
+      "sub_type": "single_return_no_conditional",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用数学技巧实现，如return x > 0（比较运算符本身返回布尔值，不算if-else），或利用短路求值如return x > 0 and True or False。不能用if-else或三元运算符，且只能有一个return。",
+      "scoring_rubric": "1. 函数体内恰好只有一个return语句；2. 不使用if-else语句和三元运算符；3. 功能正确（正数返回True，否则返回False）；4. 代码语法正确可运行。"
+    },
+    {
+      "id": "81-014",
+      "prompt": "请写一封英文商务邮件，要求：1）开头必须用'Dear Mr./Ms.' 2）正文分三段，每段不超过两句话 3）必须包含'action required by'和具体的截止日期 4）结尾必须用'Best regards' 5）总字数不超过100个英文单词。",
+      "sub_type": "business_email_multi_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应严格满足所有约束：Dear Mr./Ms.开头、三段每段不超过两句、包含action required by和日期、Best regards结尾、总词数不超过100。需要精确控制格式和字数。",
+      "scoring_rubric": "1. 开头为Dear Mr./Ms.，结尾为Best regards；2. 正文恰好三段，每段不超过两句话；3. 包含action required by和具体截止日期；4. 总词数不超过100。"
+    },
+    {
+      "id": "81-015",
+      "prompt": "请写一段Python代码处理字符串，要求：1）输入是一个字符串 2）输出是一个字典 3）字典的key必须是字符 4）字典的value必须是该字符在字符串中出现的次数 5）只统计中文字符和英文字母 6）结果按出现次数降序排列 7）整个实现不能超过8行代码（不含空行和注释）。",
+      "sub_type": "line_count_constraint",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现字符频率统计，过滤非中英文字符，按频率降序排列，且代码行数不超过8行。可以使用collections.Counter简化实现。",
+      "scoring_rubric": "1. 只统计中文字符和英文字母；2. 输出为字典且value为出现次数；3. 结果按降序排列；4. 代码行数不超过8行。"
+    },
+    {
+      "id": "81-016",
+      "prompt": "请解释什么是Docker，要求：1）用三个比喻分别解释镜像、容器和Dockerfile 2）每个比喻不超过20个字 3）三个比喻必须属于同一个领域（如都用烹饪类比）。",
+      "sub_type": "coherent_domain_analogy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应选择一个统一的类比领域（如烹饪、建筑、汽车），为镜像、容器和Dockerfile各写一个不超过20字的比喻，且三个比喻在同一个领域内保持一致性。",
+      "scoring_rubric": "1. 三个比喻都属于同一个领域；2. 每个比喻不超过20个字；3. 比喻准确反映了对应概念的本质；4. 三个比喻之间有内在的逻辑联系。"
+    },
+    {
+      "id": "81-017",
+      "prompt": "请写一段代码注释，要求：1）注释必须是中文 2）注释中不能出现'注释'、'代码'、'函数'、'变量'这四个词 3）解释以下代码的作用：\nresult = [x**2 for x in range(10) if x % 2 == 0]",
+      "sub_type": "forbidden_word_explanation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用同义词替代禁用词（如用'程序'代替'代码'、用'方法'代替'函数'、用'标识符'代替'变量'、用'说明'代替'注释'），同时准确解释列表推导式的作用。",
+      "scoring_rubric": "1. 全文不出现'注释'、'代码'、'函数'、'变量'四个词；2. 使用替代词汇准确描述代码功能；3. 注释清晰易懂；4. 技术描述准确。"
+    },
+    {
+      "id": "81-018",
+      "prompt": "请用Python实现一个简单的计算器类，要求：1）类名为Calc 2）必须有add、sub、mul、div四个方法 3）每个方法的参数名必须是a和b 4）div方法必须处理除零异常 5）必须有__str__方法返回'Calculator ready' 6）所有方法必须有类型注解。",
+      "sub_type": "exact_class_structure",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应严格按照要求实现Calc类：类名Calc、四个方法名和参数名精确匹配、div处理ZeroDivisionError、__str__返回'Calculator ready'、所有方法有类型注解。任何命名偏差都算不满足。",
+      "scoring_rubric": "1. 类名严格为Calc；2. 四个方法名和参数名(a,b)完全匹配；3. div正确处理除零异常；4. __str__返回值严格为'Calculator ready'；5. 所有方法有类型注解。"
+    },
+    {
+      "id": "81-019",
+      "prompt": "请写一段关于人工智能的介绍，要求：1）必须使用'总分总'结构 2）分述部分必须包含三个并列段落 3）每个段落的第一句必须是该段的主题句 4）全文不能超过200字 5）不能使用'人工智能'四个字连续出现超过3次。",
+      "sub_type": "structural_with_frequency_limit",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应严格使用总分总结构（开头总述、中间三段分述、结尾总结），每段有主题句，总字数不超过200，'人工智能'连续出现不超过3次。需要精确控制结构和用词频率。",
+      "scoring_rubric": "1. 使用总分总结构（开头+三段并列+结尾）；2. 每个分述段落第一句是主题句；3. 全文不超过200字；4. '人工智能'连续出现不超过3次。"
+    },
+    {
+      "id": "81-020",
+      "prompt": "请写一个Bash函数，功能是批量重命名指定目录下的文件。要求：1）函数名必须是rename_files 2）必须接受3个参数：目录路径、原后缀、新后缀 3）必须检查目录是否存在 4）必须返回重命名的文件数量 5）函数内不能使用find命令。",
+      "sub_type": "shell_function_exact_spec",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应严格按规范实现：函数名rename_files、3个参数顺序匹配、用test -d检查目录、用计数器返回重命名数量、用glob或ls替代find。需要精确匹配所有约束。",
+      "scoring_rubric": "1. 函数名严格为rename_files；2. 参数顺序为目录路径、原后缀、新后缀；3. 包含目录存在性检查；4. 返回重命名文件数量；5. 不使用find命令。"
+    },
+    {
+      "id": "81-021",
+      "prompt": "请写一段关于微服务的介绍，要求：1）全文只能用四字短语组成（每句恰好4个汉字）2）至少写10句 3）每句之间用顿号分隔 4）内容要连贯通顺。",
+      "sub_type": "fixed_length_phrase_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出至少10个四字短语，用顿号分隔，整体围绕微服务主题且语义连贯。如：'服务拆分、独立部署、松耦合、高内聚、接口统一、数据自治、故障隔离、弹性伸缩、持续交付、独立演进。'需要精确控制每句恰好4个汉字。",
+      "scoring_rubric": "1. 每个短语恰好4个汉字；2. 至少10个短语；3. 用顿号分隔；4. 内容围绕微服务且语义连贯。"
+    },
+    {
+      "id": "81-022",
+      "prompt": "请写一个Python函数实现二分查找，要求：1）函数签名必须是def binary_search(arr: list, target: int) -> int 2）不能使用while循环 3）必须使用递归 4）必须有类型注解 5）找不到时返回-1。",
+      "sub_type": "recursive_implementation_constraint",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应使用递归实现二分查找，函数签名严格匹配要求，不使用while循环，包含完整的类型注解，找不到返回-1。需要处理递归终止条件和参数传递。",
+      "scoring_rubric": "1. 函数签名严格匹配要求；2. 使用递归而非循环；3. 类型注解完整（arr: list, target: int, -> int）；4. 找不到返回-1；5. 算法逻辑正确。"
+    },
+    {
+      "id": "81-023",
+      "prompt": "请用JSON格式输出一份个人简历，要求：1）必须包含且只能包含以下字段：name、age、education、skills、experience 2）education必须是数组且至少2项 3）skills必须是数组且每项必须有name和level字段 4）experience必须是数组且每项必须有company、role、years字段 5）整个JSON必须合法可解析。",
+      "sub_type": "strict_json_schema",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应输出合法JSON，严格包含5个指定字段，各字段的嵌套结构完全匹配要求（education数组、skills含name/level、experience含company/role/years）。不多不少，格式精确。",
+      "scoring_rubric": "1. JSON合法可解析；2. 恰好包含5个指定字段；3. education至少2项；4. skills每项含name和level；5. experience每项含company、role、years。"
+    },
+    {
+      "id": "81-024",
+      "prompt": "请写一段关于数据库索引的解释，要求：1）第一段用比喻解释（不超过50字）2）第二段用技术原理解释（不超过80字）3）第三段给出使用建议（不超过50字）4）三段之间用空行分隔 5）全文不能出现'索引'两个字以外的英文。",
+      "sub_type": "multi_segment_with_ban",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出三段式解释，第一段比喻（如图书馆目录），第二段技术原理（B+树等），第三段使用建议。每段严格控制字数，全文除'索引'外不使用其他英文词。需要精确控制每段长度和语言约束。",
+      "scoring_rubric": "1. 三段结构完整，用空行分隔；2. 每段字数在限制范围内；3. 全文除'索引'外无英文；4. 内容从比喻到原理到建议递进合理。"
+    },
+    {
+      "id": "81-025",
+      "prompt": "请用Python写一个装饰器，要求：1）装饰器名为retry 2）接受max_retries参数（默认3）和delay参数（默认1秒）3）被装饰函数抛出异常时自动重试 4）重试间隔使用指数退避（delay * 2^n）5）超过最大重试次数后抛出原始异常 6）代码中不能使用任何第三方库。",
+      "sub_type": "decorator_with_exponential_backoff",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现retry装饰器，严格满足所有约束：装饰器名retry、参数max_retries=3和delay=1、指数退避（delay * 2^n）、超限抛出原始异常、仅使用标准库。常见错误是退避公式不对或参数默认值不匹配。",
+      "scoring_rubric": "1. 装饰器名严格为retry；2. 参数默认值正确（max_retries=3, delay=1）；3. 指数退避公式正确（delay * 2^n）；4. 超限后抛出原始异常而非包装异常；5. 不使用第三方库。"
+    },
+    {
+      "id": "81-026",
+      "prompt": "请用表格对比三种Python Web框架（Django、Flask、FastAPI），要求：1）表格必须有5行4列 2）第一列是对比维度 3）每个单元格内容不能超过8个字 4）必须包含'性能'和'学习曲线'两个维度。",
+      "sub_type": "table_with_cell_length_and_required_rows",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应输出Markdown表格，5行4列（含表头），第一列为维度名称，每个单元格不超过8个汉字。必须包含性能和学习曲线两个维度，其余维度自选。需要极度精简每个描述。",
+      "scoring_rubric": "1. 表格恰好5行4列；2. 每个单元格不超过8个汉字；3. 包含'性能'和'学习曲线'两个维度；4. 对比内容准确反映框架差异。"
+    },
+    {
+      "id": "81-027",
+      "prompt": "请写一段Bash脚本，功能是批量重命名文件。要求：1）脚本第一行必须是#!/bin/bash 2）必须有usage函数 3）必须接受3个参数：目录、原后缀、新后缀 4）参数数量不对时调用usage并exit 1 5）重命名前必须先打印将要重命名的文件列表并等待用户确认 6）最终输出重命名的文件数量。",
+      "sub_type": "bash_script_multi_requirement",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应严格满足所有6个约束：shebang行、usage函数、3个参数、参数校验、用户确认、输出计数。需要精确实现每个要求，不能遗漏。",
+      "scoring_rubric": "1. 第一行是#!/bin/bash；2. 包含usage函数；3. 接受3个参数；4. 参数校验正确（exit 1）；5. 打印文件列表并等待确认；6. 输出重命名数量。"
+    },
+    {
+      "id": "81-028",
+      "prompt": "请写一段产品描述，要求：1）总共恰好5句话 2）每句话的第一个字连起来读是'产品真不错' 3）每句话不超过15个字 4）主题是无线蓝牙耳机。",
+      "sub_type": "acrostic_with_length_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出5句话，首字依次为'产'、'品'、'真'、'不'、'错'，每句不超过15字，主题围绕无线蓝牙耳机。需要同时满足藏头字、字数限制和主题约束。",
+      "scoring_rubric": "1. 恰好5句话；2. 首字依次为'产品真不错'；3. 每句不超过15个汉字；4. 内容围绕无线蓝牙耳机主题。"
+    },
+    {
+      "id": "81-029",
+      "prompt": "请回答'什么是RESTful API'，要求：1）用三个自然段回答 2）每段的第一句话必须是该段的总结（不超过10个字）3）每段正文不超过80字 4）全文不能使用'的'字连续出现两次以上（即不能有'的的'或'的的的'）。",
+      "sub_type": "summary_first_with_char_restriction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出三段式回答，每段以不超过10字的总结句开头，正文不超过80字，全文避免'的'字连续出现。需要精确控制段落结构和用词频率。",
+      "scoring_rubric": "1. 三个自然段结构完整；2. 每段首句是不超过10字的总结；3. 每段正文不超过80字；4. 全文无连续'的'字出现。"
+    },
+    {
+      "id": "81-030",
+      "prompt": "请写一个Python类实现LRU缓存，要求：1）类名必须是LRUCache 2）构造函数接受capacity参数 3）必须有get(key)和put(key, value)两个方法 4）get不存在的key时返回-1 5）put超过容量时淘汰最久未使用的key 6）两个方法的时间复杂度必须是O(1) 7）代码中不能使用collections.OrderedDict。",
+      "sub_type": "data_structure_no_builtin",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用哈希表+双向链表实现O(1)的LRU缓存，类名和方法名严格匹配，不能使用OrderedDict。需要手动实现双向链表的节点操作（移动到头部、删除尾部）。",
+      "scoring_rubric": "1. 类名严格为LRUCache；2. 构造函数接受capacity参数；3. get和put方法存在且签名正确；4. get不存在key返回-1；5. 超容量时正确淘汰LRU项；6. 时间复杂度O(1)；7. 不使用OrderedDict。"
+    },
+    {
+      "id": "81-031",
+      "prompt": "请写一封英文商务邮件通知客户系统维护，要求：1）主题行格式为'[Maintenance Notice] System Maintenance on {日期}' 2）正文第一句为'We are writing to inform you that...' 3）必须包含维护时间、影响范围、建议措施三个要点 4）每个要点用bullet point列出 5）结尾为'We apologize for any inconvenience.' 6）总词数不超过120个英文单词。",
+      "sub_type": "structured_email_word_limit",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应严格满足所有约束：主题行格式、开头句、三个bullet point、结尾句、总词数限制。需要精确控制格式和字数。",
+      "scoring_rubric": "1. 主题行格式匹配要求；2. 第一句为指定句式；3. 三个要点用bullet point；4. 结尾为指定句式；5. 总词数不超过120。"
+    },
+    {
+      "id": "81-032",
+      "prompt": "请写一段产品描述，要求：1）总共恰好6句话 2）每句话的字数依次是5、7、9、9、7、5个汉字（标点不算）3）内容关于无线充电器 4）整体形成对称的字数结构。",
+      "sub_type": "symmetric_word_count_structure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出6句话，字数严格为5-7-9-9-7-5的对称结构，主题围绕无线充电器。需要精确控制每句的汉字数量并保持内容连贯。",
+      "scoring_rubric": "1. 恰好6句话；2. 每句字数严格符合5-7-9-9-7-5结构；3. 内容围绕无线充电器主题；4. 整体语义连贯通顺。"
+    },
+    {
+      "id": "81-033",
+      "prompt": "请用Python写一个函数，要求：1）函数名必须是merge_sorted_lists 2）接受两个参数list1和list2，都是List[int]类型 3）返回合并后的有序列表List[int] 4）不能使用sorted()、sort()或任何排序函数 5）必须有docstring和类型注解 6）代码行数不超过10行（不含空行和注释）。",
+      "sub_type": "merge_without_sort_line_limit",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用双指针归并算法实现，函数签名和参数名严格匹配，不使用任何排序函数，代码行数不超过10行，包含完整的docstring和类型注解。",
+      "scoring_rubric": "1. 函数名和参数名严格匹配要求；2. 使用双指针归并而非排序函数；3. 包含docstring和类型注解；4. 代码行数不超过10行。"
+    },
+    {
+      "id": "81-034",
+      "prompt": "请介绍Python的异常处理机制，要求：1）用三个自然段 2）每段以一个emoji开头（用Unicode字符如🔴🟢🔵）3）每段不超过60字 4）全文不能出现'错误'两个字。",
+      "sub_type": "emoji_paragraph_with_ban",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出三个自然段，每段以Unicode emoji开头，每段不超过60字，全文避免使用'错误'二字（可用'异常'、'问题'、'故障'等替代），内容介绍Python异常处理机制。",
+      "scoring_rubric": "1. 三个自然段结构完整；2. 每段以Unicode emoji开头；3. 每段不超过60字；4. 全文不出现'错误'二字。"
+    },
+    {
+      "id": "81-035",
+      "prompt": "请写一个Python装饰器，要求：1）装饰器名为validate_types 2）检查被装饰函数的参数类型是否与类型注解一致 3）类型不匹配时抛出TypeError 4）错误信息格式必须是'参数 {参数名} 期望类型 {类型名}，实际得到 {实际类型}' 5）支持任意数量的参数。",
+      "sub_type": "type_validation_decorator",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现validate_types装饰器，通过inspect模块获取函数的类型注解，在运行时检查每个参数的实际类型是否匹配注解。TypeError的错误信息格式必须严格匹配要求。需要处理*args和**kwargs的情况。",
+      "scoring_rubric": "1. 装饰器名严格为validate_types；2. 正确读取函数类型注解并检查参数类型；3. TypeError信息格式严格匹配要求；4. 支持任意数量和类型的参数。"
+    },
+    {
+      "id": "81-036",
+      "prompt": "请用表格对比三种消息队列（Kafka、RabbitMQ、Redis Streams），要求：1）表格恰好6行3列（不含表头）2）第一列是对比维度 3）每个单元格必须用且只能用一个四字词语概括 4）必须包含'吞吐量'维度。",
+      "sub_type": "four_char_cell_constraint_table",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应输出Markdown表格，6行3列（不含表头），每个单元格恰好用一个四字词语概括。必须包含'吞吐量'维度，其余维度自选。需要极度精简且准确的四字概括。",
+      "scoring_rubric": "1. 表格恰好6行3列；2. 每个单元格恰好一个四字词语；3. 包含'吞吐量'维度；4. 四字词语准确概括各队列特征。"
+    },
+    {
+      "id": "81-037",
+      "prompt": "请写一段Python代码，实现一个简单的栈数据结构。要求：1）类名为Stack 2）必须有push、pop、peek、is_empty、size五个方法 3）pop和peek在栈为空时必须抛出IndexError 4）错误信息必须是'Stack is empty' 5）使用list作为底层存储 6）不能使用collections模块。",
+      "sub_type": "exact_stack_implementation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应严格按照要求实现Stack类，五个方法名精确匹配，空栈操作抛出IndexError且信息为'Stack is empty'，使用list存储，不使用collections。",
+      "scoring_rubric": "1. 类名严格为Stack；2. 五个方法名和功能完全匹配；3. 空栈操作抛出IndexError且信息为'Stack is empty'；4. 使用list存储且不使用collections。"
+    },
+    {
+      "id": "81-038",
+      "prompt": "请写一段介绍容器技术的文字，要求：1）每句话必须以'容器'两个字开头 2）总共5句话 3）每句话不超过20个字 4）每句话的最后一个字必须是'术'、'性'、'率'、'境'、'用'中的一个（按顺序）。",
+      "sub_type": "head_and_tail_character_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应写出5句话，每句以'容器'开头，每句末字依次为术、性、率、境、用，每句不超过20字。需要同时控制开头和结尾的字，且保持内容通顺。",
+      "scoring_rubric": "1. 每句以'容器'开头；2. 每句末字严格按术、性、率、境、用顺序；3. 每句不超过20字；4. 内容围绕容器技术且语义通顺。"
+    },
+    {
+      "id": "81-039",
+      "prompt": "请用Python写一个上下文管理器（context manager），要求：1）类名为Timer 2）进入时记录开始时间 3）退出时计算耗时并打印'[Timer] 代码块执行耗时: {秒数:.4f}秒' 4）必须处理异常情况（即使代码块抛出异常也要打印耗时）5）不能使用contextlib装饰器 6）必须有__enter__和__exit__方法。",
+      "sub_type": "context_manager_exact_spec",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现Timer类作为上下文管理器，包含__enter__和__exit__方法。进入时用time.time()记录开始时间，退出时计算耗时并按指定格式打印。__exit__中即使有异常也要打印耗时，且正确处理异常（不吞掉异常）。",
+      "scoring_rubric": "1. 类名严格为Timer；2. 包含__enter__和__exit__方法；3. 输出格式严格匹配'[Timer] 代码块执行耗时: {秒数:.4f}秒'；4. 异常情况下仍正确打印耗时。"
+    },
+    {
+      "id": "81-040",
+      "prompt": "请写一段代码注释，要求：1）总共恰好5行 2）每行以'# '开头 3）第一行必须是'功能说明：' 4）最后一行必须是'作者：匿名' 5）中间三行分别说明输入、输出和算法 6）每行不超过30个字。",
+      "sub_type": "structured_comment_template",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应写出5行注释，第一行为'功能说明：'，中间三行分别说明输入、输出和算法，最后一行为'作者：匿名'，每行不超过30字。格式严格匹配要求。",
+      "scoring_rubric": "1. 恰好5行注释；2. 第一行是'功能说明：'；3. 中间三行分别说明输入、输出和算法；4. 最后一行是'作者：匿名'。"
+    },
+    {
+      "id": "81-041",
+      "prompt": "请用Python实现一个简单的布隆过滤器（Bloom Filter），要求：1）类名为SimpleBloomFilter 2）构造函数接受capacity（预期元素数量）和fp_rate（期望误判率）两个参数 3）必须有add和contains两个方法 4）内部使用bitarray或list模拟位数组 5）自动计算最优的位数组大小和哈希函数数量 6）不能使用第三方布隆过滤器库。",
+      "sub_type": "bloom_filter_implementation_spec",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现SimpleBloomFilter类，根据capacity和fp_rate自动计算最优位数组大小m=(-n*ln(p))/(ln2)^2和哈希函数数量k=(m/n)*ln2。使用多个独立哈希函数（如MurmurHash的不同seed）将元素映射到位数组。add方法设置对应位，contains方法检查所有对应位是否都为1。",
+      "scoring_rubric": "1. 类名严格为SimpleBloomFilter；2. 构造函数参数和自动计算逻辑正确；3. add和contains方法功能正确；4. 使用正确的布隆过滤器数学公式计算参数。"
+    },
+    {
+      "id": "81-042",
+      "prompt": "请写一段关于机器学习的介绍，要求：1）恰好5个段落 2）每段恰好3句话 3）每句话恰好15个汉字（标点不算）4）总共225个汉字。",
+      "sub_type": "off_by_one_count",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应严格满足所有字数和结构约束：恰好5段、每段3句、每句15汉字、总计225字。常见错误是段落数或句数偏差1，或字数不准。需要精确计数每个约束维度。",
+      "scoring_rubric": "1. 恰好5个段落不多不少；2. 每段恰好3句话；3. 每句恰好15个汉字（不含标点）；4. 总汉字数为225。"
+    },
+    {
+      "id": "81-043",
+      "prompt": "请用Markdown格式输出一份技术方案大纲，要求：1）使用二级标题(##)作为主标题 2）使用有序列表作为子项 3）主标题之间不能有空行 4）至少包含4个主标题 5）每个主标题下至少3个子项。",
+      "sub_type": "format_violation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应严格使用##标题和有序列表格式，主标题间无空行，至少4个主标题各含至少3个子项。常见错误是主标题间加了空行、用无序列表替代有序列表、或子项数量不足。",
+      "scoring_rubric": "1. 使用##二级标题作为主标题；2. 使用有序列表(1. 2. 3.)作为子项；3. 主标题之间没有空行；4. 至少4个主标题且每个至少3个子项。"
+    },
+    {
+      "id": "81-044",
+      "prompt": "请用Python写一个函数实现冒泡排序，要求：1）函数名必须是bubble_sort 2）参数名必须是arr 3）返回排序后的列表 4）代码中不能使用任何Python内置排序函数（sort、sorted）5）不能使用第三方库。",
+      "sub_type": "negative_constraint_breach",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应严格使用冒泡排序算法实现，函数名和参数名精确匹配，不使用sort/sorted或任何第三方库。常见错误是使用了sorted()或引入了额外库。",
+      "scoring_rubric": "1. 函数名严格为bubble_sort，参数名严格为arr；2. 使用冒泡排序算法而非内置排序；3. 不使用sort()和sorted()；4. 不引入任何第三方库。"
+    },
+    {
+      "id": "81-045",
+      "prompt": "请写一段关于Docker的介绍，要求：1）必须包含镜像、容器、仓库三个概念的解释 2）每个概念的解释不超过30字 3）整体不超过100字 4）必须以问句开头。",
+      "sub_type": "partial_compliance",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应同时满足所有约束：包含三个概念且各不超30字、总字数不超100、问句开头。常见错误是遗漏仓库概念、某个解释超过30字、或总字数超标。需要精确控制每个维度。",
+      "scoring_rubric": "1. 包含镜像、容器、仓库三个概念的解释；2. 每个解释不超过30字；3. 总字数不超过100；4. 以问句开头。"
+    },
+    {
+      "id": "81-046",
+      "prompt": "请帮我写一个Python函数，功能是从URL中提取域名。输入是字符串，输出也是字符串。",
+      "sub_type": "implicit_requirement_miss",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出隐含需求：1）处理带协议(http/https)和不带协议的URL；2）处理带端口号的URL；3）处理带路径的URL；4）处理无效输入（空字符串、非URL字符串）。应使用urlparse而非简单字符串分割，并包含输入验证和异常处理。",
+      "scoring_rubric": "1. 使用urlparse而非简单字符串分割；2. 处理带/不带协议的URL；3. 处理端口号和路径的剥离；4. 包含输入验证或异常处理。"
+    },
+    {
+      "id": "81-047",
+      "prompt": "请写一个Python函数：1）输入字符串列表 2）返回长度大于3的 3）去重 4）按字母倒序 5）结果用逗号分隔 6）不能用内置函数sorted()",
+      "sub_type": "four_plus_constraints",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须同时满足全部6个约束：过滤长度>3、去重、自定义排序（不使用sorted）、倒序、逗号分隔。常见错误是漏掉某个约束或偷偷用了sorted。需要手动实现排序算法（如冒泡排序）或使用list.sort()方法（注意：sorted()是被禁止的，但list.sort()是允许的）。",
+      "scoring_rubric": "1. 过滤长度大于3的字符串；2. 去重处理；3. 不使用sorted()内置函数；4. 按字母倒序排列；5. 结果用逗号分隔的字符串输出。"
+    },
+    {
+      "id": "81-048",
+      "prompt": "请写一个Python函数计算列表中所有元素的平均值，要求：1）函数名必须是calc_avg 2）参数名必须是nums 3）必须处理空列表（返回0.0）4）必须处理非数字类型（跳过）5）返回值必须是float类型 6）必须有docstring 7）代码不能超过15行。",
+      "sub_type": "conflicting_constraints",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须同时满足全部7个约束。约束之间存在潜在冲突：处理非数字类型（跳过）可能使逻辑变长，而代码不能超过15行。需要在有限行数内实现过滤、类型检查、异常处理和平均值计算。常见错误是为满足行数限制而省略类型检查。",
+      "scoring_rubric": "1. 函数名和参数名严格匹配；2. 空列表返回0.0；3. 非数字类型被跳过；4. 返回float类型；5. 包含docstring；6. 代码不超过15行。"
+    },
+    {
+      "id": "81-049",
+      "prompt": "请写一段产品描述，要求：1）关于智能音箱 2）每句话不超过15字 3）至少5句话 4）不能使用'智能'两个字 5）整体读起来要押韵。",
+      "sub_type": "hidden_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须同时满足全部5个约束，其中'不能使用智能两个字'是容易被忽略的隐藏约束（因为主题是智能音箱，很容易下意识使用'智能'一词）。需要在描述智能音箱功能时避免使用'智能'二字，同时保持押韵和字数限制。",
+      "scoring_rubric": "1. 内容围绕智能音箱；2. 每句不超过15字；3. 至少5句话；4. 全文不出现'智能'二字；5. 整体押韵。"
+    },
+    {
+      "id": "81-050",
+      "prompt": "请写一个Python函数实现字符串反转，要求：1）函数名reverse_str 2）不能使用切片[::-1] 3）不能使用reversed() 4）必须用循环实现 5）但是如果是回文字符串则直接返回原字符串不反转。",
+      "sub_type": "constraint_with_exception",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须满足所有约束：函数名reverse_str、不使用切片和reversed()、用循环实现，但对回文字符串有特殊处理（返回原字符串）。常见错误是只实现反转而忽略回文检测的例外条件，或为检测回文而使用了被禁止的切片操作。",
+      "scoring_rubric": "1. 函数名严格为reverse_str；2. 不使用[::-1]切片；3. 不使用reversed()；4. 使用循环实现反转；5. 回文字符串返回原字符串。"
+    },
+    {
+      "id": "81-051",
+      "prompt": "请写一个Python类，要求：1）类名DataProcessor 2）有process(data)方法 3）如果data是字符串，则转为大写 4）如果data是数字，则转为字符串 5）如果data是列表，则递归处理每个元素 6）其他类型抛出TypeError 7）所有操作必须在process方法内完成，不能拆分成多个方法。",
+      "sub_type": "conditional_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须在单个process方法内处理4种条件分支（字符串、数字、列表递归、其他类型抛异常），且不能拆分成辅助方法。递归处理列表时需要保持对每个元素的类型判断。常见错误是为清晰而拆分成多个方法违反约束7。",
+      "scoring_rubric": "1. 类名严格为DataProcessor；2. process方法处理字符串转大写；3. 处理数字转字符串；4. 列表递归处理；5. 其他类型抛TypeError；6. 所有逻辑在process方法内完成。"
+    },
+    {
+      "id": "81-052",
+      "prompt": "请写一段Bash脚本，要求：1）查找指定目录下所有.log文件 2）压缩打包 3）上传到远程服务器 4）删除本地打包文件 5）但如果是今天的日志文件则跳过不打包 6）如果远程服务器不可达则保留本地文件不删除。",
+      "sub_type": "constraint_priority",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须同时处理6个约束，且约束之间有优先级关系：约束5（今天的日志跳过）优先于约束2（压缩打包），约束6（服务器不可达则保留）优先于约束4（删除本地文件）。常见错误是按顺序执行而忽略约束间的优先级关系。",
+      "scoring_rubric": "1. 查找.log文件；2. 压缩打包；3. 上传远程服务器；4. 条件性删除本地文件；5. 今天的日志被跳过；6. 服务器不可达时保留文件。"
+    },
+    {
+      "id": "81-053",
+      "prompt": "请写一个Python装饰器，要求：1）装饰器名cache 2）带maxsize参数（默认128）3）缓存函数返回值 4）缓存满时使用LRU淘汰 5）但被装饰函数如果参数中包含request对象则跳过缓存 6）缓存命中时打印[HIT] 7）缓存未命中时打印[MISS]。",
+      "sub_type": "constraint_interaction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须同时满足7个约束，且约束之间有交互关系：约束5（含request跳过缓存）会影响约束3/4/6/7的行为（跳过时不缓存也不打印HIT/MISS）。需要正确处理约束间的交互逻辑，常见错误是忽略约束5的跳过逻辑而对所有参数统一缓存。",
+      "scoring_rubric": "1. 装饰器名cache且带maxsize参数；2. 实现LRU淘汰策略；3. 含request参数时跳过缓存；4. 缓存命中打印[HIT]；5. 未命中打印[MISS]；6. 约束间交互逻辑正确。"
+    },
+    {
+      "id": "81-054",
+      "prompt": "请写一个Python函数处理用户输入，要求：1）输入是字符串 2）去除首尾空格 3）如果为空则返回None 4）如果包含@则当作邮箱处理 5）如果不包含@则当作用户名处理 6）邮箱格式校验失败则抛ValueError 7）用户名长度必须在3-20之间否则抛ValueError 8）以上所有校验必须按顺序执行。",
+      "sub_type": "cascading_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须按顺序执行8个约束，形成级联逻辑：先去空格 -> 空值检查 -> 判断类型（邮箱/用户名） -> 分别校验。约束8要求顺序执行，常见错误是打乱执行顺序（如先判断@再去除空格），或跳过某个步骤。",
+      "scoring_rubric": "1. 去除首尾空格；2. 空字符串返回None；3. 按@区分邮箱和用户名；4. 邮箱格式校验；5. 用户名长度校验；6. 所有校验按正确顺序执行。"
+    },
+    {
+      "id": "81-055",
+      "prompt": "请写一个Python函数，要求：1）函数名process_data 2）接受一个字典参数 3）返回字典中所有值为字符串的key-value对组成的字典 4）但如果key以_开头则跳过 5）如果值包含'password'或'secret'则脱敏为'***' 6）但如果是管理员用户（字典中有role=admin）则不脱敏 7）不能使用字典推导式。",
+      "sub_type": "constraint_with_escape",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须满足7个约束，其中约束6是对约束5的'逃逸'条件（管理员不脱敏），约束7禁止使用字典推导式增加了实现难度。常见错误是忘记管理员逃逸条件而统一脱敏，或为简化而使用了被禁止的字典推导式。",
+      "scoring_rubric": "1. 函数名严格为process_data；2. 过滤值为字符串的项；3. 跳过_开头的key；4. 敏感值脱敏为***；5. 管理员不脱敏；6. 不使用字典推导式。"
+    },
+    {
+      "id": "81-056",
+      "prompt": "请写一段Python代码完成以下任务：1）读取一个CSV文件 2）过滤掉行数少于10行的文件（如果文件本身行数少于10则直接返回空列表）3）提取第二列数据 4）去除重复值 5）按字母排序 6）输出为JSON格式 7）如果CSV文件不存在则创建一个默认文件 8）以上所有步骤必须在main函数中完成，不能调用其他自定义函数。",
+      "sub_type": "meta_constraint",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "必须满足8个约束，其中约束8是元约束（限制代码组织方式——所有逻辑在main函数内，不能定义其他自定义函数）。这意味着文件存在性检查、默认文件创建、CSV读取、过滤、去重、排序、JSON输出全部要在main函数内完成。常见错误是为代码清晰而拆分成多个函数违反约束8。",
+      "scoring_rubric": "1. 读取CSV文件；2. 行数不足10行时返回空列表；3. 提取第二列并去重；4. 按字母排序；5. JSON格式输出；6. 文件不存在时创建默认文件；7. 所有逻辑在main函数内完成。"
+    }
+  ]
+}

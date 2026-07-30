@@ -1,0 +1,232 @@
+{
+  "capability": "cryptography",
+  "label": "密码学知识",
+  "total": 25,
+  "cases": [
+    {
+      "id": "46-001",
+      "prompt": "请解释密码学中的侧信道攻击（Side-Channel Attack）。时间攻击（timing attack）和能量分析攻击（power analysis）是如何工作的？如何通过恒定时间实现（constant-time implementation）防御时间攻击？请给出一个具体的代码示例。",
+      "sub_type": "side_channel_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "时间攻击通过测量加密操作的执行时间推断密钥信息；能量分析通过测量功耗模式推断数据；恒定时间实现确保所有执行路径耗时相同（如使用位运算替代条件分支）",
+      "scoring_rubric": "1. 时间攻击和能量分析的原理描述正确；2. 恒定时间实现的防御原理描述正确；3. 代码示例能正确展示恒定时间比较的实现。"
+    },
+    {
+      "id": "46-002",
+      "prompt": "请解释密码学中的Merkle Tree（默克尔树）及其变体。Merkle Patricia Trie（MPT）在以太坊中是如何使用的？Sparse Merkle Tree（SMT）有什么优势？Merkle Tree在数据完整性验证和零知识证明中如何应用？",
+      "sub_type": "merkle_tree_variants",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Merkle树通过哈希链保证数据完整性；MPT结合Trie和Merkle树存储以太坊状态；SMT用默认值填充空位支持高效的存在性/不存在性证明；用于区块链状态验证和ZK证明",
+      "scoring_rubric": "1. Merkle树的基本原理描述正确；2. MPT在以太坊中的应用描述正确；3. SMT的优势和应用场景描述正确。"
+    },
+    {
+      "id": "46-003",
+      "prompt": "请解释安全多方计算（Secure Multi-Party Computation, MPC）的基本原理。MPC需要满足哪些安全性质（正确性、隐私性、公平性）？基于混淆电路（Garbled Circuit）的MPC是如何工作的？MPC在隐私保护机器学习和联合风控中如何应用？",
+      "sub_type": "secure_mpc",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "MPC允许多方在不泄露各自输入的情况下共同计算函数结果；混淆电路由一方生成加密电路，另一方通过OT获取解密密钥；应用于隐私保护的联合建模和跨机构风控",
+      "scoring_rubric": "1. MPC的安全性质描述正确；2. 混淆电路的工作原理描述正确；3. 在隐私保护机器学习中的应用描述正确。"
+    },
+    {
+      "id": "46-004",
+      "prompt": "请解释并实现密钥派生函数（KDF）HKDF（HMAC-based KDF）。HKDF的提取（extract）和扩展（expand）两个阶段分别做什么？为什么需要两个阶段？在TLS 1.3中HKDF是如何用于密钥派生的？",
+      "sub_type": "key_derivation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Extract阶段用HMAC将输入密钥材料和salt混合为固定长度的伪随机密钥（PRK）；Expand阶段用PRK派生出多个子密钥；两阶段分离提高了灵活性和安全性",
+      "scoring_rubric": "1. Extract阶段的工作原理描述正确；2. Expand阶段的工作原理描述正确；3. 两阶段分离的设计理由描述正确；4. TLS 1.3中的应用描述正确。"
+    },
+    {
+      "id": "46-005",
+      "prompt": "请解释并实现基于Shamir秘密共享的图像秘密分享方案。将一张图片的秘密像素值分为n份，任意k份可恢复。如何处理像素值的有限域运算？如何保证恢复的图片无损？",
+      "sub_type": "visual_secret_sharing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将每个像素值作为有限域GF(p)上的秘密，构造k-1次多项式，常数项为像素值；n个分享对应多项式上n个点；恢复时用拉格朗日插值；需选择大于255的素数p",
+      "scoring_rubric": "1. Shamir方案在图像上的应用描述正确；2. 有限域运算的处理正确；3. 拉格朗日插值恢复过程正确；4. 无损恢复的条件描述正确。"
+    },
+    {
+      "id": "46-006",
+      "prompt": "请解释并实现一个基于哈希的消息完整性校验方案——Merkle Tree审计证明（Audit Proof）。如何用Merkle Tree证明某个数据块属于数据集？审计路径的长度与数据集大小有什么关系？在区块链和分布式存储中如何应用？",
+      "sub_type": "merkle_audit_proof",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Merkle Tree将数据块哈希逐层聚合到根哈希；审计路径是从叶子到根的兄弟哈希链，长度O(logn)；验证者只需根哈希和审计路径即可验证数据完整性",
+      "scoring_rubric": "1. Merkle Tree的构建过程描述正确；2. 审计路径的构造和验证逻辑正确；3. O(logn)的路径长度分析正确；4. 应用场景描述正确。"
+    },
+    {
+      "id": "46-007",
+      "prompt": "请解释并实现一个简单的混淆电路（Garbled Circuit）协议，用于两方安全计算一个简单的函数（如比较两个数的大小）。混淆电路的四个步骤（生成、传输、解密、求值）分别做什么？",
+      "sub_type": "garbled_circuit",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "生成方为每个门的每个输入线生成两个随机密钥（代表0和1），用输出线密钥加密真值表；传输方通过OT获取自己输入对应的密钥；逐门解密得到输出",
+      "scoring_rubric": "1. 混淆电路的四个步骤描述正确；2. 真值表的加密和解密逻辑正确；3. OT协议在其中的作用描述正确；4. 能说明如何保证隐私性。"
+    },
+    {
+      "id": "46-008",
+      "prompt": "请解释并实现一个简单的门限同态加密方案。如何将Shamir秘密共享与Paillier同态加密结合实现t-out-of-n门限解密？部分解密份额如何组合为完整明文？分析安全性。",
+      "sub_type": "threshold_homomorphic",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将Paillier私钥通过Shamir方案分发给n个参与者；解密时每个参与者用其私钥份额计算部分解密结果，t个份额通过拉格朗日插值恢复完整明文；安全性基于Shamir信息论安全和Paillier计算安全",
+      "scoring_rubric": "1. 私钥分发和份额生成过程正确；2. 部分解密和拉格朗日插值恢复过程正确；3. 同态性质在门限解密后仍保持描述正确；4. 安全性分析正确。"
+    },
+    {
+      "id": "46-009",
+      "prompt": "请解释密码学中的可提取签名（Extractable Signature）和不可伪造性。在随机预言机模型下如何构建可提取签名？可提取签名在零知识证明的非交互式知识论证（NIZK）中起什么作用？",
+      "sub_type": "extractable_signature",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "可提取签名/知识签名（Signatures of Knowledge）的核心是知识可抽取性：在随机预言机模型下，存在提取器可通过重放/分叉（forking）从有效签名/证明中抽取签名者所掌握的见证（witness），而非恢复其私钥；任何能从合法签名恢复私钥的方案都会破坏不可伪造性。Fiat-Shamir变换将具有special soundness的交互式Σ协议转为非交互式NIZK，知识可靠性（knowledge soundness）正来自Σ协议的可抽取性与随机预言机的可编程性。",
+      "scoring_rubric": "1. 可提取签名的定义和安全性质描述正确；2. 在ROM中的构建方法描述正确；3. 在NIZK中的作用描述正确；4. 与普通不可伪造签名的区别描述正确。"
+    },
+    {
+      "id": "46-010",
+      "prompt": "请解释并实现一个简单的零知识范围证明（Range Proof）。如何证明一个承诺值v在[0,2^n)范围内而不泄露v的具体值？Bulletproofs的对数大小范围证明是如何工作的？与基于Boudot证明的传统方法相比有什么优势？",
+      "sub_type": "range_proof",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将v的二进制位分别承诺，证明每个位为0或1；Bulletproofs通过内积论证和递归折叠将证明大小从O(n)压缩到O(logn)；无需可信设置且证明更短",
+      "scoring_rubric": "1. 二进制分解和位承诺的方法描述正确；2. Bulletproofs的递归折叠思想描述正确；3. 对数大小证明的原理描述正确；4. 与传统方法的对比分析正确。"
+    },
+    {
+      "id": "46-011",
+      "prompt": "请解释并实现一个简单的多方密钥协商（Group Key Agreement）协议。Burmester-Desmedt（BD）协议是如何在n个参与者中建立共享密钥的？BD协议需要几轮通信？与逐对Diffie-Hellman相比有什么效率优势？",
+      "sub_type": "group_key_agreement",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "BD协议：每方生成临时私钥x_i并广播g^x_i，然后每方计算X_i=(g^x_{i+1}/g^x_{i-1})^x_i并广播，最后每方用所有X_i计算共享密钥；只需两轮广播（O(n)消息）比逐对DH的O(n^2)更高效",
+      "scoring_rubric": "1. BD协议的两轮通信过程描述正确；2. 共享密钥的计算公式正确；3. 与逐对DH的通信复杂度对比正确；4. 安全性分析（抗被动攻击）正确。"
+    },
+    {
+      "id": "46-012",
+      "prompt": "请解释密码学中的deniable encryption（可否认加密）。可否认加密需要满足什么安全性质？如何构建一个可否认的公钥加密方案？可否认加密在保护用户免受胁迫攻击中如何应用？",
+      "sub_type": "deniable_encryption",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "可否认加密允许接收者在胁迫下生成假随机数使解密结果看起来是另一个合法明文；Canetti等人方案：加密时选择两个随机数分别对应真实明文和伪装明文；应用于保护记者和活动人士的通信",
+      "scoring_rubric": "1. 可否认性的安全定义描述正确；2. 构建方案的数学原理描述正确；3. 胁迫场景下的否认过程描述正确；4. 与普通加密的安全差异描述正确。"
+    },
+    {
+      "id": "46-013",
+      "prompt": "请解释并实现一个简单的可搜索对称加密（Searchable Symmetric Encryption, SSE）方案。SSE如何允许在加密数据上进行关键词搜索而不泄露搜索模式？倒排索引SSE是如何构建的？什么是搜索模式泄露和访问模式泄露？",
+      "sub_type": "searchable_encryption",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "SSE通过为每个关键词生成陷门（trapdoor）允许服务器匹配加密文档；倒排索引SSE为每个关键词构建加密的文档ID列表，搜索时发送关键词的陷门；搜索模式泄露：服务器知道两次搜索是否相同；访问模式泄露：服务器知道搜索匹配了哪些文档",
+      "scoring_rubric": "1. SSE的陷门生成和匹配机制描述正确；2. 倒排索引SSE的构建和搜索过程描述正确；3. 搜索模式和访问模式泄露的定义和风险描述正确；4. 安全性分析正确。"
+    },
+    {
+      "id": "46-014",
+      "prompt": "请解释并实现一个简单的聚合签名（Aggregate Signature）方案。聚合签名如何将多个用户的多个签名压缩为单个签名？BGLS聚合签名方案是如何工作的？聚合签名在区块链轻客户端验证中有什么应用？",
+      "sub_type": "aggregate_signature",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "BGLS基于双线性映射：将n个签名σ_1,...,σ_n聚合为σ=Πσ_i，验证时检查e(σ,g)=Πe(H(m_i),pk_i)；验证者只需一次配对运算验证聚合签名；区块链中可用于批量验证多个交易的签名",
+      "scoring_rubric": "1. BGLS聚合签名的数学原理描述正确；2. 聚合和验证的双线性配对公式正确；3. 安全性（不可伪造性）的保证描述正确；4. 在区块链中的应用描述正确。"
+    },
+    {
+      "id": "46-015",
+      "prompt": "请解释并实现一个零知识集合成员证明（ZK Set Membership Proof）。如何证明一个承诺值属于某个集合而不泄露具体是哪个元素？使用Merkle树和零知识证明结合的方案。分析证明大小和验证时间。",
+      "sub_type": "zk_set_membership",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将集合元素构建Merkle树，证明者提供从承诺值到根的Merkle路径和零知识证明；验证者只需根哈希和证明即可验证成员关系；证明大小O(logn)；可用于匿名凭证和隐私白名单",
+      "scoring_rubric": "1. Merkle树在集合成员证明中的应用描述正确；2. 零知识性质（不泄露具体元素）的保证描述正确；3. 证明大小和验证时间的分析正确；4. 应用场景描述正确。"
+    },
+    {
+      "id": "46-016",
+      "prompt": "请解释私有集合交集（Private Set Intersection, PSI）协议。PSI允许两方做什么？基于不经意伪随机函数（OPRF）的PSI是如何工作的？PSI在隐私保护的数据匹配中有哪些应用？分析PSI的通信复杂度。",
+      "sub_type": "private_set_intersection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "PSI允许两方计算集合交集而不泄露各自集合的其他元素；基于OPRF的PSI：一方用密钥计算另一方元素的OPRF值，然后比较哈希值；应用于隐私保护的联系人匹配和广告归因",
+      "scoring_rubric": "1. PSI的安全性质（只泄露交集）描述正确；2. OPRF-based PSI的工作流程描述正确；3. 通信复杂度分析正确；4. 应用场景描述正确。"
+    },
+    {
+      "id": "46-017",
+      "prompt": "请解释并实现一个简单的Pedersen向量承诺方案。Pedersen向量承诺如何对一个向量的多个元素生成单个承诺？如何证明向量中某个位置的值而不泄露其他位置的值？向量承诺在零知识证明系统中起什么作用？",
+      "sub_type": "vector_commitment",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Pedersen向量承诺C=g1^v1 * g2^v2 * ... * gn^vn * h^r，每个元素对应不同的生成元；打开特定位置时只暴露该元素和对应的随机性；向量承诺在多项式承诺和向量内积论证中是基础构件",
+      "scoring_rubric": "1. Pedersen向量承诺的数学公式正确；2. 位置选择性打开的原理描述正确；3. 安全性（隐藏性和绑定性）描述正确；4. 在ZK证明系统中的作用描述正确。"
+    },
+    {
+      "id": "46-018",
+      "prompt": "请解释并实现一个支持前向隐私的可搜索加密方案（Forward-Private SSE）。前向隐私防止什么攻击？如何在每次搜索后更新加密索引使得新加入的文档不会被之前的搜索令牌匹配？分析前向隐私和后向隐私的安全权衡。",
+      "sub_type": "forward_private_sse",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "前向隐私防止服务器通过新加入文档的加密索引匹配之前的搜索令牌推断文档关键词；实现方式：每次搜索后更新关键词的陷门使得新旧陷门不可关联；可通过SSE方案的更新令牌机制实现",
+      "scoring_rubric": "1. 前向隐私防止的攻击场景描述正确；2. 陷门更新机制的原理描述正确；3. 前向隐私和后向隐私的安全权衡分析正确；4. 实现方案的可行性分析正确。"
+    },
+    {
+      "id": "46-019",
+      "prompt": "请解释泄漏韧性密码学（Leakage-Resilient Cryptography）。泄漏韧性方案允许攻击者获取什么信息？什么是 bounded leakage model？泄漏韧性加密方案和签名方案分别是如何构建的？泄漏韧性在物理安全（如侧信道防护）中如何应用？",
+      "sub_type": "leakage_resilient_crypto",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "泄漏韧性方案在密钥的部分信息泄漏后仍保持安全性；bounded leakage model限制攻击者获取的总泄漏量不超过某个阈值；通过密钥随机化和泄漏提取器构建；应用于智能卡和嵌入式设备的侧信道防护",
+      "scoring_rubric": "1. 泄漏韧性密码学的安全模型描述正确；2. bounded leakage model的概念描述正确；3. 构建方法的原理描述正确；4. 在物理安全中的应用描述正确。"
+    },
+    {
+      "id": "46-020",
+      "prompt": "请解释并实现一个简单的承诺方案（Commitment Scheme）。Pedersen承诺的隐藏性和绑定性分别保证什么？如何用Pedersen承诺实现零知识证明中的值承诺？承诺的打开（reveal）过程是如何验证的？",
+      "sub_type": "pedersen_commitment",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Pedersen承诺C=g^v*h^r，隐藏性保证从C无法推断v（信息论安全），绑定性保证无法找到两个不同的(v,r)得到相同的C（离散对数假设）；打开时提供v和r，验证者检查g^v*h^r=C",
+      "scoring_rubric": "1. Pedersen承诺的数学公式正确；2. 隐藏性和绑定性的安全保证描述正确；3. 打开和验证的过程描述正确；4. 在零知识证明中的应用描述正确。"
+    },
+    {
+      "id": "46-021",
+      "prompt": "请解释密码学中的随机预言机模型（Random Oracle Model, ROM）和标准模型。ROM假设哈希函数是完全随机的映射，这个假设在现实中是否成立？在ROM中证明安全的方案在标准模型下可能存在什么风险？如何在标准模型中构建安全方案？",
+      "sub_type": "random_oracle_model",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "ROM假设哈希函数对每个新输入返回真正随机的输出且一致；现实中哈希函数是确定性的不满足ROM假设；ROM证明的方案可能存在\"ROM攻击\"（利用哈希函数的结构）；标准模型基于具体困难问题假设",
+      "scoring_rubric": "1. ROM的假设和定义描述正确；2. ROM与现实哈希函数的差异描述正确；3. ROM攻击的风险描述正确；4. 标准模型的安全构建方法描述正确。"
+    },
+    {
+      "id": "46-022",
+      "prompt": "请解释并实现一个简单的密钥交换协议——Noise Protocol Framework。Noise协议的基本握手模式（如Noise_XX、Noise_IK）分别适用于什么场景？Noise如何实现前向保密和身份隐藏？与TLS 1.3握手相比Noise有什么优势？",
+      "sub_type": "noise_protocol",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Noise_XX适用于双方互不认识的场景（三次握手交换密钥和身份），Noise_IK适用于已知对方身份的场景；前向保密通过临时密钥对实现；Noise比TLS更轻量适合嵌入式和P2P场景",
+      "scoring_rubric": "1. Noise基本握手模式的适用场景描述正确；2. 前向保密和身份隐藏的实现描述正确；3. 与TLS 1.3的对比分析正确；4. Noise模式的命名规则描述正确。"
+    },
+    {
+      "id": "46-023",
+      "prompt": "请解释并实现一个基于多项式承诺的零知识证明方案——KZG承诺。KZG承诺如何利用双线性映射实现对多项式的简洁承诺？如何证明多项式在某点的取值？KZG承诺在以太坊EIP-4844中如何应用？",
+      "sub_type": "kzg_commitment",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "KZG承诺C=g^{f(s)}（s为可信设置的秘密），证明π=g^{(f(s)-f(z))/(s-z)}；验证通过双线性配对e(π,g^{s-z})=e(C/g^{f(z)},g)；以太坊用KZG承诺验证blob数据的可用性",
+      "scoring_rubric": "1. KZG承诺的数学公式正确；2. 求值证明的构造和验证逻辑正确；3. 可信设置的作用描述正确；4. 在EIP-4844中的应用描述正确。"
+    },
+    {
+      "id": "46-024",
+      "prompt": "请解释并实现一个简单的安全多方计算协议——秘密共享加法和乘法。如何用Shamir秘密共享实现多方加法（本地计算即可）？乘法需要什么额外的通信（Beaver三元组）？如何生成Beaver三元组？",
+      "sub_type": "secret_sharing_mpc",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "加法：各方本地将份额相加即可得到结果的份额；乘法：需要Beaver三元组(a,b,c=ab)，各方计算(x-a)和(y-b)的份额并公开，然后用线性组合计算xy的份额",
+      "scoring_rubric": "1. Shamir秘密共享的加法同态性描述正确；2. Beaver三元组在乘法中的使用逻辑正确；3. Beaver三元组的生成方法描述正确；4. 通信复杂度分析正确。"
+    },
+    {
+      "id": "46-025",
+      "prompt": "请解释并实现一个简单的隐私保护机器学习方案——安全内积计算。如何用Paillier同态加密实现两个向量的内积而不泄露各自的向量？如何处理浮点数到整数的转换？分析通信复杂度和计算开销。",
+      "sub_type": "secure_inner_product",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "一方将向量x用Paillier加密发送给另一方，另一方计算E(x)^y=E(x*y)的乘积并求和得到E(<x,y>)；浮点数通过定点数表示（乘以精度因子转为整数）；通信开销为O(n)个密文",
+      "scoring_rubric": "1. Paillier同态加密的内积计算逻辑正确；2. 浮点数到定点数的转换处理正确；3. 通信复杂度O(n)的分析正确；4. 安全性（不泄露各自向量）的分析正确。"
+    }
+  ]
+}

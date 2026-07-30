@@ -1,0 +1,457 @@
+{
+  "capability": "mobile_development",
+  "label": "移动开发能力",
+  "total": 50,
+  "cases": [
+    {
+      "id": "98-001",
+      "prompt": "你需要为一个新闻阅读App设计离线优先架构。用户在有网时预缓存内容，断网后仍可流畅阅读。请设计数据层架构、同步策略和冲突解决机制。",
+      "sub_type": "offline_first_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应以本地数据库为单一数据源（Single Source of Truth），UI始终从本地读取；后台Worker定时或在网络恢复时增量同步；冲突解决采用时间戳合并或操作队列重放策略",
+      "scoring_rubric": "1. 单一数据源架构设计正确；2. 同步策略（增量/全量/队列）描述合理；3. 冲突解决机制描述正确；4. 离线体验保障措施描述完整"
+    },
+    {
+      "id": "98-002",
+      "prompt": "你的电商App需要支持深度链接（Deep Link）路由，要求从短信链接、网页Universal Link和二维码扫码三种来源都能正确跳转到商品详情页，并携带来源归因参数。请设计路由方案。",
+      "sub_type": "deeplink_routing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计统一的路由表映射URI到目标页面；iOS使用Universal Links+Associated Domains，Android使用App Links+intent-filter；解析query参数传递来源归因；处理未安装时的降级到网页",
+      "scoring_rubric": "1. 路由表和URI映射设计描述正确；2. Universal Links和App Links的配置方式描述正确；3. 参数传递和归因方案描述合理；4. 降级和异常处理描述完整"
+    },
+    {
+      "id": "98-003",
+      "prompt": "你的银行App需要通过WCAG 2.1 AA级别的无障碍审核。请分析移动端无障碍适配的关键点，包括屏幕阅读器支持、动态字体大小、色彩对比度和焦点导航的实现方案。",
+      "sub_type": "mobile_accessibility",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "iOS使用VoiceOver+accessibilityLabel/traits，Android使用TalkBack+contentDescription；支持Dynamic Type/字体缩放；色彩对比度至少4.5:1；焦点顺序应符合逻辑阅读顺序",
+      "scoring_rubric": "1. 屏幕阅读器适配方案描述正确；2. 动态字体支持方案描述正确；3. 色彩对比度标准和检测方法描述正确；4. 焦点导航设计描述合理"
+    },
+    {
+      "id": "98-004",
+      "prompt": "你的App安装包已超过200MB，用户流失率明显上升。请从资源优化、代码优化、按需加载和构建配置四个维度分析App体积瘦身方案，并估算每项优化的预期收益。",
+      "sub_type": "app_size_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "资源优化：WebP替代PNG、移除未用资源、Asset Catalog按设备分发；代码优化：R8/ProGuard混淆缩减、移除未使用代码；按需加载：App Bundle/动态交付、Asset Bundles；构建：启用编译优化和Link Time Optimization",
+      "scoring_rubric": "1. 资源优化方案描述正确且有预期收益；2. 代码层优化手段描述正确；3. 按需加载和动态交付方案描述正确；4. 各方案优先级排序合理"
+    },
+    {
+      "id": "98-005",
+      "prompt": "你使用Flutter开发跨平台App，发现同一CustomPainter在iOS和Android上渲染结果不一致：抗锯齿效果和文字排版有差异。请分析原因并给出统一渲染的解决方案。",
+      "sub_type": "cross_platform_rendering",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Flutter在iOS使用Skia/Metal后端，Android使用Skia/Vulkan后端，GPU渲染管线差异导致微妙不同；文字排版受平台字体fallback链影响；解决方案包括指定统一字体、固定painter抗锯齿参数、使用Impeller渲染引擎统一行为",
+      "scoring_rubric": "1. 渲染差异的根本原因分析正确；2. 文字排版差异的平台因素描述正确；3. 统一渲染方案描述可行；4. 对Impeller等新引擎的了解准确"
+    },
+    {
+      "id": "98-006",
+      "prompt": "你的金融App需要集成生物识别认证（Face ID / 指纹）。请设计从Keychain/Keystore密钥管理到认证流程的完整方案，包括降级策略和安全考虑。",
+      "sub_type": "biometric_authentication",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "iOS使用LAContext+Keychain访问控制，Android使用BiometricPrompt+AndroidKeyStore；密钥在生物识别绑定后才可解密；降级到PIN码/密码；防截屏、防root/越狱检测、密钥不可导出",
+      "scoring_rubric": "1. Keychain/Keystore密钥保护机制描述正确；2. 生物识别认证流程描述完整；3. 降级策略描述合理；4. 安全加固措施描述全面"
+    },
+    {
+      "id": "98-007",
+      "prompt": "你的社交App需要实现拍照+实时滤镜功能。请设计相机模块的架构，包括预览流处理、滤镜渲染管线和拍照输出流程，同时需要处理不同设备的摄像头能力差异。",
+      "sub_type": "camera_integration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "iOS使用AVCaptureSession+Metal/CIImage滤镜管线，Android使用Camera2/CameraX+OpenGL ES/GLSurfaceView；预览帧经滤镜shader处理后渲染到Surface；拍照时切换到最高分辨率捕获；通过CameraCharacteristics查询设备能力适配",
+      "scoring_rubric": "1. 相机模块架构设计描述正确；2. 实时滤镜渲染管线描述合理；3. 设备能力适配方案描述正确；4. 拍照输出流程描述完整"
+    },
+    {
+      "id": "98-008",
+      "prompt": "你的即时通讯App需要在后台定期同步消息和上传用户日志。请设计后台任务方案，对比iOS的BGTaskScheduler和Android的WorkManager，分析各自的任务调度策略和电量优化。",
+      "sub_type": "background_task",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "iOS BGTaskScheduler由系统统一调度受严格限制（最少间隔15分钟），分BGAppRefreshTask和BGProcessingTask；Android WorkManager支持OneTime/PeriodicWork、约束条件、链式任务；电量优化：合并任务、批量执行、指数退避",
+      "scoring_rubric": "1. iOS后台任务限制和调度机制描述正确；2. Android WorkManager的功能和约束描述正确；3. 电量优化策略描述合理；4. 两个平台的差异对比清晰"
+    },
+    {
+      "id": "98-009",
+      "prompt": "你的App线上崩溃率达到1.5%，需要搭建崩溃监控体系。请设计从崩溃采集、符号化、聚合分析到修复闭环的完整方案，并区分Native崩溃和Java/Kotlin异常的处理差异。",
+      "sub_type": "crash_reporting",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Native崩溃通过Mach Exception/Signal Handler采集需dsym/符号表还原堆栈；Java异常通过UncaughtExceptionHandler捕获；聚合按堆栈指纹分组；集成Firebase Crashlytics或自建Sentry；修复闭环：报警->定位->修复->验证",
+      "scoring_rubric": "1. Native崩溃和Java异常的采集机制描述正确；2. 符号化流程描述正确；3. 崩溃聚合分析方案描述合理；4. 修复闭环流程描述完整"
+    },
+    {
+      "id": "98-010",
+      "prompt": "你的新闻App需要同时适配手机和平板，且支持横竖屏切换。请设计响应式布局方案，包括断点策略、内容重组逻辑和折叠屏设备的特殊处理。",
+      "sub_type": "responsive_layout_mobile",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "iOS使用Size Classes（Compact/Regular）+Auto Layout自适应，Android使用sw限定符/Jetpack WindowManager；断点按宽度分手机(<600dp)、平板(600-840dp)、大屏(>840dp)；折叠屏监听WindowStateFeature处理折叠/展开状态切换",
+      "scoring_rubric": "1. 断点策略和尺寸分类描述正确；2. 内容重组逻辑描述合理；3. 折叠屏适配方案描述正确；4. 横竖屏切换的状态保存方案描述完整"
+    },
+    {
+      "id": "98-011",
+      "prompt": "你的App冷启动时间已超过4秒，应用商店评分持续下降。请从Application初始化、首屏渲染和懒加载三个维度分析启动优化方案，说明如何使用Trace工具定位启动瓶颈，以及如何设计启动任务的依赖图和并行执行策略。",
+      "sub_type": "app_startup_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "冷启动瓶颈可通过Systrace/Instruments定位各阶段耗时；Application阶段优化：延迟非必要SDK初始化、使用App Startup库管理初始化依赖图并行执行；首屏渲染优化：减少首屏布局层级、使用ViewStub延迟加载非关键UI；懒加载：将非首屏功能模块延迟到首屏渲染完成后初始化",
+      "scoring_rubric": "1. 启动瓶颈定位方法描述正确；2. Application初始化优化策略描述合理；3. 首屏渲染优化方案描述正确；4. 启动任务依赖图和并行执行设计可行；5. 各优化项的预期收益估算合理"
+    },
+    {
+      "id": "98-012",
+      "prompt": "你的团队需要开发一个包含复杂动画、原生相机调用和高性能列表的社交App。请对比Flutter、React Native和Kotlin Multiplatform三种跨平台方案在此场景下的优劣，分析各自的性能瓶颈和原生能力调用方式，给出选型建议和混合开发策略。",
+      "sub_type": "cross_platform_framework_selection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Flutter自绘渲染动画性能好但原生API调用需Platform Channel；React Native通过Bridge通信有性能瓶颈但生态成熟，新架构Fabric改善了此问题；KMP共享业务逻辑但UI需分别实现；复杂动画选Flutter，原生相机调用React Native/KMP更自然；可采用混合策略：核心UI用原生，共享业务逻辑用KMP",
+      "scoring_rubric": "1. 三种框架的渲染和通信机制差异描述正确；2. 各框架在指定场景下的性能分析准确；3. 原生能力调用方式的对比正确；4. 选型建议和混合策略合理；5. 考虑了团队技能和维护成本"
+    },
+    {
+      "id": "98-013",
+      "prompt": "请设计一个金融App的安全加固方案。需要防范反编译、中间人攻击、数据泄露和Root/越狱设备运行。请从代码混淆、网络安全、数据存储安全和运行时保护四个层面设计防御策略。",
+      "sub_type": "mobile_security_hardening",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "代码混淆：ProGuard/R8混淆Java/Kotlin代码，Swift使用LLVM混淆；网络安全：Certificate Pinning防止中间人攻击，使用TLS 1.3；数据存储：敏感数据使用Keychain/Keystore存储，数据库使用SQLCipher加密；运行时保护：检测Root/越狱环境并限制功能，防调试检测，防截屏和录屏",
+      "scoring_rubric": "1. 代码混淆方案描述正确；2. Certificate Pinning的实现方式描述正确；3. 敏感数据存储方案描述正确；4. Root/越狱检测和运行时保护措施描述全面；5. 各层面防御的深度和完整性到位"
+    },
+    {
+      "id": "98-014",
+      "prompt": "你的App在低端设备上列表滚动帧率低于30fps，用户反馈卡顿严重。请分析移动端UI渲染管线（测量、布局、绘制、合成），定位可能的性能瓶颈，并设计一套从布局优化、绘制优化到硬件加速的完整解决方案。",
+      "sub_type": "ui_rendering_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "渲染管线：Measure到Layout到Draw到Compose四阶段；瓶颈可能在过度嵌套的布局层级导致重复测量、过度绘制、主线程耗时操作；布局优化：使用ConstraintLayout减少层级、ViewStub延迟加载；绘制优化：减少背景色重叠、使用clipRect减少绘制区域；硬件加速：使用RenderThread、避免在onDraw中创建对象",
+      "scoring_rubric": "1. 渲染管线各阶段的职责描述正确；2. 性能瓶颈的定位方法描述正确；3. 布局优化和绘制优化策略描述合理；4. 硬件加速的利用方式描述正确；5. 性能分析工具的使用方法描述正确"
+    },
+    {
+      "id": "98-015",
+      "prompt": "请设计一个移动端的多级缓存架构。App需要缓存API响应、图片和用户操作数据。请设计L1内存缓存（LRU）、L2磁盘缓存和L3远程缓存的协同策略，说明缓存失效、缓存预热和离线降级的实现方案。",
+      "sub_type": "mobile_data_caching",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "L1内存缓存使用LruCache管理热数据，容量根据设备内存动态调整；L2磁盘缓存使用DiskLruCache或SQLite持久化冷数据；L3远程缓存通过ETag和Last-Modified实现HTTP条件请求减少数据传输；缓存失效策略：API响应基于Cache-Control头，图片基于内容Hash；缓存预热在App启动时加载常用数据；离线降级返回磁盘缓存并提示数据时效性",
+      "scoring_rubric": "1. 三级缓存的职责划分和数据流向描述正确；2. LRU和磁盘缓存的实现方案描述正确；3. 缓存失效和一致性策略描述合理；4. 缓存预热和离线降级方案描述完整；5. 缓存容量管理和淘汰策略描述正确"
+    },
+    {
+      "id": "98-016",
+      "prompt": "你的图片编辑App需要支持复杂的手势交互：双指缩放、旋转、拖拽移动、双击放大和长按菜单。请设计一个手势识别系统，说明如何处理手势冲突（如缩放和旋转同时进行）、如何实现手势的平滑响应，以及如何支持手势的撤销和重做。",
+      "sub_type": "gesture_interaction_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "手势识别通过ScaleGestureDetector和RotateGestureDetector组合实现多触点识别；手势冲突通过设置互斥优先级或合并同时识别的手势为复合变换；平滑响应通过Matrix变换实现图片的缩放、旋转和位移，使用动画插值器平滑过渡；撤销重做通过操作栈记录每步变换矩阵，支持逐步回退",
+      "scoring_rubric": "1. 多手势识别的技术方案描述正确；2. 手势冲突处理策略描述合理；3. 变换矩阵的应用和动画平滑描述正确；4. 撤销重做的实现方案描述正确；5. 事件分发冲突的处理描述正确"
+    },
+    {
+      "id": "98-017",
+      "prompt": "你的App在长时间使用后内存持续增长，最终被系统OOM杀死。请分析移动端内存泄漏的常见原因（如Activity泄漏、Bitmap未回收、注册未注销），设计一套内存监控和自动检测方案，并说明如何使用弱引用和生命周期感知组件预防泄漏。",
+      "sub_type": "mobile_memory_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "常见泄漏：Activity/Fragment被静态变量或后台线程引用导致无法GC；Bitmap未及时recycle或缓存过大；EventBus注册后未注销；监控方案：LeakCanary自动检测泄漏链路，通过hprof分析堆快照；预防：使用WeakReference持有Activity引用，使用LifecycleObserver自动管理注册和注销",
+      "scoring_rubric": "1. 内存泄漏的常见原因分析全面；2. 内存监控和检测方案描述正确；3. 弱引用的使用场景和方式描述正确；4. 生命周期感知组件的使用描述正确；5. Bitmap和缓存的内存管理策略描述合理"
+    },
+    {
+      "id": "98-018",
+      "prompt": "请设计一个日历App的桌面小组件（Widget）系统。小组件需要显示今日日程列表，支持点击跳转到详情页，并在日程变化时自动更新。请对比iOS WidgetKit和Android AppWidget的实现差异，说明小组件的刷新策略和性能约束。",
+      "sub_type": "app_widget_development",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "iOS WidgetKit使用SwiftUI构建TimelineProvider驱动更新，系统统一调度刷新不支持实时更新；Android AppWidget使用RemoteViews构建布局，通过WorkManager定时刷新；两者都不能执行复杂计算和网络请求；点击跳转通过Deep Link实现；性能约束：iOS限制每日刷新次数，Android限制RemoteViews布局复杂度",
+      "scoring_rubric": "1. WidgetKit和AppWidget的架构差异描述正确；2. 刷新策略和系统限制描述正确；3. 点击跳转的实现方式描述正确；4. 性能约束和优化建议描述合理；5. 数据更新通知机制描述正确"
+    },
+    {
+      "id": "98-019",
+      "prompt": "请设计一个移动端的实时图像分类功能。模型需要在设备端运行，推理延迟要求低于100ms。请对比TensorFlow Lite、Core ML和ONNX Runtime Mobile三种推理框架的性能差异，说明模型量化对精度和速度的影响，以及如何利用GPU/NPU加速推理。",
+      "sub_type": "on_device_ml_inference",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "TFLite支持Android/iOS有丰富的优化工具，Core ML深度集成Apple硬件（Neural Engine），ONNX Runtime跨平台兼容性好；FP16量化精度损失极小速度提升约2倍，INT8量化精度下降但速度提升更大；GPU加速通过OpenCL/Metal Delegate实现，NPU加速通过Core ML的ANE或Android NNAPI调度",
+      "scoring_rubric": "1. 三种推理框架的特点和性能差异描述正确；2. 量化对精度和速度的影响数据描述合理；3. GPU/NPU加速的实现方式描述正确；4. 模型优化策略描述正确；5. 端到端推理延迟优化方案可行"
+    },
+    {
+      "id": "98-020",
+      "prompt": "请设计一个大型电商App的模块化架构。App包含商品、购物车、订单、用户中心等十多个业务模块。请设计模块间的依赖关系和通信机制，说明如何实现模块的独立编译和按需加载，以及如何管理模块间的共享资源（如网络层、图片加载）。",
+      "sub_type": "mobile_architecture_patterns",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模块化按业务域拆分为独立编译单元；模块间通信通过接口下沉和路由框架实现页面跳转；独立编译通过构建工具的依赖隔离和动态模块实现按需加载；共享资源通过Base Module提供网络层、图片加载等基础设施；依赖管理使用BOM统一版本，避免循环依赖",
+      "scoring_rubric": "1. 模块划分原则和依赖关系设计合理；2. 模块间通信机制描述正确；3. 独立编译和按需加载的实现描述正确；4. 共享资源管理方案描述合理；5. 依赖管理和版本控制策略描述正确"
+    },
+    {
+      "id": "98-021",
+      "prompt": "你的App需要实现端到端加密的即时通讯功能。请设计密钥交换协议（如Signal Protocol的X3DH）和消息加密方案（Double Ratchet），说明如何在移动端安全存储会话密钥，以及如何处理多设备同步时的密钥管理问题。",
+      "sub_type": "e2e_encryption_mobile",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "X3DH通过长期密钥和临时密钥的组合实现异步密钥协商，Double Ratchet通过棘轮机制实现前向保密和未来保密；会话密钥存储在Keychain/Keystore中受生物识别保护；多设备同步通过每个设备独立维护密钥对，服务器分发消息时加密多份分别发送给各设备；需处理设备添加和删除时的密钥更新",
+      "scoring_rubric": "1. X3DH密钥协商协议描述正确；2. Double Ratchet的前向保密机制描述正确；3. 移动端密钥存储的安全方案描述正确；4. 多设备密钥同步方案描述合理；5. 能分析E2E加密对消息搜索和备份的影响"
+    },
+    {
+      "id": "98-022",
+      "prompt": "你的App需要在弱网环境下（2G/高延迟/高丢包）保持可用性。请设计网络层的自适应策略，包括请求优先级队列、数据压缩、协议选择和离线队列管理。如何根据网络质量动态调整超时时间和重试策略？",
+      "sub_type": "adaptive_network_layer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "请求优先级队列将请求分为实时/高/低三级，弱网时优先保证实时请求；数据压缩通过Protocol Buffers替代JSON减少传输量，启用gzip/brotli压缩HTTP体；协议选择：弱网时使用QUIC替代TCP减少握手延迟；离线队列将失败请求暂存本地待网络恢复后重发；自适应超时通过RTT探测动态调整，重试策略从固定间隔改为指数退避加抖动",
+      "scoring_rubric": "1. 请求优先级队列的设计合理；2. 数据压缩和协议选择策略描述正确；3. 离线队列管理方案描述正确；4. 自适应超时和重试策略描述合理；5. 能分析弱网优化对用户体验的改善效果"
+    },
+    {
+      "id": "98-023",
+      "prompt": "请设计一个移动端的A/B测试和灰度发布一体化方案。功能标志需要支持按用户ID、设备型号、地区和版本号进行定向发布。请设计标志的评估引擎、数据采集和统计分析流程，以及如何在App端实现标志的本地缓存和实时更新。",
+      "sub_type": "ab_test_灰度_release",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "评估引擎在服务端根据用户属性和规则匹配返回标志值；数据采集记录每个用户的分组和关键行为事件用于后续统计分析；统计分析使用贝叶斯方法或频率学派假设检验判断实验显著性；本地缓存通过SharedPreferences/UserDefaults存储标志值避免每次请求；实时更新通过长连接推送标志变更或App启动时拉取最新配置",
+      "scoring_rubric": "1. 标志评估引擎的设计描述正确；2. 数据采集和统计分析流程描述正确；3. 本地缓存和实时更新机制描述正确；4. 定向发布的规则引擎设计合理；5. 能分析A/B测试的样本污染和新奇效应问题"
+    },
+    {
+      "id": "98-024",
+      "prompt": "你的App在多个Android设备上出现兼容性问题：相机预览拉伸、刘海屏内容被遮挡、不同DPI设备图标模糊。请设计一套设备适配方案，说明如何处理屏幕比例、刘海/挖孔/折叠屏、以及资源的多密度适配。",
+      "sub_type": "device_compatibility_adaptation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "相机预览通过匹配SurfaceView比例避免拉伸；刘海屏通过WindowInsets API获取安全区域适配；多密度资源通过mipmap五档资源和VectorDrawable自适应；折叠屏通过WindowManager监听状态切换布局；ConstraintLayout比例约束适配不同屏幕",
+      "scoring_rubric": "1. 相机预览比例适配方案描述正确；2. 刘海/挖孔屏的安全区域处理描述正确；3. 多密度资源适配策略描述正确；4. 折叠屏适配方案描述正确；5. 能分析设备碎片化的测试策略"
+    },
+    {
+      "id": "98-025",
+      "prompt": "你的App需要实现高性能的列表渲染，列表项包含图片、文字和复杂的自定义布局。请设计RecyclerView/UITableView的优化方案，包括ViewHolder复用、预加载、异步布局计算和图片加载的协同优化，目标是在低端设备上实现60fps的滚动体验。",
+      "sub_type": "high_performance_list_rendering",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "ViewHolder复用通过增大缓存池减少创建开销；预加载通过prefetch机制提前计算Item布局；异步布局通过AsyncLayoutInflater在后台预计算；图片加载与滚动联动：滚动时暂停，停止后恢复；DiffUtil精确计算差异避免全量刷新",
+      "scoring_rubric": "1. ViewHolder复用和缓存优化描述正确；2. 预加载机制的实现描述正确；3. 异步布局计算方案描述合理；4. 图片加载与滚动状态的联动策略描述正确；5. 能使用Systrace/Instruments定位滚动卡顿的具体原因"
+    },
+    {
+      "id": "98-026",
+      "prompt": "你的社交App需要实现消息的本地全文搜索功能，支持搜索聊天记录中的文字内容。请设计移动端的本地搜索引擎方案，说明如何构建倒排索引、如何处理中文分词、如何实现搜索结果的高亮和排序，以及如何在数据库更新时增量更新索引。",
+      "sub_type": "local_full_text_search",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "本地搜索引擎使用SQLite FTS5扩展或Realm Text Index构建倒排索引；中文分词通过Unicode分词算法或集成jieba分词库处理；搜索结果高亮通过偏移量信息标记匹配位置；排序通过TF-IDF或BM25算法计算相关性得分；增量索引在新消息入库时通过触发器自动更新FTS索引；性能优化：索引压缩、分页加载搜索结果、搜索防抖",
+      "scoring_rubric": "1. 本地搜索引擎的选型和架构描述正确；2. 中文分词方案描述正确；3. 搜索结果高亮和排序实现描述正确；4. 增量索引更新机制描述正确；5. 能分析大规模数据下的搜索性能优化策略"
+    },
+    {
+      "id": "98-027",
+      "prompt": "请设计一个移动端的性能监控SDK。SDK需要采集启动时间、页面渲染帧率、网络请求延迟、内存使用和崩溃率五大指标。请设计SDK的架构、数据采集方案和上报策略，说明如何最小化SDK对宿主App性能的影响。",
+      "sub_type": "performance_monitoring_sdk",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "架构采用插件化设计各采集器独立可配置；启动时间通过onCreate到首帧渲染时间差计算；帧率通过Choreographer监控丢帧；网络延迟通过Interceptor采集；上报策略：本地缓存+批量上报+网络感知；最小化影响：异步执行、避免主线程IO、采样率可配置",
+      "scoring_rubric": "1. SDK的插件化架构设计合理；2. 各指标的采集方案描述正确；3. 上报策略（缓存/批量/采样）描述正确；4. 性能影响最小化措施描述正确；5. 能分析各指标的业务价值和告警阈值"
+    },
+    {
+      "id": "98-028",
+      "prompt": "你的App需要支持自定义字体，包括动态下载和应用字体。请设计字体管理方案，说明如何实现字体的按需下载和本地缓存、如何在不同平台（iOS/Android）上应用自定义字体、以及如何处理字体文件过大导致的内存问题。",
+      "sub_type": "custom_font_management",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "字体按需下载存储到应用沙盒；iOS通过UIFont注册，Android通过Typeface或Downloadable Fonts API；本地缓存通过Hash值管理版本避免重复下载；内存优化：字体子集化只含需要字符、延迟加载、系统字体降级",
+      "scoring_rubric": "1. 字体按需下载和缓存方案描述正确；2. iOS和Android平台的字体应用方式描述正确；3. 字体子集化的实现和效果描述正确；4. 内存优化策略描述合理；5. 能分析自定义字体对App启动和渲染性能的影响"
+    },
+    {
+      "id": "98-029",
+      "prompt": "你的App需要实现AR增强现实功能，包括平面检测、3D物体放置和光照估计。请对比ARKit和ARCore的功能差异，设计AR场景的渲染管线，说明如何处理AR会话的生命周期管理和AR内容与真实世界的遮挡关系。",
+      "sub_type": "augmented_reality_integration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "ARKit和ARCore都支持平面检测、特征点追踪和光照估计，ARKit的LiDAR支持更精确的深度感知；渲染管线：AR Session捕获相机帧到AR Frame获取相机位姿和特征点到渲染引擎将3D物体投影到相机坐标系到合成AR内容与相机画面；生命周期管理：App进入后台暂停AR Session，返回前台时恢复；遮挡通过深度图（Depth Map）实现虚拟物体被真实物体遮挡的效果",
+      "scoring_rubric": "1. ARKit和ARCore的功能差异对比正确；2. AR场景渲染管线描述正确；3. AR会话生命周期管理描述正确；4. 遮挡关系的实现方案描述正确；5. 能分析AR功能的设备兼容性和性能要求"
+    },
+    {
+      "id": "98-030",
+      "prompt": "你的App从单体架构迁移到Kotlin Multiplatform跨平台方案。业务逻辑层需要在iOS和Android间共享，但UI层保持原生实现。请设计迁移策略，说明如何将现有的网络层、数据层和业务逻辑层抽取为共享模块，如何处理平台特定的API差异（如文件系统、加密），以及如何在不影响现有功能的前提下渐进式迁移。",
+      "sub_type": "kmp_migration_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "迁移策略分三阶段：先抽取纯Kotlin业务逻辑（如数据模型、业务规则），再迁移网络层（Ktor Client）和数据层（SQLDelight），最后处理平台特定逻辑；平台差异通过expect/actual机制声明平台特定接口，各平台提供实现；渐进式迁移通过将共享模块作为库引入原项目，逐步替换原生实现；构建配置使用KMP的source sets管理共享代码和平台代码",
+      "scoring_rubric": "1. 迁移阶段划分合理；2. 共享模块的抽取策略描述正确；3. expect/actual机制处理平台差异描述正确；4. 渐进式迁移的风险控制描述正确；5. 能分析KMP与Flutter/React Native的适用场景差异"
+    },
+    {
+      "id": "98-031",
+      "prompt": "你的App需要实现跨进程的IPC通信。主进程需要将用户数据同步到独立的推送进程中。请设计基于Android AIDL/iOS XPC的IPC方案，说明如何保证数据传输的安全性、如何处理进程崩溃时的连接恢复，以及如何优化大数据量传输的性能。",
+      "sub_type": "ipc_cross_process",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Android AIDL定义接口并由Binder驱动通信，iOS XPC通过NSXPCConnection实现；安全性通过进程签名验证和权限校验保证；连接恢复通过DeathRecipient监听进程状态并在重启后重新绑定；大数据传输使用Parcelable序列化或共享内存（Ashmem/Shared Memory）避免Binder缓冲区限制",
+      "scoring_rubric": "1. AIDL和XPC的实现机制描述正确；2. 进程间安全通信方案描述正确；3. 崩溃恢复和连接重建机制描述正确；4. 大数据量传输优化方案描述合理"
+    },
+    {
+      "id": "98-032",
+      "prompt": "请设计一个移动端的多语言热切换方案。用户可以在App内切换语言而不需要重启应用。请说明如何实现语言资源的动态加载、UI的实时刷新，以及如何处理已缓存数据的语言适配问题。",
+      "sub_type": "runtime_language_switch",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "语言切换通过更新Locale配置并重建Activity/刷新SwiftUI环境实现；动态加载通过按需下载语言包到应用沙盒；UI刷新通过监听语言变更事件触发所有界面重新绑定文本；缓存数据适配通过在缓存Key中包含语言标识或在语言切换时清除文本相关缓存",
+      "scoring_rubric": "1. 语言热切换的技术方案描述正确；2. UI实时刷新的实现方式描述正确；3. 缓存数据的语言适配策略描述合理；4. 能分析热切换对用户体验和性能的影响"
+    },
+    {
+      "id": "98-033",
+      "prompt": "你的App在低端设备上出现严重的内存抖动（Memory Churn），GC频繁触发导致界面卡顿。请分析移动端内存抖动的常见原因（如频繁创建临时对象、Bitmap解码、列表滚动），设计一套从检测到修复的完整方案。",
+      "sub_type": "memory_churn_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "内存抖动原因：onDraw中创建临时对象、Bitmap频繁解码未复用、列表滚动创建过多临时对象；检测通过Android Profiler的Allocation Tracking或iOS Instruments的Allocations定位高频分配点；修复：对象池复用、Bitmap复用、ViewHolder预绑定",
+      "scoring_rubric": "1. 内存抖动的常见原因分析全面；2. 检测工具和方法描述正确；3. 对象复用和池化方案描述正确；4. 能分析内存抖动对GC和帧率的具体影响"
+    },
+    {
+      "id": "98-034",
+      "prompt": "请设计一个移动端的蓝牙Mesh组网方案。多个智能灯需要通过手机App实现群组控制和场景联动。请说明蓝牙Mesh的配网流程、消息发布机制和组地址管理，以及如何在App端实现设备状态的实时同步。",
+      "sub_type": "bluetooth_mesh_control",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "蓝牙Mesh配网通过Provisioner（手机）将未配网设备加入网络并分配单播地址；消息发布使用Publish/Subscribe模型，组地址实现一对多控制；状态同步通过Status消息订阅和Mesh Proxy协议实现手机与Mesh网络的通信；场景联动通过在设备端预存场景配置触发",
+      "scoring_rubric": "1. 蓝牙Mesh配网流程描述正确；2. 发布/订阅和组地址机制描述正确；3. App端状态同步方案描述正确；4. 能分析蓝牙Mesh的延迟和可靠性特点"
+    },
+    {
+      "id": "98-035",
+      "prompt": "你的App需要实现基于机器学习的智能预加载。根据用户的使用习惯预测下一步可能访问的页面并提前加载数据。请设计用户行为特征的采集方案、预测模型的选择，以及预加载的资源管理和优先级调度策略。",
+      "sub_type": "ml_predictive_preload",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "行为特征采集：页面访问序列、停留时间、操作时间和上下文（如时间、地点）；预测模型使用Markov Chain或轻量LSTM预测下一页面的转移概率；预加载在预测置信度超过阈值时触发后台数据请求；资源管理通过优先级队列控制并发预加载数量，内存紧张时取消低优先级预加载",
+      "scoring_rubric": "1. 用户行为特征的采集维度设计合理；2. 预测模型的选择和训练方案描述正确；3. 预加载触发和资源管理策略描述正确；4. 能分析预加载对电量和流量的影响"
+    },
+    {
+      "id": "98-036",
+      "prompt": "请设计一个移动端的视频播放器架构。需要支持自适应码率切换（ABR）、离线缓存和画中画模式。请说明如何实现基于网络带宽估计的码率自适应策略，以及如何设计视频缓存的存储和淘汰机制。",
+      "sub_type": "video_player_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "ABR通过测量下载速度和缓冲区水位选择合适的码率档位；带宽估计使用滑动窗口平均或指数加权移动平均；离线缓存通过分片存储视频片段到本地数据库；画中画通过PictureInPicture API在系统层面支持小窗口播放；缓存淘汰使用LRU策略并设置最大缓存容量",
+      "scoring_rubric": "1. ABR码率自适应策略描述正确；2. 带宽估计算法描述正确；3. 离线缓存的存储和淘汰机制描述合理；4. 画中画模式的实现方案描述正确"
+    },
+    {
+      "id": "98-037",
+      "prompt": "你的App需要实现端侧大语言模型推理。模型大小约1.5GB，需要在手机上实现流畅的对话交互。请对比llama.cpp、MLC LLM和MediaPipe LLM Inference三种端侧推理框架的性能，说明如何通过模型量化和内存映射优化推理速度和内存占用。",
+      "sub_type": "on_device_llm_inference",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "llama.cpp支持多种量化格式跨平台性好，MLC LLM针对移动端GPU优化有更高吞吐，MediaPipe集成TensorFlow生态易用；INT4量化将模型压缩到约400MB减少内存占用；内存映射通过mmap将模型文件映射到虚拟内存避免完整加载；推理优化：KV Cache复用、批处理token和使用Metal/GPU Delegate加速",
+      "scoring_rubric": "1. 三种端侧推理框架的特点和性能差异描述正确；2. 量化的原理和效果描述正确；3. 内存映射优化方案描述正确；4. 端到端推理延迟优化策略描述合理"
+    },
+    {
+      "id": "98-038",
+      "prompt": "请设计一个移动端的自动化UI测试框架。测试需要覆盖多设备、多分辨率和多语言场景。请设计Page Object模式的测试架构，说明如何实现UI元素的稳定定位策略，以及如何处理测试中的异步等待和网络请求Mock。",
+      "sub_type": "mobile_ui_test_framework",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Page Object模式将每个页面封装为对象隐藏UI细节；元素定位优先使用testID/accessibilityId避免依赖布局结构；异步等待通过显式等待条件（如元素出现、网络请求完成）替代固定sleep；网络Mock通过拦截HTTP层返回预设数据；多设备测试通过云端设备农场（如Firebase Test Lab）并行执行",
+      "scoring_rubric": "1. Page Object模式的架构设计描述正确；2. UI元素稳定定位策略描述正确；3. 异步等待和网络Mock方案描述正确；4. 多设备测试执行方案描述合理"
+    },
+    {
+      "id": "98-039",
+      "prompt": "你的App在后台被系统杀死后无法恢复到之前的页面状态。请设计一套完整的状态保存和恢复方案，覆盖Activity/Fragment状态保存、ViewModel持久化和导航状态恢复，说明如何处理大体积状态数据的序列化和恢复性能问题。",
+      "sub_type": "state_restoration",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Activity状态通过onSaveInstanceState保存到Bundle，Fragment通过SavedStateHandle；ViewModel持久化通过SavedStateHandle或手动序列化到磁盘；导航状态通过NavBackStackEntry恢复导航栈；大体积数据通过序列化到文件而非Bundle（Bundle限制1MB）；恢复性能通过懒加载和分段恢复避免阻塞主线程",
+      "scoring_rubric": "1. Activity和Fragment的状态保存机制描述正确；2. ViewModel持久化方案描述正确；3. 导航状态恢复的实现描述正确；4. 大体积数据的状态保存优化描述合理"
+    },
+    {
+      "id": "98-040",
+      "prompt": "请设计一个移动端的图片超分辨率功能。用户拍摄的模糊照片需要在设备端实时增强到高清。请对比Real-ESRGAN、SwinIR和MobilePixel三种超分模型在移动端的推理性能，说明如何通过模型蒸馏和算子融合优化端侧推理速度。",
+      "sub_type": "super_resolution_mobile",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Real-ESRGAN通用性好但计算量大，SwinIR质量高但Transformer结构在移动端慢，MobilePixel专为移动端优化；模型蒸馏将大模型的知识迁移到小模型保持质量的同时减少参数；算子融合将Conv+BN+ReLU合并为单个算子减少内存访问；推理使用Core ML Neural Engine或Android NNAPI加速",
+      "scoring_rubric": "1. 三种超分模型在移动端的性能差异描述正确；2. 模型蒸馏的原理和效果描述正确；3. 算子融合优化方案描述正确；4. 端侧推理加速方案描述合理"
+    },
+    {
+      "id": "98-041",
+      "prompt": "你的App需要实现热修复（Hotfix）能力，在不发版的情况下修复线上严重Bug。请设计一个支持代码和资源增量更新的热修复框架，说明补丁的生成和应用机制、如何处理多DEX和资源文件的修复、以及如何保证修复过程的安全性和灰度发布策略。",
+      "sub_type": "hotfix_framework_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "热修复框架通过类加载机制替换修复后的类文件；代码修复通过在ClassLoader中插入修复DEX到DEX数组前面实现类替换；资源修复通过替换AssetManager的资源路径实现；安全性通过补丁签名验证和完整性校验保证；灰度发布按设备ID百分比逐步推送补丁；回滚通过移除补丁DEX并重启应用恢复；需处理不同Android版本的兼容性",
+      "scoring_rubric": "1. 热修复的类加载机制描述正确；2. 代码和资源修复的技术方案描述正确；3. 安全性保障措施描述正确；4. 灰度发布和回滚策略设计合理"
+    },
+    {
+      "id": "98-042",
+      "prompt": "你的App需要实现跨平台的崩溃收集和分析系统。请设计一个支持iOS和Android的统一崩溃上报方案，对比Firebase Crashlytics和Sentry的优劣，说明如何实现Native崩溃的符号化还原、如何设计崩溃的聚类分析算法，以及如何通过崩溃数据驱动应用质量改进。",
+      "sub_type": "cross_platform_crash_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Crashlytics深度集成Firebase生态零配置但自定义能力有限；Sentry开源可自建支持Source Map和面包屑但需维护；Native崩溃符号化通过dSYM/iOS和符号表/Android还原堆栈地址到源码行号；聚类分析通过堆栈指纹（关键帧组合）分组相同根因的崩溃；质量改进通过崩溃率趋势、Top崩溃排序和影响用户数驱动修复优先级",
+      "scoring_rubric": "1. 跨平台崩溃上报方案设计正确；2. Crashlytics和Sentry的对比分析准确；3. Native崩溃符号化流程描述正确；4. 聚类分析和质量驱动改进方案描述合理"
+    },
+    {
+      "id": "98-043",
+      "prompt": "你的App在不同网络环境下用户体验差异巨大，需要设计一个网络质量监控和自适应调度系统。请设计网络类型检测和质量评估方案，说明如何根据网络质量动态调整请求策略（如降低图片质量、延迟非关键请求），以及如何实现基于网络质量的API服务器选择。",
+      "sub_type": "adaptive_network_scheduling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "网络类型检测通过系统API获取WiFi/4G/5G状态，质量评估通过定期探测RTT和丢包率；自适应策略：弱网时降低图片分辨率、启用更强的数据压缩、延迟非关键请求到网络恢复；API服务器选择通过调度中心根据各节点的延迟和负载返回最优接入点；网络变化监听通过ConnectivityManager/SCNetworkReachability实时响应",
+      "scoring_rubric": "1. 网络类型检测和质量评估方案描述正确；2. 自适应请求策略设计合理；3. API服务器选择方案描述正确；4. 网络变化的实时响应机制描述正确"
+    },
+    {
+      "id": "98-044",
+      "prompt": "请设计一个移动端的应用性能基准测试（Benchmark）体系。需要建立可量化的性能评分模型，覆盖启动速度、页面加载、滚动流畅度和内存效率四个维度。请设计基准测试的场景选择、数据采集方法和评分算法，说明如何通过基准测试驱动性能回归检测。",
+      "sub_type": "performance_benchmark_system",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "基准测试场景：冷启动时间、列表滚动帧率、页面切换耗时、内存峰值；数据采集通过自动化脚本在固定设备上重复测试取中位数；评分算法将各维度指标归一化后加权综合为0到100分；回归检测在CI中运行基准测试与基线对比超过阈值则阻断发布；需控制测试环境变量（设备温度、后台应用）保证结果可复现",
+      "scoring_rubric": "1. 基准测试维度和场景选择合理；2. 数据采集方法描述正确；3. 评分算法设计合理；4. 回归检测的CI集成方案描述正确"
+    },
+    {
+      "id": "98-045",
+      "prompt": "你的App需要在WebView中嵌入大量H5页面，但WebView的内存管理成为瓶颈。请设计WebView的内存优化方案，说明如何实现WebView池化和复用、如何监控WebView的内存泄漏、以及如何在内存紧张时主动回收WebView实例。",
+      "sub_type": "webview_memory_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "WebView池化通过预创建固定数量的WebView实例复用减少频繁创建销毁的开销；内存泄漏监控通过检测Activity销毁后WebView是否被GC回收；主动回收通过onTrimMemory回调在内存紧张时销毁低优先级WebView实例；优化还包括限制WebView的缓存大小、禁用不必要的功能（如地理位置）减少内存占用；进程隔离将WebView放到独立进程避免影响主进程",
+      "scoring_rubric": "1. WebView池化和复用方案描述正确；2. 内存泄漏监控方法描述正确；3. 主动回收策略描述合理；4. 进程隔离方案描述正确"
+    },
+    {
+      "id": "98-046",
+      "prompt": "请设计一个移动端的应用质量评估体系。需要从性能、稳定性、兼容性和安全性四个维度建立量化的质量评分模型。请设计各维度的评估指标和权重、数据采集方案，以及如何将质量评分融入持续集成流程实现质量门禁。",
+      "sub_type": "app_quality_assessment",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "性能维度包含启动时间、帧率和内存使用；稳定性维度包含崩溃率和ANR率；兼容性维度包含设备覆盖率和OS版本覆盖率；安全性维度包含漏洞数和权限合规性；权重根据业务优先级分配；数据采集通过自动化测试和线上监控融合；质量门禁在CI中设置各维度最低阈值不达标则阻断发布；质量报告定期生成趋势分析",
+      "scoring_rubric": "1. 四个评估维度的指标设计合理；2. 权重分配策略描述正确；3. 数据采集方案描述正确；4. 质量门禁的CI集成方案描述合理"
+    },
+    {
+      "id": "98-047",
+      "prompt": "你的App需要实现端侧的自然语言理解能力，支持离线的语音指令识别和文本意图分类。请设计端侧NLP引擎的架构，说明如何在设备端实现语音到文本的转换、意图分类模型的部署优化，以及如何处理多语言和方言的识别挑战。",
+      "sub_type": "on_device_nlp_engine",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "语音到文本通过端侧ASR模型（如Whisper-tiny或Vosk）实现离线识别；意图分类通过轻量BERT模型或MobileBERT在设备端推理；部署优化通过模型量化（INT8）和剪枝减少模型体积和推理延迟；多语言支持通过多语言模型或语言检测后路由到对应语言模型；方言处理通过在方言数据上微调模型提升识别率；模型更新通过OTA下发新模型",
+      "scoring_rubric": "1. 端侧ASR方案选型和优化描述正确；2. 意图分类模型的部署方案描述正确；3. 多语言和方言的处理策略描述合理；4. 模型更新机制描述正确"
+    },
+    {
+      "id": "98-048",
+      "prompt": "你的App需要实现复杂的动画效果，包括共享元素转场、物理弹簧动画和手势驱动动画。请设计一个声明式的动画框架，说明如何实现动画的编排和序列化、如何通过物理引擎实现自然的弹簧和阻尼效果，以及如何保证动画在60fps下流畅运行。",
+      "sub_type": "declarative_animation_framework",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "声明式动画通过DSL描述动画目标属性和时序关系框架自动插值；共享元素转场通过记录起始和结束位置的视图属性实现平滑过渡；物理弹簧动画通过SpringForce模拟弹簧的刚度和阻尼参数实现自然效果；动画编排通过依赖图定义动画的并行和串行关系；性能保证通过硬件加速（RenderThread）、减少布局计算和避免过度绘制",
+      "scoring_rubric": "1. 声明式动画框架的架构设计合理；2. 共享元素转场的实现方案描述正确；3. 物理弹簧动画的参数设计描述正确；4. 60fps性能保证措施描述正确"
+    },
+    {
+      "id": "98-049",
+      "prompt": "你的App需要在弱网环境下保持良好的用户体验，请设计一个离线优先的数据同步方案。用户在离线时的操作需要在恢复网络后自动同步到服务端。请设计操作队列的存储和重放机制、冲突检测和合并策略，以及如何在离线状态下保护用户数据的安全。",
+      "sub_type": "offline_data_synchronization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "操作队列存储在SQLite中包含操作类型、目标对象和时间戳；恢复网络后按序重放操作到服务端；冲突检测通过版本向量或时间戳比较发现并发修改；合并策略可选最后写入胜出或三路合并；离线数据安全通过加密存储和生物识别访问控制；同步状态通过UI指示器告知用户数据是否已同步；需处理部分同步失败的重试和回滚",
+      "scoring_rubric": "1. 操作队列的存储和重放机制描述正确；2. 冲突检测和合并策略描述正确；3. 离线数据安全方案描述正确；4. 同步状态的用户反馈设计合理"
+    },
+    {
+      "id": "98-050",
+      "prompt": "请设计一个移动端的应用内搜索系统。搜索需要覆盖App内的本地内容（如聊天记录、收藏、浏览历史）和远程内容（如商品、文章）。请设计搜索索引的构建方案、搜索结果的排序算法，以及如何实现搜索建议和实时搜索功能。",
+      "sub_type": "in_app_search_system",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "本地搜索索引通过SQLite FTS5或Realm构建倒排索引支持全文搜索；远程搜索通过API调用后端搜索引擎；搜索结果排序综合相关性得分、时间衰减和用户偏好；搜索建议通过前缀匹配和热门搜索词实现；实时搜索通过防抖（300ms）触发搜索避免频繁请求；索引更新在数据变更时增量更新；搜索历史记录支持清除和隐私模式",
+      "scoring_rubric": "1. 本地搜索索引的构建方案描述正确；2. 搜索结果排序算法设计合理；3. 搜索建议和实时搜索实现描述正确；4. 索引更新机制描述正确"
+    }
+  ]
+}

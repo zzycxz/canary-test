@@ -1,0 +1,457 @@
+{
+  "capability": "creative_problem_solving",
+  "label": "创造性问题解决",
+  "total": 50,
+  "cases": [
+    {
+      "id": "41-001",
+      "prompt": "请用Python实现一个可重试的数据库事务装饰器：当事务因死锁或临时错误失败时自动重试，支持配置最大重试次数、退避策略和可重试异常类型白名单。",
+      "sub_type": "retryable_transaction_decorator",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现装饰器捕获数据库异常（如死锁、连接超时），判断是否在可重试白名单中，若是则回滚事务并按指数退避策略重试。应正确处理事务的begin/commit/rollback生命周期，确保重试前事务已完全回滚。应支持同步和异步两种模式。",
+      "scoring_rubric": "1. 正确实现事务的begin/commit/rollback生命周期管理；2. 仅重试白名单中的异常类型；3. 使用指数退避策略避免立即重试；4. 确保重试前事务已完全回滚，避免脏状态。"
+    },
+    {
+      "id": "41-002",
+      "prompt": "请用Python的typing模块实现一个类型安全的事件系统：定义事件类型（使用dataclass或TypedDict），事件处理器的类型签名必须与事件类型匹配，注册不匹配的处理器时在类型检查阶段（而非运行时报错）就能发现。",
+      "sub_type": "type_safe_event_system",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用泛型（Generic）和Protocol定义事件总线的类型约束，使subscribe方法的回调参数类型与事件类型关联。应使用TypeVar和overload实现类型推断，使mypy/pyright能在静态检查阶段发现类型不匹配。运行时也应有基本的类型校验作为兜底。",
+      "scoring_rubric": "1. 使用泛型和Protocol建立事件-处理器的类型关联；2. 静态类型检查器（mypy/pyright）能发现类型不匹配；3. 支持多种事件类型的注册和分发；4. 运行时也有基本的类型校验兜底。"
+    },
+    {
+      "id": "41-003",
+      "prompt": "请用Python实现一个线程安全的单例模式，支持惰性初始化，并且在反序列化（pickle.loads）和子类继承时也能保持单例特性。",
+      "sub_type": "robust_singleton",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用__new__方法配合锁（threading.Lock）实现线程安全的单例。应覆盖__reduce__或__copy__/__deepcopy__方法防止反序列化创建新实例。应通过元类或__init_subclass__控制子类行为，避免子类破坏单例约束。应支持惰性初始化（首次访问时才创建实例）。",
+      "scoring_rubric": "1. 使用__new__+Lock实现线程安全；2. 覆盖__reduce__防止pickle反序列化破坏单例；3. 控制子类继承行为；4. 实现惰性初始化（首次调用时创建）。"
+    },
+    {
+      "id": "41-004",
+      "prompt": "请用Python的__init_subclass__实现一个自动注册的策略模式：定义Strategy基类，所有子类自动注册到策略注册表中，支持按名称查找策略并执行。无需在子类中写任何注册代码。",
+      "sub_type": "auto_register_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用__init_subclass__钩子在子类定义时自动将其注册到类级别的字典中。应支持按类名或自定义名称查找策略。应处理抽象基类不注册、同名策略冲突、策略的execute方法统一接口等边界情况。应展示__init_subclass__相比元类的简洁性。",
+      "scoring_rubric": "1. 使用__init_subclass__实现零侵入自动注册；2. 支持按名称查找和执行策略；3. 处理抽象基类和同名冲突的边界情况；4. 策略接口统一（如execute方法）。"
+    },
+    {
+      "id": "41-005",
+      "prompt": "请用Python实现一个同时具有字典和列表特性的混合数据结构OrderedMap：支持按键访问（如d['key']）、按索引访问（如d[0]）、保持插入顺序、支持切片操作。",
+      "sub_type": "hybrid_dict_list",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现一个类，内部维护一个dict和一个list（或使用OrderedDict），通过__getitem__根据参数类型（str→按键、int/slice→按索引）分发访问逻辑。应支持__setitem__、__delitem__、__len__、__iter__、__contains__等标准接口。应正确处理删除元素后索引的维护。",
+      "scoring_rubric": "1. __getitem__根据参数类型分发按键/按索引访问；2. 保持插入顺序；3. 支持切片操作并返回正确的子集；4. 正确处理删除后索引的维护和边界情况。"
+    },
+    {
+      "id": "41-006",
+      "prompt": "请用Python的asyncio实现一个生产者-消费者模式：支持多个生产者并发生产、多个消费者并发消费、有界缓冲区（满时生产者阻塞、空时消费者阻塞）、以及优雅关闭（所有消息处理完后退出）。",
+      "sub_type": "async_producer_consumer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用asyncio.Queue实现有界缓冲区（maxsize），生产者使用await queue.put()（满时自动阻塞），消费者使用await queue.get()（空时自动阻塞）。应实现优雅关闭：使用哨兵值（None）或asyncio.Event通知消费者退出，确保所有消息处理完毕后才关闭。应使用asyncio.gather管理多个生产者和消费者任务。",
+      "scoring_rubric": "1. 使用asyncio.Queue实现有界缓冲区和阻塞语义；2. 支持多个并发生产者和消费者；3. 实现优雅关闭机制（哨兵值或Event）；4. 正确处理CancelledError和异常传播。"
+    },
+    {
+      "id": "41-007",
+      "prompt": "请用Python实现一个简单的属性测试（Property-Based Testing）框架：支持定义属性（如'对任意整数x，reverse(reverse(x)) == x'），自动生成随机测试数据进行验证，并在发现反例时缩小（shrink）到最小反例。",
+      "sub_type": "property_based_testing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现属性测试的核心组件：数据生成器（支持int、str、list等类型的随机生成和复合生成）、属性装饰器（将函数标记为属性测试）、测试执行器（多次运行并收集结果）、缩小器（发现反例后逐步简化输入到最小反例）。应参考Hypothesis库的设计思想。",
+      "scoring_rubric": "1. 实现多种类型的随机数据生成器；2. 支持属性的定义和多次执行验证；3. 实现反例缩小（shrinking）机制；4. 输出清晰的失败信息（最小反例+属性描述）。"
+    },
+    {
+      "id": "41-008",
+      "prompt": "请用Python实现一个链式查询构建器（Query Builder），支持链式调用where、orderBy、limit、select等方法，最终生成SQL语句。要求支持AND/OR条件组合和参数化查询（防SQL注入）。",
+      "sub_type": "chainable_query_builder",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现QueryBuilder类，每个方法返回self支持链式调用。where方法支持字段、运算符、值的三元组形式，支持and_where和or_where组合。最终build()方法生成参数化SQL（使用%s占位符）和参数列表。应支持JOIN、GROUP BY、HAVING等高级功能。",
+      "scoring_rubric": "1. 支持链式调用的流畅接口设计；2. 支持AND/OR条件的灵活组合；3. 生成参数化SQL（非字符串拼接）防止注入；4. 支持JOIN、GROUP BY、ORDER BY、LIMIT等SQL子句。"
+    },
+    {
+      "id": "41-009",
+      "prompt": "请用Python的abc模块实现一个接口强制检查机制：定义一个抽象基类，声明必须实现的方法，如果子类未实现所有抽象方法就实例化，应抛出清晰的错误信息列出缺失的方法。",
+      "sub_type": "abc_enforcement",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应使用abc.ABC和@abstractmethod装饰器定义抽象基类。Python原生已支持在实例化时检查抽象方法是否实现，但错误信息不够清晰。应增强错误处理，在实例化时自定义__init_subclass__或元类的__call__方法，输出缺失方法的完整列表和期望的方法签名。",
+      "scoring_rubric": "1. 使用abc.ABC和@abstractmethod定义接口；2. 子类未实现全部抽象方法时实例化报错；3. 错误信息清晰列出所有缺失的方法名；4. 给出期望的方法签名作为实现参考。"
+    },
+    {
+      "id": "41-010",
+      "prompt": "请用Python实现一个简单的依赖注入容器，支持通过类型注解自动解析依赖：定义injectable装饰器标记可注入类，容器根据__init__的类型注解自动创建和注入依赖实例。",
+      "sub_type": "type_annotation_di",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现DIContainer类，使用inspect.signature获取类的__init__参数类型注解，递归解析依赖链。应支持单例（register_singleton）和瞬态（register_transient）两种生命周期。应检测循环依赖并抛出清晰的错误。应使用injectable装饰器或register方法注册可注入类型。",
+      "scoring_rubric": "1. 通过类型注解自动解析依赖关系；2. 支持单例和瞬态两种生命周期；3. 检测并报告循环依赖；4. 使用inspect模块获取参数类型注解。"
+    },
+    {
+      "id": "41-011",
+      "prompt": "请用Python实现一个简单的编译器前端：支持词法分析（Tokenizer）和语法分析（Parser），能解析一个包含变量声明、赋值和算术表达式的简单语言，并生成AST（抽象语法树）。",
+      "sub_type": "compiler_frontend",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Token类型定义、词法分析器（正则匹配）、递归下降语法分析器。生成的AST应包含Program、VariableDeclaration、Assignment、BinaryExpression等节点类型。应处理运算符优先级和括号嵌套。",
+      "scoring_rubric": "1. 实现完整的词法分析器（支持标识符、数字、运算符）；2. 实现递归下降Parser生成AST；3. 正确处理运算符优先级和结合性；4. AST节点类型设计合理且可扩展。"
+    },
+    {
+      "id": "41-012",
+      "prompt": "请用Python实现一个简单的响应式编程库：支持创建Observable、订阅（subscribe）、变换操作（map、filter、merge）和自动传播变更。",
+      "sub_type": "reactive_programming_library",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Observable类（观察者模式的扩展），支持subscribe注册回调、map返回新的Observable、filter过滤、merge合并多个流。应支持链式调用和错误传播。应说明拉模型（Pull）和推模型（Push）的区别。",
+      "scoring_rubric": "1. 实现Observable的创建和订阅机制；2. 支持map/filter/merge等链式变换操作；3. 正确处理错误传播和完成信号；4. 支持取消订阅防止内存泄漏。"
+    },
+    {
+      "id": "41-013",
+      "prompt": "请用Python实现一个轻量级的依赖注入框架：支持构造函数注入、属性注入、作用域管理（singleton/transient/scoped），并通过类型注解自动解析依赖图。",
+      "sub_type": "lightweight_di_framework",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Container类，支持register注册类型映射、resolve解析实例、三种生命周期管理。使用inspect模块获取类型注解自动构造依赖链。应支持循环依赖检测、延迟加载、接口到实现的映射。",
+      "scoring_rubric": "1. 支持构造函数注入和属性注入；2. 实现singleton/transient/scoped三种作用域；3. 通过类型注解自动解析依赖图；4. 检测并报告循环依赖。"
+    },
+    {
+      "id": "41-014",
+      "prompt": "请用Python实现一个分布式唯一ID生成器：支持趋势递增、高可用、每秒生成10万个ID。要求ID中包含时间信息，且不同节点生成的ID不冲突。",
+      "sub_type": "distributed_id_generator",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Snowflake风格的ID生成器：时间戳（41bit）+机器ID（10bit）+序列号（12bit）。应处理时钟回拨问题（等待或使用扩展位）。应支持自定义epoch、机器ID分配策略。应分析ID的唯一性保证和性能。",
+      "scoring_rubric": "1. 实现Snowflake风格的位分配方案；2. 处理时钟回拨的异常情况；3. 支持自定义epoch和机器ID分配；4. 分析唯一性保证和每秒生成能力。"
+    },
+    {
+      "id": "41-015",
+      "prompt": "请用Python实现一个流式JSON解析器（Streaming JSON Parser）：可以逐token解析JSON数据，无需将整个JSON加载到内存中。支持解析超大JSON文件（>1GB）。",
+      "sub_type": "streaming_json_parser",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现基于状态机的JSON解析器，逐字符读取并识别token（字符串、数字、布尔、null、对象开始/结束、数组开始/结束）。应支持事件驱动模式（遇到key/value时回调）。应处理Unicode转义、嵌套深度限制等边界情况。",
+      "scoring_rubric": "1. 实现基于状态机的逐token解析；2. 内存占用恒定（不随JSON大小增长）；3. 支持事件驱动回调模式；4. 正确处理Unicode转义和嵌套深度限制。"
+    },
+    {
+      "id": "41-016",
+      "prompt": "请用Python实现一个数据流编排引擎：支持定义DAG（有向无环图）形式的任务依赖关系，自动并行执行无依赖的任务，支持任务失败重试和依赖跳过。",
+      "sub_type": "dag_workflow_engine",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现DAG的拓扑排序和并行调度。使用asyncio或线程池并行执行无依赖任务。支持任务失败时的重试策略（指数退避）、失败后跳过下游任务（skip_downstream）。应支持任务状态跟踪（pending/running/success/failed/skipped）。",
+      "scoring_rubric": "1. 实现DAG拓扑排序和并行调度；2. 支持任务失败重试和依赖跳过；3. 正确处理任务状态生命周期；4. 检测DAG中的环并报错。"
+    },
+    {
+      "id": "41-017",
+      "prompt": "请用Python实现一个支持热重载的插件系统：插件以独立Python文件存在，支持运行时加载、卸载和重新加载插件，无需重启主程序。",
+      "sub_type": "hot_reload_plugin_system",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用importlib动态加载模块，支持load/unload/reload操作。使用文件监控（watchdog）检测插件文件变更自动重载。应处理插件的生命周期钩子（on_load、on_unload）。应解决模块缓存和旧版本清理问题。",
+      "scoring_rubric": "1. 使用importlib实现动态模块加载和卸载；2. 支持文件监控自动检测变更；3. 实现插件生命周期钩子；4. 正确处理模块缓存和旧版本清理。"
+    },
+    {
+      "id": "41-018",
+      "prompt": "请用Python实现一个简单的ORM，支持模型定义（使用类和类型注解）、自动生成建表SQL、CRUD操作、关联查询（一对多、多对多）和数据迁移脚本生成。",
+      "sub_type": "mini_orm_with_migration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用元类和描述符定义Model基类，通过类型注解自动推断字段类型和约束。应支持ForeignKey关系定义和JOIN查询。应实现migration diff（对比模型定义和数据库实际schema生成ALTER语句）。",
+      "scoring_rubric": "1. 使用类型注解自动推断字段类型；2. 支持一对多和多对多关联查询；3. 实现数据迁移脚本自动生成；4. 支持查询构建器的链式调用。"
+    },
+    {
+      "id": "41-019",
+      "prompt": "请用Python实现一个在线算法评测器：接收用户提交的代码和测试用例，在隔离的沙箱环境中运行，检测超时、内存超限、错误输出和运行时异常，并返回评测结果。",
+      "sub_type": "online_judge_sandbox",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用subprocess在受限环境中运行用户代码（限制CPU时间、内存使用、禁止文件写入）。应支持多种语言（Python、C++、Java）。应实现结果对比（exact match和浮点误差容忍）。应处理各种异常输出（RE、TLE、MLE、OLE、CE）。",
+      "scoring_rubric": "1. 使用subprocess实现隔离执行环境；2. 支持CPU时间、内存、输出大小限制；3. 正确检测和分类各种异常（RE/TLE/MLE/CE）；4. 支持多种编程语言的评测。"
+    },
+    {
+      "id": "41-020",
+      "prompt": "请用Python实现一个API限流中间件：支持多种限流策略（固定窗口、滑动窗口、令牌桶、漏桶），支持按用户、按IP、按API路径分别限流，使用Redis实现分布式限流。",
+      "sub_type": "multi_strategy_rate_limiter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现四种限流算法的Redis版本（使用Lua脚本保证原子性）。支持多维度限流（用户+IP+路径的组合）。应支持限流配置热更新、限流响应自定义（HTTP 429 + Retry-After header）。应分析各算法的内存占用和精度差异。",
+      "scoring_rubric": "1. 实现四种限流算法的Redis Lua脚本；2. 支持多维度限流规则组合；3. 使用Lua脚本保证分布式原子性；4. 支持配置热更新和自定义响应。"
+    },
+    {
+      "id": "41-021",
+      "prompt": "请用Python实现一个分布式限流器的本地组件：每个服务节点维护本地计数器，定期向中心节点同步。需要设计同步协议保证全局计数的近似准确性，同时最小化网络开销。",
+      "sub_type": "distributed_rate_limiter_local_component",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现本地令牌桶+定期同步的混合方案。本地预分配令牌额度，通过心跳包向中心节点报告使用量并获取新额度。应处理网络分区时的降级策略（本地限额放行）。应分析同步频率、额度大小对准确性和网络开销的影响。",
+      "scoring_rubric": "1. 实现本地令牌桶和中心同步协议；2. 设计预分配额度机制减少网络往返；3. 处理网络分区时的降级策略；4. 分析同步频率与准确性的trade-off。"
+    },
+    {
+      "id": "41-022",
+      "prompt": "请用Python实现一个事件溯源（Event Sourcing）框架：支持定义事件类型、存储事件流、重建聚合状态、以及基于事件流生成快照以加速状态重建。",
+      "sub_type": "event_sourcing_framework",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现EventStore类存储事件流（append-only），Aggregate基类支持apply_event重建状态。应实现快照机制：每N个事件生成一次快照，重建时从最近快照+后续事件恢复。应支持事件版本管理和Schema Evolution。",
+      "scoring_rubric": "1. 实现事件存储和聚合状态重建；2. 支持快照机制加速重建；3. 处理事件版本管理和Schema Evolution；4. 支持事件流的并发写入和乐观锁。"
+    },
+    {
+      "id": "41-023",
+      "prompt": "请用Python实现一个配置热更新系统：配置存储在远端（模拟为文件），支持多个客户端监听变更，配置更新后1秒内推送到所有客户端。需要处理网络断开时的重连和配置版本冲突。",
+      "sub_type": "hot_config_push_system",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现配置中心和客户端SDK。配置中心维护配置版本号，通过长轮询或WebSocket推送变更。客户端维护本地缓存和版本号，断线重连时检查版本号拉取增量更新。应处理版本冲突（服务端版本为准）和配置回滚。",
+      "scoring_rubric": "1. 实现配置变更的实时推送机制；2. 处理断线重连时的增量同步；3. 支持配置版本管理和冲突解决；4. 实现配置回滚和变更历史查询。"
+    },
+    {
+      "id": "41-024",
+      "prompt": "请用Python实现一个链式调用的验证器框架：支持对数据进行多维度验证（类型、范围、格式、自定义规则），验证失败时收集所有错误而非遇到第一个就停止，支持嵌套对象的递归验证。",
+      "sub_type": "chainable_validator_framework",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现Validator基类，支持chain方法链式组合多个验证规则。应实现required、type_check、range_check、regex_check、custom_rule等内置验证器。验证过程收集所有错误到errors列表。应支持嵌套验证（对字典的某个字段递归应用验证器）。",
+      "scoring_rubric": "1. 支持链式调用的流畅API设计；2. 收集所有验证错误而非提前终止；3. 支持嵌套对象的递归验证；4. 提供清晰的错误信息（字段路径+错误类型+期望值）。"
+    },
+    {
+      "id": "41-025",
+      "prompt": "请用Python实现一个简单的协程池（Coroutine Pool）：限制同时运行的协程数量为N，支持任务提交、等待全部完成、取消所有任务。超出容量的提交自动排队等待。",
+      "sub_type": "coroutine_pool_limiter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用asyncio.Semaphore限制并发协程数，asyncio.Queue实现任务排队。应支持submit提交协程、wait_all等待所有任务完成、cancel_all取消所有任务。应正确处理CancelledError传播和异常收集（不因单个任务异常影响其他任务）。",
+      "scoring_rubric": "1. 使用Semaphore限制并发协程数；2. 支持任务提交、等待和取消操作；3. 正确处理CancelledError和异常传播；4. 超出容量的任务自动排队而非拒绝。"
+    },
+    {
+      "id": "41-026",
+      "prompt": "请用Python实现一个可扩展的日志框架：支持多个输出目标（控制台、文件、远程服务器），支持结构化日志（JSON格式），支持日志级别过滤和采样（如只记录10%的DEBUG日志）。",
+      "sub_type": "extensible_logging_framework",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现Logger类和Handler抽象基类，支持ConsoleHandler、FileHandler、RemoteHandler。应支持JSON格式化器输出结构化日志。应实现采样器（基于哈希的确定性采样，保证同一请求的日志要么全采要么全不采）。应支持Handler的组合和过滤器链。",
+      "scoring_rubric": "1. 实现可扩展的Handler架构；2. 支持JSON结构化日志输出；3. 实现基于哈希的确定性采样；4. 支持日志级别过滤和Handler组合。"
+    },
+    {
+      "id": "41-027",
+      "prompt": "请用Python实现一个简单的Actor模型框架：每个Actor拥有独立的状态和消息队列，通过消息传递进行通信，支持Actor的创建、消息发送、超时等待和监督策略（子Actor失败时的重启策略）。",
+      "sub_type": "actor_model_framework",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Actor基类（receive方法处理消息）、ActorRef（消息发送代理）、ActorSystem（管理Actor生命周期）。应支持OneForOne和AllForOne监督策略。应使用asyncio或线程实现Actor的并发执行。应处理消息的有序传递和Actor的优雅停止。",
+      "scoring_rubric": "1. 实现Actor、ActorRef和ActorSystem核心组件；2. 支持消息的异步传递和有序处理；3. 实现监督策略（重启/停止/恢复）；4. 处理Actor的生命周期管理和优雅停止。"
+    },
+    {
+      "id": "41-028",
+      "prompt": "请用Python实现一个数据校验和转换管道（ETL Pipeline）：支持从多种数据源读取、链式数据转换、数据校验、错误记录和统计。支持处理百万级数据时的内存效率。",
+      "sub_type": "etl_pipeline_framework",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Source（数据源抽象）、Transformer（转换步骤）、Sink（输出目标）三层架构。应使用生成器实现惰性处理，全程内存占用恒定。应支持错误记录（将失败记录写入死信队列而非中断整个管道）。应提供处理统计（成功数、失败数、处理速率）。",
+      "scoring_rubric": "1. 实现Source/Transformer/Sink三层架构；2. 使用生成器保证内存效率；3. 支持错误记录和死信队列；4. 提供实时的处理统计信息。"
+    },
+    {
+      "id": "41-029",
+      "prompt": "请用Python实现一个简单的时间序列数据库（TSDB）：支持高吞吐写入（按时间戳+标签+值）、基于时间范围和标签的查询、以及自动数据过期（TTL）。",
+      "sub_type": "mini_timeseries_database",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现内存型TSDB，使用有序数据结构（如跳表或排序数组）按时间戳存储。应支持标签索引（倒排索引）加速按标签查询。应实现批量写入接口优化吞吐。应支持TTL自动过期和数据压缩（如降采样旧数据）。",
+      "scoring_rubric": "1. 实现按时间戳有序存储和范围查询；2. 使用倒排索引加速标签查询；3. 支持批量写入优化吞吐；4. 实现TTL过期和数据降采样压缩。"
+    },
+    {
+      "id": "41-030",
+      "prompt": "请用Python实现一个可重入的读写锁（Reentrant ReadWriteLock）：同一线程可以多次获取读锁或写锁（可重入），支持写锁优先（防止写者饥饿），支持try_lock超时机制。",
+      "sub_type": "reentrant_read_write_lock",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用threading.Condition和计数器实现。读锁支持多线程并发持有，写锁独占。可重入需要记录每线程的重入次数。写锁优先：当有写者等待时，新读者应阻塞。应使用collections.defaultdict记录各线程的锁持有状态。应正确处理锁的释放顺序（必须由持有者释放）。",
+      "scoring_rubric": "1. 实现读锁并发、写锁独占的正确互斥语义；2. 支持同一线程的可重入获取和释放；3. 实现写锁优先防止饥饿；4. 支持try_lock超时机制。"
+    },
+    {
+      "id": "41-031",
+      "prompt": "请用Python实现一个极简的API限流器，只用一个函数和不超过15行代码实现令牌桶算法。函数签名：is_allowed(user_id: str, capacity: int, rate: float) -> bool",
+      "sub_type": "minimal_rate_limiter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用模块级字典存储每个用户的上次请求时间和剩余令牌数，通过时间差计算应补充的令牌数。应使用单个函数+模块级变量实现，代码紧凑但功能完整。应处理时间精度、令牌数上限和线程安全等边界情况。",
+      "scoring_rubric": "1. 使用模块级字典存储用户状态实现紧凑代码；2. 正确实现令牌桶的生成和消耗逻辑；3. 处理时间差计算和令牌上限；4. 代码行数不超过15行且功能完整。"
+    },
+    {
+      "id": "41-032",
+      "prompt": "请用Python实现一个装饰器，可以让任何函数支持自动重试。要求：重试次数可配置，支持指数退避，支持指定哪些异常触发重试，且装饰器本身不超过20行代码。",
+      "sub_type": "compact_retry_decorator",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现一个参数化装饰器，使用functools.wraps保留元信息，内部使用for循环+try/except实现重试逻辑。应支持exponential backoff（delay * 2^attempt），支持异常类型白名单过滤。应使用*args和**kwargs保证通用性。代码应紧凑优雅。",
+      "scoring_rubric": "1. 实现参数化装饰器支持重试次数和退避配置；2. 支持异常类型白名单过滤；3. 使用functools.wraps保留函数元信息；4. 代码紧凑且功能完整。"
+    },
+    {
+      "id": "41-033",
+      "prompt": "请用Python实现一个简单的链式调用配置构建器（Builder Pattern），支持如下用法：Config().set_host('localhost').set_port(8080).set_debug(True).build()。要求支持类型检查和必填字段验证。",
+      "sub_type": "fluent_config_builder",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现ConfigBuilder类，每个set方法返回self支持链式调用。build方法验证必填字段并返回不可变的Config对象。应支持类型检查（如port必须是int）和默认值。应使用dataclass或NamedTuple作为最终的Config类型。",
+      "scoring_rubric": "1. 实现流畅的链式调用API设计；2. 支持类型检查和必填字段验证；3. build返回不可变的配置对象；4. 支持默认值和自定义验证规则。"
+    },
+    {
+      "id": "41-034",
+      "prompt": "请用Python实现一个上下文管理器，可以临时修改某个对象的属性值，退出with块后自动恢复原始值。用法：with temp_setattr(obj, 'name', 'temp_value'): ...",
+      "sub_type": "temp_attribute_context_manager",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现temp_setattr上下文管理器，__enter__保存原始值并设置新值，__exit__恢复原始值。应处理属性不存在的情况（首次设置时应删除而非恢复）。应支持同时修改多个属性。应使用contextlib.contextmanager装饰器简化实现。",
+      "scoring_rubric": "1. 正确实现属性的临时修改和恢复；2. 处理属性不存在的边界情况；3. 支持同时修改多个属性；4. 使用contextmanager装饰器简化实现。"
+    },
+    {
+      "id": "41-035",
+      "prompt": "请用Python实现一个简单的进度条类ProgressBar，支持嵌套进度条、自定义样式、预估剩余时间显示，且在终端中实时刷新。要求不依赖任何第三方库。",
+      "sub_type": "terminal_progress_bar",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现ProgressBar类，使用sys.stdout.write和\\r实现同行刷新。支持update(n)方法更新进度、自动计算百分比和ETA、自定义宽度和样式（如[###---] 50% ETA: 2m30s）。应支持嵌套进度条（通过缩进区分层级）。应处理终端宽度检测和非TTY环境的降级。",
+      "scoring_rubric": "1. 使用\\r实现终端同行实时刷新；2. 支持百分比、ETA和自定义样式；3. 支持嵌套进度条和缩进区分；4. 处理非TTY环境的降级输出。"
+    },
+    {
+      "id": "41-036",
+      "prompt": "请用Python实现一个简单的函数执行超时装饰器，使用signal模块（Unix）或threading方案（跨平台）实现。如果函数执行超过指定时间，抛出TimeoutError异常。",
+      "sub_type": "function_timeout_decorator",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现两种方案：Unix下使用signal.alarm+SIGALRM（简单但仅支持Unix），跨平台使用threading+ctypes异步异常注入（复杂但跨平台）。应说明两种方案的限制：signal方案不能在多线程中使用，threading方案需要Python 3.9+的interrupt_main或ctypes。应处理装饰器对函数元信息的保留。",
+      "scoring_rubric": "1. 实现至少一种超时方案并说明限制；2. 正确处理超时后的异常抛出和资源清理；3. 保留被装饰函数的元信息；4. 说明signal和threading方案的适用场景差异。"
+    },
+    {
+      "id": "41-037",
+      "prompt": "请用Python实现一个内存高效的CSV大文件处理器，支持流式读取、列选择、行过滤和聚合操作，且全程内存占用恒定。用法示例：CSVStream('data.csv').select(['name','age']).filter(lambda r: r['age']>18).avg('age')",
+      "sub_type": "streaming_csv_processor",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现CSVStream类，使用生成器链实现惰性处理。select方法返回只包含指定列的新流，filter方法返回过滤后的新流，聚合方法（avg/sum/count）触发实际计算。应使用csv.DictReader逐行读取，全程内存占用为O(列数)而非O(行数)。应支持链式调用和延迟计算（lazy evaluation）。",
+      "scoring_rubric": "1. 使用生成器链实现惰性求值；2. 支持列选择、行过滤和聚合操作的链式调用；3. 全程内存占用恒定；4. 支持延迟计算（不调用终端操作不触发读取）。"
+    },
+    {
+      "id": "41-038",
+      "prompt": "请用Python实现一个简单的依赖注入容器，支持自动解析函数参数的类型注解来注入依赖。用法：container.register(Service)；result = container.resolve(handler_function)，handler_function的参数自动从容器中解析。",
+      "sub_type": "auto_resolve_di_container",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现DIContainer类，使用inspect.signature获取函数参数的类型注解，从容器中查找匹配的实例或工厂。应支持单例（register_singleton）和瞬态（register_transient）两种生命周期。应支持递归解析依赖链（A依赖B，B依赖C）。应检测循环依赖并抛出清晰的错误信息。",
+      "scoring_rubric": "1. 通过类型注解自动解析函数参数依赖；2. 支持单例和瞬态两种生命周期；3. 支持递归依赖链解析；4. 检测并报告循环依赖。"
+    },
+    {
+      "id": "41-039",
+      "prompt": "请用Python实现一个简单的事件溯源（Event Sourcing）框架：支持定义事件类型、存储事件序列、从事件流重建对象状态。用法：aggregate.apply(EventA(data))；state = aggregate.replay()",
+      "sub_type": "minimal_event_sourcing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Aggregate基类和EventStore。Aggregate维护事件列表，apply方法记录事件并更新内部状态。replay方法从事件流重建状态。应支持事件类型注册和多态处理（不同事件类型有不同的状态更新逻辑）。应支持快照机制避免每次从头重放所有事件。",
+      "scoring_rubric": "1. 实现事件记录和状态重建的核心机制；2. 支持事件类型的多态处理；3. 支持快照机制优化重建性能；4. 事件存储可扩展（内存/文件/数据库）。"
+    },
+    {
+      "id": "41-040",
+      "prompt": "请用Python实现一个简单的规则引擎，支持定义规则（条件+动作）、规则组合（AND/OR/NOT）和批量规则执行。用法：engine.add_rule(Rule(condition=lambda ctx: ctx['age']>18, action='allow'))；result = engine.evaluate(context)",
+      "sub_type": "simple_rule_engine",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Rule类（condition函数+action值）、规则组合类（AndRule/OrRule/NotRule）和RuleEngine类（管理规则列表、执行评估）。应支持规则优先级和短路评估（AND遇到False停止，OR遇到True停止）。应支持规则的链式组合和规则执行结果的收集。",
+      "scoring_rubric": "1. 实现Rule类和三种组合操作（AND/OR/NOT）；2. 支持规则优先级和短路评估；3. 支持规则的链式组合；4. 收集所有匹配规则的执行结果。"
+    },
+    {
+      "id": "41-041",
+      "prompt": "请用Python实现一个可取消的异步任务链（Cancellable Async Chain）：多个异步任务按顺序执行，支持在任意时刻取消整个链，已开始的任务需要优雅终止，未开始的任务不再执行。",
+      "sub_type": "cancellable_async_chain",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用asyncio.Task和asyncio.Event实现可取消的任务链。取消时应传播CancelledError给当前执行的任务，后续任务通过Event检查取消状态。应正确处理资源清理（如关闭连接、释放锁）。应支持await chain.cancel()等待当前任务优雅终止。",
+      "scoring_rubric": "1. 使用asyncio.Task和Event实现取消传播；2. 当前执行的任务能优雅终止并清理资源；3. 未开始的任务不再执行；4. 支持等待取消完成的异步接口。"
+    },
+    {
+      "id": "41-042",
+      "prompt": "请用Python实现一个基于描述符（Descriptor）的ORM字段系统：定义Field描述符类，支持IntegerField、StringField、DateTimeField等类型，在类定义时自动收集字段元信息，实例化时支持类型验证。",
+      "sub_type": "descriptor_based_orm_fields",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Field基类和__get__/__set__描述符协议。__set__时进行类型验证和约束检查（如max_length、nullable）。应使用__set_name__获取字段名。应通过元类的__new__或__init_subclass__在类定义时收集所有Field到_fields字典。应支持默认值和自定义验证器。",
+      "scoring_rubric": "1. 正确实现描述符协议（__get__/__set__/__set_name__）；2. 支持多种字段类型的类型验证；3. 在类定义时自动收集字段元信息；4. 支持默认值、约束和自定义验证器。"
+    },
+    {
+      "id": "41-043",
+      "prompt": "请用Python实现一个作用域感知的上下文管理器（Scoped Context Manager）：支持嵌套作用域，内层作用域可以访问外层作用域的变量，但修改只影响当前作用域（类似词法作用域）。",
+      "sub_type": "scoped_context_manager",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Scope类，使用链式字典（当前作用域查找变量时先查本地，未找到则向上层作用域查找）。赋值操作只影响当前作用域。应支持with scope:嵌套，退出时自动弹出当前作用域。应使用contextvars或自定义栈实现线程安全的作用域链。",
+      "scoring_rubric": "1. 实现链式字典的词法作用域查找；2. 赋值操作只影响当前作用域；3. 支持嵌套作用域的进入和退出；4. 实现线程安全的作用域管理。"
+    },
+    {
+      "id": "41-044",
+      "prompt": "请用Python实现一个可组合的中间件管道（Composable Middleware Pipeline）：支持将多个中间件函数组合为一个处理链，每个中间件可以决定是否继续执行后续中间件（类似Express.js的next()模式）。",
+      "sub_type": "composable_middleware_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现Middleware基类和Pipeline类。每个中间件的process方法接收request和next回调。Pipeline.compose将多个中间件组合为一个处理函数。应支持异步中间件。应支持条件中间件（根据请求类型决定是否执行）。应使用装饰器或类方式定义中间件。",
+      "scoring_rubric": "1. 实现中间件的链式调用（next模式）；2. 支持同步和异步中间件；3. 中间件可以决定是否继续执行后续链；4. 支持中间件的条件执行和组合。"
+    },
+    {
+      "id": "41-045",
+      "prompt": "请用Python实现一个内存高效的稀疏矩阵类（Sparse Matrix）：支持COO、CSR和CSC三种存储格式的相互转换，以及矩阵加法、乘法和转置操作。对比三种格式在不同操作下的性能差异。",
+      "sub_type": "sparse_matrix_multi_format",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现SparseMatrix类，内部可切换COO（坐标列表）、CSR（压缩稀疏行）、CSC（压缩稀疏列）三种存储。应实现format方法进行格式转换。矩阵乘法在CSR格式下最高效（行访问），转置在CSC格式下最高效（列访问）。应分析各格式在内存占用和操作复杂度上的trade-off。",
+      "scoring_rubric": "1. 正确实现COO/CSR/CSC三种存储格式；2. 支持格式间的高效转换；3. 实现矩阵加法、乘法和转置操作；4. 分析各格式在不同操作下的时间复杂度差异。"
+    },
+    {
+      "id": "41-046",
+      "prompt": "请用Python实现一个支持热重载的配置管理器：配置文件（YAML/JSON）变更时自动重新加载，支持配置项的类型验证、默认值、环境变量覆盖和配置变更回调通知。",
+      "sub_type": "hot_reload_config_manager",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用watchdog监控配置文件变更，变更时自动重新加载并验证。应支持配置项的类型注解验证（使用pydantic或自定义验证器）。应支持环境变量覆盖（CONFIG_KEY格式）。应支持注册变更回调函数。应处理文件格式错误时的降级（保留上一次有效配置）。",
+      "scoring_rubric": "1. 使用文件监控实现配置热重载；2. 支持类型验证和默认值机制；3. 支持环境变量覆盖和变更回调；4. 处理配置加载失败时的降级策略。"
+    },
+    {
+      "id": "41-047",
+      "prompt": "请用Python实现一个可暂停和恢复的数据处理管道（Pausable Pipeline）：支持在处理过程中暂停（处理完当前记录后暂停）、恢复和查询当前进度。处理状态持久化到文件，支持进程重启后继续。",
+      "sub_type": "pausable_resumable_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用asyncio.Event实现暂停/恢复控制。处理完每条记录后检查暂停标志。应将当前处理位置（offset/checkpoint）持久化到文件或数据库。恢复时从上次checkpoint继续。应支持查询当前进度（已处理数/总数、百分比、处理速率）。",
+      "scoring_rubric": "1. 使用Event实现处理过程中的暂停和恢复；2. 将处理进度持久化支持断点续传；3. 支持进度查询（数量、百分比、速率）；4. 正确处理暂停时的资源管理和信号处理。"
+    },
+    {
+      "id": "41-048",
+      "prompt": "请用Python实现一个基于原型的克隆系统（Prototype Cloning）：支持对象的深拷贝和浅拷贝，支持自定义克隆逻辑（如某些字段共享引用而非复制），支持克隆时的字段覆盖。",
+      "sub_type": "prototype_cloning_system",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应实现Prototype基类，提供clone方法支持深拷贝和浅拷贝模式。应支持通过__clone_hooks__字典定义字段级别的克隆策略（deep、shallow、share）。应支持clone(field_overrides)在克隆时覆盖特定字段。应使用copy模块的深拷贝机制并扩展其行为。",
+      "scoring_rubric": "1. 实现深拷贝和浅拷贝两种克隆模式；2. 支持字段级别的自定义克隆策略；3. 支持克隆时的字段覆盖；4. 正确处理循环引用和不可变对象。"
+    },
+    {
+      "id": "41-049",
+      "prompt": "请用Python实现一个简单的事务性文件写入器（Transactional File Writer）：支持将多个文件的写入操作组织为一个事务，要么全部成功，要么全部回滚（恢复到操作前的状态）。",
+      "sub_type": "transactional_file_writer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现事务性写入：写入前备份原文件内容到临时目录，记录操作日志（WAL），提交时删除备份，回滚时从备份恢复。应支持原子性（所有文件要么全写入要么全不写入）和持久性（写入后fsync）。应处理磁盘空间不足、权限错误等异常情况的回滚。",
+      "scoring_rubric": "1. 实现备份+日志的事务性写入机制；2. 支持提交和回滚操作；3. 正确处理异常情况下的回滚和资源清理；4. 使用fsync保证写入的持久性。"
+    },
+    {
+      "id": "41-050",
+      "prompt": "请用Python实现一个表达式求值引擎（Expression Evaluator）：支持数学表达式、变量绑定、函数调用和条件表达式（三元运算符），使用递归下降解析器实现，支持运算符优先级和结合性。",
+      "sub_type": "expression_evaluator_engine",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应实现词法分析器（支持数字、标识符、运算符、函数名）和递归下降语法分析器。应支持算术运算（加减乘除、幂）、比较运算、逻辑运算、三元条件运算。应支持变量绑定（let x = 5）和内置函数（sin、cos、max、min）。应正确处理运算符优先级（乘除>加减>比较>逻辑）和括号嵌套。",
+      "scoring_rubric": "1. 实现完整的词法和语法分析器；2. 正确处理运算符优先级和结合性；3. 支持变量绑定和函数调用；4. 支持条件表达式和括号嵌套。"
+    }
+  ]
+}

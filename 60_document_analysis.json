@@ -1,0 +1,565 @@
+{
+  "capability": "document_analysis",
+  "label": "文档分析能力",
+  "total": 55,
+  "cases": [
+    {
+      "prompt": "请提取这份合同中的关键条款，包括甲乙方信息、合同总金额、服务期限和违约条款。",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确提取合同中的指定条款，并以清晰格式列出。",
+      "scoring_rubric": "提取准确性、信息完整性、格式规范性。",
+      "id": "60-001"
+    },
+    {
+      "prompt": "从财务数据表中，提取2024年1月到6月的月度营收数据。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "table_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应从Excel表格中定位并提取指定月份的营收数据，正确识别表格结构。",
+      "scoring_rubric": "数据提取准确性、表格识别正确性。",
+      "id": "60-002"
+    },
+    {
+      "prompt": "请总结这份销售分析报告的主要发现和趋势。",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "report_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供报告的综合摘要，涵盖关键数据点和趋势分析。",
+      "scoring_rubric": "摘要全面性、重点突出、语言简洁。",
+      "id": "60-003"
+    },
+    {
+      "prompt": "分析财务数据中各季度的毛利率变化，并计算平均毛利率。同时，比较上半年和下半年的营收表现。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应执行计算任务，分析毛利率趋势和营收对比，并提供洞察。",
+      "scoring_rubric": "计算准确性、分析深度、逻辑推理能力。",
+      "id": "60-004"
+    },
+    {
+      "prompt": "解析员工绩效表中的表单字段，列出所有员工的姓名、绩效评分和部门。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "form_parsing",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别表单结构并提取指定字段的数据，以列表形式呈现。",
+      "scoring_rubric": "表单识别准确性、数据提取完整性。",
+      "id": "60-005"
+    },
+    {
+      "prompt": "识别会议纪要中提到的项目风险点和应对措施。",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "risk_identification",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应从会议纪要中提取所有风险点及其对应的应对措施。",
+      "scoring_rubric": "风险识别准确性、措施提取完整性。",
+      "id": "60-006"
+    },
+    {
+      "prompt": "从会议纪要中提取所有待办事项，包括负责人和截止日期。",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "action_item_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应提取行动项，并结构化输出任务、负责人和日期。",
+      "scoring_rubric": "提取完整性、结构化格式正确性。",
+      "id": "60-007"
+    },
+    {
+      "prompt": "这份合同的甲方和乙方分别是哪家公司？合同的总金额是多少？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应从合同中准确提取并返回甲乙双方的公司全称以及合同总金额（包括币种）。回复应清晰、直接。",
+      "scoring_rubric": "准确性：甲乙方名称、合同总金额是否完全正确；完整性：是否提供了要求的所有信息；格式：信息呈现是否清晰易读。",
+      "id": "60-008"
+    },
+    {
+      "prompt": "请提取财务汇总表中第二季度（4、5、6月）每个月的营收和成本数据。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "table_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应定位到财务汇总表，并准确提取指定月份（4月、5月、6月）的营收和成本数值，以清晰的格式（如列表或表格）返回。",
+      "scoring_rubric": "准确性：提取的数值是否正确无误；完整性：是否包含了4、5、6三个月的所有数据点；定位能力：是否正确识别并提取了目标表格。",
+      "id": "60-009"
+    },
+    {
+      "prompt": "请用不超过5句话概括这份2024年上半年销售分析报告的核心发现。",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "report_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应阅读整个报告，提炼出最重要的结论（如整体业绩、关键区域表现、增长趋势等），并用精炼、连贯的语言进行总结，控制在指定篇幅内。",
+      "scoring_rubric": "概括能力：是否抓住了报告最核心的信息；简洁性：是否控制在5句话内；准确性：总结内容是否与报告主旨一致。",
+      "id": "60-010"
+    },
+    {
+      "prompt": "根据财务数据，分析一下上半年（1-6月）毛利率的整体趋势，并计算第二季度的平均毛利率。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应首先从表格中提取1-6月的毛利率数据，描述其变化趋势（如上升、下降、波动），然后计算4、5、6三个月毛利率的平均值。",
+      "scoring_rubric": "数据分析：趋势描述是否基于数据且合理；计算准确性：平均值计算是否正确；逻辑性：分析和计算过程是否清晰可循。",
+      "id": "60-011"
+    },
+    {
+      "prompt": "这份服务合同中，有哪些条款对甲方（我方）可能构成较大的履约风险或不利影响？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "risk_identification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应深入理解合同条款，从责任划分、赔偿上限、终止条件、保密义务等方面，识别出可能对甲方不利或存在风险的条款，并简要说明原因。",
+      "scoring_rubric": "风险识别能力：是否能识别出真正有风险的条款（如单方解释权、无限责任、苛刻违约条件等）；解释深度：是否能简明扼要地说明风险点；全面性：是否遗漏重大风险条款。",
+      "id": "60-012"
+    },
+    {
+      "prompt": "解析销售报告PDF中关于‘华南区’业绩分析部分的表格，告诉我该区域各产品线的具体销售额和同比增长率。",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "table_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应在报告的多页多图表中，精准定位到专门分析‘华南区’业绩的表格部分，并从中提取每个产品线的销售额和同比增长率数据。",
+      "scoring_rubric": "定位能力：是否正确找到了‘华南区’的相关表格；数据提取：销售额和增长率数据是否准确完整；格式：提取结果是否清晰、有结构。",
+      "id": "60-013"
+    },
+    {
+      "prompt": "项目启动会议纪要中提到了哪些已经识别出的潜在风险？针对这些风险采取了什么措施？",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "risk_identification",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应通读会议纪要，找出明确列出的‘风险’或‘风险应对’相关段落，列出所有提到的风险点以及对应或计划采取的措施。",
+      "scoring_rubric": "提取完整性：是否列出了所有明确提及的风险和措施；对应关系：风险与措施是否匹配正确；信息保真：是否准确转述了原文意思。",
+      "id": "60-014"
+    },
+    {
+      "prompt": "请列出会议纪要中所有明确分配给‘张三’的待办事项（Action Items），以及相关的截止日期。",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "action_item_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应在会议纪要的‘待办事项’或相关部分中，筛选出负责人明确为‘张三’的所有任务，并提取对应的任务描述和截止日期（如有）。",
+      "scoring_rubric": "筛选准确性：是否只提取了负责人是‘张三’的事项；信息完整：任务描述和截止日期是否完整提取；格式：输出是否清晰列表化。",
+      "id": "60-015"
+    },
+    {
+      "prompt": "我想快速了解这份合同对服务期限、付款节奏和违约责任的约定。请分别总结。",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要综合理解合同中分布在不同条款（如‘服务期限’、‘付款条款’、‘违约与赔偿’章节）的信息，分别对这三个方面进行准确总结。",
+      "scoring_rubric": "信息整合：是否正确关联了分布在不同位置的信息；准确性：总结的三个方面的内容是否准确；清晰度：分点总结是否逻辑清晰。",
+      "id": "60-016"
+    },
+    {
+      "prompt": "分析财务数据表格，请指出第三季度（预计）毛利率相比第二季度可能出现的变化方向，并说明你的分析依据。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要基于1-6月的历史数据趋势、以及可能的季节性或业务逻辑（如果数据中有所体现），对第三季度的毛利率进行合理预测，并给出分析依据（如趋势外推、成本结构变化等）。",
+      "scoring_rubric": "分析逻辑：预测方向是否有合理的数据或逻辑支撑；依据充分：是否引用了具体的历史数据点或趋势进行论证；合理性：预测结论是否在合理范围内。",
+      "id": "60-017"
+    },
+    {
+      "prompt": "从财务汇总表中提取所有员工的姓名、所属部门以及他们的绩效评级（如A、B、C）。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "form_parsing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别出财务Excel文件中的‘员工绩效表’，并像解析表单一样，提取出每一条记录中的‘姓名’、‘部门’、‘绩效评级’这三个字段的信息，整理成结构化输出。",
+      "scoring_rubric": "表单识别：是否正确识别了员工绩效表；字段提取：三个指定字段的数据是否准确提取并对应正确；结构化：输出格式是否清晰（如JSON、表格）。",
+      "id": "60-018"
+    },
+    {
+      "prompt": "这份销售报告在‘总结与展望’章节提到了哪些关键的战略举措？在‘数据分析’章节，哪些区域的数据支持了这些举措的必要性？请关联说明。",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要先从报告的末尾‘总结与展望’章节提取出关键的战略举措，然后回溯到前面的‘数据分析’章节，找出具体区域的数据（如增长缓慢、成本过高等）作为这些举措的支撑论据，并将两者关联起来进行解释。",
+      "scoring_rubric": "信息关联：是否成功建立了前后章节信息之间的逻辑联系；论证支撑：引用的数据是否恰当支持了战略举措的必要性；综合理解：对报告整体逻辑的把握是否准确。",
+      "id": "60-019"
+    },
+    {
+      "prompt": "基于提供的所有文档，请综合分析一下，要确保‘客户系统升级项目’成功，合同条款（服务范围、时间）和会议纪要中提到的风险、待办事项之间有哪些需要特别协调或注意的关键点？",
+      "file_path": [
+        "docs/contract.pdf",
+        "docs/meeting_minutes.docx"
+      ],
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "这是一个跨文档分析任务。模型需要同时理解合同中约定的服务范围和时间要求，以及会议纪要中识别的风险和待办事项，找出两者之间可能存在的冲突、依赖或需要紧密配合的关键点（例如，合同截止日期与会议纪要中的里程碑是否匹配，合同要求的服务质量如何通过会议纪要中的措施来保障）。",
+      "scoring_rubric": "跨文档理解：是否能同时消化两份不同文档的核心信息；关键点提炼：是否找出了真正需要协调的核心矛盾或连接点；综合建议：提出的注意点是否具有可操作性。",
+      "id": "60-020"
+    },
+    {
+      "prompt": "合同的第X条（假设是‘保密条款’）和第Y条（假设是‘知识产权’）分别约定了什么？它们之间是否存在潜在的冲突或模糊之处？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要精读合同的特定条款（需要定位到保密和知识产权相关条款），分别准确总结其内容，然后进行对比分析，指出两者在信息归属、使用权等方面是否存在定义重叠、责任不清或潜在冲突的地方。",
+      "scoring_rubric": "条款理解：对两个条款的解释是否准确深入；分析能力：是否能从专业角度发现条款间潜在的模糊或冲突点；输出质量：分析结论是否清晰、有逻辑。",
+      "id": "60-021"
+    },
+    {
+      "prompt": "销售报告的结论部分建议‘加大华东区市场投入’。请从报告前文的数据分析中，找出至少三条支持这一建议的数据证据（如市场潜力、增长率、竞争状况等）。",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型需要先定位到报告结论部分的该建议，然后逆向追踪到报告前部的数据分析章节，寻找所有与“华东区”相关的积极数据（如高增长率、未饱和市场、相对较低的投入产出比等），作为支持该建议的证据。",
+      "scoring_rubric": "逆向论证能力：是否能从结论回溯并找到支撑数据；证据相关性：找到的数据证据是否与‘加大投入’的建议直接相关；证据充分性：是否找到了足够数量（至少三条）且有说服力的证据。",
+      "id": "60-022"
+    },
+    {
+      "prompt": "这份服务合同中的服务提供方和客户方的全称是什么？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能够准确识别并提取合同首页或首条款中的“甲方”与“乙方”全称。",
+      "scoring_rubric": "准确提取出合同双方全称。",
+      "id": "60-023"
+    },
+    {
+      "prompt": "请提取合同中关于服务总金额及付款方式的条款。",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能够定位到合同中的金额条款，提取总金额数字、币种，并说明付款分期、时间等关键信息。",
+      "scoring_rubric": "1. 金额提取准确。2. 付款方式描述完整（如分期比例、付款触发条件）。",
+      "id": "60-024"
+    },
+    {
+      "prompt": "合同的服务期限是从何时开始到何时结束？是否有续约条款？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "能准确提取合同的“生效日期”和“终止日期”。对于续约条款，需要理解条款逻辑，说明自动续约或需双方同意等条件。",
+      "scoring_rubric": "1. 起止日期准确。2. 清晰解释续约条件或流程。",
+      "id": "60-025"
+    },
+    {
+      "prompt": "这份合同中关于保密义务的规定具体要求是什么？违约方需要承担什么责任？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "能定位到保密条款章节，提取保密信息的范围、保密期限，以及违约后的赔偿责任（如违约金、赔偿范围等）。",
+      "scoring_rubric": "1. 保密范围描述正确。2. 保密期限提取准确。3. 违约责任描述完整。",
+      "id": "60-026"
+    },
+    {
+      "prompt": "分析一下这份合同主要存在哪些风险点或需要注意的潜在问题？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "risk_identification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "能基于合同文本进行风险推理，如：单方面终止条款是否过于苛刻、违约责任是否对等、交付标准是否模糊、知识产权归属是否明确等。",
+      "scoring_rubric": "1. 能识别出2-3个合理的风险点。2. 风险点需基于合同具体条款进行推断，而非泛泛而谈。",
+      "id": "60-027"
+    },
+    {
+      "prompt": "请从财务数据表中提取2024年1月至6月每个月的营业收入数据。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "table_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能准确识别表格中的“月份”和“营业收入”列，并按顺序列出1-6月的具体数值。",
+      "scoring_rubric": "提取的六个月数据完整、准确、无遗漏或错位。",
+      "id": "60-028"
+    },
+    {
+      "prompt": "财务表中，哪个月的毛利率最高？哪个月最低？最高月与最低月相差多少个百分点？",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "首先需要正确提取所有月份的毛利率，然后进行比较找出最高和最低值，并计算差值。",
+      "scoring_rubric": "1. 最高/最低月份判断正确。2. 毛利率数值提取准确。3. 差值计算正确。",
+      "id": "60-029"
+    },
+    {
+      "prompt": "对比上半年（1-3月）和下半年（4-6月）的总营业收入和总成本，哪个半年度的盈利能力更强？请说明理由。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "需要分组汇总两个时间段的营收和成本数据，可能还需计算总利润或平均毛利率来进行盈利能力比较，并给出逻辑清晰的结论。",
+      "scoring_rubric": "1. 分组汇总计算正确。2. 盈利能力判断有数据支撑（如利润、毛利率）。3. 分析过程逻辑清晰。",
+      "id": "60-030"
+    },
+    {
+      "prompt": "请提取员工绩效表中，绩效评级为‘A’的员工姓名和所属部门。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "table_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能识别“员工绩效表”，根据“绩效评级”列筛选出‘A’，并输出对应的“姓名”和“部门”。",
+      "scoring_rubric": "提取结果准确无误，人员和部门对应正确。",
+      "id": "60-031"
+    },
+    {
+      "prompt": "这份销售报告总结了哪些主要业绩亮点和存在问题？",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "report_summary",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能从报告的概述、总结或分析章节中，概括出核心的积极成果（亮点）和挑战/不足（问题）。",
+      "scoring_rubric": "摘要能覆盖主要的亮点和问题，提炼准确。",
+      "id": "60-032"
+    },
+    {
+      "prompt": "请对销售报告的‘区域表现分析’部分进行详细总结，说明各区域的增长情况和特点。",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "report_summary",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "需要定位到专门分析各区域销售数据的章节，综合文字描述和图表数据，分别总结不同区域的表现（如增长最快、表现平稳、有所下滑等）。",
+      "scoring_rubric": "1. 总结准确，涵盖报告中提到的所有主要区域。2. 对各区域特点描述与原文数据/图表相符。",
+      "id": "60-033"
+    },
+    {
+      "prompt": "根据报告中的区域数据，哪个区域的同比增长率最高？哪个最低？分析可能的原因。",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "能从报告中的表格或图表提取各区域的同比增长率，进行排序，并尝试结合报告文字（如市场策略、竞争环境）解释原因。",
+      "scoring_rubric": "1. 高低区域判断正确。2. 比率数据提取正确。3. 原因分析合理，基于报告内容。",
+      "id": "60-034"
+    },
+    {
+      "prompt": "这份会议纪要中提到了哪些项目主要的里程碑节点和时间安排？",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "action_item_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能从会议纪要中提取列出的项目里程碑（如需求评审、开发、测试、上线等）及其对应的时间点。",
+      "scoring_rubric": "提取的里程碑名称和日期完整、准确。",
+      "id": "60-035"
+    },
+    {
+      "prompt": "会议中识别出了哪些主要风险？针对每个风险采取了什么应对措施？",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "risk_identification",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "能定位到风险讨论部分，列出风险点，并将每个风险与其对应的缓解或应对措施正确关联起来。",
+      "scoring_rubric": "1. 风险点提取完整。2. 风险与措施一一对应正确。",
+      "id": "60-036"
+    },
+    {
+      "prompt": "请提取会议纪要中所有待办事项（Action Items），并注明负责人和截止日期。",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "action_item_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能系统性地扫描纪要，提取所有分配的任务，包括任务描述、明确的负责人和要求的完成日期。",
+      "scoring_rubric": "1. 待办事项无遗漏。2. 每个事项的负责人、截止日期信息准确完整。",
+      "id": "60-037"
+    },
+    {
+      "prompt": "这份财务数据表和销售报告都提到了上半年业绩，请综合两份文档，分析营收增长与销售策略之间的关系。",
+      "file_path": "docs/financial_data.xlsx",
+      "file_path_2": "docs/sales_report.pdf",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "需要跨文档理解。首先从财务表获取营收增长数据，再从销售报告中查找驱动增长的策略（如新产品、区域拓展、市场活动），然后建立关联进行分析。",
+      "scoring_rubric": "1. 准确引用两份文档的关键信息。2. 能合理推断策略与业绩之间的因果关系或关联性。",
+      "id": "60-038"
+    },
+    {
+      "prompt": "合同中的违约责任条款是如何规定的？与会议纪要中提到的项目风险应对措施相比，合同对风险的管控是否更严格？",
+      "file_path": "docs/contract.pdf",
+      "file_path_2": "docs/meeting_minutes.docx",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "需要同时理解合同条款和项目风险。先提取合同的违约条款（赔偿、罚则等），再结合会议纪要中的风险及措施，对比分析合同的法律约束力与项目内部管理措施的区别与严格程度。",
+      "scoring_rubric": "1. 合同违约条款提取正确。2. 项目风险措施提取正确。3. 对比分析有逻辑，结论合理。",
+      "id": "60-039"
+    },
+    {
+      "prompt": "请解析会议纪要中的组织架构部分，说明项目组的主要成员和他们的职责分工。",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "form_parsing",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能识别纪要中列出的项目组成员名单或职责表，提取每个角色/人员的职责描述。",
+      "scoring_rubric": "成员和职责的对应关系解析正确，无信息丢失。",
+      "id": "60-040"
+    },
+    {
+      "prompt": "从销售报告的图表中，提取第二季度（4-6月）每月的具体销售额数据。",
+      "file_path": "docs/sales_report.pdf",
+      "sub_type": "table_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "需要从报告中的柱状图、折线图或表格中，准确读取或推算4月、5月、6月的销售额数值。",
+      "scoring_rubric": "数值提取准确，单位正确。",
+      "id": "60-041"
+    },
+    {
+      "prompt": "综合销售报告的区域分析和财务数据的成本结构，分析哪个区域的销售利润率可能最高？为什么？",
+      "file_path": "docs/sales_report.pdf",
+      "file_path_2": "docs/financial_data.xlsx",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "这是一个综合性分析任务。需要从销售报告获取各区域的营收或销量占比，从财务数据获取整体毛利率或费用率信息，并可能需要做一些假设或推断（如认为各区域成本结构相似），来估算区域盈利能力。",
+      "scoring_rubric": "1. 正确整合两份文档的相关数据。2. 分析逻辑清晰，假设合理。3. 得出的结论有依据。",
+      "id": "60-042"
+    },
+    {
+      "prompt": "请列出合同中所有提到“不可抗力”相关条款的具体内容。",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "能精准定位“不可抗力”定义条款，并提取关于定义范围、通知义务、免责后果等所有相关细节。",
+      "scoring_rubric": "条款内容提取完整，关键点（如定义、通知、后果）无遗漏。",
+      "id": "60-043"
+    },
+    {
+      "prompt": "财务数据中的员工绩效表，不同绩效评级（S, A, B, C）的人数分布是怎样的？",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "table_extraction",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "需要遍历“绩效评级”列，对S、A、B、C各等级的出现次数进行计数。",
+      "scoring_rubric": "各等级的人数统计准确。",
+      "id": "60-044"
+    },
+    {
+      "prompt": "基于会议纪要，梳理出项目启动后的第一个关键决策是什么？由谁做出的？",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "需要通读会议流程记录，识别出会议中达成的第一个正式决定（如通过方案、确定预算），并找出决议人或主持人。",
+      "scoring_rubric": "1. 关键决策识别正确。2. 决策人/发起人判断合理。",
+      "id": "60-045"
+    },
+    {
+      "prompt": "这份合同的服务内容描述是否足够具体明确？请举例说明。",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "risk_identification",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "需要评估合同中“服务内容”或“工作范围”条款的清晰度，判断其是笼统的（如“提供技术支持”）还是详细的（如包含具体交付物清单、功能点），并引用原文作为论据。",
+      "scoring_rubric": "1. 评价有依据（引用原文）。2. 分析具体，能指出模糊或清晰之处。",
+      "id": "60-046"
+    },
+    {
+      "prompt": "请生成一份简短的会议纪要摘要，重点包括：会议目的、达成的核心共识、最重要的三个待办事项。",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "report_summary",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "能从会议纪要的开头部分或总结部分提取会议目的，并归纳出核心共识（如决议通过）和最重要的行动项（通常优先级高或截止早的）。",
+      "scoring_rubric": "摘要要素齐全（目的、共识、待办），重点突出，语言简洁。",
+      "id": "60-047"
+    },
+    {
+      "prompt": "分析销售报告中提到的“客户投诉率上升”这一问题，结合财务数据，评估其可能对公司利润产生的影响。",
+      "file_path": "docs/sales_report.pdf",
+      "file_path_2": "docs/financial_data.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "需要建立问题与财务结果的逻辑链。例如，投诉上升可能导致退款增加、处理成本上升、客户流失影响未来收入等，并尝试在财务数据中找到相关迹象（如某月成本激增、营收增速放缓）。",
+      "scoring_rubric": "1. 推理链条完整，从问题到影响分析合理。2. 能尝试在财务数据中寻找佐证。",
+      "id": "60-048"
+    },
+    {
+      "prompt": "合同中关于知识产权的归属是如何约定的？这对我们后续使用开发成果有什么影响？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "需要理解复杂的知识产权条款（如背景IP、前景IP、职务作品等），准确提取归属约定（甲方所有、双方共有等），并基于此分析对用户使用成果的限制或权利。",
+      "scoring_rubric": "1. 知识产权归属条款解读正确。2. 对使用影响的分析合理。",
+      "id": "60-049"
+    },
+    {
+      "prompt": "从财务数据的成本项中，找出“市场推广费”在哪些月份有异常波动？并结合销售报告推测可能的原因。",
+      "file_path": "docs/financial_data.xlsx",
+      "file_path_2": "docs/sales_report.pdf",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "首先在成本表中定位“市场推广费”行，发现波动月份。然后去销售报告中查找该月份附近是否有重大营销活动、产品发布或区域促销的描述，从而建立费用波动与业务动作的关联。",
+      "scoring_rubric": "1. 异常波动月份判断准确。2. 原因推测基于销售报告内容，合理可信。",
+      "id": "60-050"
+    },
+    {
+      "prompt": "会议纪要中提到的“遗留问题”有哪些？会议对它们做出了什么处理决定？",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "action_item_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "能识别出会议中专门讨论的“遗留问题”部分，并提取每个问题的描述以及会议上给出的决议（如“继续跟进”、“转给XX处理”、“本次会议不做决定”）。",
+      "scoring_rubric": "1. 遗留问题提取完整。2. 处理决定与问题对应准确。",
+      "id": "60-051"
+    },
+    {
+      "prompt": "请审查这份服务合同，总结并列出以下信息：1. 合同的甲乙方全称；2. 合同总金额及服务期限；3. 主要的付款节点与方式；4. 关键的违约责任或限制条款。",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能从合同文本中准确识别并提取出甲乙方名称、总金额、服务起止日期、分期付款或一次性支付等付款安排，以及关于违约、保密或责任限制的具体条款描述。",
+      "scoring_rubric": "1. 甲乙方信息准确无误；2. 金额与期限表述正确；3. 付款节点/方式描述完整；4. 违约/限制条款提取关键点正确；5. 总结条理清晰。",
+      "id": "60-052"
+    },
+    {
+      "prompt": "从财务数据表中，提取第二季度（4月、5月、6月）每个月的营收、成本和毛利率数据。计算第二季度的总营收，并计算其相比第一季度总营收的增长率。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "table_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要定位到月度营收/成本/毛利率表格，正确提取第二季度三个月的对应数值，并能进行跨季度的加总与增长率计算。",
+      "scoring_rubric": "1. 提取的单月数据准确无误；2. 第二季度总营收计算正确；3. 增长率计算公式与结果正确；4. 能正确关联不同季度的数据。",
+      "id": "60-053"
+    },
+    {
+      "prompt": "综合会议纪要内容，请提取出所有待办事项，包括具体内容、负责人和计划完成时间。同时，请说明文档中提到的主要风险及相应的应对措施。",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要通读整篇会议纪要，分别从“待办事项”和“风险措施”等不同章节中提取信息，并进行整合输出，不能遗漏或混淆。",
+      "scoring_rubric": "1. 待办事项列表完整，包含内容、负责人、时间三要素；2. 风险与措施对应准确；3. 输出结构清晰，区分两类信息；4. 没有从非相关部分提取无关信息。",
+      "id": "60-054"
+    },
+    {
+      "prompt": "请分析这份服务合同中，关于保密义务和责任限制的条款。评估这些条款可能对甲方（服务提供方）构成哪些潜在风险或不利影响？",
+      "file_path": "docs/contract.pdf",
+      "sub_type": "risk_identification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型不仅要提取出保密条款和责任限制条款的具体文本，还需要基于条款内容，进行逻辑推理和风险分析，指出可能对合同一方（甲方）产生的法律或商业风险。",
+      "scoring_rubric": "1. 准确提取相关法律条款；2. 分析指出的风险点具体且合理（如：责任上限过低导致赔偿不足，保密范围过宽增加履约成本）；3. 风险分析基于条款文本，而非泛泛而谈；4. 回答体现出对合同风险的基本理解。",
+      "id": "60-055"
+    }
+  ]
+}

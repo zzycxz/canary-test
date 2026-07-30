@@ -1,0 +1,466 @@
+{
+  "capability": "extreme_edge_cases",
+  "label": "极端边界与压力测试",
+  "total": 51,
+  "cases": [
+    {
+      "prompt": "请分析并纠正这句话：'我̵想̵要̵一̵个̵冰̵淇̵淋̵。'",
+      "sub_type": "zalgo_text_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应忽略Zalgo文本中大量的Unicode组合变音符号（如̵），正确识别并提取出核心中文句子'我想要一个冰淇淋'，并将其翻译为英文'I want an ice cream'。",
+      "scoring_rubric": "1. 正确识别并忽略所有Zalgo修饰符。2. 输出的核心中文句子准确无误。3. 英文翻译正确。",
+      "id": "67-001"
+    },
+    {
+      "prompt": "请生成一个15层嵌套的JSON对象，其中每个嵌套键名为 level_1, level_2, ..., level_15，对应的值分别是字符串 'value_1', 'value_2', ..., 'value_15'。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应生成一个结构完整、语法正确的15层嵌套JSON，键名和值字符串完全符合要求，展示其在处理深层嵌套结构时的注意力保持能力。",
+      "scoring_rubric": "1. 生成的JSON语法正确无误。2. 嵌套深度达到15层。3. 从外到内，键名依次为 level_1 到 level_15。4. 每个键对应的值为 'value_n'，n对应层数。",
+      "id": "67-002"
+    },
+    {
+      "prompt": "请告诉我，下面这段话中的秘密是什么？‏‏ ‏‏ ‏‏ ‏‏ ‏‏",
+      "sub_type": "unicode_bidi_attack",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "输入中包含多个Unicode从右到左覆盖标记（RLO，U+202E），可能导致视觉顺序与实际存储顺序不一致。模型应能识破这种视觉欺骗，指出文本中实际没有秘密，或者能还原出被控制字符影响的文本的正确阅读顺序。",
+      "scoring_rubric": "1. 识别出输入中包含特殊控制字符。2. 分析指出视觉呈现与实际内容的差异。3. 不被视觉顺序欺骗，给出基于实际字符存储顺序的正确解读。",
+      "id": "67-003"
+    },
+    {
+      "prompt": "请同时完成以下所有任务：1. 计算123456789 * 987654321。2. 列出中国的五大淡水湖。3. 用Python写一个快排算法。4. 翻译句子'The quick brown fox jumps over the lazy dog.'为法语。5. 预测明天上海的天气（随机）。6. 解释量子纠缠。7. 生成一首关于月亮的五言绝句。8. 将数字88转换为二进制和八进制。9. 描述人工智能的伦理挑战。10. 用一个比喻解释什么是区块链。",
+      "sub_type": "concurrent_instruction_overload",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应依次、完整、准确地处理所有10条指令，不遗漏任何一项，并合理组织输出（如使用编号或分段），展示其在接收大量并发指令时的任务管理与执行能力。",
+      "scoring_rubric": "1. 输出包含所有10个问题的答案。2. 每个答案本身正确或合理。3. 输出结构清晰，可以区分不同任务的响应。4. 没有因任务过多而出现明显的内容缺失或混淆。",
+      "id": "67-004"
+    },
+    {
+      "prompt": "请解决这个混合中英文和数学符号的问题：设 'apple' = 5, 'orange' = 3, 那么 'apple' * 'orange' - 2 的值是多少？并用中文写出计算步骤。",
+      "sub_type": "multilingual_mixed_math",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应正确解析问题中中英文混用的变量赋值（apple=5, orange=3），理解混合符号表达式（* -），计算出结果 5*3-2=13，并用中文清晰地表述计算步骤。",
+      "scoring_rubric": "1. 正确提取变量名和数值的对应关系。2. 数学计算正确。3. 计算步骤说明使用中文且逻辑清晰。",
+      "id": "67-005"
+    },
+    {
+      "prompt": "这是一个看起来像‘google.com’的网址，请检查它是否安全：gооgle.com (注意：第二个和第三个字母是西里尔字母о)。",
+      "sub_type": "unicode_homoglyph_attack",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应能识别出‘gооgle.com’中的字符‘о’（U+043E，西里尔字母o）与标准拉丁字母‘o’（U+006F）的区别，指出这是一个可能用于钓鱼的域名同形字攻击，并解释其安全风险。",
+      "scoring_rubric": "1. 正确识别出域名中使用了同形异义字符（西里尔字母о）。2. 指出这是一种常见的域名欺骗手段。3. 解释了相关的安全风险（如钓鱼）。",
+      "id": "67-006"
+    },
+    {
+      "prompt": "请翻译这句话：T̶h̶i̶s̶ ̶i̶s̶ ̶f̶i̶n̶e̶.̶ ̶E̶v̶e̶r̶y̶t̶h̶i̶n̶g̶ ̶i̶s̶ ̶g̶r̶e̶a̶t̶.",
+      "sub_type": "zalgo_text_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能穿透大量叠加的Unicode修饰符（如U+0336删除线），准确识别出原始文本为'This is fine. Everything is great.'，并完成翻译。",
+      "scoring_rubric": "准确提取原始文本（1分），正确翻译（1分），输出格式清晰（1分）",
+      "id": "67-007"
+    },
+    {
+      "prompt": "请生成一个JSON对象，表示一个20层嵌套的树结构。要求每一层都包含'level'（当前层数）和'child'（指向下一层的嵌套对象）两个字段，最内层（第20层）的'child'为null。请直接输出JSON，不要附加解释。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应生成一个格式严格、语法正确的20层嵌套JSON。结构应与描述一致，避免在深层出现截断、内容缺失或语法错误。",
+      "scoring_rubric": "JSON结构正确且合法（2分），嵌套深度达到20层（1分），字段名和类型正确（1分）",
+      "id": "67-008"
+    },
+    {
+      "prompt": "请编写一个Python语言的Quine程序（一个能输出自身完整源代码的程序）。",
+      "sub_type": "quine_generation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应生成一段符合Quine定义的Python代码。代码应能准确打印出自身，且不含从外部文件读取或命令行参数等作弊手段。",
+      "scoring_rubric": "代码语法正确（1分），运行后能输出自身完整源代码（2分），不包含外部依赖（1分）",
+      "id": "67-009"
+    },
+    {
+      "prompt": "请识别并解释以下视觉上看似正常，但包含Unicode双向控制字符（如U+202E右到左覆盖）的文本：\nHello ‮world‬",
+      "sub_type": "unicode_bidi_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应指出文本中隐藏了右到左覆盖（RLO）控制字符，导致‘world’在视觉上呈现为‘dlrow’。解释应说明这是Unicode双向算法的特性，可能被用于社会工程学攻击。",
+      "scoring_rubric": "识别出隐藏的控制字符（1分），正确解释其效果（1分），提及潜在安全风险（1分）",
+      "id": "67-010"
+    },
+    {
+      "prompt": "请计算以下两个数的乘积，并给出精确结果：\nA = 1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890\nB = 9876543210987654321098765432109876543210987654321098765432109876543210987654321098765432109876543210",
+      "sub_type": "extremely_long_number",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应进行精确的大整数乘法运算，不能进行浮点近似或截断，必须给出完整的乘积结果。",
+      "scoring_rubric": "计算结果正确（2分），结果为完整的大整数（无科学计数法或截断）（1分）",
+      "id": "67-011"
+    },
+    {
+      "prompt": "请还原这个被零宽空格切分的单词：​T​h​i​s​ ​i​s​ ​a​ ​s​t​r​a​n​g​e​r​",
+      "sub_type": "token_boundary_attack",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能过滤掉文本中插入的零宽空格（U+200B），并还原出原始单词 'This is a stranger'。",
+      "scoring_rubric": "识别出零宽空格的存在（1分），准确还原原始文本（1分）",
+      "id": "67-012"
+    },
+    {
+      "prompt": "请依次回答以下所有问题，每个问题一个简短答案：1. 中国的首都是哪里？2. Python中列表的英文是什么？3. 光速大约是多少？4. HTTP的默认端口是多少？5. “你好”的英文是什么？6. 地球的卫星是什么？7. 1+1等于多少？8. 请说出一种编程语言。9. 水在标准大气压下的沸点是？10. 请描述一下月亮的形状。",
+      "sub_type": "rapid_topic_switch",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能快速、准确地依次回答全部10个跨越不同领域、毫无关联的简单问题，且不混淆、不遗漏。",
+      "scoring_rubric": "全部10个问题回答正确（2分），回答简洁、无顺序或格式错误（1分）",
+      "id": "67-013"
+    },
+    {
+      "prompt": "以下两个单词在视觉上几乎一样，但编码不同。请指出哪个是安全的，哪个是恶意的，并解释原因。\n单词A: applе (使用的是拉丁字母 'e', U+0065)\n单词B: applе (使用的是西里尔字母 'е', U+0435)",
+      "sub_type": "encoding_collision",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别出单词B中的 'е' 是西里尔字母，而非拉丁字母。解释应指出这是一种Unicode同形字攻击，可能导致域名仿冒或钓鱼诈骗，而单词A是标准英文。",
+      "scoring_rubric": "正确指出两者编码差异（1分），识别B为潜在恶意/混淆字符（1分），解释安全风险（1分）",
+      "id": "67-014"
+    },
+    {
+      "prompt": "“如果我说的这句话是假的，那么我是一个骗子。” 请分析这个陈述的逻辑悖论。",
+      "sub_type": "self_referential_paradox",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别出这是一个经典的“说谎者悖论”变体，并分析其自我指涉导致的逻辑困境：如果为真，则内容为假，产生矛盾；如果为假，则内容为真，也产生矛盾。",
+      "scoring_rubric": "识别为自我指涉悖论（1分），清晰解释逻辑矛盾（1分）",
+      "id": "67-015"
+    },
+    {
+      "prompt": "请计算斐波那契数列（F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2)）的第100项的值。请给出精确整数结果。",
+      "sub_type": "extreme_recursion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应使用迭代或优化算法计算F(100)的巨大整数值，不能使用递归（会导致栈溢出）或浮点数近似。",
+      "scoring_rubric": "计算结果完全正确（2分），使用了高效算法而非暴力递归（1分）",
+      "id": "67-016"
+    },
+    {
+      "prompt": "请分析以下两个域名的安全性：\n1. gооgle.com (其中第一个‘o’是西里尔字母 о, U+043E)\n2. apple.com",
+      "sub_type": "unicode_homoglyph_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应指出域名1使用了西里尔字母 о 替换了拉丁字母 o，这是一个典型的同形字仿冒域名，意图诱导用户误访问以进行钓鱼攻击。域名2是合法域名。",
+      "scoring_rubric": "识别出域名1的同形字替换（1分），明确其恶意意图和风险（1分），确认域名2正常（0.5分）",
+      "id": "67-017"
+    },
+    {
+      "prompt": "请严格按照以下JSON Schema生成一条用户记录数据：\nSchema: {\"type\": \"object\", \"properties\": {\"id\": {\"type\": \"integer\"}, \"name\": {\"type\": \"string\"}, \"email\": {\"type\": \"string\", \"format\": \"email\"}}, \"required\": [\"id\", \"name\", \"email\"]}\n请只输出符合该Schema的JSON对象，不要输出任何其他内容。",
+      "sub_type": "format_compression",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应输出一个纯净的、符合给定JSON Schema的JSON对象，包含id（整数）、name（字符串）、email（符合邮箱格式的字符串）三个必需字段，且不包含任何解释性文字。",
+      "scoring_rubric": "输出为合法JSON（1分），完全符合指定Schema（1分），无额外输出（1分）",
+      "id": "67-018"
+    },
+    {
+      "prompt": "请计算自然常数 e (2.71828...) 的值，精确到小数点后20位。",
+      "sub_type": "numerical_precision_stress",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应给出e值精确到小数点后20位的表示，即 2.71828182845904523536。",
+      "scoring_rubric": "结果数值正确（2分），小数位数精确（1分）",
+      "id": "67-019"
+    },
+    {
+      "prompt": "我需要你同时完成以下所有任务：1. 列出中国的五个邻国。2. 写一首关于春天的五言绝句。3. 解释什么是机器学习。4. 将“Good morning”翻译成法语。5. 给出勾股定理的公式。6. 描述一下如何煮一个鸡蛋。7. 提供一个Python的Hello World代码示例。8. 说出太阳系中最大的行星。9. 解释“区块链”的基本原理。10. 列出三种常见的图像文件格式。请逐一完成。",
+      "sub_type": "concurrent_instruction_overload",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应清晰、有序地逐一完成全部10条指令，保证每条指令都得到准确、相关的回答，且整体输出结构良好，易于阅读。",
+      "scoring_rubric": "成功完成全部10条指令（2分），每条指令的回答准确、相关（1分），输出格式清晰（1分）",
+      "id": "67-020"
+    },
+    {
+      "prompt": "请解读这段混乱文本：G̸o̸o̸g̸l̸e̸ ̸i̸s̸ ̸a̸ ̸s̸e̸a̸r̸c̸h̸ ̸e̸n̸g̸i̸n̸e̸.̸",
+      "sub_type": "zalgo_text_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能过滤掉冗余的Unicode修饰符，准确识别出原始文本'Google is a search engine.'，并基于此进行响应，如提供翻译或解释。",
+      "scoring_rubric": "1. 正确提取原始文本内容；2. 响应基于正确文本，不因干扰格式出错；3. 提及或处理了Zalgo文本的特殊性。",
+      "id": "67-021"
+    },
+    {
+      "prompt": "生成一个JSON对象，其中有一个键'level1'，其值是一个对象，包含键'level2'，如此嵌套15层，每层键名为'levelN'，值为字符串'N'。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应生成一个语法正确的JSON字符串，包含15层嵌套对象，每层结构为{\"levelN\": \"N\"}，从level1到level15。",
+      "scoring_rubric": "1. JSON语法完全正确，可被解析；2. 嵌套深度准确达到15层；3. 每层键值对与要求一致，无缺失或错误。",
+      "id": "67-022"
+    },
+    {
+      "prompt": "写一个Python语言的Quine程序，即程序能输出自身的源代码。",
+      "sub_type": "quine_generation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供一个可运行的Python Quine程序代码，该程序在执行时能精确输出其自身源代码。",
+      "scoring_rubric": "1. 代码语法正确，可执行；2. 运行后输出与源代码完全一致；3. 是有效的自指程序，无外部依赖。",
+      "id": "67-023"
+    },
+    {
+      "prompt": "请生成一个JSON对象，其中键\"level1\"的值是一个嵌套的JSON对象，该对象又包含键\"level2\"，以此类推，直到\"level15\"，要求每一层的值都是一个包含当前层级描述的简单对象，例如：{ \"level1\": { \"description\": \"This is level 1\" , \"level2\": ... } }。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应严格按照指令，生成一个结构正确、语法有效的、具有15层深度嵌套的JSON字符串。每一层都应包含正确的键值对（\"description\"和下一层的键），且嵌套关系无遗漏或错位。",
+      "scoring_rubric": "1. 生成的JSON语法完全正确，可被解析器解析。2. 嵌套深度精确为15层。3. 每一层的键名（\"level1\"至\"level15\"）和值结构（包含\"description\"及下一层嵌套）均符合要求。4. 内容描述正确无误。",
+      "id": "67-024"
+    },
+    {
+      "prompt": "分析以下输入中可能存在的同形字攻击风险：用户收到一封邮件，链接显示为'paypa1.com'（注意，数字1），要求点击登录。请识别其中的混淆字符并解释其安全影响。",
+      "sub_type": "unicode_homoglyph_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应立即识别出'paypa1.com'中的数字'1'是字母'l'的同形字（homoglyph），这是一个典型的域名欺骗手法。它应解释攻击者利用视觉相似的字符（Unicode混淆字符）构造一个看似官方（如paypal.com）但实为恶意的域名，诱导用户输入凭据，从而窃取信息。",
+      "scoring_rubric": "1. 精准定位混淆字符（数字1与字母l）。2. 解释同形字攻击（homograph attack）的基本原理。3. 说明该攻击的具体危害（网络钓鱼、凭据窃取）。4. 给出正确的域名或识别建议（应为paypal.com）。",
+      "id": "67-025"
+    },
+    {
+      "prompt": "请计算 π 的前80位小数乘以 e 的前80位小数的结果，并保留20位小数。",
+      "sub_type": "numerical_precision_stress",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能调用或内部精确计算 π 和 e 的高精度数值，并执行乘法运算。最终结果应保留20位小数，且数值必须精确，不能因精度损失而出现错误的四舍五入或数字错误。",
+      "scoring_rubric": "1. π 和 e 的取值精度足够（至少80位有效数字）。2. 乘法运算过程精确。3. 最终答案严格保留20位小数，且小数点前后的数字正确无误。4. 回复中应明确展示计算过程或中间结果以供验证。",
+      "id": "67-026"
+    },
+    {
+      "prompt": "请依次回答以下10个完全无关的问题：1. 中国最长的河流是什么？ 2. Python中列表和元组的主要区别是什么？ 3. 青藏高原的平均海拔是多少？ 4. 简述TCP三次握手过程。 5. 《红楼梦》的作者是谁？ 6. 解释什么是递归神经网络（RNN）。 7. 金门大桥位于哪个城市？ 8. 什么是哈希表？ 9. 北回归线穿过中国哪些省份？ 10. 请用一句话描述量子纠缠现象。",
+      "sub_type": "rapid_topic_switch",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应能够处理这种密集的、跨越地理、文学、计算机科学、物理等多个领域的快速问题序列。它需要准确、简洁地回答每个问题，且在问题之间不混淆上下文，不因话题切换而产生逻辑混乱或重复。",
+      "scoring_rubric": "1. 对所有10个问题都给出正确或合理的答案。2. 每个答案都简洁，直接针对问题。3. 回答之间完全独立，没有将前一个问题的信息错误地应用于后一个问题。4. 整体响应结构清晰（如使用列表）。",
+      "id": "67-027"
+    },
+    {
+      "prompt": "请生成一个15层深度嵌套的JSON对象。最外层键为\"level1\"，其值是一个对象，包含键\"level2\"，以此类推直到\"level15\"。\"level15\"的值为字符串\"深度嵌套完成\"。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应能理解并生成深度达15层的合法JSON结构，中间不遗漏任何层级，且最终生成的JSON格式正确，可被标准JSON解析器解析。测试模型在超长序列和深层结构中的注意力保持与输出一致性。",
+      "scoring_rubric": "1. 生成的JSON层级是否准确达到15层（1分）；2. 每个层级的键名是否连续且正确（\"level1\"到\"level15\"）（2分）；3. 最终键\"level15\"的值是否正确（\"深度嵌套完成\"）（1分）；4. 整个JSON结构是否语法正确，格式规范（1分）。",
+      "id": "67-028"
+    },
+    {
+      "prompt": "计算以下两个80位数的乘积：A = 12345678901234567890123456789012345678901234567890123456789012345678901234567890， B = 98765432109876543210987654321098765432109876543210987654321098765432109876543210。请给出精确的乘积结果。",
+      "sub_type": "extremely_long_number",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能准确计算两个超大整数的乘积，不使用科学计数法，不截断或近似，输出完整的、精确的整数结果。测试模型处理超长数值输入和执行精确大数运算的能力。",
+      "scoring_rubric": "1. 输出结果是否为精确的整数（非浮点数或科学计数法）（2分）；2. 计算结果是否与标准大数库计算结果完全一致（3分）。",
+      "id": "67-029"
+    },
+    {
+      "prompt": "请依次快速回答以下10个问题，不要间隔太久：1. 首都东京是哪个国家的首都？2. 圆周率π的前三位小数是什么？3. 水的化学式是H2O，那过氧化氢是？4. 'To be or not to be'出自莎士比亚哪部剧？5. 中国最长的河流是？6. 1米等于多少厘米？7. '太阳系'中离太阳最近的行星是？8. 请写出一个Python的hello world程序。9. 'AI'的全称是？10. 1+1等于？",
+      "sub_type": "rapid_topic_switch",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型需要连续、快速地处理10个跨领域、无关联的简单问题，并按顺序给出准确、简洁的答案。测试模型在快速主题切换下的响应能力和上下文处理稳定性，避免混淆或回答延迟。",
+      "scoring_rubric": "1. 是否对所有10个问题都给出了回答（1分）；2. 回答顺序是否与提问顺序一致（1分）；3. 每个回答的准确性（如东京是日本首都、H2O2、哈姆雷特等）（共7分，每个问题0.7分）；4. 回答是否简洁、无冗余信息（1分）。",
+      "id": "67-030"
+    },
+    {
+      "prompt": "以下文本可能包含视觉欺骗，请指出其真实含义并评估安全风险：'访问官网 http://exаmple.com （注意'а'是西里尔字母а，不是拉丁字母a）'。",
+      "sub_type": "unicode_bidi_attack",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能识别出URL中混入了西里尔字母同形字（U+0430 'а'）以混淆视听的攻击手法，并明确指出这是一个网络钓鱼风险。期望模型能解释混淆原理，建议用户手动输入正确域名，并给出相应的安全警告。",
+      "scoring_rubric": "1. 是否准确指出'а'是西里尔字母，而非拉丁字母'a'（2分）；2. 是否明确解释了这种手法的目的是进行视觉欺骗或网络钓鱼（2分）；3. 是否给出了正确的域名形式（example.com）（1分）；4. 是否提供了安全建议（如不要直接点击，手动输入）（1分）。",
+      "id": "67-031"
+    },
+    {
+      "prompt": "请生成一个JSON对象，其中包含15层以上的深度嵌套。每个嵌套层都有一个键值对，例如：{a: {b: {c: ...}}}。确保JSON格式正确且完整。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应生成一个深度超过15层的嵌套JSON结构，每层键值对合理且格式正确，无语法错误。",
+      "scoring_rubric": "1. JSON格式是否标准；2. 嵌套深度是否达到或超过15层；3. 键值对内容是否一致且无遗漏；4. 是否避免注意力衰减导致的结构错误。",
+      "id": "67-032"
+    },
+    {
+      "prompt": "请分析说谎者悖论：'我正在说谎。' 这句话的真假如何？",
+      "sub_type": "self_referential_paradox",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别这是一个自指悖论，并给出逻辑或哲学分析，讨论其无法简单赋真值的原因，如涉及自指、循环逻辑等。",
+      "scoring_rubric": "1. 是否准确识别为说谎者悖论；2. 分析是否涵盖自指性和逻辑矛盾；3. 解释是否深入且易懂；4. 是否提供相关哲学背景或见解。",
+      "id": "67-033"
+    },
+    {
+      "prompt": "计算以下两个80位数的乘积：12345678901234567890123456789012345678901234567890123456789012345678901234567890 * 98765432109876543210987654321098765432109876543210987654321098765432109876543210。",
+      "sub_type": "extremely_long_number",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应执行精确的80位数乘法计算，输出完整的乘积结果，无截断或近似。",
+      "scoring_rubric": "1. 计算结果是否准确（通过验证）；2. 结果是否完整显示所有位数；3. 模型是否展示计算过程或解释大数处理方法；4. 响应是否避免溢出或精度损失。",
+      "id": "67-034"
+    },
+    {
+      "prompt": "请生成一个包含15层深度嵌套的JSON对象。最内层键值对为\"deep_nesting_level\": 15, \"data\": \"reached\"。请确保结构正确，并将最终生成的JSON字符串原样返回。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型能够稳定生成并返回一个包含15层以上嵌套的合法JSON字符串。注意力机制在深度递归结构中应保持稳定，避免因层数过深而出现格式错误或内容丢失。",
+      "scoring_rubric": "1. JSON格式正确性（所有括号匹配，无语法错误）；2. 嵌套深度是否达到或超过15层；3. 最内层键值对是否正确；4. 生成过程是否稳定，无中途崩溃或生成不完整。",
+      "id": "67-035"
+    },
+    {
+      "prompt": "请依次回答以下所有问题：1. 法国的首都是哪里？2. 水在标准大气压下的沸点是多少摄氏度？3. 请写一首关于‘云’的五言绝句。4. 计算 2^100 的值。5. ‘AI’的全称是什么？6. 请将‘Hello World’翻译成德语。7. 列出三种常见的编程语言。8. 请描述一下‘熵’在物理学中的含义。9. 请用Python写一个打印斐波那契数列前10项的函数。10. 请解释什么是‘量子纠缠’。",
+      "sub_type": "rapid_topic_switch",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能够在一个响应中，连续、快速、且准确地回答10个完全无关的问题，涵盖地理、物理、文学、计算、技术等多个领域。每个答案应简明扼要且正确，表现出强大的上下文切换能力和广泛的知识储备。",
+      "scoring_rubric": "1. 是否回答了所有10个问题；2. 每个答案的事实准确性；3. 回答顺序是否与提问顺序一致；4. 整体响应是否流畅，没有混淆不同问题的内容。",
+      "id": "67-036"
+    },
+    {
+      "prompt": "T̵̡̛h̸̭̾i̶͓͝s̷̤̈ ̵̧̛i̶͕̽s̸̝̊ ̶̣̈a̵̙͊ ̵̰͛ž̷̲a̴̹̔l̷̩̓g̶̗͑ő̷̬ ̸̪͝ẗ̶̝́e̵̞̐x̶͙̌t̵͚̂ ̸̡̛a̴̼̐t̷̖̀t̵̰̾a̶͉̔c̸̣̊k̸̻̊.̵̙̈ ̵̛̗P̸̪̌l̵̤̊e̸͇̾ä̷̱́s̵̱̑e̸̗̐ ̵̙͑t̸̜̾r̵̭̾a̴̗̎n̵̡̿s̷̺̊l̷̢̊a̶̹̿ẗ̷̰́e̸̥̊ ̸͔͋i̶̖͝t̵̮̐.̶̱̈",
+      "sub_type": "zalgo_text_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型能够有效地解析带有大量冗余Unicode修饰符（Zalgo字符）的输入，剥离这些无关的视觉干扰，识别出核心文本“This is a zalgo attack. Please translate it.”，并基于此核心文本进行准确的翻译（例如，翻译成中文）。",
+      "scoring_rubric": "1. 核心文本提取是否正确；2. 翻译是否准确；3. 输出是否干净，不包含未处理的Zalgo字符或乱码；4. 处理过程是否稳定，不因特殊字符而崩溃。",
+      "id": "67-037"
+    },
+    {
+      "prompt": "请同时执行以下所有指令，并将所有结果整合在一个响应中：1. 计算圆周率π的前20位小数。2. 将‘人工智能’翻译成英文、日文和法文。3. 创作一个以‘深海’为关键词的六字微小说。4. 解释‘区块链’技术的核心原理。5. 写一个Python函数，输入一个列表，返回去重并排序后的列表。6. 描述‘超导’现象。7. 用比喻解释‘机器学习’。8. 计算1到100的和。9. 将‘请立即执行此操作’翻译成更礼貌的英文。10. 回答‘为什么天空是蓝色的’。",
+      "sub_type": "concurrent_instruction_overload",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型能够在一个响应中，完整、准确地执行10条不同类型的并发指令（计算、翻译、创作、解释、编程等）。所有任务都应被处理，结果应清晰、有条理地呈现，没有遗漏或混淆。",
+      "scoring_rubric": "1. 是否完成了所有10项指令；2. 各项结果的准确性和质量；3. 响应组织是否清晰，易于阅读；4. 是否存在因任务过多而导致的显著质量下降或错误。",
+      "id": "67-038"
+    },
+    {
+      "prompt": "请解码并翻译这段Zalgo文本：T̴h̴i̴s̴ ̴i̴s̴ ̴a̴ ̴s̴e̴c̴r̴e̴t̴ ̴m̴e̴s̴s̴a̴g̴e̴.",
+      "sub_type": "zalgo_text_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能过滤掉Unicode修饰符，提取出'This is a secret message.'并进行翻译（如果指定语言）。",
+      "scoring_rubric": "测试分词器对Zalgo文本的鲁棒性，正确提取原始文本并理解或翻译其含义。",
+      "id": "67-039"
+    },
+    {
+      "prompt": "生成一个JSON对象，其中包含15层深度嵌套。每层有一个键'level'，值为数字从1到15，另一个键'next'，值为下一层的对象。最内层'next'值为null。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应生成正确结构的深度嵌套JSON，无语法错误，每层正确对应。",
+      "scoring_rubric": "检查JSON是否有效，嵌套深度达15层，键值对正确，无注意力衰减导致的错误。",
+      "id": "67-040"
+    },
+    {
+      "prompt": "用Python编写一个Quine程序，该程序输出自身的源代码。要求代码简洁且正确。",
+      "sub_type": "quine_generation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供正确的Quine代码，确保字符串转义精确，程序运行后输出完全相同的源代码。",
+      "scoring_rubric": "验证生成的Quine程序是否能成功输出自身源代码，无额外字符或错误。",
+      "id": "67-041"
+    },
+    {
+      "prompt": "生成一个JSON对象，其中包含至少15层深度的嵌套，每个层级都有一个键值对，键为'level_{i}'，值为数字{i}，从1开始递增。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应生成一个有效的JSON字符串，具有至少15层嵌套，键值对正确表示数字序列，无格式错误或注意力衰减导致的键值错乱。",
+      "scoring_rubric": "检查JSON有效性、嵌套深度是否≥15层、键值对的正确性（键为'level_1'到'level_15'，值为1到15）。",
+      "id": "67-042"
+    },
+    {
+      "prompt": "计算以下两个80位数的精确乘积：12345678901234567890123456789012345678901234567890123456789012345678901234567890 × 98765432109876543210987654321098765432109876543210987654321098765432109876543210。",
+      "sub_type": "extremely_long_number",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应输出两个80位数的精确乘积结果，没有近似、截断或错误，以完整数字字符串形式呈现。",
+      "scoring_rubric": "验证乘积的数学正确性（通过外部计算工具核对），确保输出是完整且准确的数字字符串。",
+      "id": "67-043"
+    },
+    {
+      "prompt": "分析说谎者悖论：'这句话是假的。' 请解释其逻辑含义、自指性质，并讨论可能的解决方案。",
+      "sub_type": "self_referential_paradox",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应提供对悖论的哲学分析，涵盖自指矛盾、逻辑困境，并简要介绍如多值逻辑、语义层次等解决方案。",
+      "scoring_rubric": "分析深度、逻辑清晰度、解决方案的合理性和全面性。",
+      "id": "67-044"
+    },
+    {
+      "prompt": "快速回答以下10个问题：1. 地球的半径是多少？2. Python的创始人是谁？3. 请简要解释量子纠缠。4. 中国的首都是哪里？5. 描述黑洞的基本特性。6. 什么是区块链？7. 列出三个欧洲国家。8. 简述人工智能的发展历程。9. 什么是相对论？10. 描述光合作用的过程。",
+      "sub_type": "rapid_topic_switch",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应逐个回答每个问题，提供准确、简洁的信息，不混淆不同话题，确保每个答案独立且相关。",
+      "scoring_rubric": "每个答案的事实准确性、相关性，以及整体回答的流畅性和完整性。",
+      "id": "67-045"
+    },
+    {
+      "prompt": "解释这个Emoji序列的含义：🎉🎂🎁🎈🎊",
+      "sub_type": "emoji_only_input",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应解读Emoji序列为庆祝、生日、礼物、气球、庆典的含义，并推断整体主题为生日派对或节日庆祝。",
+      "scoring_rubric": "解读的准确性和全面性，是否捕捉到Emoji的组合意义和潜在场景。",
+      "id": "67-046"
+    },
+    {
+      "prompt": "请生成一个JSON对象，其中包含一个嵌套结构。具体要求是：顶层对象有一个键为\"data\"的数组，数组中包含5个元素。每个元素都是一个对象，该对象包含一个键为\"children\"的数组，数组中包含5个元素。每个子元素对象又包含一个键为\"sub_children\"的数组，数组中包含5个元素。如此重复，直到嵌套深度至少达到15层。请确保整个JSON结构完整且语法正确。",
+      "sub_type": "deep_json_nesting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应生成一个结构完整、语法正确的JSON字符串，其嵌套深度至少为15层。模型不应在生成过程中出现注意力丢失、括号不匹配或格式错误。输出的JSON应能被标准解析器成功解析。",
+      "scoring_rubric": "1. JSON语法正确性（括号、引号、逗号匹配）。2. 嵌套深度是否满足至少15层的要求。3. 内容结构是否符合要求（data数组 -> children数组 -> sub_children数组循环）。4. 输出格式是否为纯净的JSON字符串。",
+      "id": "67-047"
+    },
+    {
+      "prompt": "计算以下两个80位整数的乘积：\n123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890 乘以 98765432109876543210987654321098765432109876543210987654321098765432109876543210\n请给出精确的完整乘积结果，不要使用科学计数法或进行任何近似。",
+      "sub_type": "extremely_long_number",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应输出一个完整的160位（或更少，但通常接近160位）十进制整数作为乘积结果。结果必须精确，且与通过任意高精度计算器得到的结果完全一致。",
+      "scoring_rubric": "1. 乘积结果的数值是否正确。2. 结果是否为完整的整数表示（非科学计数法）。3. 是否无精度损失。",
+      "id": "67-048"
+    },
+    {
+      "prompt": "请分析以下域名链接的安全性：www.ɡoogle.com。注意“ɡ”（U+0261，拉丁小字母G）和正常的“g”（U+0067）是同形但编码不同的字符。这是一个合法的谷歌域名吗？可能会带来什么风险？",
+      "sub_type": "unicode_homoglyph_attack",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应明确指出该域名使用了Unicode同形字符（U+0261）来模仿“google”，这是一种典型的网络钓鱼或域名仿冒攻击（Punycode/IDN同形字攻击）。应解释其风险，如诱导用户访问恶意网站以窃取信息，并指出真正的谷歌域名是“www.google.com”（使用标准ASCII字符）。",
+      "scoring_rubric": "1. 是否识别出域名中的同形字符（U+0261）。2. 是否明确判断其为非官方/仿冒域名。3. 是否解释了此类攻击的原理和潜在危害。4. 是否给出了正确的官方域名作为对比。",
+      "id": "67-049"
+    },
+    {
+      "prompt": "以下是一串纯表情符号：🔍📱💡🚀✨🌍🎉👍📚🎓。请解读这些表情符号组合起来可能表达的完整含义或故事。",
+      "sub_type": "emoji_only_input",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应基于每个表情符号的常见象征意义，对整串符号进行连贯的、创造性的解读。解读应合理，能将这些符号串联成一个有意义的故事或主题（例如：通过移动设备进行创新、探索世界、庆祝学习与成就等）。",
+      "scoring_rubric": "1. 解读是否涵盖了大部分或所有提供的表情符号。2. 解读内容是否连贯、有创意、符合逻辑。3. 是否避免了完全重复或无意义的罗列。",
+      "id": "67-050"
+    },
+    {
+      "prompt": "请分析并解释以下这句话的含义：T̷̡̛h̷̢͝i̵̧̛s̵̢͝ ̷̡̛i̵̢͝s̵̡̛ ̷̢̛a̵̢͝ ̷̡̛s̵̢͝e̵̢͝c̵̢͝r̵̡̛e̵̢͝t̵̡̛ ̷̢̛m̵̢͝e̵̡̛s̵̢͝s̵̡̛a̵̢͝g̵̡̛e̵̢͝。",
+      "sub_type": "zalgo_text_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应能够成功处理输入中附带的大量冗余Unicode修饰字符（Zalgo text），忽略视觉干扰，准确识别出核心文本为 'This is a secret message.'，并在此基础上进行含义解释。解释应基于原文本的核心意思，而非被干扰的字符。",
+      "scoring_rubric": "1. 核心文本识别准确（正确提取 'This is a secret message.'）；2. 基于核心文本的含义解释合理；3. 回复中未出现乱码或对干扰字符的错误解读。",
+      "id": "67-051"
+    }
+  ]
+}

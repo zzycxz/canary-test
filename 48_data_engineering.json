@@ -1,0 +1,457 @@
+{
+  "capability": "data_engineering",
+  "label": "数据工程能力",
+  "total": 50,
+  "cases": [
+    {
+      "id": "48-001",
+      "prompt": "设计一个流批一体架构，将现有的独立Flink流处理作业和Spark批处理作业统一到同一套计算框架下，支持同一份代码同时运行在流和批两种模式，共享状态和调度。",
+      "sub_type": "stream_batch_unification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于Flink的流批统一架构，统一的DataStream/Table API编程模型，流批共享的Checkpoint和状态后端，统一的调度编排平台，数据一致性保障（流产出与批产出可对账），渐进式迁移策略。",
+      "scoring_rubric": "1. 正确描述流批统一的计算架构（如Flink DataStream/Table API）并给出具体的编程模型选型依据；2. 明确说明Checkpoint和状态后端在流模式和批模式下的配置差异及兼容方案；3. 设计分阶段的迁移计划，至少包含3个迁移阶段和每阶段的回滚策略；4. 提出具体的流批数据一致性对账方法（如行数对比/校验和比对），并说明对账频率和差异处理机制。"
+    },
+    {
+      "id": "48-002",
+      "prompt": "设计一个数据血缘可视化方案，将复杂的上下游依赖关系以交互式图谱形式展示，支持从任意节点出发的正向/反向血缘追踪，高亮关键路径和影响范围。",
+      "sub_type": "data_lineage_visualization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于图数据库的血缘存储，前端交互式图谱渲染（D3.js/Cytoscape），节点聚合（表级/列级/作业级）切换，关键路径高亮和影响范围圈选，血缘变更历史对比，搜索和过滤功能。",
+      "scoring_rubric": "1. 准确设计血缘数据的存储模型（图数据库Schema），明确表级、列级、作业级至少3种粒度的节点和边定义；2. 实现可交互的图谱渲染方案，说明正向和反向追踪的具体查询算法（如BFS/DFS遍历深度限制）；3. 给出关键路径高亮的判定规则（如最长依赖链/最低SLA路径）和影响范围的计算方法；4. 设计搜索功能的具体实现方案（全文检索+标签过滤）和历史版本对比的Diff展示逻辑。"
+    },
+    {
+      "id": "48-003",
+      "prompt": "设计一个自动化数据探查（Profiling）系统，对新接入的数据源自动执行字段类型推断、空值率统计、值分布分析、异常值检测、基数统计，生成结构化探查报告。",
+      "sub_type": "automated_profiling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计可配置的探查任务框架，支持增量探查（仅扫描新增分区），探查指标包括类型推断/空值率/值分布/基数/异常值/统计量，探查结果结构化存储并生成可视化报告，支持与数据目录集成自动更新元数据。",
+      "scoring_rubric": "1. 给出探查任务框架的具体配置项（数据源类型、采样比例、并行度、触发条件）；2. 列出至少5种探查指标（类型推断、空值率、值分布直方图、基数、异常值检测）的计算公式或算法；3. 设计结构化报告的字段定义（JSON/表格格式）和数据目录集成的API接口规范。"
+    },
+    {
+      "id": "48-004",
+      "prompt": "设计一个数据异常检测系统，实时监控核心业务指标（GMV/订单量/转化率），当指标出现突增突降、趋势偏离、周期性异常时自动识别并归因。要求误报率<5%。",
+      "sub_type": "data_anomaly_detection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计多算法异常检测（Z-Score/3-Sigma/孤立森林/Prophet时序分解），动态阈值自适应调整，多维下钻归因（按渠道/地区/商品类目），误报反馈闭环优化阈值，告警分级和自动恢复建议。",
+      "scoring_rubric": "1. 列出至少3种异常检测算法（如Z-Score、孤立森林、Prophet）的适用场景和参数配置；2. 给出动态阈值自适应调整的具体公式（如指数加权移动平均）和误报率<5%的验证方法；3. 设计多维下钻归因的具体维度（至少3个维度）和归因排序算法；4. 描述误报反馈闭环的数据流和阈值更新规则。"
+    },
+    {
+      "id": "48-005",
+      "prompt": "设计一个跨系统数据同步方案，MySQL、PostgreSQL、MongoDB三个异构数据库之间需要双向实时同步指定表的数据，处理冲突解决、Schema差异、网络分区。",
+      "sub_type": "data_synchronization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于CDC的双向同步架构，冲突检测和解决策略（时间戳/LWW/业务规则），异构数据类型映射和转换，网络分区时的最终一致性保障，同步延迟监控和数据对账机制。",
+      "scoring_rubric": "1. 给出CDC双向同步架构的具体组件选型（如Debezium+Kafka Connect）和数据流向图；2. 列出至少3种冲突解决策略（时间戳LWW、版本号、业务规则）的优先级和适用场景；3. 说明网络分区时的一致性保障机制（如最终一致性的对账周期和补偿写入逻辑）；4. 设计数据对账的具体指标（行数差异、字段级差异）和延迟监控的告警阈值。"
+    },
+    {
+      "id": "48-006",
+      "prompt": "设计一个数据采样方案，对万亿级数据表进行分层抽样、系统抽样、随机抽样，支持在不读取全表的前提下快速获取具有代表性的样本数据用于分析和测试。",
+      "sub_type": "data_sampling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计多种采样策略（随机/分层/系统/蓄水池采样），利用表格式的元数据和索引避免全表扫描，采样比例和置信区间计算，采样结果的代表性验证，采样缓存复用机制。",
+      "scoring_rubric": "1. 列出至少4种采样策略（随机/分层/系统/蓄水池）的算法描述和适用数据特征；2. 说明如何利用表格式元数据（如Iceberg Manifest）或索引避免全表扫描，给出具体的数据访问路径；3. 给出采样比例的计算公式（基于置信水平和误差范围）和代表性验证的统计检验方法（如KS检验）。"
+    },
+    {
+      "id": "48-007",
+      "prompt": "设计一个数据目录智能搜索方案，支持自然语言查询（如「上个月销售额相关的表」「用户画像标签在哪里」），结合语义搜索和关键词匹配返回相关数据资产。",
+      "sub_type": "data_catalog_search",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计混合搜索架构（关键词BM25+语义Embedding），元数据和描述文本的向量化索引，搜索结果排序（相关度+使用频率+数据质量分），查询意图理解和实体识别，搜索结果的过滤和分面导航。",
+      "scoring_rubric": "1. 设计混合搜索架构的具体组件（BM25关键词检索+向量语义检索）和结果融合算法（如RRF倒数排序融合）；2. 说明元数据向量化的Embedding模型选型和意图识别的NLU流程（实体抽取/同义词扩展）；3. 给出排序公式中至少3个因素（相关度、使用频率、数据质量分）的权重计算方法和分面导航的筛选维度。"
+    },
+    {
+      "id": "48-008",
+      "prompt": "设计一个细粒度数据访问控制方案，支持表级、列级、行级的权限控制，权限可按角色、部门、项目组分配，支持权限审计和临时授权，接入统一身份认证。",
+      "sub_type": "data_access_control",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计RBAC+ABAC混合权限模型，行级安全策略（RLS）实现和列级脱敏策略，权限继承和冲突处理，临时授权和自动过期，统一身份认证集成（LDAP/OIDC），权限变更审计日志和定期权限审查。",
+      "scoring_rubric": "1. 给出RBAC+ABAC混合权限模型的具体数据结构（角色表、属性表、策略表）和权限判定算法；2. 说明行级安全策略（RLS）的实现方式（如PostgreSQL RLS策略或应用层过滤SQL拼接）和列级脱敏的具体规则（如手机号掩码、身份证截断）；3. 设计临时授权的过期机制（TTL字段+定时清理任务）和权限审计日志的字段定义（who/what/when/result）。"
+    },
+    {
+      "id": "48-009",
+      "prompt": "设计一个数据管道编排平台，支持可视化DAG定义，任务间依赖管理，参数传递，条件分支，失败重试策略，支持数百个管道并发执行。",
+      "sub_type": "data_pipeline_orchestration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计DAG调度引擎（对比Airflow/Prefect/Dagster），可视化拖拽式DAG编辑器，任务间XCom参数传递，条件分支和动态任务生成，多级重试策略（指数退避/自定义），并发控制和优先级队列，任务执行日志和监控集成。",
+      "scoring_rubric": "1. 给出DAG调度引擎的核心数据模型（Task/DAG/Run/Instance表结构）和调度算法（拓扑排序+并发度控制）；2. 说明任务间参数传递的具体机制（如XCom的存储后端和序列化格式）和条件分支的DSL语法定义；3. 设计至少2种重试策略（固定间隔、指数退避）的配置参数和优先级队列的调度权重计算；4. 列出执行日志需要采集的字段（开始时间、耗时、输入输出行数、错误栈）和监控告警的具体指标。"
+    },
+    {
+      "id": "48-010",
+      "prompt": "设计一个数据可靠性工程（Data Reliability）体系，定义数据SLA/SLO，实现端到端数据质量监控，支持数据事故的自动检测、告警、根因分析和恢复。类似SRE理念应用于数据领域。",
+      "sub_type": "data_reliability",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应定义数据SLA/SLO指标（新鲜度/完整性/准确性/可用性），设计端到端数据质量检查点（入口/中间/出口），自动化事故检测和分级，基于血缘的根因定位，数据回溯和补数恢复流程，事后复盘（Postmortem）模板。",
+      "scoring_rubric": "1. 定义至少4个数据SLO指标（新鲜度、完整性、准确性、可用性）的SLI计算公式和目标值；2. 设计端到端质量检查点的至少3个位置（入口计数、中间校验、出口对账）和每类检查的具体SQL断言；3. 给出基于血缘的根因定位算法（反向BFS遍历+质量指标时间序列对比）和恢复流程的具体步骤；4. 设计事后复盘模板包含的必填字段（事故时间线、影响范围、根因、修复措施、Action Items）。"
+    },
+    {
+      "id": "48-011",
+      "prompt": "设计一个数据契约（Data Contract）方案，上游数据团队和下游消费团队需要建立明确的数据接口协议。需要定义Schema规范、SLA承诺（新鲜度/完整性/准确性）、变更通知机制和违约处理流程。",
+      "sub_type": "data_contract",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计数据契约的Schema定义规范（字段类型/约束/语义），SLA指标（数据新鲜度延迟/完整性阈值/准确性校验规则），契约版本管理和兼容性规则，变更通知机制（提前N天通知/自动审批），违约检测和处理流程（告警/阻断/修复）。",
+      "scoring_rubric": "1. 给出数据契约Schema定义的具体字段规范（字段名命名规则、类型映射、约束条件如nullable/unique）和SLA指标的量化阈值（如新鲜度延迟<30分钟、完整性>99.9%）；2. 设计契约版本号的语义化规则（major/minor/patch）和兼容性检查的具体规则（向前兼容=新增字段有默认值）；3. 说明变更通知的具体提前天数和审批流程的至少3个步骤；4. 设计违约检测的触发条件和处理流程的至少3个阶段（告警/阻断/修复）。"
+    },
+    {
+      "id": "48-012",
+      "prompt": "设计一个CDC延迟优化方案，当前Debezium采集MySQL binlog到Kafka的延迟从<1秒恶化到30秒。需要分析延迟瓶颈（binlog解析/网络传输/序列化/Kafka写入），优化连接器配置和并行度。",
+      "sub_type": "CDC_latency_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用Debezium Metrics定位延迟瓶颈环节，分析binlog解析（GTID/位点）、网络传输（压缩/batch）、序列化（Avro/JSON）、Kafka写入（acks/batch.size/linger.ms）各环节的延迟，优化连接器配置参数，设计并行捕获（多task/分表）策略，监控端到端延迟指标。",
+      "scoring_rubric": "1. 列出Debezium需要监控的至少4个关键Metrics（如binlog-parse-time、queue-size、kafka-produce-latency、connect-task-status）及其定位瓶颈的方法；2. 给出Kafka Producer至少5个关键参数（acks、batch.size、linger.ms、compression.type、buffer.memory）的推荐配置值和调优依据；3. 设计并行捕获的具体分片策略（按表分task或按库分connector）和预期吞吐量提升的量化估算；4. 给出端到端延迟监控的指标定义和告警阈值（如延迟>5秒触发P1告警）。"
+    },
+    {
+      "id": "48-013",
+      "prompt": "设计一个Iceberg表的Compaction优化方案，小文件数量从1万增长到100万导致查询性能下降10倍。需要设计增量Compaction策略（按分区/按大小）、Compaction调度频率、与写入作业的协调。",
+      "sub_type": "iceberg_compaction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析小文件产生的原因（频繁commit/低并行写入），设计增量Compaction策略（按分区合并/按文件大小阈值触发），Compaction与写入作业的协调（避开写入高峰期），调度频率优化（基于文件数量增长趋势），Compaction过程的资源隔离和监控，Compaction前后查询性能对比。",
+      "scoring_rubric": "1. 给出小文件产生的具体原因分析（如commit频率、写入并行度）和增量Compaction的触发条件（如文件数>阈值或单文件大小<阈值）；2. 设计Compaction与写入作业协调的具体机制（如基于锁或时间窗口避开写入高峰期）；3. 说明Compaction调度频率的计算方法（基于文件增长率）和资源隔离的具体配置（CPU/IO限制）；4. 给出Compaction效果的量化评估指标（文件数减少比例、查询延迟P50/P99改善幅度）。"
+    },
+    {
+      "id": "48-014",
+      "prompt": "设计一个数据新鲜度SLO监控方案，核心数据管道需要保证99%的数据在30分钟内从源系统到达数据仓库。需要设计端到端延迟追踪、新鲜度SLO告警、SLI定义和Error Budget管理。",
+      "sub_type": "data_freshness_slo",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计端到端延迟追踪机制（数据产生时间戳/各环节处理时间/到达时间），定义SLI（30分钟内到达的数据比例），设置SLO（99%新鲜度），Error Budget计算和消耗告警，新鲜度仪表盘和趋势分析，SLI不达标时的根因定位和修复流程。",
+      "scoring_rubric": "1. 设计端到端延迟追踪的具体埋点方案（数据产生时间戳、各环节处理时间戳、到达时间戳的字段定义和采集方式）；2. 给出SLI的精确计算公式（30分钟内到达的数据行数/总数据行数）和SLO目标值（99%）；3. 说明Error Budget的计算窗口（30天滚动）和消耗速率告警的阈值（如剩余Budget<10%触发告警）；4. 设计新鲜度不达标时的根因定位检查清单（至少5个检查项）。"
+    },
+    {
+      "id": "48-015",
+      "prompt": "设计一个数据管道死信处理方案，ETL过程中处理失败的消息需要进入死信队列。需要设计死信消息的分类（数据质量/系统异常/业务异常）、自动重试策略、人工干预流程和死信数据的最终处置。",
+      "sub_type": "dead_letter_processing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计死信队列的消息分类规则（数据格式错误/系统超时/业务校验失败），自动重试策略（指数退避/最大重试次数），死信消息的告警和可视化，人工干预工单流程（查看原始消息/修改后重新处理/标记废弃），死信数据的最终处置（修复回流/记录归档）。",
+      "scoring_rubric": "1. 列出死信消息至少3种分类（数据格式错误、系统超时、业务校验失败）的判定规则和路由目标队列；2. 给出自动重试策略的具体参数（最大重试次数、退避基数、最大退避时间）；3. 设计人工干预工作台需要展示的字段（原始消息、错误原因、重试次数、关联作业）和至少3种处置操作；4. 说明死信数据最终处置的两条路径（修复回流的验证规则、归档的保留期限和存储位置）。"
+    },
+    {
+      "id": "48-016",
+      "prompt": "设计一个Schema注册中心方案，Kafka集群中200+Topic的消息格式需要统一管理。使用Confluent Schema Registry或Apicurio，设计Schema版本管理、兼容性规则（向前/向后/完全）、客户端自动序列化/反序列化。",
+      "sub_type": "schema_registry",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Schema注册中心的高可用部署方案，Schema版本管理和兼容性规则配置（BACKWARD/FORWARD/FULL），客户端Serializer/Deserializer集成，Schema演进的审批流程，Schema使用情况的监控和审计，与数据目录的集成。",
+      "scoring_rubric": "1. 给出Schema注册中心的高可用部署架构（至少3节点集群）和版本管理的存储模型（subject/version/schema三元组）；2. 说明BACKWARD、FORWARD、FULL三种兼容性规则的具体含义和每种规则允许的变更类型；3. 列出客户端Serializer/Deserializer的集成方式（如KafkaAvroSerializer的配置项）；4. 设计Schema演进审批流程的至少3个步骤和使用情况监控的指标（如各版本Consumer数量）。"
+    },
+    {
+      "id": "48-017",
+      "prompt": "设计一个数据隐私工程方案，满足GDPR和中国个人信息保护法要求。需要实现数据分类（公开/内部/机密/受限）、自动化PII检测、数据主体权利支持（访问/删除/可携带）、隐私影响评估。",
+      "sub_type": "data_privacy_engineering",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计数据分类分级标准和自动化分类引擎，PII字段自动检测（正则+NLP+元数据标注），数据主体权利的技术实现（访问API/删除工作流/数据导出），隐私影响评估（PIA）模板和流程，数据处理活动记录（ROPA），隐私合规监控和审计报告。",
+      "scoring_rubric": "1. 给出数据分类分级的具体标准（至少4级：公开/内部/机密/受限）和PII自动检测的技术方案（正则匹配+NLP识别的字段类型列表）；2. 设计数据主体权利的3个API接口（访问/删除/可携带）的请求参数和响应格式；3. 说明隐私影响评估（PIA）模板需要包含的至少5个评估维度；4. 给出数据处理活动记录（ROPA）的字段定义和合规审计报告的输出频率。"
+    },
+    {
+      "id": "48-018",
+      "prompt": "设计一个Lakehouse查询优化方案，数据湖上使用Spark/Presto查询Iceberg表时P99延迟超过30秒。需要优化数据文件组织（排序/分区/聚簇）、统计信息收集、查询计划缓存和文件剪枝策略。",
+      "sub_type": "lakehouse_query_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析查询性能瓶颈（文件扫描数/数据倾斜/统计信息缺失），优化数据文件组织（Z-Order排序/分区裁剪/聚簇索引），收集表和列级统计信息（ANALYZE TABLE），设计查询计划缓存机制，利用Iceberg的分区裁剪和Manifest文件剪枝减少扫描文件数，对比优化前后的查询性能。",
+      "scoring_rubric": "1. 列出查询性能瓶颈分析的具体方法（如EXPLAIN分析扫描文件数、检查数据倾斜度、统计信息缺失检测）；2. 给出数据文件组织优化的至少3种技术（Z-Order排序、分区裁剪、聚簇索引）及每种技术的适用场景和配置示例；3. 说明统计信息收集的具体SQL（ANALYZE TABLE）和查询计划缓存的命中条件；4. 给出优化前后的量化对比指标（扫描文件数减少比例、P50/P99延迟改善幅度）。"
+    },
+    {
+      "id": "48-019",
+      "prompt": "设计一个数据产品SLA管理方案，将数据资产作为产品管理，每个数据产品需要定义SLA（可用性/延迟/质量）、监控SLI、SLA违约时的自动告警和降级策略，以及SLA报告。",
+      "sub_type": "data_product_sla",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计数据产品的SLA定义模板（可用性/延迟/质量指标），SLI自动采集和计算机制，SLA违约的自动检测和告警，降级策略（使用备用数据源/缓存数据/通知下游），SLA报告生成和分发（周报/月报），Error Budget管理和消耗追踪。",
+      "scoring_rubric": "1. 设计数据产品SLA定义模板的具体字段（可用性目标%、延迟P99阈值、完整性阈值、准确性校验规则）；2. 给出SLI自动采集的至少3个指标（查询成功率、数据到达延迟、质量检查通过率）的计算公式；3. 说明降级策略的至少3种场景（备用数据源切换、缓存数据兜底、通知下游暂停消费）的触发条件；4. 设计SLA报告的具体内容（本周SLI达成率、Error Budget消耗、违约事件清单）和分发机制。"
+    },
+    {
+      "id": "48-020",
+      "prompt": "设计一个增量快照方案，使用Iceberg/Delta Lake的增量读取能力，实现下游数据管道只处理自上次快照以来的变更数据。需要设计快照管理、变更数据提取、下游消费者适配和回溯能力。",
+      "sub_type": "incremental_snapshot",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计快照版本管理和保留策略（保留最近N个快照/按时间过期），变更数据提取机制（基于快照Diff的新增/修改/删除记录），下游消费者适配（增量读取API/Checkpoint管理），回溯能力（从任意历史快照重新处理），增量与全量模式的切换，监控增量处理的延迟和数据量。",
+      "scoring_rubric": "1. 给出快照保留策略的具体规则（保留最近N个快照或按时间过期）和版本管理的存储开销估算；2. 说明基于快照Diff的变更数据提取的具体API调用方式（如Iceberg的incrementalAppendScan）；3. 设计下游消费者的Checkpoint管理机制（记录上次消费的snapshotId）和增量读取的API接口规范；4. 给出回溯能力的实现方式（指定起止snapshotId重新处理）和增量/全量切换的触发条件。"
+    },
+    {
+      "id": "48-021",
+      "prompt": "设计一个数据血缘影响分析方案，当上游MySQL的一张源表字段类型变更时，需要自动追踪影响到哪些ETL作业、数仓表、BI报表和API接口，给出影响范围评估和变更通知。",
+      "sub_type": "data_lineage_impact_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计列级血缘图谱（解析SQL提取字段映射关系），变更影响传播算法（从变更字段出发沿血缘图正向遍历），影响范围分级（直接/间接/潜在），自动通知受影响方（邮件/IM/工单），变更窗口协商和兼容性验证流程。",
+      "scoring_rubric": "1. 给出列级血缘图谱的具体构建方法（SQL AST解析提取字段映射关系）和图存储的数据模型；2. 设计变更影响传播算法的具体步骤（从变更字段沿血缘正向BFS遍历，区分直接/间接/潜在影响）；3. 说明分级影响通知的触发条件（直接影响立即通知、间接影响每日汇总）和通知渠道（邮件/IM/工单）；4. 给出兼容性验证的具体方法（Schema对比、数据采样验证、影响作业的冒烟测试）。"
+    },
+    {
+      "id": "48-022",
+      "prompt": "设计一个Schema注册中心迁移方案，Kafka集群从Confluent Schema Registry迁移到Apicurio Registry，需要保证迁移期间生产者和消费者正常工作，Schema版本和兼容性规则不丢失。",
+      "sub_type": "schema_registry_migration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计双注册中心并行方案（新旧同时写入），Schema批量迁移脚本（导出/转换/导入/校验），兼容性规则映射（BACKWARD/FORWARD/FULL），客户端Serializer/Deserializer切换（配置驱动），灰度切换（逐Topic迁移），回滚方案和数据一致性验证。",
+      "scoring_rubric": "1. 给出双注册中心并行方案的具体架构（新旧同时写入的数据流向和一致性保障）；2. 设计Schema批量迁移脚本的具体步骤（导出JSON→格式转换→导入Apicurio→逐条校验）和兼容性规则的映射方法；3. 说明灰度切换的粒度（逐Topic迁移）和客户端Serializer/Deserializer的切换方式（配置驱动/Feature Flag）；4. 给出回滚方案的触发条件和具体操作步骤，以及迁移前后Schema数量和兼容性规则的一致性验证SQL。"
+    },
+    {
+      "id": "48-023",
+      "prompt": "设计一个流式数据Join优化方案，Flink作业需要将用户行为流（百万条/秒）与用户画像维表（千万级）进行实时Join，当前维表查询延迟导致整体处理延迟超标。需要优化维表加载策略和Join性能。",
+      "sub_type": "stream_join_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计维表加载策略（全量预加载vs增量更新/LRU Cache），异步IO（AsyncDataStream并发查询维表），维表广播（小维表全量广播到各算子），Lookup Join vs Temporal Join选型，维表更新频率与数据一致性权衡，State TTL管理防止状态膨胀。",
+      "scoring_rubric": "1. 列出维表加载的至少3种策略（全量预加载、增量更新、LRU Cache）的适用维表规模和内存占用估算；2. 给出AsyncDataStream的具体配置参数（容量、超时时间、重试次数）和广播维表的适用数据规模阈值；3. 说明Lookup Join与Temporal Join的语义差异和各自的数据一致性保障条件；4. 设计State TTL的配置值（基于维表更新频率）和状态膨胀的监控指标（状态大小、Checkpoint耗时）。"
+    },
+    {
+      "id": "48-024",
+      "prompt": "设计一个增量物化视图刷新优化方案，三层嵌套的物化视图（A->B->C）每次全量刷新耗时4小时。需要设计基于变更数据的增量刷新策略，只处理自上次刷新以来变更的数据。",
+      "sub_type": "incremental_view_refresh_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计变更数据捕获（基于表格式快照Diff或CDC），增量计算引擎（只重新计算受影响的聚合区间），依赖图管理（A变更->触发B增量刷新->触发C增量刷新），数据一致性保障（增量结果与全量结果可对账），刷新失败的自动降级到全量刷新策略。",
+      "scoring_rubric": "1. 给出变更数据捕获的具体实现方式（基于表格式快照Diff或CDC日志解析）和变更范围的计算逻辑；2. 设计多层物化视图依赖刷新链的触发规则（A变更→B增量刷新→C增量刷新）和并发控制机制；3. 说明增量刷新结果与全量结果的对账方法（行数对比、聚合值校验、抽样记录比对）；4. 给出刷新失败降级到全量刷新的触发条件和恢复步骤。"
+    },
+    {
+      "id": "48-025",
+      "prompt": "设计一个数据质量SLO监控方案，核心数据管道的数据完整性SLO为99.9%（缺失记录<0.1%）。需要设计SLI定义、自动化检测、Error Budget计算、SLO违约告警和根因定位。",
+      "sub_type": "data_quality_slo",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应定义SLI（完整性=实际行数/预期行数/准确性=校验通过率/及时性=SLA内到达率），设计自动化质量检查点（入口计数/中间校验/出口对账），Error Budget计算（30天滚动窗口/消耗速率），SLO违约自动告警和升级，基于血缘的根因定位。",
+      "scoring_rubric": "1. 定义至少3个数据质量SLI（完整性=实际行数/预期行数、准确性=校验通过率、及时性=SLA内到达率）的精确计算公式；2. 设计自动化质量检查点的至少3个位置和每类检查的具体SQL断言语句；3. 给出Error Budget的计算窗口（30天滚动）和消耗速率告警的阈值（如剩余Budget<10%触发告警）；4. 说明基于血缘的根因定位算法（反向遍历检查各环节质量指标的时间序列变化）。"
+    },
+    {
+      "id": "48-026",
+      "prompt": "设计一个数据管道死信处理优化方案，当前ETL失败的消息进入死信队列后无人处理，积压超过10万条。需要设计死信分类（数据格式/业务校验/系统异常）、自动重试、人工干预工作台和处置统计。",
+      "sub_type": "dead_letter_handling_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计死信分类引擎（基于错误码/异常类型自动分类），分级重试策略（格式错误不重试/系统异常指数退避重试/业务异常人工确认后重试），人工干预工作台（查看原始消息/修改后重发/标记废弃），死信处置统计看板（积压趋势/分类分布/平均处置时间），死信根因分析报告。",
+      "scoring_rubric": "1. 给出死信自动分类的判定规则（基于错误码/异常类型）和至少3种分类的路由策略；2. 设计分级重试策略的具体参数（格式错误不重试、系统异常指数退避、业务异常人工确认后重试）；3. 说明人工干预工作台需要展示的字段和至少3种处置操作（修改重发、标记废弃、批量处理）；4. 给出处置统计看板的至少4个指标（积压趋势、分类分布、平均处置时间、处置完成率）和根因分析报告的输出频率。"
+    },
+    {
+      "id": "48-027",
+      "prompt": "设计一个CDC双向同步冲突解决方案，MySQL和PostgreSQL之间双向同步指定表数据时，两端同时修改同一条记录导致冲突。需要设计冲突检测、解决策略和数据最终一致性保障。",
+      "sub_type": "cdc_conflict_resolution",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计冲突检测机制（基于版本号/时间戳/操作序列号），冲突解决策略（Last-Write-Wins/业务规则优先/人工仲裁），循环复制防止（标记同步来源避免回写），冲突日志和审计，数据对账机制（定期全量对比检测不一致），最终一致性验证。",
+      "scoring_rubric": "1. 给出冲突检测机制的具体实现（基于版本号/时间戳/操作序列号的比较逻辑）；2. 列出至少3种冲突解决策略（LWW、业务规则优先、人工仲裁）的判定条件和优先级；3. 说明循环复制防止的具体机制（标记同步来源的元数据字段和过滤规则）；4. 设计数据对账的具体方法（定期全量对比的SQL、差异记录的自动修复逻辑）和一致性验证的频率。"
+    },
+    {
+      "id": "48-028",
+      "prompt": "设计一个Iceberg表分区演进方案，时序数据表最初按天分区，但数据量增长后查询需要按小时粒度裁剪。需要支持分区字段变更而不重写历史数据，利用分区变换（Partition Transform）实现。",
+      "sub_type": "iceberg_partition_evolution",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计分区变换策略（identity/days/hours/bucket/truncate），使用Iceberg的Partition Evolution能力在不重写数据的情况下变更分区粒度，分析新旧分区对查询性能的影响（分区裁剪效率），设计渐进式迁移（新数据用新分区/历史数据保持旧分区），验证查询计划正确使用分区裁剪。",
+      "scoring_rubric": "1. 列出Iceberg支持的至少4种分区变换类型（identity/days/hours/bucket/truncate）的语法和适用场景；2. 给出不重写数据的分区演进的具体ALTER TABLE语句和新旧分区共存期间的查询路由逻辑；3. 说明新旧分区对查询裁剪效率的量化对比方法（EXPLAIN分析扫描的Manifest文件数）；4. 设计验证查询计划正确利用分区裁剪的具体测试用例（至少3个查询场景）。"
+    },
+    {
+      "id": "48-029",
+      "prompt": "设计一个特征回填（Feature Backfill）方案，新增的用户画像标签需要基于历史180天的行为数据重新计算。数据量50亿条，需要设计分布式回填作业，控制对在线服务的影响。",
+      "sub_type": "feature_backfill",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计离线回填作业（Spark分区并行处理历史数据），分批回填策略（按用户ID分片/按日期分批），回填期间在线服务隔离（读写分离/回填数据写入临时表），回填进度监控和断点续传，回填结果验证（抽样对比/一致性校验），灰度切换（逐步替换在线特征值）。",
+      "scoring_rubric": "1. 给出分布式回填作业的具体配置（Spark分区数、executor数量、按用户ID分片的分区键）；2. 说明回填期间在线服务隔离的具体措施（读写分离、回填写入临时表、资源队列隔离）；3. 设计断点续传的实现方式（记录已处理分片的Checkpoint文件）和进度监控的指标（已完成分片数/总分片数）；4. 给出回填结果验证的具体方法（抽样对比的样本量计算、一致性校验的SQL）和灰度切换的阶段划分。"
+    },
+    {
+      "id": "48-030",
+      "prompt": "设计一个数据契约验证方案，上游数据团队发布数据时需要自动验证是否满足下游消费团队定义的契约（Schema/SLA/质量规则）。不满足时阻断发布并通知相关方。",
+      "sub_type": "data_contract_validation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计契约定义语言（Schema规范+SLA指标+质量规则），契约注册和版本管理，发布前自动验证流水线（Schema兼容性检查/SLA预测/质量规则预执行），验证失败的阻断策略和通知机制，契约变更的影响评估和审批流程，契约执行的监控和违约告警。",
+      "scoring_rubric": "1. 给出数据契约定义语言的具体语法（Schema字段规范+SLA指标阈值+质量规则SQL断言）；2. 设计发布前自动验证流水线的具体步骤（Schema兼容性检查→SLA预测→质量规则预执行）；3. 说明验证失败的阻断策略（阻断发布+返回失败原因详情）和通知机制（邮件+IM+工单）；4. 给出契约变更影响评估的具体方法（基于血缘的影响传播分析）和审批流程的至少3个步骤。"
+    },
+    {
+      "id": "48-031",
+      "prompt": "设计一个Kafka日志采集管道延迟诊断方案，从日志产生到可查询的端到端延迟从5分钟恶化到30分钟。需要定位延迟瓶颈（采集/传输/解析/写入）并设计优化策略。",
+      "sub_type": "log_pipeline_latency_diagnosis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计端到端延迟追踪（日志时间戳vs入库时间戳），定位瓶颈环节（Fluentd解析/Kafka积压/ES写入），优化策略（Fluentd并行度/Kafka分区数/ES Bulk写入参数），延迟监控看板和SLA告警。",
+      "scoring_rubric": "1. 设计端到端延迟追踪的具体埋点方案（日志产生时间戳、采集时间戳、Kafka写入时间戳、ES入库时间戳）；2. 列出各环节的优化策略（Fluentd并行度调优、Kafka分区数扩容、ES Bulk写入参数调整）及预期延迟改善；3. 给出延迟监控看板的具体指标（各环节延迟P50/P99、Kafka消费Lag、ES写入速率）和SLA告警的阈值设置。"
+    },
+    {
+      "id": "48-032",
+      "prompt": "设计一个数据质量异常自动修复方案，ETL过程中检测到空值率突增、数据格式异常和记录重复三类质量问题。需要设计自动修复规则引擎和无法自动修复时的人工干预流程。",
+      "sub_type": "auto_data_quality_repair",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计质量异常分类引擎（空值/格式/重复/业务规则违反），自动修复规则（默认值填充/格式标准化/去重策略），修复效果验证（修复前后数据对比），人工干预工单流程（无法自动修复的问题升级），修复日志和审计追踪。",
+      "scoring_rubric": "1. 列出至少3种质量异常类型（空值率突增、格式异常、记录重复）的检测规则和自动修复方案（默认值填充、格式标准化、去重策略）；2. 设计修复效果验证的具体方法（修复前后行数对比、修复率统计、抽样校验）和修复日志的字段定义；3. 说明无法自动修复时的升级条件（如业务规则违反）和人工干预工单的必填字段（问题描述、影响范围、建议修复方案）。"
+    },
+    {
+      "id": "48-033",
+      "prompt": "设计一个流处理数据乱序和延迟到达处理方案，IoT设备数据因网络不稳定导致事件乱序到达（延迟最多5分钟），需要设计Watermark策略和窗口触发机制保证计算结果准确性。",
+      "sub_type": "stream_disorder_handling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Watermark生成策略（固定延迟/自适应延迟），允许延迟数据的窗口处理（Allowed Lateness/侧输出流），窗口触发机制（定时触发/水位线触发），延迟数据的修正计算和结果更新，监控乱序比例和延迟分布。",
+      "scoring_rubric": "1. 给出Watermark生成策略的具体配置（固定延迟时间值或自适应延迟的计算公式）和窗口触发的条件；2. 设计延迟到达数据的处理方式（Allowed Lateness时间窗口、侧输出流的路由规则）和修正计算的具体逻辑；3. 说明监控数据乱序比例和延迟分布的具体指标（迟到数据占比P99、Watermark与处理时间的差距）和策略参数的优化方法。"
+    },
+    {
+      "id": "48-034",
+      "prompt": "设计一个数据血缘自动发现方案，从200+个SQL脚本和ETL代码中自动提取数据血缘关系。需要解析SQL的SELECT/INSERT/JOIN操作，构建表级和列级血缘图谱。",
+      "sub_type": "lineage_auto_discovery",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计SQL解析引擎（基于SQLGlot/Calcite解析AST），提取表级血缘（INSERT INTO...SELECT FROM）和列级血缘（字段映射关系），处理复杂SQL（子查询/CTE/UNION/VIEW），血缘图谱存储（Neo4j/JanusGraph），增量更新和血缘准确性验证。",
+      "scoring_rubric": "1. 给出SQL解析引擎的具体技术选型（如SQLGlot/Calcite）和AST解析提取表级血缘（INSERT INTO...SELECT FROM）的伪代码逻辑；2. 说明列级血缘提取的具体方法（字段映射关系追踪）和复杂SQL结构（子查询/CTE/UNION/VIEW）的处理策略；3. 设计血缘图谱的存储模型（节点=表/列、边=依赖关系）和增量更新的触发机制（代码变更时重新解析）。"
+    },
+    {
+      "id": "48-035",
+      "prompt": "设计一个跨时区数据仓库方案，全球化业务需要处理UTC、北京时间、纽约时间、伦敦时间的时区转换。需要设计统一时间存储标准、时区转换规则和跨时区报表对齐策略。",
+      "sub_type": "timezone_data_warehouse",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计统一时间存储标准（UTC存储+时区标记），时区转换规则引擎（DST夏令时处理/时区数据库维护），报表对齐策略（按业务日切vs自然日切），时区变更的影响评估和历史数据修正方案。",
+      "scoring_rubric": "1. 给出统一时间存储标准的具体规范（UTC TIMESTAMP类型+时区标记字段的格式）；2. 列出DST夏令时处理的具体规则（时区数据库版本、转换函数的实现逻辑）和至少2个跨时区对齐的示例；3. 设计报表对齐策略的至少2种模式（业务日切vs自然日切）的定义和切换条件，以及历史数据修正的SQL逻辑。"
+    },
+    {
+      "id": "48-036",
+      "prompt": "设计一个实时数仓查询资源隔离方案，同一ClickHouse集群中adhoc查询和ETL写入相互影响。需要设计查询队列、资源配额和优先级调度策略保障关键查询SLA。",
+      "sub_type": "realtime_warehouse_isolation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计查询队列管理（交互式/批处理/ETL三类队列），资源配额（CPU/内存/IO的max_threads/max_memory_usage限制），优先级调度（VIP查询优先执行/ETL降级），查询超时和取消机制，资源使用监控和动态调整策略。",
+      "scoring_rubric": "1. 给出查询队列的分类定义（交互式/批处理/ETL）和各类队列的资源配额配置（max_threads、max_memory_usage的具体值）；2. 设计优先级调度的具体权重（如VIP查询优先级=1、adhoc=3、ETL=5）和查询超时的阈值设置；3. 说明资源使用监控的具体指标（CPU使用率、内存占用、IO吞吐、队列深度）和动态调整的触发条件。"
+    },
+    {
+      "id": "48-037",
+      "prompt": "设计一个数据资产价值评估方案，企业有500+数据表但不清楚哪些数据有业务价值。需要设计数据价值评估模型（使用频率/业务影响/数据质量/维护成本），输出数据资产价值排名。",
+      "sub_type": "data_asset_valuation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计多维度价值评估模型（使用频率x业务影响x数据质量/维护成本），使用频率指标（查询次数/下游依赖数/用户数），业务影响评估（关联收入/决策支持度），数据质量评分（完整性/准确性/及时性），输出价值排名和低价值数据治理建议。",
+      "scoring_rubric": "1. 给出数据价值评估模型的至少4个维度（使用频率、业务影响、数据质量、维护成本）的具体指标和权重分配；2. 说明各维度指标的量化方法（查询次数统计、下游依赖数计数、质量评分公式、维护工时统计）和综合价值分的计算公式；3. 设计价值排名的输出格式和低价值数据治理建议的分类（归档/降级/清理）。"
+    },
+    {
+      "id": "48-038",
+      "prompt": "设计一个数据湖到Lakehouse架构的渐进式迁移方案，当前数据湖使用Hive表格式，需要迁移到Iceberg/Lakehouse架构。需要设计双写策略、数据一致性验证和灰度切换。",
+      "sub_type": "lakehouse_migration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计双写策略（同时写入Hive和Iceberg表），数据一致性校验框架（行数/校验和/抽样对比），下游作业的渐进式迁移（从Hive读切换到Iceberg读），回滚方案（保留Hive表直到迁移完成），迁移进度跟踪和自动化验收测试。",
+      "scoring_rubric": "1. 给出双写策略的具体实现方式（同步双写或异步双写）和写入一致性的保障机制；2. 设计数据一致性校验框架的具体方法（行数对比、校验和比对、抽样字段级对比）和校验频率；3. 说明下游作业渐进式迁移的阶段划分（至少3个阶段：影子读→灰度切换→全量切换）和回滚的触发条件。"
+    },
+    {
+      "id": "48-039",
+      "prompt": "设计一个数据测试自动化框架，需要在ETL管道中嵌入数据质量检查点。支持行数校验、Schema校验、业务规则校验和统计分布校验，测试失败时阻断管道执行。",
+      "sub_type": "data_test_automation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计可配置的数据测试规则（行数阈值/Schema兼容性/业务SQL断言/分布KS检验），测试检查点嵌入ETL管道（Airflow Task/Spark Listener），失败阻断策略（严重度分级/告警vs阻断），测试报告生成和历史趋势分析，测试规则的版本管理和复用。",
+      "scoring_rubric": "1. 列出至少4种数据测试规则（行数阈值校验、Schema兼容性检查、业务SQL断言、统计分布KS检验）的具体配置格式；2. 说明测试检查点嵌入ETL管道的具体方式（如Airflow Sensor或Spark Listener的实现）和失败阻断的严重度分级；3. 设计测试报告的具体内容（检查项通过率、失败详情、历史趋势图表）和测试规则版本管理的方式。"
+    },
+    {
+      "id": "48-040",
+      "prompt": "设计一个Schema变更影响评估系统，上游数据团队修改表Schema前需要自动分析对下游ETL作业、数据仓库表和BI报表的影响。需要基于血缘关系生成影响报告和变更建议。",
+      "sub_type": "schema_change_impact_assessment",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Schema变更解析（字段新增/删除/类型变更/重命名），基于列级血缘的影响传播分析，影响范围分级（直接/间接/潜在），自动生成影响报告（受影响的作业列表/修改建议/风险等级），与CI集成阻断高风险变更，支持变更协商和审批流程。",
+      "scoring_rubric": "1. 给出Schema变更类型解析的具体分类（字段新增/删除/类型变更/重命名）和每种变更的影响权重；2. 设计基于列级血缘的影响传播分析算法（从变更字段沿血缘正向遍历，输出受影响的作业/表/报表清单）；3. 说明影响报告的具体内容（受影响作业列表、风险等级、修改建议）和CI集成的阻断规则（高风险变更阻断PR合并）。"
+    },
+    {
+      "id": "48-041",
+      "prompt": "设计一个流式数据实时去重方案，IoT设备因网络重传导致同一事件被多次发送到Kafka。需要设计基于事件ID的实时去重机制，保证Exactly-Once语义，支持百万级QPS下的低延迟去重。",
+      "sub_type": "streaming_deduplication",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于事件ID的去重策略（Bloom Filter预判+精确存储确认），Flink状态后端存储已见事件ID（RocksDB State Backend），去重窗口设计（基于事件时间的时间窗口+State TTL自动清理），处理乱序和延迟到达的重复事件，去重率监控和Bloom Filter误判率评估，Exactly-Once语义保障（Checkpoint+事务写入）。",
+      "scoring_rubric": "1. 给出基于事件ID的去重策略的具体实现（Bloom Filter预判的参数配置+RocksDB精确存储的Key格式）；2. 说明去重窗口的时间范围（基于事件时间的时间窗口大小）和State TTL的配置值（基于数据最大延迟）；3. 设计高QPS下的性能保障措施（Bloom Filter的误判率配置、RocksDB的并发读写优化）；4. 给出去重效果监控的具体指标（去重率、Bloom Filter误判率、去重延迟P99）。"
+    },
+    {
+      "id": "48-042",
+      "prompt": "设计一个参考数据广播分发方案，配置型数据（如城市编码表、商品类目树）需要实时同步到所有Flink算子实例。对比Broadcast State、Periodic Join和外部缓存查询三种方案的性能和一致性。",
+      "sub_type": "reference_data_broadcast",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应对比Broadcast State（Flink原生/全量广播/状态大小受限）、Periodic Join（定时全量加载维表/延迟等于刷新周期）、外部缓存查询（Redis/HBase/异步IO查询/网络开销），设计参考数据的更新检测和增量同步机制，评估不同数据规模下各方案的内存和延迟特征，选择最优方案并设计故障降级策略（参考数据不可用时的默认值处理）。",
+      "scoring_rubric": "1. 列出三种方案（Broadcast State、Periodic Join、外部缓存查询）的至少4个对比维度（内存占用、更新延迟、一致性、适用数据规模）的量化对比；2. 说明参考数据增量更新的检测机制（如版本号比对或时间戳检查）和同步的具体流程；3. 给出不同数据规模下各方案的性能特征（如Broadcast State适用于<10MB、Periodic Join适用于<1GB）和选择决策树；4. 设计参考数据不可用时的降级策略（默认值处理、缓存兜底、告警通知）。"
+    },
+    {
+      "id": "48-043",
+      "prompt": "设计一个Schema演进兼容性保障方案，Kafka Topic的消息Schema需要支持向前和向后兼容的演进（新增字段/删除字段/类型变更）。设计兼容性检查、消费者适配和数据转换策略。",
+      "sub_type": "schema_evolution_compatibility",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Schema兼容性规则（BACKWARD/FORWARD/FULL）和自动检查机制，消费者适配策略（缺失字段默认值/未知字段忽略），数据转换层（不同版本Schema间的格式转换），Schema演进最佳实践和版本回滚方案。",
+      "scoring_rubric": "1. 给出Schema兼容性规则的具体定义（BACKWARD=新Consumer读旧数据、FORWARD=旧Consumer读新数据、FULL=两者都兼容）和自动检查的实现逻辑；2. 设计消费者兼容适配的具体策略（缺失字段使用默认值、未知字段静默忽略）的配置方式；3. 说明不同版本Schema间数据转换层的实现方式（如Schema Registry的自动转换或应用层Adapter）；4. 给出Schema演进的最佳实践清单（至少5条规则）和版本回滚的具体操作步骤。"
+    },
+    {
+      "id": "48-044",
+      "prompt": "设计一个流处理Watermark自适应调整方案，不同数据源的事件延迟特征差异大（实时数据延迟<1秒，批量补数延迟>1小时）。需要设计自适应Watermark策略平衡延迟和完整性。",
+      "sub_type": "adaptive_watermark_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析不同数据源的延迟分布特征（实时流/准实时/批量补数），设计多源Watermark合并策略（取最小值/按数据源分别处理），自适应Watermark生成（基于历史延迟分布动态调整Watermark滞后时间），处理批量补数场景（特殊标记/独立窗口/侧输出流），Allowed Lateness和侧输出流处理迟到数据，监控Watermark进度和迟到数据比例。",
+      "scoring_rubric": "1. 给出不同数据源延迟分布特征的具体量化（实时流P99<1秒、准实时P99<1分钟、批量补数延迟>1小时）的测量方法；2. 设计自适应Watermark生成策略的具体算法（基于历史延迟分布的滑动窗口计算Watermark滞后时间）；3. 说明批量补数场景的特殊处理方式（特殊标记数据的路由规则、独立窗口或侧输出流的配置）；4. 给出Watermark进度监控的指标（Watermark延迟、迟到数据比例）和策略参数优化的触发条件。"
+    },
+    {
+      "id": "48-045",
+      "prompt": "设计一个数据湖存储成本优化方案，S3数据湖月存储费50万元且持续增长。需要设计数据生命周期管理、存储分层、压缩格式优化和冷数据归档策略。",
+      "sub_type": "data_lake_cost_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计数据生命周期策略（热数据S3 Standard/温数据S3 IA/冷数据S3 Glacier），存储格式优化（Parquet列式压缩/ZSTD压缩算法/压缩级别调优），小文件合并（定期Compaction减少请求费用），数据过期和清理策略（按保留期自动删除/归档前审计），存储成本监控和预算告警，存储成本分摊到各业务团队。",
+      "scoring_rubric": "1. 给出数据生命周期策略的具体规则（热数据<30天S3 Standard、温数据30-90天S3 IA、冷数据>90天S3 Glacier）和分层迁移的触发条件；2. 说明存储格式优化的具体参数（Parquet+ZSTD压缩级别、行组大小配置）和预期压缩率；3. 设计小文件合并的具体规则（文件大小<128MB触发合并、合并频率为每日一次）和数据过期清理的保留期设置；4. 给出存储成本监控的具体指标（月存储费用、各层费用占比、增长率）和预算告警的阈值。"
+    },
+    {
+      "id": "48-046",
+      "prompt": "设计一个消息队列有序性保障方案，订单状态变更事件需要按订单ID严格有序处理。Kafka分区有序但需要处理分区再平衡、消费者重启时的有序性保障。",
+      "sub_type": "message_ordering_guarantee",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计基于订单ID的分区路由策略（相同订单ID始终路由到同一分区），消费者有序消费保障（单分区内有序/分区级锁或单消费者），分区再平衡时的有序性保护（Cooperative Rebalance/静态成员/会话超时调优），消费者重启时的状态恢复和位点管理，全局有序vs分区有序的权衡分析，有序性验证测试方案。",
+      "scoring_rubric": "1. 给出基于订单ID的分区路由策略的具体实现（如Kafka Producer的Partitioner配置或自定义分区键计算）；2. 说明分区再平衡时有序性保障的具体机制（Cooperative Rebalance配置、静态成员ID设置、会话超时调优参数）；3. 设计消费者重启时的位点恢复策略（从Checkpoint恢复或从最新Committed Offset恢复）和有序性验证的测试方法；4. 给出全局有序vs分区有序的性能对比数据（吞吐量差异）和选择决策的判断标准。"
+    },
+    {
+      "id": "48-047",
+      "prompt": "设计一个跨数据源联邦查询方案，业务需要同时查询MySQL业务数据、ClickHouse分析数据和Elasticsearch日志数据，通过统一SQL接口返回合并结果。",
+      "sub_type": "federated_query_engine",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计联邦查询引擎架构（Trino/Presto/Dremio选型），数据源Connector配置，查询下推优化（谓词和聚合下推减少传输），跨源Join策略（Broadcast/Shuffle Join），查询计划优化（CBO选最优Join顺序），性能监控。",
+      "scoring_rubric": "1. 给出联邦查询引擎的具体选型依据（Trino vs Presto vs Dremio的对比维度：延迟、并发、Connector生态）和至少3个数据源的Connector配置；2. 说明查询下推优化的具体规则（谓词下推、聚合下推、Limit下推）和下推前后的数据传输量对比；3. 设计跨源Join策略的选择逻辑（小表用Broadcast Join、大表用Shuffle Join）和CBO的统计信息收集方式；4. 给出联邦查询性能监控的具体指标（查询延迟P50/P99、跨源数据传输量、下推命中率）。"
+    },
+    {
+      "id": "48-048",
+      "prompt": "设计一个跨Region数据复制方案，数据仓库需要从华东Region实时复制到华南Region用于灾备。需要设计复制架构、一致性保障、延迟监控和故障切换策略。",
+      "sub_type": "cross_region_data_replication",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计跨Region复制架构（S3 CRR/Kafka MirrorMaker 2/数据库逻辑复制），复制延迟监控和数据一致性验证，故障切换策略（Region不可用时自动切换），复制成本优化（增量/压缩/带宽限速），回切方案（主Region恢复后反向同步）。",
+      "scoring_rubric": "1. 给出跨Region复制架构的具体技术选型（S3 CRR/MirrorMaker 2/逻辑复制）和数据流向图；2. 设计复制延迟监控的具体指标（复制Lag时间、数据一致性校验通过率）和告警阈值；3. 说明故障切换的触发条件（Region不可用检测方法）和切换步骤（DNS切换、消费者重连、数据对账）；4. 给出复制成本优化的具体措施（增量复制、压缩传输、带宽限速配置）和回切方案的步骤。"
+    },
+    {
+      "id": "48-049",
+      "prompt": "设计一个ETL作业幂等性保障方案，Spark批处理作业在执行中途失败后重新运行，需要保证数据不重复不遗漏。设计幂等写入策略和作业状态管理机制。",
+      "sub_type": "etl_idempotency",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计幂等写入策略（INSERT OVERWRITE覆盖分区/MERGE INTO去重更新/基于唯一键的Upsert），作业状态管理（Checkpoint记录已处理的分区和偏移量），失败恢复机制（从上次Checkpoint续传/自动清理部分写入的数据），数据一致性验证（重跑前后数据行数和校验和对比），分区级别幂等（按分区粒度控制重跑范围），作业执行日志和审计追踪。",
+      "scoring_rubric": "1. 列出至少3种幂等写入策略（INSERT OVERWRITE、MERGE INTO、Upsert）的适用场景和具体SQL示例；2. 设计作业状态管理的Checkpoint记录内容（已处理分区列表、偏移量、处理时间戳）和失败恢复的具体步骤；3. 说明分区粒度重跑的实现方式（指定分区参数覆盖）和部分写入数据清理的逻辑；4. 给出重跑后数据一致性验证的具体方法（行数对比、校验和比对、抽样记录比对的SQL）。"
+    },
+    {
+      "id": "48-050",
+      "prompt": "设计一个数据质量异常根因定位方案，数据质量监控检测到订单表的空值率从0.1%突增到5%，需要自动定位根因（上游变更/ETL Bug/数据源问题）。设计基于血缘的根因定位算法。",
+      "sub_type": "data_quality_root_cause",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计根因定位算法（沿数据血缘反向遍历检查各环节的数据质量指标变化），多维度下钻分析（按时间维度定位突变时间点/按分区维度定位受影响范围/按字段维度定位关联变更），变更关联分析（关联上游Schema变更/ETL代码变更/配置变更的时间窗口），根因候选排序（按相关性评分排序），自动修复建议（根据根因类型推荐修复方案），根因定位准确率评估和持续优化。",
+      "scoring_rubric": "1. 设计基于血缘的根因定位算法的具体步骤（反向BFS遍历、各环节质量指标时间序列对比、突变点检测）；2. 给出多维度下钻分析的至少3个维度（时间维度定位突变时间点、分区维度定位受影响范围、字段维度定位关联变更）的具体查询方式；3. 说明变更关联分析的数据源（Schema变更记录、ETL代码Git提交、配置变更日志）和时间窗口匹配规则；4. 设计根因候选排序的评分模型（相关性权重计算）和自动修复建议的规则库（至少3种根因类型对应的修复方案）。"
+    }
+  ]
+}

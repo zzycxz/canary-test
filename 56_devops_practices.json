@@ -1,0 +1,457 @@
+{
+  "capability": "devops_practices",
+  "label": "DevOps实践能力",
+  "total": 50,
+  "cases": [
+    {
+      "id": "56-001",
+      "prompt": "设计一个基于Istio的服务网格方案，为50+微服务实现流量管理（金丝雀/故障注入）、安全（mTLS/RBAC）、可观测性（分布式追踪/指标采集），并评估Sidecar资源开销。",
+      "sub_type": "service_mesh",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Istio控制面和数据面架构，VirtualService/DestinationRule流量策略，PeerAuthentication mTLS强制，Kiali可观测性，Sidecar资源限制和优化。",
+      "scoring_rubric": "1. 设计服务网格的整体架构和接入方案; 2. 能实现流量管理策略（金丝雀/故障注入/超时重试）; 3. 能配置mTLS安全认证和细粒度RBAC; 4. 能评估Sidecar代理的资源开销并给出优化建议。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "56-002",
+      "prompt": "设计一个API网关方案，使用Kong/APISIX统一管理100+后端服务的API入口，需要支持认证鉴权（JWT/OAuth2）、限流熔断、请求转换、灰度路由、API版本管理。",
+      "sub_type": "API_gateway",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计API网关集群架构，插件化认证鉴权链，限流（令牌桶/滑动窗口）和熔断策略，请求/响应转换，灰度路由规则，API版本共存和废弃策略。",
+      "scoring_rubric": "1. 设计API网关的高可用集群架构; 2. 能实现认证鉴权和限流熔断的插件化配置; 3. 能支持请求转换和灰度路由规则; 4. 能设计API版本管理和废弃迁移策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-003",
+      "prompt": "设计一个服务发现方案，微服务部署在Kubernetes和虚拟机混合环境中，需要实现统一的服务注册、健康检查、DNS解析和客户端负载均衡，支持跨集群服务发现。",
+      "sub_type": "service_discovery",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计K8s Service+CoreDNS原生发现与Consul/Nacos混合方案，统一注册中心，健康检查探针，DNS/HTTP双协议解析，客户端负载均衡（加权轮询/一致性哈希）。",
+      "scoring_rubric": "1. 设计混合环境下的统一服务注册方案; 2. 能实现多协议健康检查和故障摘除; 3. 能支持DNS和HTTP双协议的服务解析; 4. 能设计跨集群服务发现和负载均衡策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-004",
+      "prompt": "设计一个企业级容器镜像仓库方案，使用Harbor管理所有团队的Docker镜像和Helm Chart，需要支持多租户隔离、漏洞自动扫描、镜像签名验证、垃圾回收和跨数据中心复制。",
+      "sub_type": "container_registry",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Harbor高可用部署（PostgreSQL+Redis+对象存储），Project多租户隔离，Trivy集成自动扫描，cosign签名验证，Tag保留策略和垃圾回收，主从复制同步。",
+      "scoring_rubric": "1. 设计容器镜像仓库的高可用架构; 2. 能实现多租户隔离和RBAC权限管理; 3. 能配置漏洞扫描和镜像签名验证流程; 4. 能设计垃圾回收和跨数据中心复制策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-005",
+      "prompt": "设计一个Kubernetes节点管理方案，管理500+节点的集群，需要实现节点分组（GPU/CPU/内存优化型）、节点标签和污点管理、节点升级排程、节点故障自动替换（Node Problem Detector）。",
+      "sub_type": "node_management",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计节点池（NodePool）分组策略，标签/污点（Taint）调度配合，Kured协调节点重启升级，NPD+Auto Repair故障检测和替换，节点资源画像和调度优化。",
+      "scoring_rubric": "1. 设计节点分组和标签污点调度策略; 2. 能实现节点滚动升级和维护窗口排程; 3. 能配置节点故障自动检测和替换机制; 4. 能设计节点资源画像和调度优化方案。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-006",
+      "prompt": "设计一个Kubernetes Pod安全方案，需要实施Pod Security Standards（PSS）的Restricted级别，限制容器以非root运行、只读根文件系统、禁止特权模式、限制Linux Capabilities和系统调用。",
+      "sub_type": "pod_security",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Pod Security Admission（PSA）策略，SecurityContext最佳实践（runAsNonRoot/readOnlyRootFilesystem/drop ALL caps），AppArmor/Seccomp配置，安全基线扫描（kube-bench）。",
+      "scoring_rubric": "1. 设计Pod Security Standards的分级实施策略; 2. 能配置容器安全上下文和最小权限原则; 3. 能集成AppArmor/Seccomp限制系统调用; 4. 能设计安全基线扫描和持续合规验证。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-007",
+      "prompt": "设计一个Kubernetes网络策略方案，使用Calico/Cilium实现微分段隔离，按命名空间和应用维度定义入站/出站规则，禁止默认全通策略，集成网络策略审计和可视化。",
+      "sub_type": "network_policy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计默认拒绝（deny-all）基线策略，按Namespace/Label定义精细的Ingress/Egress规则，Calico/Cilium策略引擎选型，网络流量审计日志，Hubble/Cilium可视化。",
+      "scoring_rubric": "1. 设计默认拒绝的网络策略基线; 2. 能按命名空间和应用维度定义精细化访问规则; 3. 能实现网络策略的审计日志和流量可视化; 4. 能设计网络策略的渐进式迁移和验证方案。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-008",
+      "prompt": "设计一个Kubernetes存储管理方案，管理有状态服务（MySQL/Redis/Kafka）的持久化存储，需要支持动态供应（StorageClass）、存储卷快照、数据加密、存储性能分层和容量监控。",
+      "sub_type": "storage_management",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计StorageClass分层（SSD/HDD/NVMe），CSI驱动选型（Longhorn/Ceph/Rook），VolumeSnapshot快照备份，CSI加密（KMS集成），PVC容量监控和自动扩容。",
+      "scoring_rubric": "1. 设计存储分层和动态供应策略; 2. 能实现存储卷快照和数据备份恢复; 3. 能配置存储加密和访问控制; 4. 能设计容量监控和自动扩容机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-009",
+      "prompt": "设计一个Kubernetes批处理作业调度方案，需要运行每日ETL任务（1000+Job/天）、定时报表生成、机器学习训练任务，支持优先级调度、资源抢占、作业依赖链和失败重试策略。",
+      "sub_type": "job_scheduling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计CronJob定时调度+Kueue队列管理，PriorityClass优先级和资源抢占，DAG作业依赖（Argo Workflows），指数退避重试，Gang Scheduling批调度优化。",
+      "scoring_rubric": "1. 设计批处理作业的调度框架和队列管理; 2. 能实现优先级调度和资源抢占策略; 3. 能支持作业依赖链和DAG编排; 4. 能设计失败重试和死信队列处理机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-010",
+      "prompt": "设计一个Kubernetes配置漂移检测和修复方案，集群中300+服务的实际运行状态与Git仓库声明式配置不一致时，自动检测漂移、告警通知并支持一键修复（重新Apply）。",
+      "sub_type": "configuration_drift",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计ArgoCD漂移检测（Diff对比），定时扫描Job检测非声明式变更，告警通知（Slack/钉钉），一键Sync修复，Webhook防止kubectl直连集群绕过GitOps。",
+      "scoring_rubric": "1. 设计配置漂移的自动检测机制; 2. 能实现漂移告警和变更来源追溯; 3. 能支持一键修复和同步回Git声明状态; 4. 能设计防止绕过GitOps的准入控制策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-011",
+      "prompt": "设计一个Kubernetes集群滚动升级方案，生产集群有100个节点需要从1.27升级到1.29。需要保证升级期间业务零中断，设计节点排空顺序、PodDisruptionBudget配置、升级失败回滚策略。",
+      "sub_type": "cluster_upgrade_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计节点分批升级策略（先升级控制面，再分批升级工作节点，避免kubelet版本高于kube-apiserver的版本倾斜），PodDisruptionBudget保障最小可用副本数，节点排空顺序（低优先级Pod先迁移），升级健康检查和自动暂停机制，失败时的回滚和修复流程。",
+      "scoring_rubric": "1. 设计分批滚动升级策略保障业务零中断; 2. 能配置PodDisruptionBudget和节点排空策略; 3. 能实现升级过程的健康检查和自动暂停; 4. 能设计升级失败的回滚和修复机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-012",
+      "prompt": "设计一个Docker镜像构建优化流水线，CI构建时间从15分钟优化到3分钟以内。需要设计构建缓存策略、多阶段构建优化、镜像层复用、并行构建依赖分析。",
+      "sub_type": "image_optimization_pipeline",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计构建缓存策略（BuildKit缓存挂载/远程缓存），多阶段构建分离编译和运行环境，镜像层复用（频繁变更层后置），依赖分析实现无依赖步骤并行构建，构建时间监控和优化持续跟踪。",
+      "scoring_rubric": "1. 从多个维度设计BuildKit缓存和远程缓存策略减少重复构建; 2. 能优化多阶段构建和镜像层顺序提升复用率; 3. 能分析依赖关系实现并行构建; 4. 能监控构建时间并持续优化流水线。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-013",
+      "prompt": "设计一个开发者体验（DevEx）提升方案，新开发者从入职到第一次提交代码需要3天。需要设计本地开发环境一键搭建、热重载开发模式、统一调试配置、文档即代码、PR预览环境。",
+      "sub_type": "dev_experience",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Dev Container/Gitpod一键开发环境，热重载开发模式（Skaffold/Tilt），统一的VSCode调试配置和任务定义，文档即代码（Swagger/OpenAPI自动生成），PR自动创建预览环境，开发者满意度调研和指标追踪。",
+      "scoring_rubric": "1. 设计一键搭建的本地开发环境方案; 2. 能实现热重载和统一调试配置提升开发效率; 3. 能设计PR预览环境和文档自动生成机制; 4. 能建立开发者体验的度量指标和持续改进机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-014",
+      "prompt": "设计一个云资源成本归因方案，月度云账单200万元需要精确分摊到20个产品线。需要设计标签体系（团队/项目/环境/服务）、共享资源分摊规则、成本报告自动化和异常消费告警。",
+      "sub_type": "cost_attribution",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计多维标签体系（团队/项目/环境/服务/成本中心），共享资源（网络/存储/监控）的分摊规则（按用量/按比例），自动化成本报告生成和分发，异常消费检测（同比环比突增）和告警，标签合规检查和强制打标策略。",
+      "scoring_rubric": "1. 设计多维度的资源标签体系和打标规范; 2. 能制定共享资源的公平分摊规则; 3. 能实现自动化成本报告和异常消费告警; 4. 能设计标签合规检查和强制打标机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-015",
+      "prompt": "设计一个Istio Sidecar资源优化方案，500个Pod的Sidecar代理总内存占用超过100GB。需要优化Sidecar的CPU/内存配置、连接池大小、监听范围裁剪、按需注入策略。",
+      "sub_type": "sidecar_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析Sidecar内存占用构成（连接数/证书缓存/统计信息），优化资源Requests/Limits配置，裁剪不必要的监听范围（Sidecar资源声明），连接池大小调优，评估按需注入（ambient mesh）替代方案，监控Sidecar资源使用趋势。",
+      "scoring_rubric": "1. 从多个维度分析Sidecar内存占用构成和优化方向; 2. 能优化资源配置和连接池参数; 3. 能通过Sidecar资源声明裁剪监听范围; 4. 能评估ambient mesh等新架构的替代价值。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-016",
+      "prompt": "设计一个Kubernetes多租户隔离方案，三个产品团队共享一个集群，需要实现计算资源隔离（ResourceQuota/LimitRange）、网络隔离（NetworkPolicy）、存储隔离和权限隔离（RBAC/OPA）。",
+      "sub_type": "k8s_multi_tenancy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Namespace-per-team隔离模型，ResourceQuota和LimitRange配置计算资源隔离，NetworkPolicy实现网络微分段，StorageClass和PVC配额实现存储隔离，RBAC角色绑定和OPA/Gatekeeper策略实现权限隔离，租户自助管理门户。",
+      "scoring_rubric": "1. 设计Namespace级别的多租户隔离架构; 2. 能实现计算、网络、存储的资源隔离策略; 3. 能配置RBAC和OPA实现细粒度权限控制; 4. 能设计租户自助管理和资源使用报告。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-017",
+      "prompt": "设计一个服务账号密钥自动轮换方案，Kubernetes集群中200+ServiceAccount的Token需要定期轮换（90天），需要实现零停机轮换、旧Token宽限期、轮换失败告警和审计追踪。",
+      "sub_type": "service_account_rotation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计CronJob定时轮换机制，新旧Token共存的宽限期策略（双Token窗口），使用Projected ServiceAccount Token（可配置过期时间），轮换失败的告警和重试机制，审计日志记录轮换操作，与外部系统（Vault/CI）的Token同步。",
+      "scoring_rubric": "1. 设计自动化的Token定期轮换机制; 2. 能实现新旧Token共存的零停机轮换策略; 3. 能设计轮换失败的告警和重试机制; 4. 能实现轮换操作的审计追踪和外部同步。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-018",
+      "prompt": "设计一个Kubernetes Ingress管理方案，100+微服务需要统一的入口流量管理。对比Nginx Ingress/Contour/Traefik/APISIX Ingress，设计路由规则管理、TLS终止、限流和灰度路由。",
+      "sub_type": "ingress_management",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应对比四种Ingress控制器的性能、功能和运维复杂度，设计统一的路由规则模板（基于域名/路径/Header），TLS证书自动管理（cert-manager集成），限流策略（令牌桶/滑动窗口），灰度路由（按比例/Header/Cookie），Ingress配置的GitOps管理。",
+      "scoring_rubric": "1. 对比多种Ingress控制器的特性和适用场景; 2. 能设计统一的路由规则模板和TLS管理方案; 3. 能实现限流和灰度路由策略; 4. 能将Ingress配置纳入GitOps管理流程。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-019",
+      "prompt": "设计一个Kubernetes命名空间治理方案，集群中有80+Namespace需要规范化管理。设计命名空间模板（配额/网络策略/标签/RBAC）、生命周期管理（创建审批/过期回收）、资源使用报告。",
+      "sub_type": "namespace_strategy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Namespace模板（Template）包含默认ResourceQuota/NetworkPolicy/Label/RBAC，Namespace创建审批流程（OPA/Gatekeeper准入控制），过期Namespace自动检测和回收机制，资源使用报告和利用率分析，命名空间命名规范和标签标准化。",
+      "scoring_rubric": "1. 从多个维度设计标准化的Namespace模板和命名规范; 2. 能实现Namespace创建审批和生命周期管理; 3. 能设计过期Namespace的自动检测和回收机制; 4. 能生成资源使用报告和利用率分析。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-020",
+      "prompt": "设计一个工作负载身份方案，替代传统的Secret/ConfigMap存储凭据的方式，使用Kubernetes Workload Identity让Pod直接获取云服务（AWS S3/GCP BigQuery）的临时凭据，实现零密钥管理。",
+      "sub_type": "workload_identity",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Workload Identity绑定机制（GCP Workload Identity/AWS IRSA），ServiceAccount与云IAM角色的信任关系建立，临时凭据的自动获取和刷新流程，最小权限策略（按Pod/命名空间分配不同权限），审计和监控凭据使用，迁移方案（从静态密钥到动态凭据）。",
+      "scoring_rubric": "1. 设计Workload Identity与云IAM的信任绑定机制; 2. 能实现临时凭据的自动获取和刷新流程; 3. 能设计最小权限策略和细粒度访问控制; 4. 能设计从静态密钥到动态凭据的迁移方案。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-021",
+      "prompt": "设计一个Git分支策略方案，30人开发团队需要在GitHub上协作，需要对比Git Flow/GitHub Flow/Trunk-Based三种分支策略，选择最适合持续部署场景的方案，设计分支保护规则和合并策略。",
+      "sub_type": "git_branching_strategy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应对比Git Flow（复杂/适合版本发布）、GitHub Flow（简洁/适合持续部署）、Trunk-Based（快速集成/需要Feature Flag），设计分支保护规则（Required Review/Status Check/Force Push禁止），合并策略（Squash Merge/Rebase），Hotfix流程和Release Tag管理。",
+      "scoring_rubric": "1. 对比三种分支策略的适用场景和优缺点; 2. 能设计分支保护规则和代码审查要求; 3. 能制定合并策略和Hotfix快速修复流程; 4. 能与CI/CD流水线集成实现自动化验证。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-022",
+      "prompt": "设计一个容器镜像安全扫描方案，在CI/CD流水线中自动扫描Docker镜像的CVE漏洞、恶意软件、敏感信息泄露、合规性问题。设计扫描门禁策略（Critical漏洞阻断/High漏洞告警）和修复流程。",
+      "sub_type": "container_security_scanning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应集成Trivy/Grype进行CVE扫描，配置严重度分级门禁（Critical阻断/High告警/Medium记录），扫描敏感信息（密钥/证书/密码），检查合规性（非root运行/只读文件系统），设计漏洞修复SLA和自动PR修复流程。",
+      "scoring_rubric": "1. 集成容器安全扫描工具到CI/CD流水线; 2. 能设计基于严重度的分级门禁策略; 3. 能扫描敏感信息和合规性问题; 4. 能设计漏洞修复SLA和自动化修复流程。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-023",
+      "prompt": "设计一个Helm Chart管理方案，50+微服务的Kubernetes部署配置需要统一管理。设计Chart模板规范、Values分层管理、Chart版本发布流程、Chart仓库管理和依赖管理。",
+      "sub_type": "helm_chart_management",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Helm Library Chart公共模板（Deployment/Service/Ingress/HPA），Values分层（default/environment/overlay），Chart版本语义化和发布流程，Chartmuseum/Harbor仓库管理，Dependency管理（子Chart引用），Helm Lint和Template测试集成CI。",
+      "scoring_rubric": "1. 设计可复用的Helm Chart模板规范; 2. 能实现Values分层管理支持多环境配置; 3. 能设计Chart版本发布和仓库管理流程; 4. 能集成Helm测试到CI流水线。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-024",
+      "prompt": "设计一个Kubernetes资源限制策略方案，集群中500+Pod需要合理配置Requests/Limits。需要基于历史使用数据自动推荐资源配置，防止资源浪费和OOM Kill，使用VPA和Goldilocks实现。",
+      "sub_type": "k8s_resource_limiting",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应使用VPA推荐器分析历史资源使用数据，Goldilocks提供命名空间级别的VPA推荐仪表盘，设计资源配额分级（BestEffort/Burstable/Guaranteed QoS），LimitRange设置默认值，资源配置的渐进式调整和验证流程，资源使用率监控和优化闭环。",
+      "scoring_rubric": "1. 使用VPA和Goldilocks自动推荐资源配置; 2. 能设计QoS分级和资源配额策略; 3. 能实现渐进式资源配置调整和验证; 4. 能建立资源使用率监控和优化闭环。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-025",
+      "prompt": "设计一个日志采集管道优化方案，50个微服务每天产生2TB日志，当前Fluentd采集延迟30分钟且频繁丢日志。需要优化采集管道的吞吐量、可靠性和成本效率。",
+      "sub_type": "log_aggregation_pipeline",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析Fluentd瓶颈（解析/缓冲/输出），优化缓冲策略（文件缓冲vs内存缓冲），设计分级采集（Error全量/Info采样），输出批量化和压缩，采集Agent高可用（主备/多副本），日志采样和过滤策略减少存储成本，端到端延迟监控。",
+      "scoring_rubric": "1. 从多个维度分析日志采集管道的瓶颈环节; 2. 能优化缓冲策略和输出批量化提升吞吐量; 3. 能设计分级采集和采样策略降低成本; 4. 能监控端到端采集延迟和可靠性。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-026",
+      "prompt": "设计一个监控指标基数（Metric Cardinality）控制方案，Prometheus中自定义指标的标签组合爆炸导致基数从10万增长到5000万，存储和查询性能严重退化。需要设计标签规范、基数限制和高基数指标处理策略。",
+      "sub_type": "metric_cardinality_control",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计标签命名规范（禁止高基数标签如user_id/request_id），Prometheus recording rules预聚合高基数指标，基数限制告警（单指标超阈值自动阻断），高基数指标迁移到日志或ClickHouse，指标审计和清理流程（未使用指标定期清理），Grafana仪表盘规范。",
+      "scoring_rubric": "1. 设计标签命名规范和基数限制策略; 2. 能使用recording rules预聚合高基数指标; 3. 能实现基数超限告警和自动阻断; 4. 能建立指标审计和清理的常态化机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-027",
+      "prompt": "设计一个告警路由规则方案，100+告警规则需要按团队/服务/严重度路由到不同的通知渠道（钉钉/电话/邮件/PagerDuty）。设计告警标签体系、路由规则引擎和升级策略。",
+      "sub_type": "alert_routing_rules",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计告警标签体系（team/service/severity/component），Alertmanager路由树（match/match_re/continue），通知渠道配置（webhook/email/pagerduty/phone），静默和抑制规则（关联告警合并），值班轮转集成（PagerDuty/Opsgenie），告警升级（P1:5分钟电话/P2:30分钟IM/P3:邮件）。",
+      "scoring_rubric": "1. 设计告警标签体系和路由规则引擎; 2. 能配置多通知渠道和分级升级策略; 3. 能设计告警静默和关联抑制规则; 4. 能集成值班轮转实现7x24响应。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-028",
+      "prompt": "设计一个CI构建缓存优化方案，Java项目的CI构建时间从10分钟增长到30分钟。需要优化Maven/Gradle依赖缓存、Docker层缓存、测试结果缓存，将构建时间降到5分钟以内。",
+      "sub_type": "ci_cache_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计多层缓存策略：依赖缓存（Maven Local/.m2缓存持久化/Gradle Build Cache），Docker层缓存（BuildKit缓存挂载/远程缓存registry），测试结果缓存（增量测试/影响分析选测），缓存预热（每日定时构建/共享缓存），缓存命中率监控和优化。",
+      "scoring_rubric": "1. 设计依赖缓存和Docker层缓存策略; 2. 能实现增量测试和测试结果缓存; 3. 能设计缓存预热和共享机制; 4. 能监控缓存命中率和构建时间改善。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-029",
+      "prompt": "设计一个制品晋级（Artifact Promotion）方案，Docker镜像从dev构建->test验证->staging验证->production部署需要经过多级质量门禁。设计制品标签管理、晋级规则、审批流程和可追溯性。",
+      "sub_type": "artifact_promotion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计制品标签体系（dev/tested/stable/production），晋级规则（单元测试通过->集成测试通过->安全扫描通过->性能测试通过），审批流程（自动门禁+人工审批），制品不可变性保障（同一镜像从test到prod不重新构建），晋级日志和可追溯性（谁在什么时间基于什么证据晋级）。",
+      "scoring_rubric": "1. 设计制品标签体系和多级质量门禁; 2. 能实现自动门禁和人工审批相结合的晋级流程; 3. 能保障制品不可变性和可追溯性; 4. 能记录晋级日志支持审计和回溯。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-030",
+      "prompt": "设计一个Terraform状态管理方案，多团队共用同一组AWS资源时出现状态文件冲突和资源意外删除。需要设计状态文件锁定、远程存储、工作空间隔离和变更审批流程。",
+      "sub_type": "terraform_state_locking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计远程状态后端（S3+DynamoDB锁定），工作空间隔离（workspace或目录per环境/团队），状态文件加密存储和访问控制，变更审批流程（terraform plan输出PR Review/OPA策略检查），状态文件备份和恢复策略，import和mv操作规范防止资源意外删除。",
+      "scoring_rubric": "1. 设计远程状态存储和锁定机制; 2. 能实现工作空间隔离和访问控制; 3. 能设计变更审批和策略检查流程; 4. 能制定状态文件备份和恢复策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-031",
+      "prompt": "设计一个GitOps渐进式配置发布方案，基础设施配置变更（如网络策略/资源配额）需要按dev->staging->prod逐环境推进，每阶段自动验证配置生效且无副作用。",
+      "sub_type": "gitops_progressive_config",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计ArgoCD ApplicationSet的渐进式同步策略，每阶段自动验证（健康检查+功能测试+指标对比），配置变更的影响范围预评估（OPA策略检查），自动推进和回滚条件定义，变更审计和通知机制。",
+      "scoring_rubric": "1. 从多个维度设计配置变更的逐环境渐进式发布策略; 2. 能实现每阶段的自动验证和影响评估; 3. 能定义自动推进和回滚条件并支持审计追踪。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-032",
+      "prompt": "设计一个PR阶段的Kubernetes Manifest验证方案，自动检测Helm Chart或Kustomize配置中的安全漏洞、资源配额违规、标签规范违反和最佳实践偏离。",
+      "sub_type": "pr_manifest_validation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应集成kubeval/kubeconform验证Schema合规，OPA/Gatekeeper策略检查安全和规范，Polaris检测最佳实践偏离，资源Limit/Request合理性校验，验证结果作为PR Check阻断不合规变更，生成可读的验证报告。",
+      "scoring_rubric": "1. 具体集成多种工具验证Manifest的安全和规范合规性; 2. 能将验证结果作为PR Check阻断不合规变更; 3. 能生成可读的验证报告辅助开发者修复问题。，避免笼统描述；"
+    },
+    {
+      "id": "56-033",
+      "prompt": "设计一个可观测性数据湖架构方案，将Metrics、Logs、Traces三大支柱的数据统一存储和关联分析。需要设计数据分层存储（热/温/冷）、统一查询接口和成本优化策略。",
+      "sub_type": "observability_data_lake",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计OpenTelemetry统一采集层，分层存储架构（热数据Prometheus/Loki/Tempo/温数据ClickHouse/冷数据S3），TraceID贯穿关联Metrics和Logs，统一查询接口（PromQL+LogQL+TraceQL联邦查询），数据保留策略和压缩优化降低成本。",
+      "scoring_rubric": "1. 从多个维度设计三大支柱数据的统一采集和分层存储架构; 2. 能实现基于TraceID的跨信号关联分析; 3. 能设计数据保留策略和成本优化机制。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-034",
+      "prompt": "设计一个FinOps成本优化自动化方案，自动分析Kubernetes集群中各工作负载的实际资源使用与配置的偏差，生成Rightsizing建议并支持一键应用。",
+      "sub_type": "finops_rightsizing_automation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计资源使用数据采集（Prometheus/VPA），偏差分析引擎（实际使用vs配置的百分位对比），Rightsizing建议生成（保守/激进两种策略），安全应用机制（渐进式调整/自动回滚/审批流），成本节省量化报告和趋势跟踪。",
+      "scoring_rubric": "1. 设计资源使用偏差的自动化分析引擎; 2. 能生成多策略的Rightsizing建议并支持安全应用; 3. 能量化成本节省并提供趋势跟踪报告。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "56-035",
+      "prompt": "设计一个Git提交规范自动化方案，30人团队的Git提交信息格式不统一，影响变更日志自动生成和问题追溯。需要设计提交信息规范、校验工具和违规处理策略。",
+      "sub_type": "git_commit_convention",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Conventional Commits规范（type(scope): subject），commitlint校验规则和Git Hook集成，提交信息模板和CLI辅助工具（commitizen），违规处理（阻断提交/告警提示），变更日志自动生成（standard-version/release-please）。",
+      "scoring_rubric": "1. 设计清晰的提交信息规范和校验规则; 2. 能集成Git Hook实现提交时自动校验; 3. 能基于规范自动生成变更日志。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-036",
+      "prompt": "设计一个Kubernetes Operator开发方案，实现数据库实例的声明式管理（创建/扩容/备份/故障恢复）。需要设计CRD定义、Reconciliation逻辑、状态管理和测试策略。",
+      "sub_type": "k8s_operator_development",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计CRD Schema（Spec定义期望状态/Status定义实际状态），Reconciliation循环（对比Spec和Status计算差异并执行操作），状态机管理（Creating/Ready/Scaling/BackupFailed等状态转换），Operator测试策略（envtest集成测试/Chaos测试），Operator生命周期管理（升级/回滚/监控）。",
+      "scoring_rubric": "1. 设计合理的CRD Schema和状态模型; 2. 能实现Reconciliation循环和状态机管理; 3. 能设计Operator的完整测试和生命周期管理策略。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-037",
+      "prompt": "设计一个分布式追踪采样策略方案，全量采集Trace数据成本过高（日均50TB），需要设计智能采样策略在降低存储成本的同时保留有价值的Trace数据用于故障排查。",
+      "sub_type": "distributed_trace_sampling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计多层采样策略（头部采样+尾部采样），头部采样基于请求类型和流量比例，尾部采样保留慢请求和错误请求的完整Trace，动态采样率调整（基于流量和存储预算），采样决策的传播机制（通过Header传递），采样效果评估（存储节省/问题排查覆盖率）。",
+      "scoring_rubric": "1. 从多个维度设计头部采样和尾部采样相结合的智能策略; 2. 能实现采样决策的跨服务传播机制; 3. 能评估采样效果平衡存储成本和排查能力。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-038",
+      "prompt": "设计一个容器开发环境标准化方案，团队20人的本地开发环境不一致导致\"在我机器上能跑\"问题频发。需要设计Dev Container标准配置、开发工具链统一和安全加固。",
+      "sub_type": "dev_container_standardization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Dev Container标准配置（基础镜像/工具链/扩展/端口映射），统一的IDE配置（VSCode Settings/Launch配置/扩展推荐），开发环境的安全加固（非root运行/密钥管理/网络隔离），环境模板的版本管理和自动更新，新人环境搭建SLA（30分钟内可用）。",
+      "scoring_rubric": "1. 设计标准化的Dev Container配置和工具链; 2. 能实现开发环境的安全加固和密钥管理; 3. 能设计环境模板的版本管理和自动更新机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-039",
+      "prompt": "设计一个Kubernetes日志采集性能优化方案，50个微服务的日志Fluent Bit采集延迟从秒级恶化到分钟级。需要分析采集管道瓶颈（解析/缓冲/输出），优化缓冲策略和并行度。",
+      "sub_type": "log_collection_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应分析Fluent Bit管道瓶颈（输入插件/过滤器解析/缓冲区/输出插件），优化内存和文件缓冲策略，设计多输出路由（Error日志优先/采样Info日志），并行Worker数调优，背压机制（输出阻塞时的缓冲策略），端到端延迟监控和采集可靠性保障。",
+      "scoring_rubric": "1. 从多个维度分析日志采集管道的瓶颈环节; 2. 能优化缓冲策略和并行度提升吞吐量; 3. 能设计分级采集和背压机制保障可靠性。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-040",
+      "prompt": "设计一个Kubernetes集群多区域高可用方案，应用需要跨三个可用区部署，任一区域故障时自动切换。需要设计跨区域的服务发现、负载均衡和数据同步策略。",
+      "sub_type": "multi_az_high_availability",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Pod拓扑分散约束（topologySpreadConstraints跨AZ均匀分布），跨AZ的服务发现和负载均衡（Service/Ingress感知AZ），数据库跨AZ主从部署和自动故障转移，存储跨AZ复制策略，区域故障检测和自动流量切换，跨AZ延迟监控和优化。",
+      "scoring_rubric": "1. 设计Pod跨AZ的拓扑分散和调度约束; 2. 能实现跨AZ的服务发现和自动故障转移; 3. 能设计数据层的跨AZ同步和一致性保障。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-041",
+      "prompt": "设计一个GitOps自动回滚机制方案，ArgoCD同步部署后通过Prometheus指标自动判断部署是否成功，指标异常时自动回滚到上一个健康版本。需要设计健康判定规则和回滚执行流程。",
+      "sub_type": "gitops_auto_rollback",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计部署后健康检查机制（Prometheus指标采集：错误率/延迟/Pod重启次数），健康判定规则（错误率>5%持续3分钟判定为不健康），自动回滚流程（ArgoCD Rollback到上一个Revision），回滚触发条件和冷却期（防止频繁回滚），回滚通知和事件记录，回滚后的根因分析引导，与Argo Rollouts渐进式交付集成。",
+      "scoring_rubric": "1. 设计基于Prometheus指标的部署健康判定规则; 2. 能实现ArgoCD自动回滚到上一健康版本的流程; 3. 能设计回滚触发条件、冷却期和通知机制; 4. 能与渐进式交付工具集成实现自动化回滚保护。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-042",
+      "prompt": "设计一个蓝绿部署流量切换方案，电商平台大促前需要实现零停机部署。设计蓝绿环境的基础设施编排、流量切换机制、数据同步策略和快速回切能力。",
+      "sub_type": "blue_green_deployment",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计蓝绿双环境的基础设施编排（Terraform/Helm定义两套完整环境），流量切换机制（Service Mesh/Istio VirtualService权重切换/DNS切换/Ingress注解切换），数据层同步策略（共享数据库/读写分离/Schema向前兼容），切换前验证（绿环境冒烟测试/性能基线对比），快速回切能力（一键切回蓝环境/回切验证），切换期间的请求不丢失保障。",
+      "scoring_rubric": "1. 设计蓝绿双环境的基础设施编排方案; 2. 能实现秒级流量切换和快速回切机制; 3. 能设计数据层同步和Schema兼容性策略; 4. 能在切换前后进行自动化验证保障零停机。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-043",
+      "prompt": "设计一个混沌工程常态化运行方案，将混沌实验从一次性演练转变为持续的韧性验证。需要设计实验库管理、自动调度、爆炸半径控制和韧性评分体系。",
+      "sub_type": "chaos_engineering常态化",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计混沌实验库（Pod故障/网络延迟/磁盘压力/CPU压力等标准化实验模板），实验自动调度（定时执行/发布后触发/事件驱动），爆炸半径控制（从单Pod到单Namespace到集群级的渐进放大），稳态假说定义和自动验证（核心业务指标偏差阈值），韧性评分体系（各服务的韧性得分和排名），实验结果自动生成报告和改进建议，与Chaos Mesh/LitmusChaos集成。",
+      "scoring_rubric": "1. 设计标准化的混沌实验库和自动调度机制; 2. 能实现爆炸半径的渐进式放大和自动控制; 3. 能设计韧性评分体系和持续改进机制; 4. 能与混沌工程平台集成实现常态化运行。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-044",
+      "prompt": "设计一个密钥管理服务（KMS）方案，替代Kubernetes Secret明文存储敏感信息。使用HashiCorp Vault或AWS Secrets Manager实现动态密钥、自动轮换和审计追踪。",
+      "sub_type": "secret_management",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计Vault高可用部署和密钥引擎选型（KV/PKI/Transit/Database），Kubernetes集成（CSI Driver/Sidecar Injector），动态密钥生成和自动轮换策略，审计日志和最小权限策略，迁移方案（从K8s Secret到Vault渐进迁移）。",
+      "scoring_rubric": "1. 设计KMS的高可用部署和密钥引擎选型; 2. 能实现Kubernetes集成和动态密钥生成; 3. 能设计自动轮换策略和审计追踪机制; 4. 能设计从现有方案到KMS的渐进迁移方案。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-045",
+      "prompt": "设计一个CI/CD流水线性能优化方案，当前CI构建从提交到部署需要45分钟。需要分析流水线瓶颈（编译/测试/镜像构建/部署），设计并行化、增量构建和缓存策略将总时间缩短到15分钟。",
+      "sub_type": "cicd_pipeline_optimization",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应分析流水线各阶段耗时占比和瓶颈（编译25%/测试40%/镜像构建20%/部署15%），设计并行化策略（测试并行执行/无依赖步骤并行），增量构建（增量编译/增量测试/变更影响分析选测），缓存策略（依赖缓存/Docker层缓存/测试结果缓存），流水线Stage重排（将快速失败的检查前置），构建时间监控和趋势分析。",
+      "scoring_rubric": "1. 从多个维度分析CI/CD流水线各阶段的耗时瓶颈; 2. 能设计并行化和增量构建策略缩短构建时间; 3. 能实现多层缓存策略减少重复构建; 4. 能监控构建时间趋势并持续优化。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-046",
+      "prompt": "设计一个可观测性驱动的部署验证方案，每次部署后自动对比部署前后的核心指标（错误率/延迟/吞吐量），指标退化时自动阻断部署推进并触发告警。",
+      "sub_type": "observability_driven_deployment",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计部署前后指标对比机制（部署前5分钟基线vs部署后5分钟验证），核心指标定义（错误率/延迟P99/吞吐量/资源使用率），退化判定规则（指标偏差超过阈值且持续时间超过窗口），与渐进式交付集成（Argo Rollouts AnalysisTemplate），自动阻断和回滚流程，部署验证报告生成（指标对比图表/退化原因分析），告警通知和升级策略。",
+      "scoring_rubric": "1. 从多个维度设计部署前后的指标自动对比机制; 2. 能定义退化判定规则和自动阻断策略; 3. 能与渐进式交付工具集成实现自动化验证; 4. 能生成部署验证报告辅助根因分析。，给出量化的对比数据或具体案例；"
+    },
+    {
+      "id": "56-047",
+      "prompt": "设计一个数据库变更自动化管理方案，数据库Schema变更需要通过Flyway/Liquibase实现版本化管理、自动化迁移和回滚。设计变更审查流程、预发布验证和生产发布策略。",
+      "sub_type": "database_migration_automation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计数据库变更脚本的版本化管理（Flyway命名规范/迁移脚本目录结构），变更审查流程（DBA Review/OPA策略检查/影响评估），预发布验证（在预发布环境执行迁移并验证数据完整性），生产发布策略（蓝绿数据库/Online DDL/pt-osc工具），回滚脚本管理（每个迁移脚本配对回滚脚本），变更审计日志和合规追踪。",
+      "scoring_rubric": "1. 设计数据库变更脚本的版本化管理规范; 2. 能实现变更审查和预发布验证流程; 3. 能设计生产环境的安全发布策略和回滚机制; 4. 能建立变更审计日志和合规追踪。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-048",
+      "prompt": "设计一个多集群统一管理方案，企业有3个Kubernetes集群（开发/预发布/生产）分布在不同区域。需要统一管理集群配置、应用部署、监控告警和访问权限。",
+      "sub_type": "multi_cluster_management",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计多集群管理平台选型（Rancher/ArgoCD ApplicationSet/Karmada），统一配置管理（集群间配置同步/差异管理），应用部署策略（逐集群渐进发布/统一发布），统一监控（跨集群Prometheus联邦/Thanos/Cortex），统一告警（跨集群告警聚合和路由），统一访问控制（跨集群RBAC/SSO集成），集群健康度对比看板。",
+      "scoring_rubric": "1. 选择合适的多集群管理平台并设计统一管理架构; 2. 能实现跨集群的配置同步和应用部署策略; 3. 能设计统一的监控、告警和访问控制方案; 4. 能建立集群健康度对比和差异管理机制。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-049",
+      "prompt": "设计一个软件供应链安全方案，保障从代码提交到容器镜像发布的全链路安全。需要覆盖代码签名、依赖漏洞扫描、镜像签名验证、SBOM生成和运行时安全策略。",
+      "sub_type": "supply_chain_security",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应设计代码签名和依赖漏洞扫描门禁，镜像签名验证（cosign/Notary v2），SBOM生成（Syft/CycloneDX），运行时安全（Falco/OPA策略），供应链攻击防护（Typosquatting检测/依赖锁定），安全审计和SLSA合规评估。",
+      "scoring_rubric": "1. 设计从代码到镜像的全链路签名和验证机制; 2. 能集成依赖漏洞扫描和镜像安全扫描到CI/CD; 3. 能生成SBOM并建立软件物料清单管理; 4. 能设计运行时安全策略和供应链攻击防护。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "56-050",
+      "prompt": "设计一个Feature Flag全生命周期管理方案，从功能开发到全量发布需要通过Feature Flag控制功能可见性。设计Flag的创建、灰度、清理流程和技术实现。",
+      "sub_type": "feature_flag_lifecycle",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应设计Feature Flag管理平台和Flag类型分类（Release/Experiment/Ops），灰度策略（按用户ID/地区/比例），Flag代码实现规范和清理机制（全量发布后30天清理），技术债务管理（过期Flag告警/清理看板），Flag审计日志。",
+      "scoring_rubric": "1. 设计Feature Flag管理平台和分类体系; 2. 能实现灰度策略和用户分群控制; 3. 能设计Flag清理机制防止技术债务积累; 4. 能建立Flag审计和生命周期管理流程。，需包含关键细节和边界条件处理；"
+    }
+  ]
+}

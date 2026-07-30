@@ -1,0 +1,430 @@
+{
+  "capability": "security_awareness",
+  "label": "安全意识与防护能力",
+  "total": 47,
+  "cases": [
+    {
+      "id": "130-001",
+      "prompt": "请分析以下CI/CD配置的安全风险：npm install时使用了 .npmrc 配置 registry=https://registry.custom-mirror.com/ 且未校验包的完整性（ignore-scripts=false），同时项目 package-lock.json 已被删除，所有依赖使用 ^ 通配版本。",
+      "sub_type": "supply_chain_attack",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出供应链攻击风险，指出删除lock文件+通配版本+自定义registry+ignore-scripts组合可导致恶意包注入。应分析攻击链：typosquatting或registry劫持可植入后门脚本。应建议锁定版本、校验包完整性、使用npm ci替代npm install。",
+      "scoring_rubric": "1. 准确识别供应链攻击风险，并给出具体的分析依据和推理过程；2. 从多个维度分析lock文件缺失+通配版本导致的不确定性，给出量化的对比数据或具体案例；3. 准确解释ignore-scripts在安装时执行恶意代码的威胁，引用具体的技术原理或标准规范；4. 具体建议使用npm ci、锁定版本、校验包签名。，避免笼统描述；"
+    },
+    {
+      "id": "130-002",
+      "prompt": "请分析以下Nginx配置的安全风险：add_header Access-Control-Allow-Origin '*'; add_header Access-Control-Allow-Credentials 'true'; add_header Access-Control-Allow-Methods 'GET, POST, PUT, DELETE';",
+      "sub_type": "insecure_cors_wildcard",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出CORS通配符与Allow-Credentials同时启用的配置矛盾和安全风险。应指出浏览器虽会拒绝该组合（规范不允许*+credentials），但说明设计意图即暴露了信任所有来源的思路，且如果未来改为动态Origin反射将直接导致凭证劫持。应建议白名单指定允许的域名。",
+      "scoring_rubric": "1. 准确识别CORS通配符的安全风险，并给出具体的分析依据和推理过程；2. 具体指出*与credentials=true的规范矛盾，避免笼统描述；3. 从多个维度分析动态Origin反射场景下的凭证劫持攻击，给出量化的对比数据或具体案例；4. 具体建议使用白名单限定允许的来源域名。，避免笼统描述；"
+    },
+    {
+      "id": "130-003",
+      "prompt": "请分析以下Express应用的安全风险：app.use(helmet({ contentSecurityPolicy: false, xssFilter: false, noSniff: false })); 同时未设置Strict-Transport-Security和X-Frame-Options头。",
+      "sub_type": "missing_security_headers",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出多个关键安全响应头缺失的风险。应逐一分析：CSP缺失导致XSS攻击面扩大、XSS-Filter缺失降低浏览器防护、noSniff缺失允许MIME嗅探攻击、缺少HSTS导致降级攻击、缺少X-Frame-Options导致点击劫持。应建议启用helmet默认配置并补充HSTS和frame防护。",
+      "scoring_rubric": "1. 准确识别CSP缺失对XSS防护的影响，并给出具体的分析依据和推理过程；2. 从多个维度分析HSTS缺失导致的SSL降级风险，给出量化的对比数据或具体案例；3. 具体指出X-Frame-Options缺失与点击劫持的关系，避免笼统描述；4. 建议逐步启用各安全头并提供推荐配置。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "130-004",
+      "prompt": "请分析以下密码重置流程的安全风险：用户请求重置密码时，系统生成一个6位数字token存入数据库，token有效期24小时，重置链接格式为 https://app.com/reset?token=123456，且token使用后不立即失效，允许多次使用。",
+      "sub_type": "insecure_password_reset",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出密码重置流程的多个安全缺陷：6位数字token熵值过低易被暴力枚举、24小时有效期过长增大攻击窗口、token未一次性作废可被重放攻击、URL中明文token可能被Referer头泄露。应建议使用高熵token（UUID或加密随机串）、缩短有效期、使用后立即失效、通过header传递token。",
+      "scoring_rubric": "1. 准确识别token熵值不足导致的暴力枚举风险，并给出具体的分析依据和推理过程；2. 从多个维度分析token未一次性失效的重放攻击威胁，给出量化的对比数据或具体案例；3. 具体指出URL中token可能通过Referer/浏览器历史泄露，避免笼统描述；4. 具体建议使用高熵token、缩短有效期、一次性作废机制。，避免笼统描述；"
+    },
+    {
+      "id": "130-005",
+      "prompt": "请分析以下JWT验证代码的安全风险：header=jwt.get_unverified_header(token); if header['alg']=='none': jwt.decode(token,options={'verify_signature':False}); else: jwt.decode(token,secret,algorithms=['HS256']);",
+      "sub_type": "jwt_none_algorithm_v2",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出JWT none算法攻击的变体风险，指出代码虽然只在alg为none时跳过验证，但攻击者可自行构造alg=none的token绕过签名验证，伪造任意payload（如sub=admin）。应分析这种白名单逻辑的根本缺陷——算法由客户端声明而非服务端强制。应建议服务端硬编码允许的算法列表，不读取header中的alg字段。",
+      "scoring_rubric": "1. 准确识别客户端声明算法的根本设计缺陷，并给出具体的分析依据和推理过程；2. 解释攻击者如何伪造alg=none的token实现身份伪造，需包含关键细节和边界条件处理；3. 从多个维度分析该绕过方式可导致任意用户冒充，给出量化的对比数据或具体案例；4. 具体建议服务端硬编码算法白名单而非从token中读取。，避免笼统描述；"
+    },
+    {
+      "id": "130-006",
+      "prompt": "请分析以下Docker容器配置的安全风险：docker run --privileged -v /:/host -e DB_PASSWORD=secret123 --net=host --pid=host --cap-add=ALL myapp:latest",
+      "sub_type": "container_escape_risk",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出多个容器逃逸风险：--privileged赋予容器全部Linux capabilities可逃逸容器、挂载宿主机根目录/到/host使容器可读写宿主文件系统、--net=host和--pid=host共享宿主网络和进程命名空间、环境变量明文传递密码。应建议最小权限原则：移除privileged、不挂载敏感目录、使用secrets管理敏感信息。",
+      "scoring_rubric": "1. 准确识别--privileged导致的容器逃逸风险，并给出具体的分析依据和推理过程；2. 从多个维度分析挂载宿主机根目录的严重后果，给出量化的对比数据或具体案例；3. 具体指出net=host和pid=host的信息泄露风险，避免笼统描述；4. 具体建议最小权限运行并使用Docker secrets管理密码。，避免笼统描述；"
+    },
+    {
+      "id": "130-007",
+      "prompt": "请分析以下Java代码的安全风险：ObjectInputStream ois = new ObjectInputStream(request.getInputStream()); Object obj = ois.readObject(); // 直接反序列化用户提交的数据，且classpath中存在Apache Commons Collections 3.1",
+      "sub_type": "insecure_deserialization_v2",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Java反序列化RCE风险，指出readObject()可触发恶意gadget chain。应指出Commons Collections 3.1是经典利用链（InvokerTransformer），攻击者可构造序列化数据执行任意命令。应建议升级依赖到4.x+、使用ObjectInputFilter白名单或改用JSON序列化。",
+      "scoring_rubric": "1. 能识别Java反序列化RCE风险；2. 能指出Commons Collections 3.1是已知高危gadget链；3. 能解释攻击者如何构造恶意序列化数据执行命令；4. 能建议升级依赖、使用白名单过滤或改用JSON序列化。"
+    },
+    {
+      "id": "130-008",
+      "prompt": "请分析以下应用的安全风险：应用通过用户输入的域名发起HTTP请求并返回内容，DNS解析和HTTP请求之间存在时间差，且未对解析后的IP地址进行二次校验。域名为用户可控参数，服务运行在内网环境中可访问169.254.169.254。",
+      "sub_type": "dns_rebinding",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出DNS重绑定攻击风险，指出攻击者可注册一个域名，首次DNS解析返回合法IP，TTL极短，第二次解析返回内网IP（如169.254.169.254或127.0.0.1），利用时间差绕过基于域名的白名单校验。应建议在DNS解析后对IP地址进行白名单校验，禁止访问内网和链路本地地址。",
+      "scoring_rubric": "1. 准确识别DNS重绑定攻击的原理和威胁，并给出具体的分析依据和推理过程；2. 准确解释TOCTOU（检查时间与使用时间不一致）漏洞，引用具体的技术原理或标准规范；3. 准确说明攻击者如何利用短TTL域名访问内网元数据服务，引用具体的技术原理或标准规范；4. 具体建议对解析后的IP进行二次校验并禁止内网地址访问。，避免笼统描述；"
+    },
+    {
+      "id": "130-009",
+      "prompt": "请分析以下API网关配置的安全风险：upstream配置中未限制请求体大小（client_max_body_size 0），路由规则将所有路径代理到后端（location / { proxy_pass http://backend; }），未配置认证中间件，且开启debug端点（location /debug { return 200 $request_headers; }）。",
+      "sub_type": "insecure_api_gateway_config",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出API网关多个配置缺陷：无请求体大小限制可导致DoS攻击、全路径代理未做路由白名单可能暴露后端内部接口、缺少认证中间件导致任意访问、debug端点泄露请求头信息（含Authorization等敏感字段）。应建议限制请求体大小、配置路由白名单、全局认证中间件、禁用或限制debug端点。",
+      "scoring_rubric": "1. 准确识别无请求体大小限制的DoS风险，并给出具体的分析依据和推理过程；2. 从多个维度分析全路径代理暴露后端接口的威胁，给出量化的对比数据或具体案例；3. 具体指出debug端点泄露敏感请求头信息，避免笼统描述；4. 具体建议配置路由白名单、全局认证、禁用生产环境debug端点。，避免笼统描述；"
+    },
+    {
+      "id": "130-010",
+      "prompt": "请分析以下缓存配置的安全风险：Cache-Control: public, max-age=86400; Vary: （未设置）；同时应用在响应中包含用户个人信息页面（/profile），且CDN根据URL路径进行缓存，不区分用户Session。",
+      "sub_type": "insecure_caching_policy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出缓存策略导致的敏感信息泄露风险，指出public缓存指令+缺少Vary头会导致CDN缓存用户个人页面，后续用户访问同一URL时可能获取到其他用户的缓存数据。应分析这是一个Web缓存投毒/隐私泄露的典型场景。应建议对敏感页面使用private指令、添加Vary: Cookie头、设置Cache-Control: no-store。",
+      "scoring_rubric": "1. 准确识别public缓存指令对敏感页面的隐私泄露风险，并给出具体的分析依据和推理过程；2. 从多个维度分析缺少Vary头导致不同用户共享缓存的问题，给出量化的对比数据或具体案例；3. 具体指出CDN缓存个人信息可被其他用户访问，避免笼统描述；4. 具体建议使用private/no-store指令并添加Vary: Cookie。，避免笼统描述；"
+    },
+    {
+      "id": "130-011",
+      "prompt": "请分析以下CI/CD流水线的安全风险：pipeline中使用了未经校验的第三方GitHub Action（uses: some-user/action@main），且action有权限访问AWS密钥和部署凭证。",
+      "sub_type": "ci_cd_supply_chain",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出CI/CD供应链攻击风险，指出引用@main分支的action可在上游被篡改后自动获取最新恶意代码。应分析攻击场景：action维护者账号被劫持或恶意提交可窃取AWS凭证。应建议锁定action到commit SHA、使用可信组织的action、最小化secrets权限。",
+      "scoring_rubric": "1. 准确识别引用@main分支的供应链攻击风险，并给出具体的分析依据和推理过程；2. 从多个维度分析action可访问部署凭证的严重后果，给出量化的对比数据或具体案例；3. 具体建议锁定action到commit SHA而非分支引用，避免笼统描述；4. 具体提出最小权限原则和secrets作用域限制。，避免笼统描述；"
+    },
+    {
+      "id": "130-012",
+      "prompt": "请分析以下代码的安全风险：app.get('/api/download', (req, res) => { const file = req.query.path; res.sendFile(path.join(BASE_DIR, file)); }); 其中file参数未经任何校验。",
+      "sub_type": "path_traversal_v2",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出路径遍历漏洞，指出攻击者可通过传入../../../etc/passwd读取服务器任意文件。应分析path.join不会阻止../穿越，BASE_DIR拼接后仍可逃逸。应建议使用path.resolve校验结果是否以BASE_DIR开头、过滤../字符、或使用chroot/沙箱隔离。",
+      "scoring_rubric": "1. 准确识别sendFile的路径遍历漏洞，并给出具体的分析依据和推理过程；2. 从多个维度分析path.join不能防止目录穿越的原因，给出量化的对比数据或具体案例；3. 准确说明攻击者如何读取/etc/passwd或应用源码，引用具体的技术原理或标准规范；4. 具体建议path.resolve+前缀校验或白名单机制。，避免笼统描述；"
+    },
+    {
+      "id": "130-013",
+      "prompt": "请分析以下OAuth2.0实现的安全风险：回调处理代码中直接使用req.query.redirect_uri作为授权后的跳转地址，且未校验redirect_uri是否在预注册的白名单中。",
+      "sub_type": "oauth_redirect_uri_manipulation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出OAuth重定向URI篡改风险，指出攻击者可构造恶意redirect_uri将授权码或Token发送到攻击者服务器。应分析这是OAuth2.0中最常见的漏洞之一（开放重定向+授权码窃取）。应建议严格校验redirect_uri与注册时预设的白名单完全匹配。",
+      "scoring_rubric": "1. 准确识别OAuth redirect_uri未校验的安全风险，并给出具体的分析依据和推理过程；2. 准确解释攻击者如何利用此漏洞窃取授权码或Token，引用具体的技术原理或标准规范；3. 具体指出redirect_uri必须与预注册白名单严格匹配，避免笼统描述；4. 准确说明应使用精确匹配而非前缀匹配。，引用具体的技术原理或标准规范；"
+    },
+    {
+      "id": "130-014",
+      "prompt": "请分析以下代码的安全风险：const token = jwt.sign({ userId: user.id, role: user.role }, SECRET, { expiresIn: '7d' }); 用户修改密码后旧Token仍然有效。",
+      "sub_type": "jwt_invalidation_gap",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出JWT无法主动失效的安全风险，指出用户修改密码或被封禁后，已签发的7天内Token仍可使用。应分析JWT无状态设计导致的失效难题。应建议引入Token版本号（password_changed_at字段）、使用短期Token+Refresh Token机制、或维护Token黑名单（Redis）。",
+      "scoring_rubric": "1. 准确识别JWT无法主动失效的安全风险，并给出具体的分析依据和推理过程；2. 从多个维度分析密码修改后旧Token仍可访问的威胁场景，给出量化的对比数据或具体案例；3. 具体建议Token版本号或密码变更时间戳校验，避免笼统描述；4. 具体提出短期Token+Refresh Token的替代方案。，避免笼统描述；"
+    },
+    {
+      "id": "130-015",
+      "prompt": "请分析以下API的安全风险：DELETE /api/users/{id} 接口通过URL中的id参数删除用户，但未校验当前登录用户是否有权删除该id对应的用户，仅校验了登录态。",
+      "sub_type": "broken_object_level_authorization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出BOLA（对象级授权缺失）风险，指出已登录用户可遍历id删除任意用户账户。应分析这是OWASP API Security Top 10排名第一的漏洞。应建议在业务逻辑层校验资源所有权（如id === currentUser.id或管理员角色），不能仅依赖中间件鉴权。",
+      "scoring_rubric": "1. 准确识别BOLA（对象级授权缺失）风险，并给出具体的分析依据和推理过程；2. 准确解释攻击者如何通过遍历ID越权操作，引用具体的技术原理或标准规范；3. 具体指出鉴权需在资源层面而非仅接口层面，避免笼统描述；4. 具体建议基于角色+资源所有权的双重校验。，避免笼统描述；"
+    },
+    {
+      "id": "130-016",
+      "prompt": "请分析以下代码的安全风险：app.use(express.json({ limit: '50mb' })); 同时未对API设置请求频率限制，登录接口返回详细的错误信息（如'用户不存在'或'密码错误'）。",
+      "sub_type": "combined_api_abuse_vectors",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出多个API滥用风险的组合：50MB请求体限制过高可导致DoS攻击、无频率限制允许暴力破解、登录接口区分用户不存在和密码错误可被用于用户枚举攻击。应建议降低请求体限制、添加速率限制、统一返回'用户名或密码错误'。",
+      "scoring_rubric": "1. 准确识别大请求体导致的DoS风险，并给出具体的分析依据和推理过程；2. 准确识别无频率限制的暴力破解威胁，并给出具体的分析依据和推理过程；3. 具体指出登录错误信息差异导致的用户枚举漏洞，避免笼统描述；4. 具体建议统一错误信息和实施速率限制。，避免笼统描述；"
+    },
+    {
+      "id": "130-017",
+      "prompt": "请分析以下代码的安全风险：const data = JSON.parse(req.body); obj[data.key] = data.value; 攻击者发送 {\"key\":\"__proto__\",\"value\":{\"isAdmin\":true}} 的请求体。",
+      "sub_type": "prototype_pollution_v2",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出原型污染攻击，指出攻击者通过设置__proto__键可污染Object.prototype，影响应用中所有对象的属性。应分析污染后可能导致权限提升（isAdmin=true绕过鉴权）或RCE（如覆盖toString/caller等触发gadget chain）。应建议使用Object.create(null)创建纯净对象、过滤__proto__/constructor/prototype键、或使用Map替代普通对象。",
+      "scoring_rubric": "1. 准确识别原型污染的攻击向量和触发条件，并给出具体的分析依据和推理过程；2. 从多个维度分析__proto__污染如何影响全局对象，给出量化的对比数据或具体案例；3. 准确说明污染可导致权限提升或远程代码执行，引用具体的技术原理或标准规范；4. 具体建议过滤危险键或使用Map替代普通对象。，避免笼统描述；"
+    },
+    {
+      "id": "130-018",
+      "prompt": "请分析以下配置的安全风险：Docker镜像使用FROM ubuntu:latest作为基础镜像，镜像中安装了gcc、make、curl、wget等工具，容器以root用户运行，且未设置只读文件系统。",
+      "sub_type": "insecure_container_image",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出容器镜像安全风险：latest标签不可复用且可能引入未知漏洞、开发工具增大攻击面、root运行允许容器内提权、可写文件系统允许植入恶意文件。应建议使用特定版本的最小基础镜像（如alpine）、移除不必要工具、使用非root用户运行、设置只读rootfs。",
+      "scoring_rubric": "1. 准确识别latest标签的不可控风险，并给出具体的分析依据和推理过程；2. 从多个维度分析开发工具增大攻击面的问题，给出量化的对比数据或具体案例；3. 具体指出root运行和可写文件系统的提权风险，避免笼统描述；4. 具体建议最小化镜像、非root运行和只读文件系统。，避免笼统描述；"
+    },
+    {
+      "id": "130-019",
+      "prompt": "请分析以下安全日志审计的缺陷：应用仅在用户登录时记录了登录成功日志，未记录登录失败、权限变更、敏感数据访问、配置修改等操作，日志中也未包含请求IP和用户Agent信息。",
+      "sub_type": "insufficient_audit_logging",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出审计日志不足的安全风险，指出缺少关键安全事件记录导致无法检测攻击行为（如暴力破解、越权操作、数据泄露）。应建议记录所有认证事件（成功和失败）、权限变更、敏感操作（数据导出/删除）、配置修改，日志必须包含时间戳、用户ID、IP、操作详情，且日志应防篡改。",
+      "scoring_rubric": "1. 准确识别审计日志覆盖范围不足的风险，并给出具体的分析依据和推理过程；2. 具体列出应记录的关键安全事件类型，避免笼统描述；3. 具体指出日志缺少IP和User-Agent导致无法追溯攻击源，避免笼统描述；4. 具体建议日志防篡改和集中存储方案。，避免笼统描述；"
+    },
+    {
+      "id": "130-020",
+      "prompt": "请分析以下服务端请求伪造的变体风险：应用允许用户上传SVG文件并在浏览器中直接渲染，SVG内容中包含对内网服务的引用（<image href='http://169.254.169.254/latest/meta-data/'>）。",
+      "sub_type": "svg_based_ssrf",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出通过SVG文件实现的SSRF攻击，指出SVG可包含对内网资源的外部引用，浏览器渲染时会发起请求。应分析SVG不仅可引用图片，还可包含JavaScript（script标签）和外部实体（XXE）。应建议服务端对SVG进行sanitization（移除外部引用和脚本）、设置Content-Security-Policy限制资源加载源、禁止SVG中的外部URL。",
+      "scoring_rubric": "1. 准确识别SVG文件中嵌入外部引用的SSRF风险，并给出具体的分析依据和推理过程；2. 从多个维度分析SVG可同时用于XSS和XXE攻击，给出量化的对比数据或具体案例；3. 具体指出浏览器渲染SVG时会触发外部请求，避免笼统描述；4. 具体建议SVG sanitization和CSP头防护。，避免笼统描述；"
+    },
+    {
+      "id": "130-021",
+      "prompt": "请分析以下代码的安全风险：app.get('/api/user/:id', (req, res) => { const user = db.find({ _id: req.params.id, tenant: req.tenant }); res.json(user); }); 其中req.tenant从JWT中解析但未校验签名算法。",
+      "sub_type": "jwt_algorithm_confusion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出JWT签名算法未强制校验的风险，指出攻击者可篡改JWT中的tenant字段实现跨租户数据访问。应分析如果服务端仅读取JWT payload而不验证签名，攻击者可伪造任意租户身份。应建议服务端硬编码允许的算法并严格验证签名。",
+      "scoring_rubric": "1. 准确识别JWT签名未校验导致的身份伪造风险，并给出具体的分析依据和推理过程；2. 从多个维度分析跨租户数据访问的攻击场景，给出量化的对比数据或具体案例；3. 具体指出应强制校验签名算法而非信任客户端声明，避免笼统描述；4. 具体建议硬编码算法白名单和签名验证机制。，避免笼统描述；"
+    },
+    {
+      "id": "130-022",
+      "prompt": "请分析以下代码的安全风险：const express = require('express'); const app = express(); app.set('view engine', 'ejs'); app.get('/page', (req, res) => { res.render('page', { user input: req.query.name }); }); EJS模板中使用<%= user input %>直接输出。",
+      "sub_type": "server_side_template_injection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出服务端模板注入（SSTI）风险，指出如果模板引擎配置不当，攻击者可通过模板语法注入恶意代码。应分析EJS的<%= %>默认会HTML转义相对安全，但<%- %>会直接输出原始内容。应建议始终使用转义输出、设置Content-Security-Policy头、对用户输入进行长度限制。",
+      "scoring_rubric": "1. 准确识别服务端模板注入风险，并给出具体的分析依据和推理过程；2. 具体区分不同输出标签（转义vs原始）的安全性差异，避免笼统描述；3. 从多个维度分析SSTI可能导致的远程代码执行，给出量化的对比数据或具体案例；4. 具体建议使用转义输出和CSP防护措施。，避免笼统描述；"
+    },
+    {
+      "id": "130-023",
+      "prompt": "请分析以下配置的安全风险：docker-compose.yml中数据库服务配置为 ports: ['3306:3306']，环境变量 MYSQL_ROOT_PASSWORD=admin123，且未配置networks隔离，所有容器共享默认网络。",
+      "sub_type": "container_network_exposure",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出容器网络暴露风险，指出数据库端口映射到宿主机使外部可直接访问，弱密码增加暴力破解风险，共享网络使任何容器都可访问数据库。应建议仅在内部网络暴露数据库端口、使用强随机密码、配置独立的Docker网络隔离服务间通信。",
+      "scoring_rubric": "1. 准确识别数据库端口外暴露的安全风险，并给出具体的分析依据和推理过程；2. 从多个维度分析共享容器网络的横向移动威胁，给出量化的对比数据或具体案例；3. 具体指出弱密码和默认凭证的风险，避免笼统描述；4. 具体建议网络隔离、最小端口暴露和密钥管理。，避免笼统描述；"
+    },
+    {
+      "id": "130-024",
+      "prompt": "请分析以下代码的安全风险：app.use(cors({ origin: (origin, callback) => { callback(null, true); }, credentials: true })); 动态反射所有Origin且允许携带凭证。",
+      "sub_type": "cors_origin_reflection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出动态Origin反射的CORS漏洞，指出服务端将任意请求的Origin原样返回并允许凭证，攻击者可在恶意网站上发起携带用户Cookie的跨域请求窃取数据。应分析这是CORS凭证劫持的典型攻击模式。应建议使用白名单严格校验Origin，禁止通配符与credentials组合。",
+      "scoring_rubric": "1. 准确识别动态Origin反射的凭证劫持风险，并给出具体的分析依据和推理过程；2. 准确解释攻击者如何在恶意网站窃取用户数据，引用具体的技术原理或标准规范；3. 从多个维度分析CORS规范中*与credentials的互斥规则，给出量化的对比数据或具体案例；4. 具体建议使用Origin白名单和严格匹配机制。，避免笼统描述；"
+    },
+    {
+      "id": "130-025",
+      "prompt": "请分析以下代码的安全风险：const WebSocket = require('ws'); const wss = new WebSocket.Server({ port: 8080 }); wss.on('connection', (ws) => { ws.on('message', (msg) => { eval(msg); }); }); WebSocket服务端直接eval客户端消息。",
+      "sub_type": "websocket_code_execution",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出WebSocket消息直接eval导致的远程代码执行风险，指出攻击者可通过WebSocket连接发送任意代码获取服务器控制权。应分析WebSocket绕过了HTTP层的安全防护（如WAF、CSRF Token）。应建议禁止eval、使用JSON解析消息、对WebSocket连接进行认证和消息白名单校验。",
+      "scoring_rubric": "1. 准确识别WebSocket消息eval的远程代码执行风险，并给出具体的分析依据和推理过程；2. 从多个维度分析WebSocket绕过HTTP安全防护的威胁，给出量化的对比数据或具体案例；3. 具体指出WebSocket连接缺乏默认认证机制，避免笼统描述；4. 具体建议消息白名单校验和连接认证机制。，避免笼统描述；"
+    },
+    {
+      "id": "130-026",
+      "prompt": "请分析以下代码的安全风险：app.post('/api/import', (req, res) => { const data = csv.parse(req.files.file.data); data.forEach(row => { db.query('INSERT INTO products SET ?', row); }); res.send('done'); }); CSV导入功能未校验列数和数据类型。",
+      "sub_type": "csv_injection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出CSV注入风险，指出攻击者可在CSV单元格中注入公式（如=cmd|'/C calc'!A0），当用户用Excel打开导出的CSV时会执行恶意命令。应同时识别出未校验列数可能导致数据错位写入、未校验数据类型可能导致SQL错误或注入。应建议校验CSV格式、过滤公式字符、使用参数化插入。",
+      "scoring_rubric": "1. 准确识别CSV注入（公式注入）的安全风险，并给出具体的分析依据和推理过程；2. 从多个维度分析CSV注入在Excel等应用中的执行机制，给出量化的对比数据或具体案例；3. 具体指出数据格式未校验导致的写入异常，避免笼统描述；4. 具体建议输入校验、公式字符过滤和参数化插入。，避免笼统描述；"
+    },
+    {
+      "id": "130-027",
+      "prompt": "请分析以下配置的安全风险：Kubernetes Pod配置中securityContext设置为privileged: true，同时hostPID: true，hostNetwork: true，且使用latest标签的基础镜像。",
+      "sub_type": "k8s_pod_security_misconfig",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Kubernetes Pod安全配置缺陷：privileged模式赋予容器全部capabilities可逃逸容器，hostPID可查看宿主进程列表，hostNetwork可嗅探宿主网络流量，latest标签不可控且可能引入已知漏洞。应建议使用restricted Pod Security Standard、最小权限运行、固定镜像版本。",
+      "scoring_rubric": "1. 准确识别privileged模式的容器逃逸风险，并给出具体的分析依据和推理过程；2. 从多个维度分析hostPID和hostNetwork的信息泄露威胁，给出量化的对比数据或具体案例；3. 具体指出latest标签的不可控供应链风险，避免笼统描述；4. 具体建议Pod Security Standard和最小权限配置。，避免笼统描述；"
+    },
+    {
+      "id": "130-028",
+      "prompt": "请分析以下代码的安全风险：app.use(session({ secret: 'keyboard cat', resave: false, saveUninitialized: false, cookie: { secure: false, sameSite: 'none' } })); Session配置使用弱密钥且SameSite设置为none。",
+      "sub_type": "session_security_misconfig",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出多个Session安全配置缺陷：secret硬编码且为弱密钥可被伪造Session、secure:false允许HTTP传输Session Cookie可被中间人窃取、sameSite:'none'允许跨站携带Cookie增加CSRF攻击面。应建议使用高熵随机密钥、启用secure标志、设置sameSite为lax或strict。",
+      "scoring_rubric": "1. 准确识别弱Session secret的伪造风险，并给出具体的分析依据和推理过程；2. 从多个维度分析secure:false的中间人窃取威胁，给出量化的对比数据或具体案例；3. 具体指出sameSite:none增加的CSRF攻击面，避免笼统描述；4. 具体建议强密钥、secure标志和sameSite严格配置。，避免笼统描述；"
+    },
+    {
+      "id": "130-029",
+      "prompt": "请分析以下代码的安全风险：app.use('/admin', (req, res, next) => { if (req.ip === '127.0.0.1') return next(); res.status(403).send('Forbidden'); }); 管理接口仅通过IP地址进行访问控制。",
+      "sub_type": "ip_based_access_control",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出仅依赖IP地址进行访问控制的风险，指出IP可被伪造（X-Forwarded-For、X-Real-IP头）、反向代理场景下127.0.0.1不代表可信来源。应分析攻击者可通过伪造请求头绕过IP限制。应建议使用多因素认证（Token+IP）、信任代理层的IP解析、配置trust proxy设置。",
+      "scoring_rubric": "1. 准确识别IP地址可被伪造的访问控制绕过风险，并给出具体的分析依据和推理过程；2. 从多个维度分析X-Forwarded-For等头部的伪造攻击，给出量化的对比数据或具体案例；3. 准确指出反向代理场景下IP判断的不可靠性，并给出具体的分析依据和推理过程；4. 具体建议多因素认证和正确的trust proxy配置。，避免笼统描述；"
+    },
+    {
+      "id": "130-030",
+      "prompt": "请分析以下代码的安全风险：app.get('/api/user', (req, res) => { const sql = `SELECT * FROM users WHERE name LIKE '%${req.query.keyword}%'`; db.query(sql); }); 搜索接口使用模板字符串拼接LIKE查询。",
+      "sub_type": "like_clause_injection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出LIKE子句中的SQL注入风险，指出攻击者可通过输入%' OR 1=1 --绕过查询条件。应分析模板字符串与传统拼接在安全性上等价。应建议使用参数化查询并转义LIKE通配符（%和_）。",
+      "scoring_rubric": "1. 准确识别LIKE子句中的SQL注入风险，并给出具体的分析依据和推理过程；2. 从多个维度分析模板字符串拼接的安全等价性，给出量化的对比数据或具体案例；3. 给出参数化查询的修复方案，方案需具体可执行而非泛泛而谈；4. 具体指出LIKE通配符也需要转义处理。，避免笼统描述；"
+    },
+    {
+      "id": "130-031",
+      "prompt": "请分析以下代码的安全风险：crypto.createCipher('aes-256-cbc', 'hardcoded-key')使用已废弃API且密钥硬编码，CBC模式无随机IV。",
+      "sub_type": "weak_encryption_implementation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出多个加密缺陷：使用已废弃的createCipher而非createCipheriv（无IV导致相同明文产生相同密文）、密钥硬编码且为弱密钥字符串、CBC模式无随机IV存在模式泄露风险。应建议使用createCipheriv生成随机IV、使用密钥派生函数（PBKDF2/scrypt）从密码生成密钥。",
+      "scoring_rubric": "1. 准确识别createCipher废弃接口的安全风险，并给出具体的分析依据和推理过程；2. 从多个维度分析无随机IV导致的模式泄露，给出量化的对比数据或具体案例；3. 具体指出密钥硬编码和弱密钥问题，避免笼统描述；4. 具体建议使用IV+密钥派生函数的安全方案。，避免笼统描述；"
+    },
+    {
+      "id": "130-032",
+      "prompt": "请分析以下代码的安全风险：app.use('/api/internal', (req, res, next) => { if (req.headers['x-internal-secret'] === 'my-secret-123') return next(); res.status(403).send('Forbidden'); }); 内部API通过静态密钥头进行鉴权。",
+      "sub_type": "static_internal_secret",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出静态密钥鉴权的多个风险：密钥硬编码在源码中可被泄露、密钥不轮换导致泄露后永久有效、HTTP头可被中间人截获。应分析攻击者可通过源码泄露或网络嗅探获取密钥访问内部API。应建议使用mTLS双向认证、JWT Token或动态短期凭证替代静态密钥。",
+      "scoring_rubric": "1. 准确识别静态密钥的泄露和不可轮换风险，并给出具体的分析依据和推理过程；2. 从多个维度分析HTTP头传输密钥的中间人威胁，给出量化的对比数据或具体案例；3. 具体指出密钥硬编码在源码中的安全缺陷，避免笼统描述；4. 具体建议mTLS或动态凭证的替代方案。，避免笼统描述；"
+    },
+    {
+      "id": "130-033",
+      "prompt": "请分析以下代码的安全风险：elasticsearch.search({body:{query:{query_string:{query:req.body.query}}}})，用户输入直接传入ES的query_string查询。",
+      "sub_type": "elasticsearch_injection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Elasticsearch查询注入风险，指出query_string支持Lucene语法，攻击者可构造特殊查询（如*:*）获取全量数据或通过正则查询消耗服务器资源。应建议使用match查询替代query_string、对用户输入进行特殊字符转义、限制查询复杂度和返回数量。",
+      "scoring_rubric": "1. 准确识别Elasticsearch query_string注入风险，并给出具体的分析依据和推理过程；2. 从多个维度分析Lucene语法特殊字符的利用方式，给出量化的对比数据或具体案例；3. 具体指出资源耗尽和数据泄露的威胁，避免笼统描述；4. 具体建议使用match查询和输入校验。，避免笼统描述；"
+    },
+    {
+      "id": "130-034",
+      "prompt": "请分析以下代码的安全风险：fs.createReadStream(path.join(__dirname,'uploads',req.params.userId,'avatar.png')).pipe(res)，userId参数未校验路径穿越。",
+      "sub_type": "path_traversal_v3",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出路径遍历漏洞，指出攻击者可传入../../etc/passwd作为userId读取服务器任意文件。应分析path.join不会阻止../穿越，__dirname拼接后仍可逃逸。应建议使用path.resolve校验结果是否在uploads目录下、对userId进行正则白名单校验（仅允许字母数字）。",
+      "scoring_rubric": "1. 准确识别userId参数的路径遍历漏洞，并给出具体的分析依据和推理过程；2. 从多个维度分析path.join不能防止目录穿越的原因，给出量化的对比数据或具体案例；3. 准确说明攻击者如何读取任意文件，引用具体的技术原理或标准规范；4. 具体建议路径前缀校验或参数白名单。，避免笼统描述；"
+    },
+    {
+      "id": "130-035",
+      "prompt": "请分析以下配置的安全风险：Spring Boot配置文件中 spring.datasource.password=${DB_PASSWORD} 但Dockerfile中 ENV DB_PASSWORD=admin123 且.dockerignore未排除Dockerfile。",
+      "sub_type": "docker_secret_exposure",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Docker镜像中密钥泄露风险，指出ENV指令将密码写入镜像层可被docker history或镜像扫描工具提取。应分析.dockerignore未排除Dockerfile导致构建上下文泄露。应建议使用Docker BuildKit的--secret挂载、运行时注入环境变量（docker run -e）、或使用密钥管理服务。",
+      "scoring_rubric": "1. 准确识别ENV指令在镜像层中持久化密钥的风险，并给出具体的分析依据和推理过程；2. 从多个维度分析docker history可提取环境变量的威胁，给出量化的对比数据或具体案例；3. 具体指出.dockerignore配置不当的泄露风险，避免笼统描述；4. 具体建议BuildKit secret或运行时注入方案。，避免笼统描述；"
+    },
+    {
+      "id": "130-036",
+      "prompt": "请分析以下代码的安全风险：axios.get(`https://oauth.provider/token?code=${code}&client_secret=${SECRET}`)，OAuth回调通过GET参数传递client_secret。",
+      "sub_type": "oauth_secret_in_url",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出通过GET参数传递client_secret的风险，指出URL会记录在浏览器历史、Referer头、服务器访问日志和代理日志中导致密钥泄露。应分析OAuth2.0规范要求client_secret通过POST请求体传递。应建议改为POST请求传递client_secret、使用PKCE流程替代client_secret。",
+      "scoring_rubric": "1. 准确识别GET参数传递密钥的多处泄露风险，并给出具体的分析依据和推理过程；2. 从多个维度分析URL在浏览器历史和日志中的持久化问题，给出量化的对比数据或具体案例；3. 具体指出违反OAuth2.0规范的安全隐患，避免笼统描述；4. 具体建议POST传递或PKCE替代方案。，避免笼统描述；"
+    },
+    {
+      "id": "130-037",
+      "prompt": "请分析以下代码的安全风险：new WebSocket.Server({port:8080, perMessageDeflate:true})未限制消息大小和连接数，启用了压缩上下文。",
+      "sub_type": "websocket_resource_exhaustion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出WebSocket多个资源耗尽风险：无消息大小限制可发送超大消息导致内存溢出、无连接数限制可进行连接洪水攻击、perMessageDeflate的压缩上下文可被利用进行BREACH攻击。应建议限制消息大小（maxPayload）、限制单IP连接数、禁用压缩或使用上下文接管限制。",
+      "scoring_rubric": "1. 准确识别无消息大小限制的内存溢出风险，并给出具体的分析依据和推理过程；2. 从多个维度分析无连接数限制的DoS威胁，给出量化的对比数据或具体案例；3. 具体指出perMessageDeflate的BREACH攻击向量，避免笼统描述；4. 具体建议消息大小限制和连接数控制。，避免笼统描述；"
+    },
+    {
+      "id": "130-038",
+      "prompt": "请分析以下代码的安全风险：template.replace('{{userName}}',req.query.name).replace('{{data}}',req.query.data)，用户输入直接替换到HTML模板中。",
+      "sub_type": "template_injection_via_replace",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出通过模板替换实现的XSS攻击风险，指出用户输入直接嵌入HTML未进行转义，攻击者可注入<script>标签窃取Cookie或执行恶意操作。应分析String.replace仅替换第一个匹配项的局限性。应建议使用模板引擎的自动转义功能、对用户输入进行HTML实体编码、设置Content-Security-Policy头。",
+      "scoring_rubric": "1. 准确识别模板替换中的XSS注入风险，并给出具体的分析依据和推理过程；2. 从多个维度分析直接HTML拼接的攻击向量，给出量化的对比数据或具体案例；3. 具体指出String.replace的安全局限性，避免笼统描述；4. 具体建议使用模板引擎自动转义和CSP防护。，避免笼统描述；"
+    },
+    {
+      "id": "130-039",
+      "prompt": "请分析以下配置的安全风险：Redis配置中bind 0.0.0.0、protected-mode no、requirepass为空，且部署在公网可访问的服务器上，端口6379未做防火墙限制。",
+      "sub_type": "redis_public_exposure",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Redis公网暴露的严重风险：无密码认证允许任意连接、protected-mode关闭移除了安全保护、bind 0.0.0.0监听所有接口。应分析攻击者可直接连接Redis写入crontab文件获取shell、使用SLAVEOF同步数据窃取、或利用MODULE加载恶意模块。应建议设置强密码、开启protected-mode、仅绑定内网IP、配置防火墙规则。",
+      "scoring_rubric": "1. 准确识别Redis公网暴露的最高级别安全风险，并给出具体的分析依据和推理过程；2. 从多个维度分析攻击者通过Redis获取服务器shell的攻击手法，给出量化的对比数据或具体案例；3. 具体指出无认证和protected-mode关闭的严重性，避免笼统描述；4. 具体建议密码认证、网络隔离和防火墙多层防护。，避免笼统描述；"
+    },
+    {
+      "id": "130-040",
+      "prompt": "请分析以下代码的安全风险：const user = await db.query('SELECT * FROM users WHERE id = ?', [req.params.id]); if (user.role !== 'admin') return res.status(403); await db.query('DELETE FROM users WHERE id = ?', [req.body.targetId]); 管理员删除用户接口未校验targetId是否为可管理范围内的用户。",
+      "sub_type": "privilege_escalation_via_scope",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出权限范围缺失风险：虽然校验了请求者是管理员，但未校验被删除用户是否在该管理员的管辖范围内。超级管理员可被普通管理员删除，跨租户管理员可删除其他租户用户。应建议添加组织/租户范围校验、分级管理员权限模型、关键操作的二次确认机制。",
+      "scoring_rubric": "1. 准确识别管理员权限范围未校验的越权风险，并给出具体的分析依据和推理过程；2. 从多个维度分析跨组织/租户的权限提升攻击场景，给出量化的对比数据或具体案例；3. 具体指出仅校验角色不够还需校验资源范围，避免笼统描述；4. 具体建议分级权限模型和关键操作二次确认。，避免笼统描述；"
+    },
+    {
+      "id": "130-041",
+      "prompt": "请分析以下代码的安全风险：app.post('/api/upload', multer({dest:'./uploads'}).single('file'), (req, res) => { const ext = path.extname(req.file.originalname); fs.renameSync(req.file.path, req.file.path + ext); res.send('ok'); }); 未校验文件类型和大小，文件名由用户控制。",
+      "sub_type": "unrestricted_file_upload",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出多个文件上传风险：未校验文件MIME类型可上传可执行文件（如.jsp/.php）实现RCE，文件大小未限制可导致磁盘耗尽DoS，原始文件名包含路径分隔符可实现路径穿越。应建议校验文件Magic Number而非仅扩展名、限制文件大小、使用随机文件名、存储到非Web可访问目录。",
+      "scoring_rubric": "1. 准确识别文件类型未校验导致的远程代码执行风险，并给出具体的分析依据和推理过程；2. 从多个维度分析文件名控制的路径穿越攻击，给出量化的对比数据或具体案例；3. 具体指出仅靠扩展名校验的不可靠性，避免笼统描述；4. 具体建议Magic Number校验、随机文件名和大小限制。，避免笼统描述；"
+    },
+    {
+      "id": "130-042",
+      "prompt": "请分析以下配置的安全风险：Spring Boot配置 spring.jpa.properties.hibernate.show_sql=true 和 logging.level.org.hibernate.SQL=DEBUG 在生产环境启用，日志输出包含完整的SQL语句和参数值。",
+      "sub_type": "production_debug_logging",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出生产环境启用SQL调试日志的风险：SQL日志中包含用户输入参数值，可能泄露敏感数据（如密码、个人信息）。大量SQL日志增加磁盘IO和存储成本，降低系统性能。攻击者可通过日志注入构造恶意SQL参数在日志中注入内容。应建议生产环境关闭SQL调试日志，仅在排查时临时开启。",
+      "scoring_rubric": "1. 准确识别SQL日志泄露敏感数据的风险，并给出具体的分析依据和推理过程；2. 从多个维度分析大量日志对系统性能的影响，给出量化的对比数据或具体案例；3. 具体指出日志注入的攻击向量，避免笼统描述；4. 具体建议生产环境关闭调试日志的配置规范。，避免笼统描述；"
+    },
+    {
+      "id": "130-043",
+      "prompt": "请分析以下代码的安全风险：const xml2js = require('xml2js'); app.post('/api/parse', (req, res) => { const parser = new xml2js.Parser(); parser.parseString(req.body.xml, (err, result) => { res.json(result); }); }); 该接口直接解析用户提交的XML并把结果透传给业务逻辑。有人说这里存在XXE（XML外部实体注入）风险，请判断是否成立并给出真实风险与防护方案。",
+      "sub_type": "xml_parsing_safety",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出xml2js基于sax/saxes纯JS解析器，默认不解析外部实体，因此经典XXE的文件读取/SSRF风险在xml2js默认配置下并不成立，Billion Laughs（内部实体展开）同样不适用。真正的风险在于直接信任并解析用户提交的XML：可能触发解析器异常、内存占用过大（超大XML导致拒绝服务），以及将任意结构反序列化后注入下游逻辑。应建议：限制XML大小和嵌套深度、对解析结果做白名单结构校验、避免直接将解析结果透传给业务逻辑。若使用libxmljs等会解析实体的库，则需显式禁用外部实体与实体扩展。",
+      "scoring_rubric": "1. 准确判断xml2js默认不解析外部实体、经典XXE风险不成立，并说明依据；2. 指出直接解析用户XML的真实风险（超大XML导致的拒绝服务、解析结果注入下游逻辑）；3. 具体说明Billion Laughs等实体扩展攻击在xml2js下不适用，避免笼统描述；4. 具体建议限制XML大小/嵌套深度、白名单结构校验，以及对libxmljs等库显式禁用实体。"
+    },
+    {
+      "id": "130-044",
+      "prompt": "请分析以下代码的安全风险：app.use(helmet()); app.use(cors({origin: true, credentials: true})); 但Nginx反向代理层配置了 add_header X-Frame-Options SAMEORIGIN; 和 proxy_set_header X-Forwarded-For $remote_addr;",
+      "sub_type": "security_header_conflict",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出应用层和代理层安全头冲突的问题：helmet在应用层设置安全头但Nginx可能覆盖（Nginx的add_header会覆盖同名头），导致部分安全头丢失。应分析X-Forwarded-For可被客户端伪造注入多个IP影响日志审计和IP限流。应建议在单一层面（推荐Nginx）统一管理安全头、配置proxy_set_header时使用$real_ip。",
+      "scoring_rubric": "1. 准确识别应用层和代理层安全头覆盖冲突，并给出具体的分析依据和推理过程；2. 从多个维度分析X-Forwarded-For可被伪造的IP欺骗风险，给出量化的对比数据或具体案例；3. 具体指出多层安全头配置的不一致性问题，避免笼统描述；4. 具体建议单一层面统一管理和real_ip配置。，避免笼统描述；"
+    },
+    {
+      "id": "130-045",
+      "prompt": "请分析以下代码的安全风险：app.get('/api/reports', async (req, res) => { const start = new Date(req.query.start); const end = new Date(req.query.end); const data = await db.query('SELECT * FROM orders WHERE date BETWEEN ? AND ?', [start, end]); res.json(data); }); 用户可传入任意日期范围查询大量数据。",
+      "sub_type": "data_exfiltration_via_range",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出数据泄露风险：未限制日期范围跨度，攻击者可传入极宽的日期范围（如10年）导出全量订单数据。未校验日期格式合法性，非法日期字符串可能导致SQL异常泄露数据库信息。应建议限制日期范围跨度（如最长90天）、校验日期格式合法性、添加分页限制返回行数、记录异常查询的审计日志。",
+      "scoring_rubric": "1. 准确识别无限制日期范围导致的批量数据泄露风险，并给出具体的分析依据和推理过程；2. 从多个维度分析非法日期输入导致的SQL异常信息泄露，给出量化的对比数据或具体案例；3. 具体指出缺少分页和行数限制的查询风险，避免笼统描述；4. 具体建议日期范围限制、格式校验和审计日志。，避免笼统描述；"
+    },
+    {
+      "id": "130-046",
+      "prompt": "请分析以下配置的安全风险：Spring Boot Actuator端点全部暴露 management.endpoints.web.exposure.include=* 且未配置认证，Actuator默认端口与应用端口相同。",
+      "sub_type": "actuator_endpoint_exposure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Spring Boot Actuator端点暴露的严重风险：/env端点泄露环境变量（含数据库密码和API Key）、/heapdump可下载堆转储泄露内存中的敏感数据、/mappings暴露所有API路由、/shutdown可远程关闭应用。应建议仅暴露必要的端点（health/info）、配置独立端口和认证、禁用高危端点（env/heapdump/shutdown）。",
+      "scoring_rubric": "1. 准确识别Actuator端点的信息泄露风险（env/heapdump），并给出具体的分析依据和推理过程；2. 从多个维度分析/heapdump可提取内存中密钥和凭证的威胁，给出量化的对比数据或具体案例；3. 具体指出/shutdown端点的拒绝服务风险，避免笼统描述；4. 具体建议最小暴露原则和独立端口认证方案。，避免笼统描述；"
+    },
+    {
+      "id": "130-047",
+      "prompt": "请分析以下代码的安全风险：app.use(express.json({ type: '*/*' })); 接受所有Content-Type的请求体作为JSON解析，且未设置请求体大小限制。",
+      "sub_type": "overly_permissive_body_parsing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出请求体解析的两个风险：type: '*/*'接受所有Content-Type包括text/xml和multipart/form-data，可能导致非JSON格式数据被错误解析产生异常或绕过上游WAF规则。未设置大小限制（默认100KB但可被覆盖）可发送超大请求体导致内存耗尽。应建议限制Content-Type为application/json、设置合理的size limit、配置请求超时。",
+      "scoring_rubric": "1. 准确识别通配符Content-Type绕过WAF的风险，并给出具体的分析依据和推理过程；2. 从多个维度分析非JSON格式数据被错误解析的安全影响，给出量化的对比数据或具体案例；3. 具体指出无大小限制的内存耗尽DoS风险，避免笼统描述；4. 具体建议严格的Content-Type限制和请求体大小控制。，避免笼统描述；"
+    }
+  ]
+}

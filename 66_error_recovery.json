@@ -1,0 +1,412 @@
+{
+  "capability": "error_recovery",
+  "label": "错误恢复与适应能力",
+  "total": 45,
+  "cases": [
+    {
+      "id": "66-001",
+      "prompt": "我的Python异步程序偶尔会抛出'RuntimeError: Event loop is closed'，但不是每次都出现。用asyncio.run()启动的，程序正常退出时偶发。",
+      "sub_type": "async_event_loop_race",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是异步任务在事件循环关闭后仍尝试执行的问题，通常是由于后台任务未正确await或清理。应建议使用asyncio.create_task时保存引用、在退出前await所有pending任务、或使用asyncio.Runner的shutdown钩子。",
+      "scoring_rubric": "1. 识别出事件循环关闭后仍有异步任务在执行的根因；2. 指出asyncio.run()的清理行为可能导致此问题；3. 建议保存task引用并在退出前await；4. 给出使用asyncio.Runner或信号处理的方案。"
+    },
+    {
+      "id": "66-002",
+      "prompt": "我的Django应用在本地正常，部署到Nginx+Gunicorn后静态文件全部404。DEBUG=True时能访问，DEBUG=False就不行。",
+      "sub_type": "static_file_serving_misconfiguration",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出DEBUG=False时Django不再通过django.contrib.staticfiles提供静态文件服务，需要配置Nginx直接代理静态文件目录或使用collectstatic+WhiteNoise。应给出Nginx的static location配置或WhiteNoise中间件方案。",
+      "scoring_rubric": "1. 识别出DEBUG=False时Django不自动serve静态文件；2. 解释collectstatic的作用；3. 给出Nginx static location配置方案；4. 提及WhiteNoise作为替代方案。"
+    },
+    {
+      "id": "66-003",
+      "prompt": "我的Python程序处理一个大CSV文件时，内存占用从500MB逐渐涨到8GB然后OOM。文件只有2GB，用pandas的read_csv读取。",
+      "sub_type": "data_type_memory_explosion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出pandas读取CSV时可能因数据类型推断将object列占用大量内存（如将数字列读为字符串），或存在重复数据。应建议使用dtype参数显式指定类型、chunksize分块读取、或使用低内存的数据类型（如category、float32）。",
+      "scoring_rubric": "1. 识别出数据类型推断导致内存膨胀的根因；2. 建议使用dtype参数显式指定类型；3. 提出chunksize分块读取方案；4. 建议使用category等低内存类型优化。"
+    },
+    {
+      "id": "66-004",
+      "prompt": "我的微服务调用链中，某个服务返回的数据偶尔会包含其他用户的信息。无法稳定复现，只在高并发时出现。",
+      "sub_type": "shared_state_contamination",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是典型的共享状态污染问题：可能是全局变量、类属性、缓存key冲突、或数据库连接池中的会话状态泄漏。高并发时更容易暴露因为多线程/多协程共享了不该共享的状态。应建议排查全局/类级别变量、缓存隔离、数据库会话生命周期。",
+      "scoring_rubric": "1. 识别出共享状态污染导致数据串用户；2. 列出可能的污染源（全局变量、类属性、缓存、DB会话）；3. 解释高并发更容易暴露的原因；4. 给出排查和修复方案（线程隔离、请求级缓存等）。"
+    },
+    {
+      "id": "66-005",
+      "prompt": "我用requests库调用HTTPS接口，本地能正常访问，但在公司内网服务器上报SSLError: certificate verify failed。已确认证书没过期。",
+      "sub_type": "corporate_proxy_ssl_interception",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出公司内网可能有SSL中间人代理（如企业防火墙、安全网关），它会用自己的证书重新签发HTTPS连接。应建议将企业根证书添加到信任链、或在测试环境中临时使用verify=False（注明安全风险）、或配置REQUESTS_CA_BUNDLE环境变量。",
+      "scoring_rubric": "1. 识别出企业SSL中间人代理的可能；2. 解释为什么本地正常但内网失败；3. 给出添加企业根证书到信任链的方案；4. 提及verify=False的安全风险。"
+    },
+    {
+      "id": "66-006",
+      "prompt": "我的Go程序编译时报'import cycle not allowed'，三个包A、B、C互相引用。代码逻辑上确实需要互相调用，怎么重构？",
+      "sub_type": "circular_import_restructuring",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Go语言严格禁止循环导入，需要通过接口抽象、提取公共包、依赖注入等方式打破循环。应建议将共享接口提取到独立包、使用依赖注入反转依赖方向、或合并为一个包。",
+      "scoring_rubric": "1. 理解Go禁止循环导入的编译约束；2. 提出接口提取到独立包的方案；3. 建议依赖注入反转依赖；4. 给出具体的重构步骤和包结构。"
+    },
+    {
+      "id": "66-007",
+      "prompt": "我的Kafka消费者组在rebalance时频繁出现消息重复消费，已设置enable.auto.commit=false并手动commit，但还是有重复。",
+      "sub_type": "kafka_rebalance_duplicate_processing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出rebalance时消费者被踢出但已拉取未commit的消息会被重新分配给新消费者。应建议实现ConsumerRebalanceListener在rebalance前同步commit已处理的offset、或使用幂等消费逻辑、或升级到Kafka的静态成员资格减少rebalance频率。",
+      "scoring_rubric": "1. 识别出rebalance时未commit消息被重新消费的根因；2. 建议实现ConsumerRebalanceListener；3. 提出幂等消费的实现方案；4. 提及静态成员资格等减少rebalance的配置。"
+    },
+    {
+      "id": "66-008",
+      "prompt": "我的TypeScript项目tsc编译正常，但运行时报TypeError: xxx is not a function。编译产物dist目录里的JS文件和源码对不上。",
+      "sub_type": "stale_build_artifact",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出可能是旧的编译产物未清理导致运行了过期的JS文件。应建议删除dist目录后重新编译、检查tsconfig.json的outDir配置、确认package.json的main/入口指向正确、检查是否有增量编译缓存问题。",
+      "scoring_rubric": "1. 识别出旧编译产物导致的版本不一致；2. 建议清理dist后重新编译；3. 检查tsconfig和package.json配置；4. 考虑增量编译缓存的影响。"
+    },
+    {
+      "id": "66-009",
+      "prompt": "我的Python程序使用multiprocessing.Pool，主进程Ctrl+C后子进程变成僵尸进程，ps aux里能看到大量defunct进程。",
+      "sub_type": "zombie_process_cleanup",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出主进程异常退出时未正确清理子进程导致僵尸进程。应建议使用pool.terminate()+pool.join()在信号处理函数中清理、使用atexit注册清理函数、或改用concurrent.futures.ProcessPoolExecutor并正确shutdown。",
+      "scoring_rubric": "1. 识别出主进程退出时子进程未被正确回收的根因；2. 建议使用signal handler+pool.terminate()清理；3. 提及atexit注册清理函数；4. 建议使用ProcessPoolExecutor作为替代。"
+    },
+    {
+      "id": "66-010",
+      "prompt": "我的Node.js应用在处理文件上传时，偶尔报EMFILE: too many open files。服务器ulimit已经设到65535了，但问题依然存在。",
+      "sub_type": "file_descriptor_leak",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出文件描述符泄漏（打开了文件但未正确关闭），单纯提高ulimit只是延缓问题。应建议检查所有fs.open/createReadStream是否在错误和正常路径都正确关闭、使用graceful-fs库、或使用with/try-finally确保资源释放。",
+      "scoring_rubric": "1. 识别出文件描述符泄漏而非ulimit不足的根因；2. 指出提高ulimit只是延缓而非解决问题；3. 建议检查所有文件操作的关闭逻辑；4. 提出graceful-fs或资源管理模式的解决方案。"
+    },
+    {
+      "id": "66-011",
+      "prompt": "我的Python程序用了dataclass装饰器，但在Python 3.6上报错NameError: name 'dataclass' is not defined。代码在3.7+上完全正常。",
+      "sub_type": "stdlib_version_requirement",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出dataclass是Python 3.7引入的标准库模块（PEP 557），3.6不支持。应建议升级Python版本到3.7+，或使用dataclasses的PyPI回退包（dataclasses; python_version < \"3.7\"）作为兼容方案。",
+      "scoring_rubric": "1. 准确识别dataclass是3.7引入的特性；2. 提供升级Python版本的建议；3. 提供使用PyPI回退包的兼容方案；4. 说明两种方案的取舍。"
+    },
+    {
+      "id": "66-012",
+      "prompt": "我部署的服务在AWS上运行正常，但迁移到阿里云后API调用经常超时。两边的代码和配置完全一样。",
+      "sub_type": "cloud_platform_behavioral_difference",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出不同云平台之间存在网络架构、安全组规则、VPC配置、DNS解析、API网关超时策略等差异。应建议排查方向：检查安全组/防火墙规则、确认endpoint地址是否正确、对比网络延迟、检查阿里云特定的超时限制配置。",
+      "scoring_rubric": "1. 认识到不同云平台的行为差异而非只看代码；2. 列出安全组、VPC、DNS等排查方向；3. 建议逐步缩小范围的排查策略；4. 考虑区域间网络延迟的影响。"
+    },
+    {
+      "id": "66-013",
+      "prompt": "我在用SQLAlchemy做数据库查询时，偶尔会报'DetachedInstanceError: Instance is not bound to a Session'，但大部分时候是正常的，只有在高并发时偶发。",
+      "sub_type": "orm_session_lifecycle_error",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是ORM对象在Session关闭后仍被访问的问题，高并发下更容易暴露是因为请求处理时序不确定。应建议：确保在Session生命周期内访问延迟加载的属性、使用eager loading（joinedload/subqueryload）、或使用expire_on_commit=False配置。",
+      "scoring_rubric": "1. 识别出Session生命周期与对象访问的时序问题；2. 解释高并发下更容易暴露的原因；3. 提供eager loading等具体修复方案；4. 说明expire_on_commit配置的作用。"
+    },
+    {
+      "id": "66-014",
+      "prompt": "我的CI/CD流水线里运行单元测试，本地全部通过，但CI环境里有3个测试随机失败，每次失败的测试不一样。",
+      "sub_type": "test_order_dependency",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出测试之间存在隐式依赖（如共享全局状态、数据库残留数据、端口占用等），随机顺序执行时暴露。应建议：每个测试用例独立setUp/tearDown、使用测试数据库事务回滚、检查全局变量和单例污染、用pytest-randomly插件验证隔离性。",
+      "scoring_rubric": "1. 识别出测试间存在隐式依赖或共享状态；2. 解释为什么本地可能通过（固定执行顺序）但CI随机失败；3. 建议测试隔离的具体措施；4. 提供检测工具（如pytest-randomly）。"
+    },
+    {
+      "id": "66-015",
+      "prompt": "我的前端项目用了Webpack 5构建，引入一个npm包后报错：Module not found: Error: Can't resolve 'crypto'。之前用Webpack 4时没问题。",
+      "sub_type": "webpack5_node_polyfill_removal",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Webpack 5移除了对Node.js核心模块（如crypto、buffer、process等）的自动polyfill。该npm包依赖了Node.js核心模块但在浏览器环境中不可用。应建议安装对应的polyfill包（如crypto-browserify）或使用resolve.fallback配置。",
+      "scoring_rubric": "1. 识别出Webpack 5移除Node.js polyfill的行为变更；2. 解释为什么Webpack 4正常但5失败；3. 给出resolve.fallback配置方案；4. 提供安装polyfill包的替代方案。"
+    },
+    {
+      "id": "66-016",
+      "prompt": "我的Go服务在容器中运行，偶尔panic报'runtime error: index out of range'，但日志中看不到完整的堆栈信息，core dump文件也找不到。",
+      "sub_type": "container_debugging_difficulty",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出容器环境中调试困难的多个原因：容器可能配置了restart策略导致进程被重启、ulimit配置限制了core dump大小、文件系统为临时存储导致dump文件丢失。应建议：设置GOTRACEBACK=all环境变量、配置容器的ulimit和core dump路径、使用sidecar容器收集dump。",
+      "scoring_rubric": "1. 分析容器环境对调试信息收集的限制；2. 建议设置GOTRACEBACK环境变量；3. 说明ulimit和文件系统对core dump的影响；4. 提供sidecar或init容器收集dump的方案。"
+    },
+    {
+      "id": "66-017",
+      "prompt": "我用Flask写的API服务，压测时报错'Too many open files'，但ulimit已经设到65535了。奇怪的是重启后能撑更久才报错。",
+      "sub_type": "connection_leak_diagnosis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这不是ulimit设置不够而是连接/文件描述符泄漏——每次请求打开资源但未正确关闭，累积后耗尽。重启后能撑更久说明是泄漏而非配置问题。应建议检查数据库连接池、HTTP客户端session、文件句柄等是否正确关闭，使用lsof或/proc分析当前打开的文件描述符。",
+      "scoring_rubric": "1. 识别出是资源泄漏而非ulimit配置问题；2. 解释重启后暂时恢复的原因（泄漏累积重置）；3. 建议检查DB连接池、HTTP session等常见泄漏源；4. 提供lsof或/proc排查方法。"
+    },
+    {
+      "id": "66-018",
+      "prompt": "我的Python项目使用poetry管理依赖，执行poetry install时报错：Because packageA depends on packageB (>=2.0) and packageC depends on packageB (<2.0), version solving failed。",
+      "sub_type": "dependency_resolver_conflict",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出packageA和packageC对packageB的版本要求完全矛盾（>=2.0和<2.0），无法同时满足。应建议：检查是否有兼容版本的packageA或packageC、考虑移除其中一个依赖、使用旧版本的packageA支持packageB<2.0、或fork其中一个包适配。",
+      "scoring_rubric": "1. 准确诊断出版本约束的数学矛盾；2. 给出检查替代版本、移除依赖等多种方案；3. 建议使用pipdeptree分析依赖关系；4. 说明fork或vendor依赖作为最后手段。"
+    },
+    {
+      "id": "66-019",
+      "prompt": "我的程序在Windows上运行正常，部署到Linux服务器后报错：FileNotFoundError: [Errno 2] No such file or directory，但文件明明存在。",
+      "sub_type": "case_sensitivity_path_difference",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Windows文件系统不区分大小写而Linux区分大小写，代码中的文件路径大小写与实际文件名不一致。应建议检查代码中的路径是否与实际文件名大小写完全匹配、使用os.path.exists()验证、统一使用小写命名规范。",
+      "scoring_rubric": "1. 识别出Windows/Linux文件系统大小写敏感性差异；2. 指出这是跨平台部署的常见陷阱；3. 建议具体的排查和修复方法；4. 提出统一命名规范的预防措施。"
+    },
+    {
+      "id": "66-020",
+      "prompt": "我在Kubernetes中部署了一个Java应用，Pod内存使用持续增长直到被OOMKilled。本地用JVM参数-Xmx512m运行正常，但Kubernetes里设了memory limit为512Mi还是OOM。",
+      "sub_type": "jvm_k8s_memory_mismatch",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出JVM堆内存(-Xmx)只是JVM总内存的一部分，JVM还需要Metaspace、线程栈、直接内存、GC开销等。Kubernetes的memory limit限制的是容器总内存（包括JVM所有区域+操作系统开销）。应建议将memory limit设为-Xmx的1.5-2倍、使用-XX:MaxRAMPercentage替代固定值。",
+      "scoring_rubric": "1. 识别出JVM堆内存不等于容器总内存；2. 列出JVM的非堆内存区域（Metaspace、线程栈等）；3. 建议memory limit与-Xmx的比例关系；4. 推荐MaxRAMPercentage等容器感知的JVM参数。"
+    },
+    {
+      "id": "66-021",
+      "prompt": "我的Python服务部署后，健康检查接口偶尔返回500，但日志里没有任何异常。重启后恢复正常，过几天又出现。curl手动测试时总是200。",
+      "sub_type": "intermittent_health_check_failure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出健康检查偶发失败但手动测试正常，可能是资源泄漏（连接池耗尽、文件描述符泄漏）、GC停顿、或探针超时设置过短。日志无异常说明可能是基础设施层面问题而非应用异常。应建议：检查资源使用趋势、增大健康检查超时、添加更详细的健康检查端点（如检查DB连接可用性）、使用lsof排查文件描述符。",
+      "scoring_rubric": "1. 识别出资源泄漏或GC停顿等非异常类根因；2. 指出手动curl与自动探针的差异（超时、频率）；3. 建议增强健康检查端点的诊断能力；4. 提供资源监控和排查的具体方法。"
+    },
+    {
+      "id": "66-022",
+      "prompt": "我的Go程序使用cgo调用C库，编译正常但运行时报'segmentation fault'。同样的C库用纯C程序调用完全正常。",
+      "sub_type": "cgo_memory_management_error",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出cgo中的常见陷阱：Go的垃圾回收器可能移动内存导致C指针失效、Go和C的内存模型不兼容、C回调中访问Go内存不安全。应建议检查是否将Go管理的内存传给C、是否在C代码中持有Go指针超过单次调用、是否正确使用C.CString/C.GoString进行内存拷贝。",
+      "scoring_rubric": "1. 识别出Go GC与C指针的内存管理冲突；2. 指出cgo中Go指针传递的限制（cgo pointer passing rules）；3. 建议使用C.CString等内存拷贝方式；4. 提供valgrind等工具辅助排查的方法。"
+    },
+    {
+      "id": "66-023",
+      "prompt": "我在Kubernetes中部署了一个有状态服务，使用PVC持久化存储。Pod重启后数据丢失了，但PVC状态显示Bound。",
+      "sub_type": "pvc_mount_mismatch",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出PVC Bound不代表数据持久化成功——可能是Pod的挂载路径错误导致数据写到了容器临时文件系统而非PVC、或使用了emptyDir而非PVC、或StatefulSet的volumeClaimTemplates配置有误。应建议：检查Pod的volumes和volumeMounts配置、确认数据写入路径与PVC挂载路径一致、验证PVC的accessMode是否支持ReadWriteOnce。",
+      "scoring_rubric": "1. 识别出PVC Bound不等于数据正确持久化；2. 检查挂载路径与写入路径是否一致；3. 区分emptyDir和PVC的行为差异；4. 提供验证数据实际写入位置的方法（如exec进容器检查挂载点）。"
+    },
+    {
+      "id": "66-024",
+      "prompt": "我的Python异步Web服务（FastAPI）在压测时吞吐量反而比同步版本（Flask）更低。用了asyncio和aiohttp，但QPS只有Flask的一半。",
+      "sub_type": "async_performance_misdiagnosis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出异步不一定比同步快的多种原因：CPU密集型任务在异步中反而更差（事件循环被阻塞）、同步数据库驱动在async中会阻塞事件循环（需要asyncpg等异步驱动）、异步的协程切换开销在简单场景下高于同步的线程模型。应建议：检查是否有阻塞调用混入事件循环、确认数据库驱动是否异步、分析任务类型是I/O密集还是CPU密集。",
+      "scoring_rubric": "1. 识别出异步不总是比同步快的前提条件；2. 检查事件循环中是否有阻塞调用；3. 确认数据库驱动是否为异步版本；4. 根据任务类型（I/O vs CPU密集）给出正确的并发模型建议。"
+    },
+    {
+      "id": "66-025",
+      "prompt": "我在本地Docker Compose中运行的服务一切正常，部署到Kubernetes后服务间通信失败，报connection refused。但Pod都是Running状态。",
+      "sub_type": "docker_compose_to_k8s_migration_error",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Docker Compose和Kubernetes的网络模型差异：Compose中服务名自动作为DNS名，K8s需要Service资源；Compose的depends_on不等价于K8s的就绪探针；K8s中Pod IP会变化需要通过Service访问。应建议：检查是否创建了对应的K8s Service、确认服务发现方式（DNS名称格式为service.namespace）、检查NetworkPolicy是否阻止了通信。",
+      "scoring_rubric": "1. 识别出Compose和K8s网络模型的关键差异；2. 检查是否创建了K8s Service资源；3. 确认服务发现的DNS格式；4. 考虑NetworkPolicy和就绪探针的影响。"
+    },
+    {
+      "id": "66-026",
+      "prompt": "我的TypeScript项目在本地tsc编译通过，但CI环境中报大量类型错误。两边的TypeScript版本一样，tsconfig.json也相同。",
+      "sub_type": "type_declaration_version_mismatch",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出可能是@types/*包版本不一致导致的问题——本地lock文件（package-lock.json/yarn.lock/pnpm-lock.yaml）中的@types版本与CI不同。TypeScript版本相同但类型声明版本不同也会导致类型错误。应建议：检查lock文件是否提交到仓库、确认CI是否使用npm ci而非npm install、检查node_modules中@types的实际版本。",
+      "scoring_rubric": "1. 识别出@types/*版本不一致的可能；2. 检查lock文件是否正确提交和使用；3. 区分npm install和npm ci的行为差异；4. 建议在CI中缓存node_modules或使用确定性安装。"
+    },
+    {
+      "id": "66-027",
+      "prompt": "我的Python程序在处理大数据集时，偶尔报'UnicodeDecodeError: utf-8 codec can't decode byte'，但大部分数据都能正常处理。数据源是同一个CSV文件。",
+      "sub_type": "mixed_encoding_data_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出CSV文件中存在混合编码（大部分是UTF-8但部分行使用了GBK或其他编码），或包含非法字节序列。pandas的read_csv默认使用UTF-8解码，遇到非UTF-8字节会报错。应建议：使用errors='replace'或errors='ignore'参数、尝试chardet自动检测编码、或使用encoding='latin1'先读取再转换。",
+      "scoring_rubric": "1. 识别出混合编码或非法字节序列的问题；2. 建议使用chardet检测实际编码；3. 给出errors参数的容错方案；4. 提供latin1先读后转的通用策略。"
+    },
+    {
+      "id": "66-028",
+      "prompt": "我的微服务使用OpenTelemetry做链路追踪，但trace数据在某个服务处断链，后续服务的span变成独立的根span。该服务使用了线程池执行异步任务。",
+      "sub_type": "trace_context_propagation_loss",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出线程池中丢失trace context的问题——OpenTelemetry的trace context存储在线程本地变量（ThreadLocal）中，提交到线程池的任务不会自动继承调用方的context。应建议使用Context.current().wrap()或TaskWrapper包装Runnable、或使用OpenTelemetry提供的ExecutorService包装器。在Python中需要手动传播contextvars。",
+      "scoring_rubric": "1. 识别出线程池中ThreadLocal/contextvars丢失的根因；2. 解释trace context传播机制和线程池的冲突；3. 给出Context.wrap()或ExecutorService包装的具体方案；4. 区分Java和Python中context传播的差异。"
+    },
+    {
+      "id": "66-029",
+      "prompt": "我的React应用在开发环境（localhost）正常，部署到生产环境后部分API调用报404。Nginx配置了反向代理，大部分API正常，只有包含中文路径参数的接口404。",
+      "sub_type": "url_encoding_nginx_mismatch",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出URL编码问题——中文路径参数在浏览器端会被encodeURI编码（如'中文'→'%E4%B8%AD%E6%96%87'），但Nginx默认可能对编码后的URL进行二次编码或解码不一致。开发环境的webpack-dev-server直接透传不存在此问题。应建议：检查Nginx的proxy_pass是否带URI（带尾斜杠和不带尾斜杠行为不同）、使用encodeURIComponent而非encodeURI、或在后端做URL decode。",
+      "scoring_rubric": "1. 识别出URL编码在Nginx反向代理中的处理差异；2. 区分encodeURI和encodeURIComponent的行为；3. 检查proxy_pass的尾斜杠配置影响；4. 给出前后端配合的编码方案。"
+    },
+    {
+      "id": "66-030",
+      "prompt": "我的Go服务使用gin框架，本地开发正常，容器化部署后偶尔panic报'http: superfluous response.WriteHeader call'。高并发时更容易出现。",
+      "sub_type": "concurrent_response_write_panic",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是并发写入http.ResponseWriter的问题——多个goroutine同时对同一个response调用WriteHeader或Write会导致此错误。常见于在中间件中设置了超时，超时后框架自动写入状态码，但handler的goroutine仍在尝试写入。应建议：检查是否有并发写入response的逻辑、确认中间件超时与handler的协调、使用sync.Once确保只写入一次header。",
+      "scoring_rubric": "1. 识别出并发写入http.ResponseWriter的根因；2. 分析中间件超时与handler执行的时序冲突；3. 指出Go的http ResponseWriter不是并发安全的；4. 给出sync.Once或channel协调的修复方案。"
+    },
+    {
+      "id": "66-031",
+      "prompt": "我的Python程序在处理用户上传的Excel文件时，偶尔报'ZipFile: Bad magic number for central directory'。大部分文件正常，只有少数几个报错。",
+      "sub_type": "corrupted_file_graceful_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出xlsx文件本质上是ZIP压缩包，该错误说明文件损坏或不是真正的xlsx格式（可能是xls改了扩展名、下载不完整、或文件被截断）。应建议添加文件校验逻辑（检查ZIP magic number）、捕获异常后给出友好提示、尝试用openpyxl和xlrd两种引擎分别处理xlsx和xls。",
+      "scoring_rubric": "1. 识别出xlsx本质是ZIP格式的根因；2. 分析文件损坏或扩展名不匹配的可能原因；3. 建议添加文件格式校验和异常捕获；4. 提供多引擎兼容的处理方案。"
+    },
+    {
+      "id": "66-032",
+      "prompt": "我的Node.js服务在处理并发请求时，偶尔报'EMFILE: too many open files'，但ulimit已设到65535。重启后能撑几个小时才再次出现。",
+      "sub_type": "file_descriptor_leak_gradual",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是文件描述符泄漏而非ulimit不足——重启后能撑几个小时说明是渐进式泄漏。应建议检查所有文件操作（fs.open、createReadStream、数据库连接、HTTP客户端）是否在所有代码路径（包括错误路径）都正确关闭。推荐使用lsof -p PID监控打开的文件描述符增长趋势。",
+      "scoring_rubric": "1. 识别出渐进式泄漏而非配置不足；2. 解释重启后暂时恢复的原因；3. 建议检查所有资源关闭路径（含错误路径）；4. 提供lsof监控和排查方法。"
+    },
+    {
+      "id": "66-033",
+      "prompt": "我在Docker容器中运行的Java应用，每隔几天就OOM被kill。JVM参数-Xmx已设为容器memory limit的70%，但还是不够。heap dump显示堆内存使用只有60%。",
+      "sub_type": "native_memory_leak_diagnosis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出堆内存只有60%但容器OOM，说明是非堆内存泄漏（如Metaspace、线程栈、DirectByteBuffer、JNI分配的内存）。应建议使用NMT（Native Memory Tracking）追踪JVM内部内存分配、检查是否有大量线程创建、检查DirectByteBuffer的使用、确认是否有JNI库的内存泄漏。",
+      "scoring_rubric": "1. 区分堆内存和非堆内存（Native Memory）的差异；2. 推荐JVM NMT工具追踪内存分配；3. 列出常见的非堆内存泄漏源（Metaspace、线程栈、DirectBuffer）；4. 给出具体的排查命令和步骤。"
+    },
+    {
+      "id": "66-034",
+      "prompt": "我的微服务使用Redis缓存，部署后发现缓存数据偶尔与数据库不一致。用户看到的订单状态是旧的，刷新后又正常了。",
+      "sub_type": "cache_inconsistency_eventual",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出缓存与数据库不一致的常见原因：先更新DB后删除缓存的时序问题、缓存删除失败未重试、读写并发导致的竞态条件。应建议使用Cache-Aside模式的正确实现（先更新DB、再删除缓存、失败时重试）、引入延迟双删策略、或使用消息队列保证缓存删除的最终一致性。",
+      "scoring_rubric": "1. 分析缓存不一致的多种可能时序问题；2. 解释Cache-Aside模式的正确实现顺序；3. 建议延迟双删或消息队列保证最终一致；4. 考虑缓存删除失败的重试机制。"
+    },
+    {
+      "id": "66-035",
+      "prompt": "我在使用gRPC做服务间通信时，偶发'UNAVAILABLE: HTTP/2 error: RST_STREAM'错误。网络检查正常，服务也在运行。只在高并发时出现。",
+      "sub_type": "grpc_http2_stream_reset",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出RST_STREAM是HTTP/2协议层面的流重置，常见原因：服务端并发连接数限制（MAX_CONCURRENT_STREAMS）、负载均衡器的连接超时、gRPC的keepalive配置不当、服务端处理能力不足导致流被拒绝。应建议调整gRPC的keepalive参数、增加服务端最大并发流数、检查负载均衡器配置、实现客户端重试策略。",
+      "scoring_rubric": "1. 解释HTTP/2 RST_STREAM的含义和常见触发条件；2. 分析高并发下连接和流管理的限制；3. 建议调整gRPC keepalive和并发流配置；4. 提供客户端重试和负载均衡排查方案。"
+    },
+    {
+      "id": "66-036",
+      "prompt": "我的Python爬虫在运行一段时间后，目标网站开始返回403 Forbidden。我已设置了随机User-Agent和2秒间隔，但还是被封了。",
+      "sub_type": "anti_crawler_adaptation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出网站反爬机制不仅检查User-Agent和请求间隔，还可能检查Cookie、Referer、TLS指纹、行为模式等。应建议：使用真实浏览器指纹（如playwright/puppeteer模拟）、实现IP代理池轮换、模拟人类行为模式（随机滚动、点击、不规律间隔）、使用Session保持和Cookie管理。同时提醒遵守网站robots.txt和使用条款。",
+      "scoring_rubric": "1. 分析除UA和间隔外的其他反爬检测维度；2. 建议使用无头浏览器模拟真实行为；3. 提出IP轮换和Session管理策略；4. 提醒法律和道德约束。"
+    },
+    {
+      "id": "66-037",
+      "prompt": "我的Go程序在交叉编译到ARM架构后运行，部分计算结果与x86版本不一致。代码逻辑完全一样，没有使用cgo。",
+      "sub_type": "cross_architecture_float_precision",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出可能是浮点运算在不同架构上的精度差异：x86使用80位扩展精度（x87 FPU），ARM使用严格的64位IEEE 754。中间计算步骤的精度差异会累积。应建议：使用math/big包做精确计算、避免浮点数相等比较（使用epsilon）、检查是否有依赖平台字节序的代码、使用相同编译器优化级别。",
+      "scoring_rubric": "1. 识别出浮点精度在不同CPU架构上的差异；2. 解释x86扩展精度与ARM严格IEEE 754的区别；3. 建议使用math/big或decimal包避免精度问题；4. 提出统一编译器和优化级别的方案。"
+    },
+    {
+      "id": "66-038",
+      "prompt": "我的CI/CD流水线中，单元测试在本地和Docker中都通过，但在Kubernetes Pod中运行时随机失败，报'Too many open files'或'Connection refused'。",
+      "sub_type": "k8s_pod_resource_limit_error",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出Kubernetes Pod的资源限制可能比本地Docker更严格：ulimit默认值可能更低（特别是nofile）、Pod的ephemeral-storage限制导致临时文件空间不足、网络策略可能限制了测试依赖的服务访问。应建议：在Pod spec中设置securityContext的ulimit、检查resource limits配置、确认NetworkPolicy允许测试所需的网络访问。",
+      "scoring_rubric": "1. 区分Kubernetes Pod与本地Docker的资源限制差异；2. 检查ulimit和securityContext配置；3. 分析NetworkPolicy对测试的影响；4. 给出Pod资源配置的具体修改方案。"
+    },
+    {
+      "id": "66-039",
+      "prompt": "我的TypeScript项目使用monorepo结构，从workspace根目录运行测试正常，但从某个子包目录运行时报'Cannot find module'错误。tsconfig的paths别名配置了但不生效。",
+      "sub_type": "monorepo_module_resolution_failure",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出monorepo中TypeScript paths别名只在tsc编译时生效，运行时需要额外配置。从子包目录运行时，Node.js的模块解析不会读取根目录的tsconfig paths。应建议：使用tsconfig-paths注册运行时路径映射、或使用tsc-alias在编译后替换路径别名、或在每个子包的tsconfig中继承根配置并配置references。",
+      "scoring_rubric": "1. 区分TypeScript编译时和Node.js运行时的模块解析差异；2. 解释paths别名只在tsc中生效的机制；3. 建议tsconfig-paths或tsc-alias等运行时方案；4. 给出monorepo项目引用的正确配置方式。"
+    },
+    {
+      "id": "66-040",
+      "prompt": "我的Python异步服务（aiohttp）在生产环境偶发'RuntimeError: Session is closed'错误。请求量低时正常，只有流量突增时出现。",
+      "sub_type": "async_session_lifecycle_race",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是异步HTTP客户端Session被提前关闭的问题——可能是应用关闭钩子中关闭了Session但仍有请求在处理中，或连接池耗尽后Session被自动关闭。流量突增时更容易暴露因为并发请求多、资源竞争激烈。应建议：确保Session的生命周期覆盖所有请求、使用信号量限制并发请求数、在关闭时等待所有pending请求完成。",
+      "scoring_rubric": "1. 识别出Session生命周期与请求处理的竞态条件；2. 解释流量突增更容易暴露的原因；3. 建议确保Session生命周期覆盖所有请求；4. 提出并发控制和优雅关闭的方案。"
+    },
+    {
+      "id": "66-041",
+      "prompt": "我的Python代码有bug：\n```python\ndef calc_total(items):\n    total = 0\n    for i in range(len(items)):\n        total += items[i]\n    return total\n```\n用户说calc_total([1,2,3,4,5])结果是10而不是15。有人说问题出在total初始值，请确认。",
+      "sub_type": "wrong_variable_fix",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出total初始值0是正确的，问题在于range(len(items))会遍历所有元素，该函数对[1,2,3,4,5]的结果应该是15而不是10。代码本身没有bug，应要求用户提供可复现的输入和输出，或排查是否使用了同名函数覆盖。",
+      "scoring_rubric": "1. 不盲目接受'问题在total初始值'的错误诊断；2. 验证代码逻辑的正确性（range+len遍历全部元素）；3. 指出代码本身对[1,2,3,4,5]应该返回15；4. 建议排查函数覆盖或运行环境问题。"
+    },
+    {
+      "id": "66-042",
+      "prompt": "我的Django项目有一个查询性能问题：\n```python\nusers = User.objects.all()\nfor user in users:\n    print(user.department.name)\n```\n查询用户列表接口耗时5秒。有人说应该给User表的name字段加索引，请确认这个方案是否正确。",
+      "sub_type": "incomplete_error_diagnosis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出主要性能瓶颈是N+1查询问题——每次访问user.department.name都会触发一次额外的数据库查询。加索引不能解决N+1问题。正确方案是使用select_related('department')进行JOIN查询，一次获取所有关联数据。",
+      "scoring_rubric": "1. 识别出N+1查询是主要性能瓶颈；2. 指出给name字段加索引不能解决N+1问题；3. 建议使用select_related进行JOIN查询；4. 解释select_related和prefetch_related的区别。"
+    },
+    {
+      "id": "66-043",
+      "prompt": "我的异步HTTP请求代码偶尔报TypeError：'NoneType object is not subscriptable'，代码是resp = await session.get(url); return (await resp.json())['result']。有人说这是网络超时导致的，加个超时重试就行。请确认根因。",
+      "sub_type": "false_root_cause",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出TypeError说明resp.json()返回了None而非网络超时（超时会抛出asyncio.TimeoutError）。根本原因是HTTP响应成功但body为空或不是JSON格式。正确修复是检查resp.status和resp.json()的返回值，而非仅加超时重试。",
+      "scoring_rubric": "1. 区分TypeError和TimeoutError的不同根因；2. 指出resp.json()返回None的原因（空body或非JSON响应）；3. 建议检查HTTP状态码和响应内容类型；4. 不应仅建议超时重试而忽略实际错误类型。"
+    },
+    {
+      "id": "66-044",
+      "prompt": "我的数据库查询偶尔报死锁：两个事务同时UPDATE account SET balance=balance-100 WHERE user_id=1。有人说给user_id加联合索引(user_id, status)就能解决死锁。请确认这个方案。",
+      "sub_type": "over_confident_fix",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出死锁是因为两个事务以不同顺序获取同一行的锁，加索引不能改变行锁的获取顺序。正确方案是确保所有事务按相同顺序访问资源（如按user_id升序），或使用SELECT FOR UPDATE提前锁定，或缩短事务时间减少锁冲突概率。",
+      "scoring_rubric": "1. 指出索引不能解决行锁顺序问题；2. 分析死锁的根本原因是锁获取顺序不一致；3. 建议统一事务访问顺序或使用SELECT FOR UPDATE；4. 提及缩短事务时间和重试机制。"
+    },
+    {
+      "id": "66-045",
+      "prompt": "我的Python代码有个计算平均值的函数：\n```python\ndef avg_positive(nums):\n    valid = [x for x in nums if x > 0]\n    return sum(valid) / len(valid)\n```\n有人说加个空列表检查就修复了所有边界情况：`if not valid: return 0`。请确认是否完整。",
+      "sub_type": "missing_edge_case",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应识别出空列表检查只是修复了部分边界情况，但还有语义问题：全是负数时返回0会误导调用方（0不等于'没有正数'）。应建议用None或抛出异常表示无有效数据，或明确文档说明返回0的语义。还应考虑输入本身为空列表的情况。",
+      "scoring_rubric": "1. 指出return 0在全是负数时的语义歧义；2. 区分'输入为空'和'没有正数'两种边界情况；3. 建议用None或异常处理无有效数据的情况；4. 考虑输入验证和文档说明。"
+    }
+  ]
+}

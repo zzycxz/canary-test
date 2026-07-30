@@ -1,0 +1,501 @@
+{
+  "capability": "math",
+  "label": "数学能力",
+  "total": 49,
+  "cases": [
+    {
+      "prompt": "计算 2^15 + 3^10 - 4^8，结果是多少？",
+      "sub_type": "basic_arithmetic",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确计算幂运算和加减法，给出最终数值结果，并可能展示计算步骤以验证。",
+      "scoring_rubric": "答案准确性（60%），计算步骤清晰性（40%）。",
+      "id": "93-001"
+    },
+    {
+      "prompt": "一件商品原价800元，商店促销：满500减100，打9折，且会员再减50元。如果同时满足这些条件，最终价格是多少？只能选一种优惠叠加，顺序不同价格不同，如何选择？",
+      "sub_type": "percentage_discount",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应分析不同优惠叠加顺序，计算所有可能最终价格，并推荐最低价格方案。",
+      "scoring_rubric": "计算正确性（50%），逻辑推理与方案推荐（50%）。",
+      "id": "93-002"
+    },
+    {
+      "prompt": "解方程：2x^2 - 5x + 3 = 0，求x的值。",
+      "sub_type": "equation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应使用求根公式或因式分解求解，给出x=1和x=1.5（或3/2）两个解，并展示步骤。",
+      "scoring_rubric": "解法正确性（60%），步骤清晰性（40%）。",
+      "id": "93-003"
+    },
+    {
+      "prompt": "一个圆的半径是7厘米，求其面积和周长（π取3.14）。",
+      "sub_type": "geometry",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "计算面积=πr²≈153.86平方厘米，周长=2πr≈43.96厘米，公式应用准确。",
+      "scoring_rubric": "公式应用正确（50%），计算准确性（50%）。",
+      "id": "93-004"
+    },
+    {
+      "prompt": "一个等比数列，首项是3，公比是2，求第4项。",
+      "sub_type": "sequence",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应使用等比数列公式an = a1 * q^(n-1)，计算第4项=3 * 2^3=24。",
+      "scoring_rubric": "答案正确性（100%）。",
+      "id": "93-005"
+    },
+    {
+      "prompt": "使用杜邦分析，ROE = 净利润/股东权益。如果净利润是50万，总资产是200万，负债是120万，股东权益是80万，总资产周转率是2，净利率是10%，计算ROE。",
+      "sub_type": "formula",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应理解ROE公式或直接计算ROE=50/80=0.625（62.5%），并可展示杜邦分析展开验证。",
+      "scoring_rubric": "公式理解正确（60%），计算准确性（40%）。",
+      "id": "93-006"
+    },
+    {
+      "prompt": "计算 234 + 567 - 123 的结果。",
+      "sub_type": "basic_arithmetic",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应该直接计算 234 + 567 - 123，并给出结果 678 和简要计算步骤。",
+      "scoring_rubric": "答案正确性（678），计算过程清晰（如：234+567=801，801-123=678）。",
+      "id": "93-007"
+    },
+    {
+      "prompt": "计算 (2^10) * 3 - 45 / 5 的值。",
+      "sub_type": "basic_arithmetic",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该遵循运算顺序（先幂运算、乘除、后加减），给出正确答案。",
+      "scoring_rubric": "正确应用运算顺序（2^10=1024，1024*3=3072，45/5=9，3072-9=3063），答案准确。",
+      "id": "93-008"
+    },
+    {
+      "prompt": "小明以每小时5公里的速度走了2小时，然后以每小时10公里的速度骑车1小时。他总共走了多少公里？",
+      "sub_type": "word_problem",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应该计算各段距离（走路：5*2=10公里，骑车：10*1=10公里）并求和（20公里）。",
+      "scoring_rubric": "正确计算距离（走路10公里，骑车10公里），总距离准确（20公里）。",
+      "id": "93-009"
+    },
+    {
+      "prompt": "一个商店以每件20元的成本价购买商品，以每件30元的价格卖出。如果商店想要获得至少500元的利润，至少需要卖出多少件商品？",
+      "sub_type": "word_problem",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应该计算单件利润（30-20=10元），然后建立不等式 10x >= 500，解出 x >= 50。",
+      "scoring_rubric": "单件利润计算正确，不等式或方程正确，答案准确（至少50件）。",
+      "id": "93-010"
+    },
+    {
+      "prompt": "一件商品原价200元，先打8折，再减10元，最终价格是多少？",
+      "sub_type": "percentage_discount",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该按顺序应用折扣：先打8折（200*0.8=160元），再减10元（160-10=150元）。",
+      "scoring_rubric": "折扣应用顺序正确，最终价格计算准确（150元）。",
+      "id": "93-011"
+    },
+    {
+      "prompt": "一个商品原价1000元，有两种优惠：A. 满500减100；B. 打7折。只能选一种，哪种更优惠？如果两种都选，但顺序不同（先A后B或先B后A），最终价格分别是多少？",
+      "sub_type": "percentage_discount",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应该分别计算：A优惠后价格（1000-100=900元），B优惠后价格（1000*0.7=700元），比较后B更优惠；先A后B：900*0.7=630元，先B后A：700-100=600元。",
+      "scoring_rubric": "正确计算各种组合价格（A:900元，B:700元；先A后B:630元，先B后A:600元），比较逻辑清晰。",
+      "id": "93-012"
+    },
+    {
+      "prompt": "将5公里转换为米，然后将结果转换为厘米。",
+      "sub_type": "unit_conversion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该进行两次换算：5公里=5000米，5000米=500000厘米。",
+      "scoring_rubric": "换算单位正确（公里到米、米到厘米），最终结果准确（500000厘米）。",
+      "id": "93-013"
+    },
+    {
+      "prompt": "解二次方程：x^2 - 5x + 6 = 0",
+      "sub_type": "equation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应该求解二次方程，可以因式分解为(x-2)(x-3)=0，或使用求根公式，得到根 x=2 和 x=3。",
+      "scoring_rubric": "正确应用求解方法（因式分解或求根公式），根准确（2和3）。",
+      "id": "93-014"
+    },
+    {
+      "prompt": "一个矩形的长是8厘米，宽是5厘米，它的面积是多少？",
+      "sub_type": "geometry",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该计算面积：长*宽=8*5=40平方厘米。",
+      "scoring_rubric": "面积公式正确（长×宽），计算准确（40平方厘米）。",
+      "id": "93-015"
+    },
+    {
+      "prompt": "等差数列的前三项是 2, 5, 8，求第10项。",
+      "sub_type": "sequence",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该识别公差（3），使用通项公式 a_n = a_1 + (n-1)d，计算第10项：2 + (10-1)*3 = 29。",
+      "scoring_rubric": "公差正确（3），通项公式应用正确，答案准确（29）。",
+      "id": "93-016"
+    },
+    {
+      "prompt": "使用复利公式计算：本金10000元，年利率5%，每年复利一次，3年后的本利和是多少？",
+      "sub_type": "formula",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应该应用复利公式 A = P(1 + r)^n，其中 P=10000, r=0.05, n=3，计算 A ≈ 11576.25元。",
+      "scoring_rubric": "公式正确（A = P(1 + r)^n），计算准确（约11576.25元）。",
+      "id": "93-017"
+    },
+    {
+      "prompt": "如果所有的A都是B，所有的B都是C，那么所有的A都是C吗？用数学逻辑解释。",
+      "sub_type": "logical_math",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应该进行逻辑推理：由前提可得传递性，结论成立，并用集合或逻辑符号解释。",
+      "scoring_rubric": "逻辑正确（传递性成立），数学表达准确（如使用集合包含关系）。",
+      "id": "93-018"
+    },
+    {
+      "prompt": "计算 456 + 789 - 123 的结果。",
+      "sub_type": "basic_arithmetic",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确计算表达式，给出最终答案并展示计算步骤。",
+      "scoring_rubric": "答案正确性；计算步骤清晰性；是否解释运算顺序。",
+      "id": "93-019"
+    },
+    {
+      "prompt": "计算 2 的 10 次方除以 4 的结果。",
+      "sub_type": "basic_arithmetic",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应正确计算2^10=1024，然后除以4得256，并解释幂运算和除法过程。",
+      "scoring_rubric": "幂运算准确性；除法正确性；解题逻辑清晰。",
+      "id": "93-020"
+    },
+    {
+      "prompt": "小明每小时走5公里，走了3小时，他走了多远？",
+      "sub_type": "word_problem",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应使用距离=速度×时间公式，计算出15公里，并解释公式应用。",
+      "scoring_rubric": "公式应用正确；答案计算准确；解释易懂。",
+      "id": "93-021"
+    },
+    {
+      "prompt": "一件商品原价200元，打8折，现价多少？",
+      "sub_type": "percentage_discount",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应计算200 * 0.8 = 160元，并说明打折计算方法。",
+      "scoring_rubric": "折扣计算准确；解释清晰；答案正确。",
+      "id": "93-022"
+    },
+    {
+      "prompt": "一件商品原价500元，先涨10%，再打9折，最终价格是多少？",
+      "sub_type": "percentage_discount",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应计算涨价后550元，打折后495元，并解释涨跌幅和折扣叠加顺序的影响。",
+      "scoring_rubric": "涨跌幅计算正确；折扣应用准确；顺序考虑周全。",
+      "id": "93-023"
+    },
+    {
+      "prompt": "1英里等于多少米？如果一个人跑了3英里，他跑了多少米？",
+      "sub_type": "unit_conversion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应给出1英里≈1609.34米，计算3英里≈4828.02米，并解释换算过程。",
+      "scoring_rubric": "换算系数准确；乘法计算正确；单位转换清晰。",
+      "id": "93-024"
+    },
+    {
+      "prompt": "解方程：2x + 3 = 7，求x的值。",
+      "sub_type": "equation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应解出x=2，并展示移项和除法步骤。",
+      "scoring_rubric": "解方程过程正确；答案准确；步骤逻辑清晰。",
+      "id": "93-025"
+    },
+    {
+      "prompt": "解二次方程：x^2 - 5x + 6 = 0，求x的值。",
+      "sub_type": "equation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应因式分解为(x-2)(x-3)=0，解出x=2或3，并解释因式分解方法。",
+      "scoring_rubric": "二次方程求解方法正确；因式分解准确；答案完整。",
+      "id": "93-026"
+    },
+    {
+      "prompt": "一个长方形的长是10厘米，宽是5厘米，求面积和周长。",
+      "sub_type": "geometry",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应计算面积=50平方厘米，周长=30厘米，并解释面积和周长公式。",
+      "scoring_rubric": "公式应用正确；计算准确；单位一致。",
+      "id": "93-027"
+    },
+    {
+      "prompt": "使用复利公式计算：本金10000元，年利率5%，复利一年，求终值。",
+      "sub_type": "formula",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应应用复利公式A = P(1 + r)^n，计算出终值10500元，并解释公式各部分含义。",
+      "scoring_rubric": "复利公式正确应用；参数代入准确；计算无误。",
+      "id": "93-028"
+    },
+    {
+      "prompt": "掷一个公平的骰子，得到偶数点的概率是多少？",
+      "sub_type": "probability",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应识别骰子偶数点有3个，总可能结果6个，概率=3/6=0.5或50%，并解释概率计算。",
+      "scoring_rubric": "概率计算正确；解释基本事件空间；答案准确。",
+      "id": "93-029"
+    },
+    {
+      "prompt": "如果今天是星期一，那么100天后是星期几？",
+      "sub_type": "logical_math",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应使用模运算，100 mod 7 = 2，所以是星期三，并解释模运算在日期计算中的应用。",
+      "scoring_rubric": "逻辑推理正确；模运算准确；日期计算无误。",
+      "id": "93-030"
+    },
+    {
+      "prompt": "有3个人，每两个人之间握手一次，总共握手多少次？",
+      "sub_type": "logical_math",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应使用组合数C(3,2)=3次握手，并解释组合公式的应用。",
+      "scoring_rubric": "组合计算正确；逻辑清晰；解释易懂。",
+      "id": "93-031"
+    },
+    {
+      "prompt": "计算 (98765 * 43210) - (123456789 / 1234) 的结果，并验证是否为整数。",
+      "sub_type": "basic_arithmetic",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应准确执行乘法、除法和减法运算，计算出98765*43210=4267576650，123456789/1234≈100045.533...，然后相减得到最终结果，并判断结果是否为整数（由于除法结果非整数，最终结果也非整数）。",
+      "scoring_rubric": "计算准确性（乘法、除法、减法），对非整数结果的识别，解题步骤清晰易懂。",
+      "id": "93-032"
+    },
+    {
+      "prompt": "小华有5个苹果，给了小明2个，然后买了3个，现在有多少个苹果？",
+      "sub_type": "word_problem",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应列出步骤：5 - 2 = 3，然后3 + 3 = 6，最终答案为6个苹果。",
+      "scoring_rubric": "加减法运算正确，逻辑清晰，答案准确。",
+      "id": "93-033"
+    },
+    {
+      "prompt": "一件商品原价500元，打8折后，再享受满300减50的优惠，最终价格是多少？",
+      "sub_type": "percentage_discount",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应先计算打8折后的价格：500 * 0.8 = 400元，然后应用满300减50：400 - 50 = 350元，最终价格为350元。",
+      "scoring_rubric": "折扣顺序正确，计算准确，解题思路易懂。",
+      "id": "93-034"
+    },
+    {
+      "prompt": "将2.5小时转换为分钟，并将3000克转换为千克。",
+      "sub_type": "unit_conversion",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "模型应给出单位换算：2.5小时 = 150分钟，3000克 = 3千克。",
+      "scoring_rubric": "单位换算正确，无计算错误，表达清晰。",
+      "id": "93-035"
+    },
+    {
+      "prompt": "解二次方程 x^2 + 6x + 8 = 0，求所有实数解。",
+      "sub_type": "equation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "模型应因式分解方程为(x+2)(x+4)=0，然后解出x=-2或x=-4，并展示解方程步骤。",
+      "scoring_rubric": "解方程正确（所有实数解），步骤完整，逻辑严谨。",
+      "id": "93-036"
+    },
+    {
+      "prompt": "一个圆的直径是10厘米，求它的半径、面积和周长（π取3.14）。",
+      "sub_type": "geometry",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "模型应计算半径 = 直径 / 2 = 5厘米，面积 = π * 半径^2 = 3.14 * 25 = 78.5平方厘米，周长 = π * 直径 = 3.14 * 10 = 31.4厘米。",
+      "scoring_rubric": "几何公式应用正确，计算准确，单位处理恰当，解释清晰。",
+      "id": "93-037"
+    },
+    {
+      "prompt": "计算：345678 + 987654 × (2^10 - 15 × 8)",
+      "sub_type": "basic_arithmetic",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确计算出最终结果。需要正确处理运算顺序：先括号，再指数，然后乘法和减法，最后加法。最终结果应为一个确切的数字。",
+      "scoring_rubric": [
+        "正确解析并计算幂运算 2^10。",
+        "正确计算括号内的减法。",
+        "正确计算乘法。",
+        "最终结果正确。"
+      ],
+      "id": "93-038"
+    },
+    {
+      "prompt": "商场促销：一件商品原价800元。活动A是‘每满300减50’，活动B是‘全场8折’，活动C是‘会员再减总价的10%’。规则：A和B可选一种，C可与选中的A或B叠加（即C可以折上折）。问：为了价格最低，应如何选择活动组合？最终价格是多少？",
+      "sub_type": "percentage_discount",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "列出所有可能的组合（A+C， B+C），分别计算最终价格，并进行比较。需要精确处理‘每满减’的逻辑。最终给出最优选择和确切的最低价格。",
+      "scoring_rubric": [
+        "识别所有有效的活动组合（A和B互斥）。",
+        "正确计算组合A+C的最终价格（先每满减，后会员折）。",
+        "正确计算组合B+C的最终价格（先打折，后会员折）。",
+        "正确比较价格并给出最低价。"
+      ],
+      "id": "93-039"
+    },
+    {
+      "prompt": "一个长跑运动员，他前三次测试的平均成绩是12分30秒。要使前四次测试的平均成绩提高到12分钟，他第四次测试需要跑多少秒？（结果保留到秒）",
+      "sub_type": "unit_conversion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "首先将时间统一为秒进行计算。12分30秒=750秒，12分钟=720秒。计算前三次总时间，用新的总时间（720*4）减去前三次总时间，得到第四次需要的成绩。",
+      "scoring_rubric": [
+        "正确进行分与秒的单位转换。",
+        "建立正确的平均数方程。",
+        "计算出的第四次成绩（秒）准确。"
+      ],
+      "id": "93-040"
+    },
+    {
+      "prompt": "解方程：3(x + 2) - 5 = 2x + 7",
+      "sub_type": "equation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "正确解一元一次方程，给出x的值。步骤清晰：去括号、移项、合并同类项、系数化为1。",
+      "scoring_rubric": [
+        "正确去括号。",
+        "正确移项和合并同类项。",
+        "求得x的正确解。"
+      ],
+      "id": "93-041"
+    },
+    {
+      "prompt": "一个圆形花坛的周长是31.4米。如果要在花坛外围铺一条宽1米的小路，小路的面积是多少平方米？（π取3.14）",
+      "sub_type": "geometry",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "先根据周长求出圆形花坛的半径，再求出加上小路后的大圆的半径，最后用圆环面积公式（π(R² - r²)）计算小路面积。",
+      "scoring_rubric": [
+        "根据周长正确求出花坛半径。",
+        "正确求出大圆半径。",
+        "正确应用圆环面积公式计算。"
+      ],
+      "id": "93-042"
+    },
+    {
+      "prompt": "一个等差数列的首项是5，公差是3。请问这个数列的第20项是多少？前20项的和是多少？",
+      "sub_type": "sequence",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "分别应用等差数列通项公式（a_n = a1 + (n-1)d）和求和公式（S_n = n/2 * [2a1 + (n-1)d]）进行计算，并给出两个确切答案。",
+      "scoring_rubric": [
+        "正确应用通项公式计算第20项。",
+        "正确应用求和公式计算前20项和。",
+        "两个答案均正确。"
+      ],
+      "id": "93-043"
+    },
+    {
+      "prompt": "根据杜邦分析法，ROE（净资产收益率）可以分解为：净利润率 × 总资产周转率 × 权益乘数。已知一家公司净利润100万，销售收入1000万，总资产500万，股东权益250万。请计算该公司的ROE。",
+      "sub_type": "formula",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "先分别计算三个指标：净利润率=净利润/销售收入，总资产周转率=销售收入/总资产，权益乘数=总资产/股东权益。然后将三者相乘得到ROE。答案应为一个百分比。",
+      "scoring_rubric": [
+        "正确计算净利润率。",
+        "正确计算总资产周转率。",
+        "正确计算权益乘数。",
+        "将三者相乘得到正确的ROE值。"
+      ],
+      "id": "93-044"
+    },
+    {
+      "prompt": "一个袋子里有4个红球和6个蓝球。随机抽取两个球，求两个球颜色相同的概率是多少？（结果用分数表示）",
+      "sub_type": "probability",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "计算从10个球中任取2个的总组合数。计算两个球都是红色的组合数，以及两个球都是蓝色的组合数。将两个结果相加，除以总组合数，得到最终概率。",
+      "scoring_rubric": [
+        "正确计算总的组合数（C(10,2)）。",
+        "正确计算两个红球的组合数（C(4,2)）。",
+        "正确计算两个蓝球的组合数（C(6,2)）。",
+        "最终概率计算正确。"
+      ],
+      "id": "93-045"
+    },
+    {
+      "prompt": "有5个人排队，其中甲和乙必须相邻，丙不能排在最前面。一共有多少种排法？",
+      "sub_type": "logical_math",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用捆绑法和排除法。首先将甲和乙捆绑看作一个整体，与剩下3人排列（A(4,4)种）。然后计算丙在最前面的情况，再从总排列数中减去（或直接计算满足条件的排列数）。给出确切数字。",
+      "scoring_rubric": [
+        "正确使用捆绑法处理甲和乙相邻的情况。",
+        "正确处理丙不能在最前面的限制。",
+        "最终排法数量计算正确。"
+      ],
+      "id": "93-046"
+    },
+    {
+      "prompt": "求解一元二次方程：x^2 - 5x + 6 = 0",
+      "sub_type": "equation",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "可以使用因式分解法或求根公式求解。给出方程的两个解。",
+      "scoring_rubric": [
+        "正确识别可因式分解为(x-2)(x-3)=0。",
+        "求得两个根x=2和x=3。",
+        "或者正确应用求根公式得到相同结果。"
+      ],
+      "id": "93-047"
+    },
+    {
+      "prompt": "甲、乙两车从A、B两地相向而行，甲车速度60公里/小时，乙车速度40公里/小时。两车同时出发，在离中点30公里处相遇。求A、B两地距离。",
+      "sub_type": "word_problem",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "设两地距离为S。相遇时所用时间相同，甲行驶了S/2 + 30公里，乙行驶了S/2 - 30公里。根据时间相等建立方程，求解S。",
+      "scoring_rubric": [
+        "正确设定未知数和方程。",
+        "正确理解‘离中点30公里’的含义。",
+        "解方程求得AB两地距离。"
+      ],
+      "id": "93-048"
+    },
+    {
+      "prompt": "一个长方体的长、宽、高分别是4厘米、5厘米、6厘米。求它的表面积和体积。如果将它的长、宽、高都扩大为原来的2倍，那么表面积和体积分别变为原来的几倍？",
+      "sub_type": "geometry",
+      "difficulty": "easy",
+      "multi_turn": false,
+      "expected_behavior": "计算原始长方体的表面积和体积。然后计算边长扩大2倍后的新表面积和体积，并计算倍数关系（表面积应为4倍，体积应为8倍）。",
+      "scoring_rubric": [
+        "正确计算原始表面积。",
+        "正确计算原始体积。",
+        "正确计算扩大后的表面积和体积。",
+        "正确得出表面积和体积的倍数。"
+      ],
+      "id": "93-049"
+    }
+  ]
+}

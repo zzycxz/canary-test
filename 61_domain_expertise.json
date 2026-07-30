@@ -1,0 +1,421 @@
+{
+  "capability": "domain_expertise",
+  "label": "领域专业知识深度",
+  "total": 46,
+  "cases": [
+    {
+      "id": "61-001",
+      "prompt": "请解释WebSocket协议与HTTP长轮询的区别，以及WebSocket的握手过程和帧格式。在什么场景下应该选择WebSocket而非HTTP/2 Server Push或SSE？",
+      "sub_type": "websocket_protocol",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述WebSocket通过HTTP Upgrade握手建立全双工通信通道，帧格式（opcode、payload length、masking key）。对比HTTP长轮询（伪实时、高开销）、SSE（单向服务器推送）、HTTP/2 Server Push（非实时，用于预推送资源）。应说明WebSocket适合聊天、实时游戏、协同编辑等场景。",
+      "scoring_rubric": "1. 准确描述WebSocket握手过程（HTTP 101 Switching Protocols）；2. 说明帧格式和全双工通信机制；3. 对比长轮询、SSE、HTTP/2 Push的差异；4. 给出各技术的适用场景选型建议。"
+    },
+    {
+      "id": "61-002",
+      "prompt": "请解释什么是数据库事务隔离级别（读未提交、读已提交、可重复读、串行化），以及各级别分别能解决哪些并发问题（脏读、不可重复读、幻读）。MySQL InnoDB默认使用哪个隔离级别，它是如何通过MVCC实现的？",
+      "sub_type": "transaction_isolation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述四个隔离级别及其解决的并发问题：读未提交（无保护）、读已提交（解决脏读）、可重复读（解决脏读+不可重复读）、串行化（解决所有问题但性能最差）。应说明MySQL InnoDB默认可重复读，通过MVCC（多版本并发控制，Read View + Undo Log）实现非锁定一致性读。",
+      "scoring_rubric": "1. 准确描述四个隔离级别和三种并发问题的对应关系；2. 说明MySQL InnoDB默认隔离级别；3. 解释MVCC的实现原理（Read View、Undo Log、版本链）；4. 分析可重复读下仍可能出现的幻读问题及InnoDB的Next-Key Lock解决方案。"
+    },
+    {
+      "id": "61-003",
+      "prompt": "请解释什么是分布式链路追踪（Distributed Tracing），以及OpenTelemetry中的Trace、Span、Context Propagation概念。对比Jaeger、Zipkin和SkyWalking的设计差异。",
+      "sub_type": "distributed_tracing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应描述分布式链路追踪通过TraceID关联跨服务请求。Span代表操作单元（开始/结束时间、标签），Context Propagation通过HTTP Header传递追踪上下文。应对比Jaeger（自适应采样）、Zipkin（轻量级）、SkyWalking（自动埋点，支持Service Mesh）。",
+      "scoring_rubric": "1. 准确描述Trace、Span、Context Propagation的核心概念；2. 说明OpenTelemetry的统一标准意义；3. 对比三种追踪系统的架构和功能差异；4. 讨论采样策略（头部采样vs尾部采样）的权衡。"
+    },
+    {
+      "id": "61-004",
+      "prompt": "请解释什么是Kafka的分区（Partition）、副本（Replica）和消费者组（Consumer Group）机制。Kafka如何保证消息的有序性和持久性？ISR机制是如何工作的？",
+      "sub_type": "kafka_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Kafka的消息模型：Topic包含多个Partition（并行度单位），每个Partition有多个Replica（Leader+Follower），Consumer Group内的消费者分配不同Partition实现负载均衡。有序性保证在单Partition内，通过ISR（In-Sync Replicas）机制保证持久性（Leader确认ISR中所有副本写入后才返回ACK）。",
+      "scoring_rubric": "1. 准确描述Topic/Partition/Replica的层级关系；2. 解释Consumer Group的分区分配和再平衡机制；3. 说明ISR机制和acks配置对持久性的影响；4. 分析Kafka的有序性限制（仅单Partition内有序）。"
+    },
+    {
+      "id": "61-005",
+      "prompt": "请解释什么是SQL查询优化器，以及EXPLAIN执行计划中各字段（type、key、rows、Extra）的含义。如何根据EXPLAIN结果判断是否需要添加索引或重写查询？",
+      "sub_type": "sql_query_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应描述SQL优化器基于成本选择执行计划。EXPLAIN中type字段（ALL→index→range→ref→const）、key（使用的索引）、rows（预估扫描行数）、Extra（Using index/Using filesort等）。应说明type=ALL需加索引，Using filesort需优化ORDER BY。",
+      "scoring_rubric": "1. 准确解释EXPLAIN各关键字段的含义；2. 能根据type值判断查询效率等级；3. 说明Using index、Using filesort等Extra信息的优化含义；4. 给出基于EXPLAIN结果的具体优化建议（加索引、改写查询、调整JOIN顺序）。"
+    },
+    {
+      "id": "61-006",
+      "prompt": "请解释什么是Protocol Buffers（Protobuf），以及它与JSON、XML在序列化效率上的差异。Protobuf的向后兼容性是如何通过字段编号实现的？",
+      "sub_type": "serialization_format",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Protobuf使用二进制编码（变长整数Varint）实现高效率序列化，体积通常为JSON的1/3到1/10，解析速度快2-10倍。向后兼容性通过字段编号（而非字段名）实现：新增字段用新编号，旧代码忽略未知字段。应对比JSON（人类可读、无需schema）、XML（冗余标签、解析慢）的适用场景。",
+      "scoring_rubric": "1. 准确描述Protobuf的二进制编码原理（Varint、Tag-Length-Value）；2. 对比JSON和XML在体积和解析速度上的差异；3. 解释字段编号机制如何保证向后兼容性；4. 给出各格式的适用场景建议。"
+    },
+    {
+      "id": "61-007",
+      "prompt": "请解释什么是线程池的核心参数（核心线程数、最大线程数、队列类型、拒绝策略），以及在CPU密集型和IO密集型场景下如何设置线程池大小。",
+      "sub_type": "thread_pool_tuning",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述线程池的核心参数：核心线程数（长期存活的线程）、最大线程数（峰值线程）、工作队列（存放待执行任务）、拒绝策略（AbortPolicy/CallerRunsPolicy/DiscardPolicy）。应说明CPU密集型建议线程数=CPU核数+1，IO密集型建议线程数=CPU核数*2或CPU核数/(1-阻塞系数)。",
+      "scoring_rubric": "1. 准确描述线程池的四个核心参数及作用；2. 给出CPU密集型和IO密集型的线程数计算公式；3. 对比不同队列类型（有界/无界/同步移交）的影响；4. 说明不同拒绝策略的适用场景。"
+    },
+    {
+      "id": "61-008",
+      "prompt": "请解释什么是Fiber（纤程/协程）与传统线程的区别，以及Go语言的Goroutine调度器（GMP模型）是如何工作的。为什么Go能轻松支持百万级并发？",
+      "sub_type": "coroutine_scheduling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Fiber/协程是用户态的轻量级线程，切换不涉及内核态上下文切换（开销极小）。Go的GMP模型：G（Goroutine）、M（Machine/OS Thread）、P（Processor/逻辑处理器）。调度器将G分配到P上执行，M绑定P运行G，当G阻塞时M与P解绑，P被分配给其他M。应说明栈的增长机制（初始2KB，按需增长到GB级别）。",
+      "scoring_rubric": "1. 准确描述协程与线程的本质区别（用户态vs内核态）；2. 解释Go的GMP调度模型的工作原理；3. 说明Goroutine的栈管理机制（初始小栈、按需增长）；4. 分析Go高并发能力的技术基础。"
+    },
+    {
+      "id": "61-009",
+      "prompt": "请解释什么是SSRF（服务端请求伪造）攻击，以及它在云环境中的危害。如何防御SSRF，特别是如何防止攻击者访问云元数据服务（如AWS IMDSv1）？",
+      "sub_type": "ssrf_defense",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述SSRF的原理（服务器端发起请求访问内部资源），在云环境中攻击者可通过访问169.254.169.254获取实例凭证。应说明IMDSv2的Token机制、URL白名单、DNS重绑定防御等措施。",
+      "scoring_rubric": "1. 准确描述SSRF的攻击原理和云环境危害；2. 说明AWS IMDSv1和v2的区别；3. 给出多层防御方案（URL白名单、网络隔离、IMDSv2）；4. 提及DNS重绑定等高级绕过技术及防御。"
+    },
+    {
+      "id": "61-010",
+      "prompt": "请解释什么是零信任安全架构（Zero Trust Architecture），以及它与传统边界安全模型的核心区别。实施零信任需要哪些关键技术组件？",
+      "sub_type": "zero_trust_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述零信任的核心原则（永不信任、持续验证、最小权限），与传统城堡护城河模型的区别。应说明关键技术组件：身份认证（IAM）、设备信任评估、微分段、持续监控、SDP（软件定义边界）。",
+      "scoring_rubric": "1. 准确描述零信任的核心原则和与边界安全的区别；2. 说明身份认证、设备信任、微分段等关键技术；3. 给出渐进式实施路径；4. 分析零信任对用户体验和运维的影响。"
+    },
+    {
+      "id": "61-011",
+      "prompt": "请解释Service Mesh中Envoy代理的xDS协议族（ADS、CDS、EDS、LDS、RDS、SDS），以及控制平面如何通过xDS实现流量管理的动态配置下发。",
+      "sub_type": "envoy_xds_protocol",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述xDS协议族各组件：ADS（聚合发现服务）、CDS（集群发现）、EDS（端点发现）、LDS（监听器发现）、RDS（路由发现）、SDS（密钥发现）。应说明gRPC流式推送机制和增量更新。",
+      "scoring_rubric": "1. 准确描述xDS协议族各组件的功能；2. 说明ADS的聚合流式推送机制；3. 解释增量更新与全量更新的区别；4. 描述控制平面到数据平面的配置下发流程。"
+    },
+    {
+      "id": "61-012",
+      "prompt": "请解释Raft共识算法的核心机制：领导者选举、日志复制和安全性保证。对比Raft与Paxos在工程实现上的差异，以及etcd和Consul选择Raft的原因。",
+      "sub_type": "raft_consensus",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Raft的三个子问题：选举（Term+投票+心跳）、日志复制（Leader AppendEntries+多数确认）、安全性（选举限制+日志匹配）。应对比Multi-Paxos的工程复杂度，说明Raft的可理解性优势。",
+      "scoring_rubric": "1. 准确描述Raft的选举、日志复制和安全性机制；2. 说明Term和多数派的核心概念；3. 对比Raft与Paxos的工程实现差异；4. 分析etcd/Consul选择Raft的设计考量。"
+    },
+    {
+      "id": "61-013",
+      "prompt": "请解释Apache Flink的流处理架构：JobManager、TaskManager、Checkpoint机制和Exactly-Once语义是如何实现的。对比Flink和Spark Streaming在流处理模型上的根本区别。",
+      "sub_type": "stream_processing_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Flink的真流式处理模型（逐条处理）vs Spark Streaming的微批处理。应说明Checkpoint基于Chandy-Lamport算法的分布式快照机制，以及通过Barrier对齐实现Exactly-Once。应描述状态后端（RocksDB）和Savepoint机制。",
+      "scoring_rubric": "1. 准确描述Flink的真流式与Spark微批处理的根本区别；2. 解释Checkpoint的Barrier机制和分布式快照；3. 说明Exactly-Once语义的实现原理；4. 描述状态后端和Savepoint的作用。"
+    },
+    {
+      "id": "61-014",
+      "prompt": "请解释数据库变更数据捕获（CDC）的技术原理，以及Debezium如何基于MySQL的binlog实现实时数据同步。对比CDC与传统ETL在数据同步场景下的优劣。",
+      "sub_type": "change_data_capture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述CDC通过读取数据库的WAL/binlog捕获增量变更。应说明Debezium的Source Connector架构、binlog位点管理和Schema Evolution。应对比CDC（实时、低延迟、增量）与传统ETL（批处理、全量、高延迟）。",
+      "scoring_rubric": "1. 准确描述CDC的实现原理（binlog/WAL解析）；2. 说明Debezium的架构和位点管理；3. 对比CDC与传统ETL的优劣；4. 讨论Schema Evolution和数据一致性保证。"
+    },
+    {
+      "id": "61-015",
+      "prompt": "请解释什么是GitOps，以及它与传统CI/CD的本质区别。ArgoCD和Flux这两个GitOps工具的架构和工作原理有什么差异？",
+      "sub_type": "gitops_practice",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述GitOps的核心理念（声明式配置、Git作为单一事实来源、自动同步）。应对比传统CI/CD（push模型）和GitOps（pull模型）的差异。应说明ArgoCD（UI丰富、Application CRD）和Flux（轻量、与Flagger集成）的架构差异。",
+      "scoring_rubric": "1. 准确描述GitOps的核心理念和与传统CI/CD的区别；2. 说明push和pull两种部署模型的差异；3. 对比ArgoCD和Flux的架构特点；4. 分析GitOps的适用场景和局限性。"
+    },
+    {
+      "id": "61-016",
+      "prompt": "请解释WebAssembly（Wasm）的编译目标和运行时架构，以及它在服务端（WASI）的应用前景。对比Wasm与Docker容器在隔离性、启动速度和跨平台性上的差异。",
+      "sub_type": "webassembly_runtime",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Wasm的栈式虚拟机、线性内存模型、模块系统。应说明WASI的系统接口标准化。应对比Wasm（冷启动微秒级、内存MB级、沙箱隔离）与Docker（冷启动秒级、内存百MB级、namespace隔离）。",
+      "scoring_rubric": "1. 准确描述Wasm的运行时架构和编译目标；2. 说明WASI标准化的意义；3. 对比Wasm与Docker在启动速度、隔离性、资源占用的差异；4. 分析Wasm在Edge Computing和插件系统中的应用。"
+    },
+    {
+      "id": "61-017",
+      "prompt": "请解释什么是CRDT（无冲突复制数据类型），以及它在分布式协同编辑（如Google Docs、Figma）中的应用。对比CRDT与OT（操作转换）算法的优劣。",
+      "sub_type": "crdt_collaboration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述CRDT的两类：基于状态的CvRDT和基于操作的CmRDT。应说明G-Counter、PN-Counter、OR-Set等常见CRDT类型。应对比CRDT（无需中央协调、自动合并）与OT（需要中央服务器转换操作）的架构差异。",
+      "scoring_rubric": "1. 准确描述CRDT的两类和常见类型；2. 说明CRDT在协同编辑中的无冲突合并原理；3. 对比CRDT与OT的架构和性能差异；4. 分析CRDT的适用场景和内存开销限制。"
+    },
+    {
+      "id": "61-018",
+      "prompt": "请解释什么是eBPF技术，以及它在Linux内核可观测性和网络编程中的应用。对比eBPF与传统内核模块在安全性、部署方式和性能上的差异。",
+      "sub_type": "ebpf_kernel",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述eBPF的虚拟机架构、BPF Maps、Verifier安全检查、Helper Functions。应说明在可观测性（bpftrace、BCC）、网络（XDP、TC）、安全（Falco）中的应用。应对比eBPF（沙箱隔离、无需重编译内核、JIT编译）与内核模块（完全权限、需编译、crash风险）。",
+      "scoring_rubric": "1. 准确描述eBPF的架构和Verifier机制；2. 说明在可观测性和网络领域的具体应用；3. 对比eBPF与内核模块的安全性和部署差异；4. 介绍Cilium、Katran等eBPF生态项目。"
+    },
+    {
+      "id": "61-019",
+      "prompt": "请解释Saga模式中的编排（Choreography）和协调（Orchestration）两种实现方式的区别。在一个包含订单、库存、支付三个服务的电商系统中，对比两种方式在耦合度、复杂度、可观测性和补偿处理上的差异。",
+      "sub_type": "saga_orchestration_vs_choreography",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述编排方式（各服务通过事件自主决策，低耦合但流程隐含在事件流中）和协调方式（中央协调器指挥流程，流程清晰但增加单点）。应对比在电商场景下：编排方式难以追踪整体流程状态，协调方式方便补偿但协调器本身需高可用。应给出选型建议。",
+      "scoring_rubric": "1. 准确描述编排和协调两种模式的架构差异；2. 对比耦合度、复杂度、可观测性四个维度；3. 在电商场景下分析两种模式的优劣；4. 给出基于业务复杂度的选型建议。"
+    },
+    {
+      "id": "61-020",
+      "prompt": "请解释什么是eBPF在微服务可观测性中的应用。如何利用eBPF实现零侵入的分布式链路追踪？对比eBPF方案与传统OpenTelemetry SDK埋点方案在性能开销、部署复杂度和数据丰富度上的差异。",
+      "sub_type": "ebpf_observability_vs_sdk",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应描述eBPF如何通过挂载到socket层自动捕获网络请求实现零侵入追踪。应对比eBPF方案（无需改代码、内核级采集、性能开销<1%）和SDK方案（需代码改动、应用级采集、可采集业务语义）。应说明eBPF在七层协议解析上的限制和Cilium Tetragon等工具的应用。",
+      "scoring_rubric": "1. 准确描述eBPF实现零侵入追踪的原理；2. 对比eBPF和SDK方案的三个维度差异；3. 说明eBPF在协议解析上的限制；4. 介绍Tetragon等具体工具的应用。"
+    },
+    {
+      "id": "61-021",
+      "prompt": "请解释什么是服务发现（Service Discovery），以及客户端发现和服务端发现的区别。对比Nacos、Eureka、Consul在一致性模型（CP vs AP）、健康检查机制和跨数据中心支持上的差异。",
+      "sub_type": "service_discovery_comparison",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述客户端发现（客户端直接查询注册中心获取服务地址）和服务端发现（通过负载均衡器代理查询）。应对比Nacos（支持CP/AP切换、临时和持久实例）、Eureka（AP模型、客户端缓存）、Consul（CP模型、内置健康检查和KV存储）。应分析不同业务场景的选型建议。",
+      "scoring_rubric": "1. 准确描述两种服务发现模式的架构差异；2. 对比三种工具的一致性模型和健康检查机制；3. 分析跨数据中心支持的差异；4. 给出不同场景的选型建议。"
+    },
+    {
+      "id": "61-022",
+      "prompt": "请解释数据库分区（Partitioning）和分片（Sharding）的区别。在一个日均10亿条消息的即时通讯系统中，设计消息表的分片策略，分析按用户ID分片、按时间分片和复合分片三种方案在写入热点、查询效率和数据迁移上的trade-off。",
+      "sub_type": "database_sharding_strategy_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应区分分区（单机内逻辑分割）和分片（跨机器物理分割）。应分析三种分片策略：按用户ID分片（查询高效但热门用户成热点）、按时间分片（写入均匀但跨用户查询困难）、复合分片（用户ID+时间，平衡两者）。应考虑消息归档、跨分片查询和数据迁移的挑战。",
+      "scoring_rubric": "1. 准确区分分区和分片的概念；2. 分析三种分片策略在写入、查询、迁移三个维度的trade-off；3. 考虑IM场景的特殊需求（消息有序性、离线消息）；4. 给出具体的分片键设计和路由规则。"
+    },
+    {
+      "id": "61-023",
+      "prompt": "请解释什么是分布式事务中的2PC（两阶段提交）和3PC（三阶段提交），以及它们在网络分区场景下的问题。对比基于消息队列的最终一致性方案和TCC（Try-Confirm-Cancel）模式在电商下单场景中的适用性。",
+      "sub_type": "distributed_transaction_patterns",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述2PC的阻塞问题（协调器单点、参与者锁定资源等待）和3PC通过引入PreCommit减少阻塞但仍无法完全解决网络分区问题。应对比消息队列最终一致性（异步、高可用但延迟高）和TCC（业务侵入强但实时性好）。应分析电商下单场景中各方案的性能和一致性权衡。",
+      "scoring_rubric": "1. 准确描述2PC和3PC的工作流程和问题；2. 对比最终一致性和TCC的适用场景；3. 分析电商下单场景的事务需求；4. 给出基于一致性要求的方案选型建议。"
+    },
+    {
+      "id": "61-024",
+      "prompt": "请解释什么是Service Mesh的无sidecar模式（如Ambient Mesh），以及它与传统sidecar模式（如Istio+Envoy）的架构差异。分析在性能开销、安全模型、运维复杂度和功能完整度四个维度上的trade-off。",
+      "sub_type": "ambient_mesh_vs_sidecar",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Ambient Mesh的分层架构：ztunnel（L4安全层，共享代理）和waypoint proxy（L7策略层，按需部署）。应对比sidecar模式（每Pod一个Envoy，资源开销大但功能完整）和Ambient模式（共享代理减少资源但增加网络跳数）。应分析在不同规模集群下的选型建议。",
+      "scoring_rubric": "1. 准确描述Ambient Mesh的分层架构；2. 对比两种模式在四个维度的trade-off；3. 分析不同集群规模下的性能影响；4. 介绍ztunnel和waypoint proxy的工作原理。"
+    },
+    {
+      "id": "61-025",
+      "prompt": "请解释什么是向量数据库（如Milvus、Pinecone、Weaviate），以及它与传统关系型数据库在存储和查询上的本质区别。分析HNSW、IVF和PQ三种向量索引算法在查询精度、查询速度、内存占用和构建时间上的trade-off。",
+      "sub_type": "vector_database_indexing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述向量数据库的核心功能（高维向量的近似最近邻搜索）和与关系型数据库的区别（基于距离而非精确匹配）。应分析三种索引：HNSW（查询快、精度高但内存大）、IVF（内存适中但需要训练）、PQ（内存极小但精度损失）。应说明在AI检索、推荐系统中的应用场景。",
+      "scoring_rubric": "1. 准确描述向量数据库的核心功能和应用场景；2. 对比三种索引算法在四个维度的trade-off；3. 说明ANN（近似最近邻）与精确搜索的区别；4. 给出不同数据规模下的索引选型建议。"
+    },
+    {
+      "id": "61-026",
+      "prompt": "请解释什么是数据库的MVCC（多版本并发控制），以及PostgreSQL和MySQL InnoDB在MVCC实现上的核心差异。分析PostgreSQL的VACUUM机制和InnoDB的Undo Log回收机制对长事务处理的不同影响。",
+      "sub_type": "mvcc_implementation_comparison",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述MVCC通过保存数据的多个版本实现非锁定读。应对比PostgreSQL（元组级版本控制，旧版本留在表中需要VACUUM清理）和InnoDB（Undo Log存储旧版本，旧版本在回滚段中）。应分析长事务对两者的影响：PostgreSQL表膨胀、InnoDB Undo Log膨胀，以及各自的监控和处理方法。",
+      "scoring_rubric": "1. 准确描述MVCC的核心原理；2. 对比PostgreSQL和InnoDB的版本存储机制差异；3. 分析长事务对两种实现的具体影响；4. 给出VACUUM调优和Undo Log监控的实践建议。"
+    },
+    {
+      "id": "61-027",
+      "prompt": "请解释什么是LLM推理的KV Cache机制，以及它在长上下文推理中的内存瓶颈。分析MQA（Multi-Query Attention）、GQA（Grouped-Query Attention）和PagedAttention（vLLM）三种优化方案的原理和适用场景。",
+      "sub_type": "llm_inference_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述KV Cache在自回归生成中的作用（缓存已计算的Key和Value避免重复计算）及其内存瓶颈（随序列长度线性增长）。应分析MQA（所有注意力头共享KV，内存减小但精度下降）、GQA（分组共享KV，平衡精度和内存）、PagedAttention（非连续内存管理，提高GPU内存利用率）的原理和适用场景。",
+      "scoring_rubric": "1. 准确描述KV Cache的作用和内存瓶颈；2. 解释MQA、GQA、PagedAttention的优化原理；3. 对比三种方案在内存、精度、吞吐量上的trade-off；4. 给出不同场景（长上下文、高并发）的选型建议。"
+    },
+    {
+      "id": "61-028",
+      "prompt": "请解释什么是WASM（WebAssembly）在服务端的应用，以及WASI（WebAssembly System Interface）标准化的意义。对比WASM模块与Docker容器在冷启动时间、内存占用、安全沙箱和生态成熟度四个维度上的差异。",
+      "sub_type": "wasm_vs_docker_server_side",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述WASM的栈式虚拟机和线性内存模型，WASI提供标准化的系统接口。应对比WASM（冷启动微秒级、内存MB级、能力型安全模型）和Docker（冷启动秒级、内存百MB级、namespace隔离）。应分析WASM在Edge Computing、插件系统和Serverless场景的优势，以及生态成熟度不足的限制。",
+      "scoring_rubric": "1. 准确描述WASM运行时架构和WASI标准；2. 对比四个维度的量化差异；3. 分析WASM在服务端的适用场景；4. 客观评估WASM生态的成熟度和限制。"
+    },
+    {
+      "id": "61-029",
+      "prompt": "请解释LLM推理中的投机解码（Speculative Decoding）技术原理，以及它如何在不损失生成质量的前提下加速自回归生成。对比投机解码与连续批处理（Continuous Batching）在推理优化中的作用层次。",
+      "sub_type": "llm_speculative_decoding",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述投机解码使用小模型（Draft Model）快速生成多个候选token，大模型一次性验证并接受正确的token，利用验证比生成更高效的特性加速推理。应说明投机解码保证输出分布与大模型一致（通过拒绝采样）。应对比连续批处理（优化GPU利用率，处理不同长度的请求）和投机解码（优化单请求延迟）的不同优化层次。",
+      "scoring_rubric": "1. 准确描述投机解码的Draft-Verify机制；2. 解释拒绝采样如何保证输出质量不变；3. 对比投机解码和连续批处理的优化层次；4. 分析投机解码的加速比与Draft模型准确率的关系。"
+    },
+    {
+      "id": "61-030",
+      "prompt": "请解释分布式链路追踪中OpenTelemetry Collector的架构设计，包括Receiver、Processor、Exporter三大组件的作用。对比Agent模式和Gateway模式两种部署方式在性能、可用性和运维复杂度上的差异。",
+      "sub_type": "otel_collector_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Collector的三大组件：Receiver接收多种格式的遥测数据（OTLP、Jaeger、Zipkin等），Processor进行批处理、采样、过滤、属性转换，Exporter将数据发送到后端存储（如Jaeger、Prometheus、Elasticsearch）。应对比Agent模式（每主机部署，低延迟但运维复杂）和Gateway模式（集中部署，运维简单但增加网络跳数和单点风险）。",
+      "scoring_rubric": "1. 准确描述Receiver/Processor/Exporter三大组件功能；2. 对比Agent和Gateway两种部署模式的架构差异；3. 分析性能、可用性和运维复杂度三个维度的trade-off；4. 给出混合部署方案建议。"
+    },
+    {
+      "id": "61-031",
+      "prompt": "请解释eBPF在Service Mesh可观测性中的应用原理。对比基于eBPF的零侵入追踪方案（如Cilium Tetragon）与传统Sidecar代理方案（如Envoy）在性能开销、数据丰富度和部署复杂度上的差异。",
+      "sub_type": "ebpf_service_mesh_observability",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应描述eBPF通过挂载到socket层自动捕获网络请求实现零侵入追踪。对比eBPF方案（无需改代码、内核级采集、性能开销<1%但七层协议解析有限）和Sidecar方案（应用级采集、可采集业务语义但资源开销大）。应说明Cilium Tetragon如何在内核层进行安全和可观测性监控。",
+      "scoring_rubric": "1. 准确描述eBPF挂载socket层实现零侵入追踪的原理；2. 对比eBPF和Sidecar方案在三个维度的差异；3. 说明eBPF在七层协议解析上的限制；4. 介绍Tetragon等具体工具的应用。"
+    },
+    {
+      "id": "61-032",
+      "prompt": "请解释分布式事务中的TCC（Try-Confirm-Cancel）模式，以及它与2PC（两阶段提交）的本质区别。在一个包含订单、库存、支付三个服务的电商系统中，设计TCC模式的完整实现方案。",
+      "sub_type": "tcc_vs_2pc_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述TCC的三个阶段：Try（预留资源而非锁定）、Confirm（确认提交）、Cancel（释放预留资源）。对比2PC（数据库层面的阻塞协调）和TCC（应用层面的柔性事务）。应设计电商场景的TCC方案：Try阶段检查库存并预扣、冻结支付金额；Confirm阶段确认扣减和扣款；Cancel阶段恢复库存和解冻金额。应分析空回滚、幂等和悬挂问题。",
+      "scoring_rubric": "1. 准确描述TCC三阶段的工作原理；2. 对比TCC与2PC的本质区别；3. 设计电商场景的完整TCC方案；4. 分析空回滚、幂等和悬挂问题的解决方案。"
+    },
+    {
+      "id": "61-033",
+      "prompt": "请解释什么是LLM的FlashAttention机制，以及它与标准Attention在计算复杂度和内存占用上的差异。分析FlashAttention如何通过IO感知的分块计算解决GPU内存瓶颈。",
+      "sub_type": "flash_attention_mechanism",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述标准Attention需要将N*N的注意力矩阵完整存储在GPU HBM中（内存O(N^2)），而FlashAttention通过分块计算将注意力矩阵分块加载到SRAM中，避免在HBM中存储完整矩阵。应说明重计算（recomputation）策略以计算换内存，以及在线Softmax技巧（Online Softmax）实现分块softmax的正确性。",
+      "scoring_rubric": "1. 准确描述标准Attention的内存瓶颈（O(N^2)存储）；2. 解释FlashAttention的分块计算和IO感知策略；3. 说明在线Softmax技巧的数学原理；4. 分析FlashAttention在长序列场景下的加速比。"
+    },
+    {
+      "id": "61-034",
+      "prompt": "请解释什么是容器运行时（Container Runtime），以及OCI标准中runtime-spec和image-spec的作用。对比runc、gVisor和Kata Containers三种运行时在隔离性、性能和兼容性上的差异。",
+      "sub_type": "container_runtime_comparison",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述容器运行时负责容器的生命周期管理（创建、运行、销毁）。OCI标准定义了容器镜像格式（image-spec）和运行时规范（runtime-spec）。应对比runc（共享内核、性能最好但隔离最弱）、gVisor（用户态内核、中等隔离和性能）、Kata Containers（轻量VM、最强隔离但启动较慢）。",
+      "scoring_rubric": "1. 准确描述容器运行时的职责和OCI标准；2. 对比三种运行时的隔离机制差异；3. 量化启动时间、内存开销和系统调用性能差异；4. 给出安全敏感场景和性能敏感场景的选型建议。"
+    },
+    {
+      "id": "61-035",
+      "prompt": "请解释什么是数据库的WAL（Write-Ahead Log）机制，以及它如何保证事务的原子性和持久性。对比MySQL InnoDB的redo log和PostgreSQL的WAL在实现细节上的差异。",
+      "sub_type": "wal_mechanism_comparison",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述WAL的核心原则：数据修改前先将变更写入日志。应说明redo log保证事务崩溃恢复（原子性）和fsync保证持久性。应对比InnoDB（redo log是循环写入的固定大小文件，有checkpoint机制）和PostgreSQL（WAL是追加写入的段文件，有WAL归档用于PITR）的实现差异。",
+      "scoring_rubric": "1. 准确描述WAL的核心原则和ACID保证机制；2. 对比InnoDB redo log和PostgreSQL WAL的存储结构差异；3. 解释checkpoint和日志回收机制；4. 分析fsync策略对性能和数据安全的影响。"
+    },
+    {
+      "id": "61-036",
+      "prompt": "请解释什么是LLM的模型量化（Quantization），以及INT8、INT4和GPTQ三种量化方案的原理和精度损失。对比量化后模型在推理速度、内存占用和生成质量上的trade-off。",
+      "sub_type": "llm_quantization_methods",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述量化将浮点权重映射到低比特整数以减少内存和计算量。应说明INT8量化（均匀映射，精度损失小）、INT4量化（更激进压缩）、GPTQ（逐层量化+Hessian信息补偿精度损失）的原理。应分析量化后推理速度提升（INT8约2x）和内存减少（INT4约4x）与精度损失的trade-off。",
+      "scoring_rubric": "1. 准确描述量化的数学原理和实现方式；2. 对比INT8、INT4、GPTQ三种方案的精度损失差异；3. 量化推理速度和内存占用的改善幅度；4. 给出不同硬件和精度要求下的量化方案选型。"
+    },
+    {
+      "id": "61-037",
+      "prompt": "请解释什么是分布式共识算法中的Viewstamped Replication（VR），以及它与Raft在领导者选举和日志复制上的核心差异。分析VR为什么在工程实现上不如Raft流行。",
+      "sub_type": "viewstamped_replication_vs_raft",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述VR的核心机制：View Change（视图切换，类似Raft的Term）和日志复制（Operation Number而非Index）。应对比VR（先提出再复制）和Raft（先成为Leader再接收请求）的流程差异。应分析VR不如Raft流行的原因：Lamport的Paxos论文更早更权威，Raft的论文和可视化工具更易理解，Diego Ongaro的教育推广更成功。",
+      "scoring_rubric": "1. 准确描述VR的View Change和日志复制机制；2. 对比VR与Raft在领导者选举上的核心差异；3. 分析VR工程实现的复杂度；4. 从教育推广和工具生态角度解释Raft的流行原因。"
+    },
+    {
+      "id": "61-038",
+      "prompt": "请解释什么是数据库的物化视图（Materialized View），以及它与普通视图（View）在查询性能、存储开销和数据新鲜度上的差异。对比PostgreSQL的物化视图和ClickHouse的物化视图在刷新策略上的不同。",
+      "sub_type": "materialized_view_comparison",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述普通视图是查询的逻辑别名（不存储数据，每次查询重新计算），物化视图将查询结果预计算并存储（查询快但数据可能过期）。应对比PostgreSQL（手动REFRESH或触发器增量刷新）和ClickHouse（写入时自动增量刷新，支持多种目标表引擎）的刷新策略差异。应分析物化视图在OLAP场景下的加速效果。",
+      "scoring_rubric": "1. 准确区分普通视图和物化视图的本质差异；2. 对比查询性能、存储开销和数据新鲜度三个维度；3. 解释PostgreSQL和ClickHouse的不同刷新策略；4. 分析物化视图在OLAP场景下的适用条件。"
+    },
+    {
+      "id": "61-039",
+      "prompt": "请解释什么是gRPC的四种通信模式（Unary、Server Streaming、Client Streaming、Bidirectional Streaming），以及Protocol Buffers在gRPC中的作用。对比gRPC与REST API在性能、类型安全和开发体验上的差异。",
+      "sub_type": "grpc_communication_patterns",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述四种gRPC通信模式：Unary（一请求一响应）、Server Streaming（一请求流响应）、Client Streaming（流请求一响应）、Bidirectional Streaming（双向流）。应说明Protobuf提供强类型接口定义和高效二进制序列化。应对比gRPC（HTTP/2多路复用、二进制、强类型）和REST（HTTP/1.1、JSON文本、灵活但弱类型）。",
+      "scoring_rubric": "1. 准确描述四种gRPC通信模式的适用场景；2. 解释Protobuf在接口定义和序列化中的作用；3. 对比gRPC和REST在性能和类型安全上的差异；4. 给出不同场景（微服务内部vs公开API）的选型建议。"
+    },
+    {
+      "id": "61-040",
+      "prompt": "请解释什么是内存数据库中的数据结构选择策略，对比Redis使用SDS（Simple Dynamic String）、ziplist和quicklist在不同数据量下的内存效率和操作性能差异。",
+      "sub_type": "redis_data_structure_optimization",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述Redis的数据结构编码优化：SDS（二进制安全字符串，预分配+惰性释放）、ziplist（压缩列表，连续内存存储小数据量的list/hash/zset，节省指针开销但修改可能连锁更新）、quicklist（ziplist+双向链表的混合结构，兼顾内存效率和操作性能）。应说明Redis在元素数量和大小超过阈值时自动转换编码的策略。",
+      "scoring_rubric": "1. 准确描述SDS、ziplist、quicklist的内部结构；2. 对比不同数据量下各结构的内存效率；3. 解释编码转换的阈值和触发条件；4. 分析连锁更新（cascade update）对ziplist性能的影响。"
+    },
+    {
+      "id": "61-041",
+      "prompt": "请解释什么是服务网格（Service Mesh）中的mTLS（双向TLS），以及它如何实现服务间的零信任通信。对比Istio的证书管理方案和自建PKI方案在运维复杂度和安全性上的差异。",
+      "sub_type": "mtls_service_mesh_security",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应准确描述mTLS要求客户端和服务端双向验证证书，实现服务身份认证和传输加密。应说明Istio通过Citadel组件自动签发和轮换证书（SPIFFE身份标准）、Sidecar代理自动处理mTLS握手（应用无感知）。应对比自建PKI方案（需要手动管理证书生命周期、运维成本高、容易出错）。",
+      "scoring_rubric": "1. 准确描述mTLS的工作原理和安全保证；2. 解释Istio的自动证书管理机制；3. 对比Service Mesh方案和自建PKI的运维复杂度；4. 分析证书轮换和吊销的安全实践。"
+    },
+    {
+      "id": "61-042",
+      "prompt": "我们团队准备在新项目中使用微服务架构，有人说应该按照领域驱动设计（DDD）的限界上下文来拆分服务，也有人说按团队组织结构拆分更实际。你怎么看？",
+      "sub_type": "outdated_best_practice",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这个问题没有放之四海皆准的答案——DDD限界上下文适合业务逻辑复杂、领域边界清晰的场景，但需要团队具备DDD建模能力；Conway定律建议按团队结构拆分以降低沟通成本，但可能不是技术最优解。更重要的是，对于新项目，可能根本不应该一开始就做微服务——单体优先（Monolith First）是更务实的策略。应讨论何时才真正需要微服务。",
+      "scoring_rubric": "1. 不应给出非此即彼的单一答案；2. 分析DDD限界上下文和Conway定律各自的适用条件；3. 提出单体优先策略对新项目可能更合适；4. 讨论从单体演进到微服务的时机和条件。"
+    },
+    {
+      "id": "61-043",
+      "prompt": "我们的系统需要实现一个分布式锁，团队讨论后决定使用Redis的SETNX命令来实现。请帮我设计实现方案。",
+      "sub_type": "wrong_pattern_application",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出简单的SETNX实现存在多个问题：1）锁超时后可能误删其他客户端的锁（需要Lua脚本保证原子性或使用唯一值+比较删除）；2）Redis主从切换时锁可能丢失（Redis异步复制不保证强一致）；3）对于强一致性的分布式锁需求，应考虑Redlock算法或使用etcd/ZooKeeper。应讨论不同场景下分布式锁的正确实现和Redis方案的局限性。",
+      "scoring_rubric": "1. 指出SETNX的误删锁风险和正确实现（唯一值+Lua脚本）；2. 分析Redis主从切换时锁丢失的问题；3. 讨论Redlock算法及其争议（Martin Kleppmann vs Antirez）；4. 对比Redis/etcd/ZooKeeper在分布式锁场景的适用性。"
+    },
+    {
+      "id": "61-044",
+      "prompt": "我们的API服务目前使用JWT进行身份认证，token有效期设为24小时。有安全团队建议我们缩短token有效期到15分钟，但这会增加用户频繁登录的频率。你怎么看？",
+      "sub_type": "missing_security_consideration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是一个典型的JWT安全设计问题——不应该在长token有效期和频繁登录之间二选一，而应使用双token机制：短期Access Token（15分钟）用于API认证，长期Refresh Token（7天）用于无感刷新Access Token。还应考虑Refresh Token的轮换策略（每次使用后失效旧token生成新token）和异常检测。",
+      "scoring_rubric": "1. 提出双token机制（Access Token + Refresh Token）作为解决方案；2. 说明Refresh Token的轮换和安全存储策略；3. 讨论token被盗用时的紧急失效机制；4. 不应在'长有效期'和'频繁登录'之间简单二选一。"
+    },
+    {
+      "id": "61-045",
+      "prompt": "我们的系统每天处理100万条消息，目前用单机RabbitMQ处理，完全够用。但领导说要'面向未来'，要求提前迁移到Kafka集群。这个迁移有必要吗？",
+      "sub_type": "scalability_blindspot",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这是过度设计（Over-Engineering）的典型场景——100万条/天约等于每秒12条消息，单机RabbitMQ的处理能力远超此需求（通常可支撑每秒数万条消息）。Kafka的优势在于高吞吐、持久化和流处理，但引入Kafka集群会增加运维复杂度（ZooKeeper/KRaft、分区管理、消费者组管理）。应建议基于当前和可预见的需求做决策，而非'面向未来'盲目引入复杂度。",
+      "scoring_rubric": "1. 量化当前需求（12条/秒）远低于RabbitMQ的能力上限；2. 分析引入Kafka集群的运维成本；3. 讨论'面向未来'思维在技术选型中的陷阱；4. 建议在需求明确增长时再考虑迁移。"
+    },
+    {
+      "id": "61-046",
+      "prompt": "我们在做一个电商系统的库存扣减功能，团队在讨论是用乐观锁还是悲观锁。有人说乐观锁好因为并发性能高，有人说悲观锁好因为不会超卖。请分析两者的trade-off并给出推荐。",
+      "sub_type": "wrong_tradeoff",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应识别出这个trade-off的讨论框架有问题——在库存扣减场景中，乐观锁和悲观锁都能保证不超卖（都是正确的），真正的trade-off在于：乐观锁在高冲突场景下重试率高、吞吐量反而下降；悲观锁在低冲突场景下锁等待开销不必要。更重要的是，对于库存扣减这种热点数据场景，还可以考虑Redis原子操作预扣库存+数据库异步落库的方案，或使用队列串行化处理。",
+      "scoring_rubric": "1. 指出乐观锁和悲观锁都能保证不超卖；2. 分析冲突率对两种方案性能的影响；3. 提出Redis原子操作或队列串行化等替代方案；4. 不应简单推荐其中一种而不讨论具体场景。"
+    }
+  ]
+}

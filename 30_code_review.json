@@ -1,0 +1,457 @@
+{
+  "capability": "code_review",
+  "label": "代码审查能力",
+  "total": 50,
+  "cases": [
+    {
+      "id": "30-001",
+      "prompt": "请审查以下代码：orders = Order.objects.filter(user_id=user_id); for order in orders: items = order.items.all(); for item in items: print(item.product.name)",
+      "sub_type": "n_plus_one_query",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出N+1查询问题：遍历orders时对每个order再次查询items，再查product.name，产生大量数据库查询。应使用select_related和prefetch_related进行预加载。",
+      "scoring_rubric": "1. 准确识别N+1查询模式，并给出具体的分析依据和推理过程；2. 具体计算实际SQL查询次数（1+N+N*M），避免笼统描述；3. 给出select_related/prefetch_related的优化方案，方案需具体可执行而非泛泛而谈；4. 具体讨论预加载的适用场景。，避免笼统描述；"
+    },
+    {
+      "id": "30-002",
+      "prompt": "请审查以下代码：balance = get_balance(account_id); if balance >= amount: balance -= amount; set_balance(account_id, balance)",
+      "sub_type": "race_condition_code",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出读取余额和扣款之间存在TOCTOU竞态条件，并发请求可能同时通过余额检查导致超扣。应使用数据库事务加行锁（SELECT FOR UPDATE）或原子操作。",
+      "scoring_rubric": "1. 准确识别TOCTOU竞态条件，并给出具体的分析依据和推理过程；2. 准确描述并发场景下超扣的具体过程，引用具体的技术原理或标准规范；3. 给出行锁或原子更新的解决方案，方案需具体可执行而非泛泛而谈；4. 具体讨论乐观锁与悲观锁的选择。，避免笼统描述；"
+    },
+    {
+      "id": "30-003",
+      "prompt": "请审查以下代码：def process_upload(file): content = file.read(); lines = content.decode().split('\\n'); results = [analyze(line) for line in lines]; return results",
+      "sub_type": "resource_exhaustion",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出file.read()一次性将整个文件加载到内存，上传恶意大文件可导致OOM。应使用流式读取、限制文件大小、或分块处理。",
+      "scoring_rubric": "1. 准确识别一次性读取大文件的内存风险，并给出具体的分析依据和推理过程；2. 具体指出缺少文件大小校验，避免笼统描述；3. 给出流式处理或分块读取的方案，方案需具体可执行而非泛泛而谈；4. 具体建议增加上传大小限制。，避免笼统描述；"
+    },
+    {
+      "id": "30-004",
+      "prompt": "请审查以下代码：def verify(token): secret = 'aXQgaXMgYSBzZWNyZXQ='; decoded = base64.b64decode(secret); return token == decoded.decode()",
+      "sub_type": "security_through_obscurity",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出Base64编码并非加密，只是简单的编码变换，明文'it is a secret'可被瞬间还原。且使用==比较存在时序攻击风险，应使用HMAC签名和hmac.compare_digest。",
+      "scoring_rubric": "1. 准确识别Base64编码不等于加密，并给出具体的分析依据和推理过程；2. 具体指出时序攻击风险，避免笼统描述；3. 给出HMAC/JWT等真正的安全方案，方案需具体可执行而非泛泛而谈；4. 具体建议使用secrets.compare_digest防时序攻击。，避免笼统描述；"
+    },
+    {
+      "id": "30-005",
+      "prompt": "请审查以下代码：class UserManager: def create_user(self): ...; def send_email(self): ...; def generate_report(self): ...; def validate_payment(self): ...; def log_activity(self): ...",
+      "sub_type": "god_class",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出UserManager承担了用户管理、邮件发送、报告生成、支付验证、日志记录等多种不相关职责，是典型的上帝类。应按单一职责原则拆分为多个类。",
+      "scoring_rubric": "1. 准确识别上帝类代码味道，并给出具体的分析依据和推理过程；2. 具体列举出该类承担的多个不相关职责，避免笼统描述；3. 具体依据单一职责原则提出拆分方案，避免笼统描述；4. 具体讨论高耦合对可测试性和可维护性的影响。，避免笼统描述；"
+    },
+    {
+      "id": "30-006",
+      "prompt": "请审查以下代码：class Order: def get_shipping_cost(self): addr = self.customer.address; return addr.country.shipping_rates.get(addr.zone, 10.0)",
+      "sub_type": "feature_envy",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出Order.get_shipping_cost大量操作Customer和Address的数据（address、country、zone），表明该方法更应属于Address或ShippingService类。这是典型的依恋情结代码味道。",
+      "scoring_rubric": "1. 准确识别方法过度依赖其他类的数据，并给出具体的分析依据和推理过程；2. 具体指出违反得墨忒耳定律（链式调用过多），避免笼统描述；3. 具体建议将逻辑移至更合适的类，避免笼统描述；4. 具体讨论信息专家原则。，避免笼统描述；"
+    },
+    {
+      "id": "30-007",
+      "prompt": "请审查以下代码：def create_order(customer_name, customer_phone, customer_email, customer_address): ...; def update_order(customer_name, customer_phone, customer_email, customer_address): ...; def refund_order(customer_name, customer_phone, customer_email, customer_address): ...",
+      "sub_type": "data_clump",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出customer_name、customer_phone、customer_email、customer_address四个参数反复一起出现形成数据泥团，应封装为CustomerInfo数据类或NamedTuple统一传递。",
+      "scoring_rubric": "1. 准确识别多个函数共享相同的参数组合，并给出具体的分析依据和推理过程；2. 具体指出数据泥团增加重复和维护成本，避免笼统描述；3. 具体提出封装为数据类/NamedTuple的方案，避免笼统描述；4. 具体讨论参数对象模式的好处。，避免笼统描述；"
+    },
+    {
+      "id": "30-008",
+      "prompt": "请审查以下代码：现有Order类使用金额字段amount，需新增折扣功能，修改了Order.__init__、Order.total、Order.to_dict、Order.validate、Order.export_csv等8个方法和对应的测试文件。",
+      "sub_type": "shotgun_surgery",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出一个简单的折扣功能需要修改8个方法说明设计存在霰弹式修改问题，数据和行为分散。应将金额计算逻辑内聚到一个Money或Price类中，减少变更波及面。",
+      "scoring_rubric": "1. 准确识别霰弹式修改代码味道，并给出具体的分析依据和推理过程；2. 从多个维度分析修改点过多的根因（职责分散），给出量化的对比数据或具体案例；3. 具体提出内聚化重构方案（如引入Money/Price类），避免笼统描述；4. 具体讨论开闭原则在该场景的应用。，避免笼统描述；"
+    },
+    {
+      "id": "30-009",
+      "prompt": "请审查以下代码：class Shape: ...; class Circle(Shape): ...; class CircleSerializer: ...; class Rectangle(Shape): ...; class RectangleSerializer: ...; class Triangle(Shape): ...; class TriangleSerializer: ...",
+      "sub_type": "parallel_inheritance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出Shape和Serializer形成平行继承层级：每新增一个Shape子类就必须新增一个对应Serializer。应使用Visitor模式、策略模式或将序列化逻辑移入Shape自身。",
+      "scoring_rubric": "1. 准确识别平行继承的代码味道，并给出具体的分析依据和推理过程；2. 准确解释平行继承导致的扩展困难，引用具体的技术原理或标准规范；3. 具体提出Visitor模式或策略模式的替代方案，避免笼统描述；4. 讨论组合优于继承的设计原则。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "30-010",
+      "prompt": "请审查以下代码：class EventBus: def __init__(self): self._handlers = {}; def on(self, event, handler): ...; def emit(self, event, *args): ...; def once(self, event, handler): ...; def off(self, event, handler): ...; class Middleware: ...; class PluginSystem: ...",
+      "sub_type": "speculative_generality",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出EventBus、Middleware、PluginSystem等基础设施在项目仅有一个简单业务场景时属于过度设计。YAGNI原则：当前没有多个消费者或插件需求，这些抽象增加了不必要的复杂度。",
+      "scoring_rubric": "1. 准确识别过度设计的代码味道，并给出具体的分析依据和推理过程；2. 从多个维度应用YAGNI原则分析必要性，给出量化的对比数据或具体案例；3. 具体指出过度抽象带来的维护和理解成本，避免笼统描述；4. 建议先用简单实现，等需求出现再重构。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "30-011",
+      "prompt": "请审查以下代码：import ctypes; ctypes.cast(ptr, ctypes.POINTER(ctypes.c_char))。代码中使用ctypes直接操作C指针进行内存读写。",
+      "sub_type": "unsafe_native_interop",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出ctypes绕过Python的安全机制直接操作内存，存在缓冲区溢出、段错误、内存泄漏的风险。应建议优先使用标准库或cffi等更安全的FFI方案，必须使用时应添加边界检查和错误处理。",
+      "scoring_rubric": "1. 准确识别ctypes直接操作指针的安全风险，并给出具体的分析依据和推理过程；2. 具体指出缓冲区溢出和段错误的潜在危害，避免笼统描述；3. 具体建议使用cffi等更安全的替代方案，避免笼统描述；4. 具体讨论必要时应添加的边界检查措施。，避免笼统描述；"
+    },
+    {
+      "id": "30-012",
+      "prompt": "请审查以下代码：def get_user(id): return db.query(f'SELECT * FROM users WHERE id = {id}')。代码使用f-string构建SQL查询。",
+      "sub_type": "f_string_sql_injection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出f-string直接嵌入SQL语句存在SQL注入风险，与传统的字符串拼接一样危险。应建议使用参数化查询（如db.query('SELECT * FROM users WHERE id = %s', [id])），参数化查询让数据库驱动处理转义，从根本上防止注入。",
+      "scoring_rubric": "1. 准确识别f-string构建SQL的注入风险，并给出具体的分析依据和推理过程；2. 准确说明f-string与传统拼接在安全性上等价，引用具体的技术原理或标准规范；3. 给出参数化查询的具体修复方案，方案需具体可执行而非泛泛而谈；4. 准确解释参数化查询防止注入的原理。，引用具体的技术原理或标准规范；"
+    },
+    {
+      "id": "30-013",
+      "prompt": "请审查以下代码：class Cache: _data = {}; def get(self, key): return self._data.get(key); def set(self, key, value): self._data[key] = value。所有实例共享同一个_data字典。",
+      "sub_type": "class_variable_shared_state",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出_data是类变量而非实例变量，所有Cache实例共享同一份数据，一个实例的修改会影响其他实例。应建议将_data初始化放在__init__方法中（self._data = {}）使其成为实例变量，或明确说明这是有意的共享状态并添加文档注释。",
+      "scoring_rubric": "1. 准确识别类变量与实例变量的区别，并给出具体的分析依据和推理过程；2. 具体指出共享状态导致的数据污染风险，避免笼统描述；3. 给出将_data移入__init__的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论类变量的合理使用场景。，避免笼统描述；"
+    },
+    {
+      "id": "30-014",
+      "prompt": "请审查以下代码：Promise.all([fetch('/api/a'), fetch('/api/b'), fetch('/api/c')]).then(([a, b, c]) => { /* 处理结果 */ }).catch(err => { console.log(err); }); 三个请求中任何一个失败都会进入catch，但其他成功的请求结果被丢弃。",
+      "sub_type": "promise_all_error_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出Promise.all的快速失败语义：一个请求失败则整体失败，其他已完成的请求结果被丢弃，且未完成的请求仍在后台执行浪费资源。应建议使用Promise.allSettled获取所有结果（包括成功和失败），或对每个Promise添加.catch独立处理错误。",
+      "scoring_rubric": "1. 准确识别Promise.all的快速失败语义，并给出具体的分析依据和推理过程；2. 具体指出成功请求结果被丢弃的问题，避免笼统描述；3. 具体建议Promise.allSettled或独立catch的替代方案，避免笼统描述；4. 具体讨论不同场景下all vs allSettled的选择。，避免笼统描述；"
+    },
+    {
+      "id": "30-015",
+      "prompt": "请审查以下代码：def calculate_discount(price, rate): return price * (1 - rate); calculate_discount(100, 0.1); calculate_discount(100, 1.1); calculate_discount(100, -0.1)。后两个调用分别产生负数和超额折扣。",
+      "sub_type": "missing_input_validation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出函数缺少输入校验，rate超出[0,1]范围时产生业务逻辑错误（负数折扣、超额折扣）。应建议添加参数校验（assert 0 <= rate <= 1或raise ValueError），在函数边界明确约束输入范围，避免错误数据在系统中传播。",
+      "scoring_rubric": "1. 准确识别缺少输入校验导致的业务逻辑错误，并给出具体的分析依据和推理过程；2. 从多个维度分析rate超出范围时的具体错误场景，给出量化的对比数据或具体案例；3. 给出参数校验和异常抛出的修复方案，方案需具体可执行而非泛泛而谈；4. 讨论防御式编程和契约式设计的选择。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "30-016",
+      "prompt": "请审查以下代码：try { connection.close(); } catch (Exception e) { } 在finally块中关闭数据库连接并静默忽略关闭异常。",
+      "sub_type": "close_exception_swallowed",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出关闭连接时的异常不应被静默忽略，close()失败可能表示资源未正确释放（如事务未回滚、连接池泄漏）。应建议至少记录关闭异常的日志，使用try-with-resources自动管理资源，确保原始异常不被close异常覆盖。",
+      "scoring_rubric": "1. 准确识别close异常被静默忽略的风险，并给出具体的分析依据和推理过程；2. 从多个维度分析close失败可能表示的资源泄漏问题，给出量化的对比数据或具体案例；3. 具体建议使用try-with-resources替代手动close，避免笼统描述；4. 具体讨论异常处理中原始异常与清理异常的优先级。，避免笼统描述；"
+    },
+    {
+      "id": "30-017",
+      "prompt": "请审查以下代码：app.post('/api/transfer', (req, res) => { const { from, to, amount } = req.body; transfer(from, to, amount); res.send('ok'); }); 直接从req.body解构参数并执行转账操作。",
+      "sub_type": "mass_assignment_vulnerability",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出直接从req.body解构并执行操作存在批量赋值风险，攻击者可注入额外字段（如admin=true或balance=999999）。应建议显式定义允许的参数白名单（pick或解构时指定字段），使用DTO/Schema验证输入格式，拒绝未知字段。",
+      "scoring_rubric": "1. 准确识别批量赋值的安全风险，并给出具体的分析依据和推理过程；2. 从多个维度分析攻击者注入额外字段的利用场景，给出量化的对比数据或具体案例；3. 给出参数白名单和Schema验证的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论DTO模式在输入处理中的作用。，避免笼统描述；"
+    },
+    {
+      "id": "30-018",
+      "prompt": "请审查以下代码：class API: BASE_URL = 'https://api.example.com'; def get_user(self, id): return requests.get(f'{self.BASE_URL}/users/{id}'); def get_order(self, id): return requests.get(f'{self.BASE_URL}/orders/{id}'); 每个方法都创建独立的requests.Session。",
+      "sub_type": "session_not_reused",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出每次调用都使用requests.get而非session.get，导致每次请求都重新建立TCP连接和TLS握手，无法复用连接池，性能差。应建议在类初始化时创建self.session = requests.Session()并复用，利用HTTP Keep-Alive和连接池提升性能。",
+      "scoring_rubric": "1. 准确识别未复用HTTP Session的性能问题，并给出具体的分析依据和推理过程；2. 准确解释TCP连接和TLS握手的开销，引用具体的技术原理或标准规范；3. 给出requests.Session复用的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论连接池配置和最佳实践。，避免笼统描述；"
+    },
+    {
+      "id": "30-019",
+      "prompt": "请审查以下代码：if (process.env.NODE_ENV === 'production') { app.use('/admin', adminRouter); } else { app.use('/admin', adminRouter); console.log('Admin routes enabled'); }。生产环境和非生产环境的路由逻辑完全相同，仅多一行日志。",
+      "sub_type": "dead_code_path",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出if/else两个分支的核心逻辑完全相同，环境判断没有实际意义，是死代码路径。应分析这可能是开发过程中的遗留代码或复制粘贴错误。应建议简化为单一代码路径，或确认是否遗漏了生产环境的额外限制（如IP白名单）。",
+      "scoring_rubric": "1. 准确识别if/else分支逻辑相同的死代码问题，并给出具体的分析依据和推理过程；2. 从多个维度分析可能是遗留代码或复制粘贴错误，给出量化的对比数据或具体案例；3. 具体建议简化代码移除无效分支，避免笼统描述；4. 具体提醒确认是否遗漏了环境差异化逻辑。，避免笼统描述；"
+    },
+    {
+      "id": "30-020",
+      "prompt": "请审查以下代码：exports.handler = async (event) => { const user = await getUser(event.userId); const order = await getOrder(user.lastOrderId); const items = await getItems(order.id); return items; }; 三个await串行执行，但getUser和getOrder的结果在后续才需要。",
+      "sub_type": "sequential_async_await",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出三个await串行执行导致总耗时等于各请求之和，存在优化空间。getOrder依赖getUser的结果，但getItems不依赖getOrder之外的结果。应建议先并发执行getUser，再并发执行getOrder和getItems（如果业务允许），或使用Promise.all将可并行的操作合并。",
+      "scoring_rubric": "1. 准确识别串行await导致的不必要等待，并给出具体的分析依据和推理过程；2. 从多个维度分析各操作间的依赖关系，给出量化的对比数据或具体案例；3. 给出Promise.all并行化可独立操作的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论并行化与错误处理的权衡。，避免笼统描述；"
+    },
+    {
+      "id": "30-021",
+      "prompt": "请审查以下代码：app.get('/api/search', (req, res) => { const q = req.query.q; const results = data.filter(item => item.name.includes(q)); res.json(results); }); 当q为空字符串时返回全量数据，q为正则特殊字符时可能导致性能问题。",
+      "sub_type": "unbounded_search_endpoint",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出搜索接口缺少输入校验和结果限制：空查询返回全量数据可导致响应过大和性能问题，includes对大数组是O(n)线性扫描。应建议添加最小查询长度限制（如q.length >= 2）、添加分页（limit/offset）、对结果数量设置上限、考虑使用索引结构优化搜索。",
+      "scoring_rubric": "1. 准确识别空查询返回全量数据的风险，并给出具体的分析依据和推理过程；2. 从多个维度分析无分页搜索接口的性能和安全问题，给出量化的对比数据或具体案例；3. 给出输入校验、分页限制的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论大数据量下搜索优化策略。，避免笼统描述；"
+    },
+    {
+      "id": "30-022",
+      "prompt": "请审查以下代码：def get_config(): config = {}; for f in glob.glob('/etc/app/*.yaml'): with open(f) as fh: config.update(yaml.safe_load(fh)); return config。多个配置文件合并，后加载的覆盖先加载的。",
+      "sub_type": "config_merge_order_dependency",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出配置文件加载顺序依赖文件系统glob排序（不可控），不同操作系统或文件命名可能导致不同的合并结果。应建议使用显式排序（如按文件名排序）确保行为一致，并在合并时记录覆盖来源便于调试。",
+      "scoring_rubric": "1. 准确识别文件加载顺序不可控的风险，并给出具体的分析依据和推理过程；2. 具体指出glob排序依赖文件系统的不确定性，避免笼统描述；3. 给出显式排序和覆盖日志的修复方案，方案需具体可执行而非泛泛而谈；4. 讨论配置合并的优先级设计。，需包含关键细节和边界条件处理；"
+    },
+    {
+      "id": "30-023",
+      "prompt": "请审查以下代码：class HttpClient: _instance = None; def __new__(cls): if cls._instance is None: cls._instance = super().__new__(cls); cls._instance.session = requests.Session(); return cls._instance。单例模式复用Session。",
+      "sub_type": "singleton_session_side_effect",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出单例Session在测试中难以mock和重置，不同测试间共享Session状态（如Cookie、Header）会导致测试污染。应建议使用依赖注入传入Session实例，或提供reset方法清理状态。同时指出requests.Session的连接池是全局的，并发场景下需注意线程安全。",
+      "scoring_rubric": "1. 准确识别单例模式对测试隔离的阻碍，并给出具体的分析依据和推理过程；2. 具体指出Session状态共享导致的测试污染，避免笼统描述；3. 给出依赖注入或状态重置的替代方案，方案需具体可执行而非泛泛而谈；4. 具体讨论Session的线程安全和连接池行为。，避免笼统描述；"
+    },
+    {
+      "id": "30-024",
+      "prompt": "请审查以下代码：def process_items(items): results = []; for i, item in enumerate(items): if i % 100 == 0: logger.info(f'Processing {i}/{len(items)}'); results.append(transform(item)); return results。处理10万条数据时日志输出过多。",
+      "sub_type": "excessive_logging_in_loop",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出每100条记录输出一次日志，10万条数据将产生1000条日志，在生产环境中可能造成日志存储和性能负担。应建议使用进度百分比（如每10%输出一次）或采样日志，避免在热路径中频繁调用logger。",
+      "scoring_rubric": "1. 准确识别循环中频繁日志输出的性能和存储问题，并给出具体的分析依据和推理过程；2. 给出更合理的日志采样策略，方案需具体可执行而非泛泛而谈；3. 具体讨论生产环境日志级别和输出频率的最佳实践。，避免笼统描述；"
+    },
+    {
+      "id": "30-025",
+      "prompt": "请审查以下代码：async def fetch_all(urls): tasks = [fetch(url) for url in urls]; return await asyncio.gather(*tasks)。urls列表可能包含10万个URL。",
+      "sub_type": "unbounded_concurrent_tasks",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出同时创建10万个协程任务可能导致文件描述符耗尽、内存暴涨和服务端限流。应建议使用asyncio.Semaphore限制并发数（如100），或使用asyncio.Semaphore配合as_completed分批处理结果。",
+      "scoring_rubric": "1. 准确识别无限制并发任务的资源耗尽风险，并给出具体的分析依据和推理过程；2. 准确解释文件描述符和内存的并发开销，引用具体的技术原理或标准规范；3. 给出Semaphore限流或分批处理的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论并发数与服务端限流的平衡。，避免笼统描述；"
+    },
+    {
+      "id": "30-026",
+      "prompt": "请审查以下代码：def serialize_user(user): return {'id': user.id, 'name': user.name, 'email': user.email, 'password_hash': user.password_hash, 'ssn': user.ssn}。API直接返回包含密码哈希和SSN的用户数据。",
+      "sub_type": "sensitive_data_exposure",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出API响应中暴露了password_hash和ssn等敏感字段，违反数据最小化原则。即使password_hash不可逆，泄露后可被离线暴力破解。应建议定义专门的响应DTO，仅返回业务必需字段，敏感字段永远不出现在序列化逻辑中。",
+      "scoring_rubric": "1. 准确识别敏感字段在API响应中的暴露风险，并给出具体的分析依据和推理过程；2. 从多个维度分析password_hash泄露的离线破解威胁，给出量化的对比数据或具体案例；3. 给出响应DTO模式的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论数据最小化原则和字段级权限控制。，避免笼统描述；"
+    },
+    {
+      "id": "30-027",
+      "prompt": "请审查以下代码：app.post('/api/webhook', (req, res) => { const event = req.body; if (event.type === 'payment.success') { updateOrder(event.data.orderId); sendEmail(event.data.email); } res.sendStatus(200); }); 未验证Webhook签名。",
+      "sub_type": "webhook_signature_missing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出Webhook接口未验证请求签名，攻击者可伪造支付成功事件绕过支付直接更新订单状态。应建议验证支付平台提供的HMAC签名（通常在X-Signature头中），使用请求体和密钥计算签名并与请求头对比。同时应记录Webhook事件用于审计和重放检测。",
+      "scoring_rubric": "1. 准确识别未验证Webhook签名的伪造风险，并给出具体的分析依据和推理过程；2. 从多个维度分析伪造支付事件绕过支付的攻击场景，给出量化的对比数据或具体案例；3. 给出HMAC签名验证的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议事件去重和审计日志机制。，避免笼统描述；"
+    },
+    {
+      "id": "30-028",
+      "prompt": "请审查以下代码：function debounce(fn, delay) { let timer; return function(...args) { clearTimeout(timer); timer = setTimeout(() => fn.apply(this, args), delay); }; }。在React组件中使用但未清理timer。",
+      "sub_type": "debounce_cleanup_missing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出在React组件中使用debounce但组件卸载时未清理timer，可能导致内存泄漏和对已卸载组件调用setState的警告。应建议在useEffect的cleanup函数中取消debounce，或使用useMemo/useCallback配合ref管理timer。",
+      "scoring_rubric": "1. 准确识别组件卸载时debounce timer未清理的泄漏问题，并给出具体的分析依据和推理过程；2. 准确解释对已卸载组件调用setState的副作用，引用具体的技术原理或标准规范；3. 给出useEffect cleanup或useRef管理timer的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论防抖函数在React中的正确使用模式。，避免笼统描述；"
+    },
+    {
+      "id": "30-029",
+      "prompt": "请审查以下代码：def retry(func, max_retries=3): for i in range(max_retries): try: return func() except Exception: time.sleep(2 ** i); return func()。重试间隔固定且最后一次失败后又调用了一次func。",
+      "sub_type": "retry_logic_off_by_one",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出重试逻辑存在off-by-one错误：循环内捕获异常后sleep再继续循环，但最后return func()在循环外会额外执行一次，总共可能执行max_retries+1次。应建议将return func()放在循环内，循环结束后抛出最后一次异常。同时应添加随机抖动（jitter）避免惊群效应。",
+      "scoring_rubric": "1. 准确识别off-by-one错误导致的多执行一次问题，并给出具体的分析依据和推理过程；2. 从多个维度分析异常传播和重试计数的不一致，给出量化的对比数据或具体案例；3. 给出正确的重试循环结构和异常抛出，方案需具体可执行而非泛泛而谈；4. 具体建议添加随机抖动避免重试风暴。，避免笼统描述；"
+    },
+    {
+      "id": "30-030",
+      "prompt": "请审查以下代码：const router = express.Router(); router.get('/users/:id', auth, cache(300), async (req, res) => { const user = await db.getUser(req.params.id); res.json(user); }); router.put('/users/:id', auth, async (req, res) => { await db.updateUser(req.params.id, req.body); res.sendStatus(200); }); PUT更新后缓存未失效。",
+      "sub_type": "cache_invalidation_missing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出PUT更新用户后GET接口的缓存未失效，用户更新数据后300秒内读取仍返回旧数据。应建议在PUT/DELETE操作后主动清除对应key的缓存，或使用write-through模式同步更新缓存。同时应考虑使用ETag或版本号做缓存一致性校验。",
+      "scoring_rubric": "1. 准确识别写操作后缓存未失效的数据一致性问题，并给出具体的分析依据和推理过程；2. 从多个维度分析缓存与数据库不一致的业务影响，给出量化的对比数据或具体案例；3. 给出主动失效或write-through的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论缓存一致性策略的选择（Cache-Aside/Write-Through/Write-Behind）。，避免笼统描述；"
+    },
+    {
+      "id": "30-031",
+      "prompt": "请审查以下代码：public class OrderService { private final OrderRepository repo; public OrderService(OrderRepository repo) { this.repo = repo; } public Order createOrder(CreateOrderRequest req) { var order = new Order(req); order.setStatus(OrderStatus.CREATED); order.setCreatedAt(LocalDateTime.now()); repo.save(order); inventoryService.deduct(order.getItems()); return order; } } createOrder方法同时调用了repo和inventoryService但无事务注解。",
+      "sub_type": "missing_transaction_boundary",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出createOrder方法中保存订单和扣减库存是两个独立操作，如果库存扣减失败订单已保存但未回滚，导致数据不一致。应建议添加@Transactional注解确保原子性，或使用Saga模式处理跨服务事务。同时应指出inventoryService是外部依赖注入但未在构造函数中声明。",
+      "scoring_rubric": "1. 准确识别缺少事务边界导致的数据不一致风险，并给出具体的分析依据和推理过程；2. 从多个维度分析订单保存与库存扣减的部分失败场景，给出量化的对比数据或具体案例；3. 给出@Transactional或Saga模式的修复方案，方案需具体可执行而非泛泛而谈；4. 具体指出依赖注入不完整（inventoryService未通过构造函数注入）。，避免笼统描述；"
+    },
+    {
+      "id": "30-032",
+      "prompt": "请审查以下代码：def get_user(user_id): cache_key = f\"user:{user_id}\"; user = cache.get(cache_key); if not user: user = db.query(user_id); cache.set(cache_key, user, 3600); return user; 多个请求同时缓存未命中时会重复查询数据库。",
+      "sub_type": "cache_stampede_code",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出缓存击穿问题：缓存失效瞬间大量请求同时穿透到数据库。应建议使用互斥锁（singleflight模式）确保只有一个请求查询数据库，其他请求等待或返回旧值。应提到setnx实现分布式锁或使用cache aside模式的优化变体。",
+      "scoring_rubric": "1. 准确识别缓存击穿的竞态条件问题，并给出具体的分析依据和推理过程；2. 准确解释多请求同时穿透的数据库压力，引用具体的技术原理或标准规范；3. 给出singleflight或分布式锁的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论缓存降级和旧值返回策略。，避免笼统描述；"
+    },
+    {
+      "id": "30-033",
+      "prompt": "请审查以下代码：app.get('/api/data', (req, res) => { res.json({ data: processData(), timestamp: Date.now() }); }); processData()可能抛出异常但路由中未处理。",
+      "sub_type": "unhandled_exception_in_handler",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出Express路由处理器中未捕获异常会导致500错误且响应体为空（Express默认不处理同步异常）。应建议使用try-catch包裹业务逻辑或使用express-async-errors中间件自动捕获异步异常，返回统一的错误响应格式。",
+      "scoring_rubric": "1. 准确识别路由处理器中未捕获异常的风险，并给出具体的分析依据和推理过程；2. 准确解释Express默认异常处理的行为，引用具体的技术原理或标准规范；3. 给出try-catch或全局异常中间件的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议统一错误响应格式。，避免笼统描述；"
+    },
+    {
+      "id": "30-034",
+      "prompt": "请审查以下代码：async createUser(data) { await user.save(); await this.sendEmail(user.email); await this.initDefault(user.id); return user; } 三个操作串行无事务保护。",
+      "sub_type": "sequential_async_no_transaction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出三个异步操作串行执行但缺少事务保护：sendWelcomeEmail或initUserDefault失败时用户已创建但后续操作未完成导致数据不一致。应建议使用数据库事务包裹save和initUserDefault，邮件发送改为异步消息队列。应分析哪些操作需要事务保证哪些可以最终一致。",
+      "scoring_rubric": "1. 准确识别串行异步操作缺少事务保护的问题，并给出具体的分析依据和推理过程；2. 从多个维度分析部分失败导致的数据不一致场景，给出量化的对比数据或具体案例；3. 具体区分必须事务保证和可最终一致的操作，避免笼统描述；4. 给出事务+异步消息的修复方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "30-035",
+      "prompt": "请审查以下代码：def parse_config(path): for line in open(path): if '=' in line: k,v = line.split('=',1); config[k.strip()] = v.strip()。解析配置但未处理注释行和空行。",
+      "sub_type": "incomplete_input_handling",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出配置解析器未处理注释行（#开头）和空行，可能导致将注释内容误解析为配置项。应建议添加行过滤逻辑（跳过空行和#开头的注释行），处理值中包含=号的边界情况，添加编码参数（encoding='utf-8'），考虑使用标准库configparser替代手写解析。",
+      "scoring_rubric": "1. 准确识别注释行和空行未处理的解析错误，并给出具体的分析依据和推理过程；2. 从多个维度分析值中包含等号的边界情况，给出量化的对比数据或具体案例；3. 给出行过滤和标准库替代的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议添加错误处理和日志记录。，避免笼统描述；"
+    },
+    {
+      "id": "30-036",
+      "prompt": "请审查以下代码：app.use((req,res,next) => { req.id = uuid(); next(); }); app.use((req,res,next) => { logger.info({id:req.id}); next(); }); 中间件链未处理异常传播。",
+      "sub_type": "middleware_error_propagation",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出中间件链中未考虑异常传播：如果后续中间件或路由抛出异常，请求日志中间件的next()之后的逻辑不会执行，导致请求缺少结束日志。应建议在日志中间件中监听res的finish事件记录请求完成，或使用try-catch包裹next()调用。",
+      "scoring_rubric": "1. 准确识别中间件链中异常导致后续逻辑跳过的问题，并给出具体的分析依据和推理过程；2. 准确解释Express中间件的错误传播机制，引用具体的技术原理或标准规范；3. 给出监听finish事件或try-catch的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议记录请求耗时和状态码。，避免笼统描述；"
+    },
+    {
+      "id": "30-037",
+      "prompt": "请审查以下代码：def transfer(from_acc, to_acc, amount): from_acc.balance -= amount; to_acc.balance += amount; db.save(from_acc); db.save(to_acc); 两个save操作非原子性，第一个成功第二个失败会导致资金丢失。",
+      "sub_type": "non_atomic_multi_save",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出两个save操作非原子性，第一个save成功后如果程序崩溃或第二个save失败，资金从from_acc扣除但未转入to_acc导致资金丢失。应建议使用数据库事务包裹两个操作（BEGIN/COMMIT/ROLLBACK），或使用原子性UPDATE语句（UPDATE accounts SET balance = balance - amount）。",
+      "scoring_rubric": "1. 准确识别非原子操作导致的资金丢失风险，并给出具体的分析依据和推理过程；2. 从多个维度分析第一个成功第二个失败的不一致场景，给出量化的对比数据或具体案例；3. 给出数据库事务或原子UPDATE的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论并发场景下的锁机制。，避免笼统描述；"
+    },
+    {
+      "id": "30-038",
+      "prompt": "请审查以下代码：function fetch(url) { return new Promise((resolve,reject) => { https.get(url, (res) => { let d=''; res.on('data',c=>d+=c); res.on('end',()=>resolve(JSON.parse(d))); }); }); } 未设超时、未处理error事件。",
+      "sub_type": "incomplete_http_client",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出HTTP客户端多个缺陷：未设置请求超时可导致连接永久挂起、未监听error事件会导致未处理的错误崩溃进程、未校验HTTP状态码（非200响应也会被解析）、JSON.parse可能抛出异常。应建议添加超时参数、error事件处理、状态码校验、JSON解析的try-catch。",
+      "scoring_rubric": "1. 准确识别缺少超时设置的连接挂起风险，并给出具体的分析依据和推理过程；2. 具体指出未处理error事件的进程崩溃问题，避免笼统描述；3. 具体指出未校验状态码和JSON解析的异常风险，避免笼统描述；4. 给出完整的HTTP客户端错误处理方案。，方案需具体可执行而非泛泛而谈；"
+    },
+    {
+      "id": "30-039",
+      "prompt": "请审查以下代码：class EventBus { on(event,fn) { this.listeners[event]=this.listeners[event]||[]; this.listeners[event].push(fn); } emit(event,...args) { this.listeners[event].forEach(fn=>fn(...args)); } } on方法未去重，重复注册会多次执行。",
+      "sub_type": "listener_dedup_missing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出on方法未做去重检查，重复注册同一回调会导致该回调在事件触发时执行多次，可能引发意外行为（如重复发送请求、重复更新状态）。应建议添加去重逻辑（检查是否已存在同一函数引用）、提供once方法用于一次性监听、添加off方法用于取消注册、设置maxListeners上限防止泄漏。",
+      "scoring_rubric": "1. 准确识别回调重复注册的问题，并给出具体的分析依据和推理过程；2. 从多个维度分析重复执行导致的业务异常，给出量化的对比数据或具体案例；3. 给出去重检查和once/off方法的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议maxListeners上限防泄漏。，避免笼统描述；"
+    },
+    {
+      "id": "30-040",
+      "prompt": "请审查以下代码：def process_batch(items): results=[]; for item in items: try: results.append(process(item)); except: logger.error(item); continue; return results。失败时静默跳过可能导致数据丢失。",
+      "sub_type": "silent_item_skip",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出静默跳过失败项的问题：日志记录后continue可能导致关键数据被丢弃而无业务层面的感知。应建议区分可重试错误和不可重试错误，对可重试错误进行重试（带退避策略），收集失败项列表在批量处理完成后汇报，提供回调或Webhook通知调用方部分失败。",
+      "scoring_rubric": "1. 准确识别静默跳过导致的数据丢失风险，并给出具体的分析依据和推理过程；2. 具体区分可重试和不可重试的错误类型，避免笼统描述；3. 给出重试策略和失败项收集的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议部分失败的汇报和通知机制。，避免笼统描述；"
+    },
+    {
+      "id": "30-041",
+      "prompt": "请审查以下代码：app.get('/api/export', async (req,res) => { const data = await db.query('SELECT * FROM orders'); res.send(convertToCSV(data)); }); 大数据量全量查询未分批和流式传输。",
+      "sub_type": "unbounded_export_query",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出SELECT *全量查询在数据量大时会导致数据库压力和内存溢出，convertToCSV将全部数据转为字符串后一次性发送也会导致内存暴涨。应建议使用数据库游标或LIMIT分批查询、流式写入响应（res.write逐行发送）、添加压缩（gzip）、设置超时和取消机制。",
+      "scoring_rubric": "1. 准确识别全量查询的数据库压力和内存风险，并给出具体的分析依据和推理过程；2. 从多个维度分析一次性序列化的内存暴涨问题，给出量化的对比数据或具体案例；3. 给出分批查询和流式传输的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议添加压缩、超时和取消机制。，避免笼统描述；"
+    },
+    {
+      "id": "30-042",
+      "prompt": "请审查以下代码：class Service { constructor() { this.cache = new Map(); } async getData(key) { if (this.cache.has(key)) return this.cache.get(key); const data = await this.fetchFromDB(key); this.cache.set(key, data); return data; } } Map缓存无大小限制和过期机制。",
+      "sub_type": "unbounded_memory_cache",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出Map缓存无大小上限和过期机制，长时间运行会导致内存持续增长直至OOM。应建议使用LRU缓存（如lru-cache库）限制大小、设置TTL过期策略、在缓存满时自动淘汰最久未使用的条目。应同时指出缺少缓存失效机制，数据更新后缓存仍返回旧值。",
+      "scoring_rubric": "1. 准确识别无上限缓存的内存泄漏风险，并给出具体的分析依据和推理过程；2. 具体指出缺少过期和失效机制的数据一致性问题，避免笼统描述；3. 给出LRU缓存或TTL缓存的修复方案，方案需具体可执行而非泛泛而谈；4. 讨论缓存命中率监控和容量规划。，包含明确的时间节点、责任人和验收标准；"
+    },
+    {
+      "id": "30-043",
+      "prompt": "请审查以下代码：function formatUser(user) { return `Name: ${user.name}, Age: ${user.age}, Email: ${user.email}`; } 在多处被调用但未处理user为null/undefined的情况，且无参数类型声明。",
+      "sub_type": "null_safety_missing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出函数缺少空值检查，当user为null或undefined时模板字符串会抛出TypeError。应建议添加参数校验（if (!user) return ''或throw）、使用TypeScript添加类型声明、或使用可选链（user?.name）配合空值合并运算符。应讨论防御式编程与契约式设计的选择。",
+      "scoring_rubric": "1. 准确识别缺少空值检查导致的运行时崩溃，并给出具体的分析依据和推理过程；2. 具体指出缺少类型声明的可维护性问题，避免笼统描述；3. 给出参数校验或可选链的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论TypeScript严格模式对空安全的保障。，避免笼统描述；"
+    },
+    {
+      "id": "30-044",
+      "prompt": "请审查以下代码：app.use((req, res, next) => { res.setHeader('X-Request-Id', crypto.randomUUID()); next(); }); 在微服务架构中未将Request-Id传递给下游服务调用。",
+      "sub_type": "trace_id_not_propagated",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出Request-Id生成后仅设置在当前响应头中，未通过请求头传递给下游服务调用，导致跨服务链路追踪断裂。应建议将Request-Id存储在req对象和日志上下文中，在调用下游服务时通过X-Request-Id请求头传递，使用AsyncLocalStorage或cls-hooked实现跨异步调用的上下文传播。",
+      "scoring_rubric": "1. 准确识别Request-Id未传递导致的链路追踪断裂，并给出具体的分析依据和推理过程；2. 具体指出跨异步调用上下文传播的挑战，避免笼统描述；3. 给出AsyncLocalStorage或中间件传递的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论分布式追踪的标准方案（W3C TraceContext）。，避免笼统描述；"
+    },
+    {
+      "id": "30-045",
+      "prompt": "请审查以下代码：function processEvent(event) { switch(event.type) { case 'click': handleClick(event); break; case 'scroll': handleScroll(event); break; case 'input': handleInput(event); break; } } 后续新增了20多种事件类型，switch已有500+行。",
+      "sub_type": "switch_case_explosion",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出switch-case随着事件类型增加线性膨胀，违反开闭原则。500+行的switch难以维护且每次新增事件都要修改此函数。应建议使用策略模式（事件类型到处理函数的映射表）替代switch，将各事件处理器提取为独立函数或类，通过注册机制动态添加新事件类型。",
+      "scoring_rubric": "1. 准确识别switch-case膨胀的可维护性问题，并给出具体的分析依据和推理过程；2. 从多个维度应用开闭原则分析扩展困难，给出量化的对比数据或具体案例；3. 给出策略模式或注册表模式的重构方案，方案需具体可执行而非泛泛而谈；4. 具体讨论事件处理器的解耦和可测试性。，避免笼统描述；"
+    },
+    {
+      "id": "30-046",
+      "prompt": "请审查以下代码：async function batchProcess(items) { const results = []; for (const item of items) { const result = await processItem(item); results.push(result); } return results; } items可能有10万个元素，串行处理极慢。",
+      "sub_type": "unnecessary_serial_processing",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出循环中await导致每个item串行处理，10万个item的总耗时等于各item处理时间之和。应分析如果processItem之间无依赖关系，可并发执行。应建议使用Promise.all批量并发（需控制并发数避免资源耗尽）、或使用p-limit等库限制并发度为合理值（如100）。",
+      "scoring_rubric": "1. 准确识别循环中await的串行性能问题，并给出具体的分析依据和推理过程；2. 从多个维度分析无依赖操作的并发化可行性，给出量化的对比数据或具体案例；3. 给出Promise.all配合并发限制的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论并发数与服务端承受能力的平衡。，避免笼统描述；"
+    },
+    {
+      "id": "30-047",
+      "prompt": "请审查以下代码：const config = { db_host: process.env.DB_HOST || 'localhost', db_port: parseInt(process.env.DB_PORT) || 3306, db_password: process.env.DB_PASSWORD || 'default123' }; 生产环境未设置环境变量时使用了默认密码。",
+      "sub_type": "unsafe_default_credentials",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出生产环境使用默认密码是严重安全风险，环境变量未设置时静默降级到不安全的默认值可能导致服务使用弱密码运行。应建议在生产环境配置校验启动时检查必须的环境变量是否已设置，缺失时拒绝启动而非使用默认值。敏感配置不应有默认值，非敏感配置可有合理默认值。",
+      "scoring_rubric": "1. 准确识别默认密码在生产环境的安全风险，并给出具体的分析依据和推理过程；2. 具体指出静默降级策略的隐患，避免笼统描述；3. 给出启动时配置校验的修复方案，方案需具体可执行而非泛泛而谈；4. 具体区分敏感和非敏感配置的默认值策略。，避免笼统描述；"
+    },
+    {
+      "id": "30-048",
+      "prompt": "请审查以下代码：class EventBus { emit(event, ...args) { const handlers = this.listeners[event] || []; handlers.forEach(fn => fn(...args)); } } emit遍历handlers时如果handler内部又emit同一事件会递归调用。",
+      "sub_type": "recursive_event_emission",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "应指出emit遍历handlers数组时，如果某个handler内部再次emit同一事件会导致递归调用，可能引发栈溢出或无限循环。应建议添加递归检测标志（emitting flag）、在emit时复制handlers快照（[...handlers]）避免遍历时修改、或使用队列异步处理嵌套emit。",
+      "scoring_rubric": "1. 准确识别递归emit导致的栈溢出风险，并给出具体的分析依据和推理过程；2. 从多个维度分析遍历时handlers数组被修改的问题，给出量化的对比数据或具体案例；3. 给出递归检测或handlers快照的修复方案，方案需具体可执行而非泛泛而谈；4. 具体讨论异步事件队列的替代方案。，避免笼统描述；"
+    },
+    {
+      "id": "30-049",
+      "prompt": "请审查以下代码：const app = express(); app.use(express.json()); app.use(cors()); app.use('/api', apiRouter); app.use(errorHandler); 未区分开发和生产环境的错误处理，errorHandler在生产环境返回了完整堆栈。",
+      "sub_type": "error_details_leak_in_production",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出生产环境返回完整错误堆栈会泄露代码结构、文件路径和依赖版本信息，攻击者可利用这些信息定向攻击。应建议根据NODE_ENV区分错误响应：开发环境返回详细堆栈便于调试，生产环境仅返回通用错误消息和错误ID（用于关联日志）。应在errorHandler中添加错误日志记录（含堆栈）供内部排查。",
+      "scoring_rubric": "1. 准确识别生产环境错误堆栈泄露的信息安全风险，并给出具体的分析依据和推理过程；2. 具体指出错误信息对攻击者的侦察价值，避免笼统描述；3. 给出按环境差异化错误响应的修复方案，方案需具体可执行而非泛泛而谈；4. 具体建议错误ID关联日志的排查机制。，避免笼统描述；"
+    },
+    {
+      "id": "30-050",
+      "prompt": "请审查以下代码：function memoize(fn) { const cache = {}; return function(...args) { const key = JSON.stringify(args); if (!cache[key]) cache[key] = fn.apply(this, args); return cache[key]; }; } JSON.stringify作为缓存键不处理循环引用且序列化开销大。",
+      "sub_type": "inefficient_cache_key",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "应指出JSON.stringify作为缓存键的多个问题：循环引用会抛出异常、对象属性顺序不同产生不同键（{a:1,b:2}和{b:2,a:1}）、序列化开销在高频调用时显著。应建议使用WeakMap处理对象参数、对基本类型参数使用Map、或自定义哈希函数生成键。应讨论缓存键的唯一性和性能权衡。",
+      "scoring_rubric": "1. 准确识别JSON.stringify循环引用和属性顺序问题，并给出具体的分析依据和推理过程；2. 从多个维度分析序列化开销对性能的影响，给出量化的对比数据或具体案例；3. 给出WeakMap或自定义哈希的替代方案，方案需具体可执行而非泛泛而谈；4. 具体讨论不同参数类型的缓存键策略。，避免笼统描述；"
+    }
+  ]
+}

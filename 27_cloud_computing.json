@@ -1,0 +1,457 @@
+{
+  "capability": "cloud_computing",
+  "label": "云计算能力",
+  "total": 50,
+  "cases": [
+    {
+      "id": "27-001",
+      "prompt": "请设计一个Serverless应用的可观测性方案。如何在无服务器架构中实现分布式链路追踪？冷启动对监控指标有什么影响？如何区分函数级和系统级指标？",
+      "sub_type": "serverless_observability",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Serverless可观测性需解决函数实例频繁创建销毁带来的trace上下文丢失问题；冷启动会在延迟指标中引入异常尖峰需单独标记；函数级指标关注执行时长和内存，系统级指标关注并发数和节流率；OpenTelemetry的FAAS语义约定是关键",
+      "scoring_rubric": "1. Serverless可观测性面临的独特挑战描述正确；2. 冷启动对监控的影响分析准确；3. 函数级与系统级指标的区分合理；4. 链路追踪方案设计可行。"
+    },
+    {
+      "id": "27-002",
+      "prompt": "请解释容器镜像供应链安全。什么是镜像签名和验证？如何使用Cosign或Notary实现镜像签名？如何在Kubernetes准入控制中强制执行签名验证策略？",
+      "sub_type": "container_supply_chain",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "镜像供应链安全确保镜像从构建到部署全程可信；Cosign使用密钥对镜像签名存储在OCI Registry；Kubernetes通过OPA/Gatekeeper或Kyverno准入控制器验证签名；还需扫描CVE漏洞和检测恶意层",
+      "scoring_rubric": "1. 镜像供应链安全的概念描述正确；2. 签名工具和工作流程描述正确；3. K8s准入控制中的验证策略描述正确；4. 能说明漏洞扫描与签名验证的协同。"
+    },
+    {
+      "id": "27-003",
+      "prompt": "请设计一个微服务环境下的服务发现系统。客户端发现和服务端发现两种模式有什么区别？Consul、etcd和ZooKeeper作为注册中心各有什么优劣？如何处理服务的健康检查和故障摘除？",
+      "sub_type": "service_discovery",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "客户端发现由消费者直接查询注册中心获取实例列表，服务端发现通过负载均衡器代理；Consul内置健康检查和DNS接口，etcd适合K8s生态但需自建健康检查，ZooKeeper成熟但运维复杂；故障摘除通过TTL和主动探测结合实现",
+      "scoring_rubric": "1. 两种发现模式的区别描述正确；2. 三种注册中心的对比分析正确；3. 健康检查和故障摘除方案描述正确；4. 能分析各方案的适用场景。"
+    },
+    {
+      "id": "27-004",
+      "prompt": "请分析云环境中的出站流量（Egress）成本优化。NAT网关和互联网网关的计费模式有什么区别？如何通过VPC端点减少跨网络的数据传输费用？缓存和CDN如何降低出站流量成本？",
+      "sub_type": "egress_cost",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "NAT网关按处理的数据量和小时数计费，互联网网关免费但出站流量收费；VPC端点（如AWS PrivateLink）使流量走内网避免走公网；CDN将静态内容缓存到边缘节点减少回源流量；数据压缩和协议优化也是有效手段",
+      "scoring_rubric": "1. NAT网关和互联网网关的计费差异描述正确；2. VPC端点的成本优化原理描述正确；3. CDN和缓存策略的降本效果描述正确；4. 能提出综合的出站流量优化方案。"
+    },
+    {
+      "id": "27-005",
+      "prompt": "请解释Serverless架构中的成本分析和优化。如何计算Lambda/云函数的总拥有成本（TCO）？冷启动和Provisioned Concurrency对成本有什么影响？如何通过架构优化降低Serverless成本？",
+      "sub_type": "serverless_cost",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Serverless TCO需考虑调用次数、执行时长、内存配置和数据传输费用；Provisioned Concurrency消除冷启动但需额外付费需权衡；架构优化包括合理设置内存（CPU随内存线性增长）、合并函数减少调用次数、使用Arm架构降低成本",
+      "scoring_rubric": "1. TCO的计算维度描述正确；2. 冷启动与预置并发的成本权衡分析正确；3. 架构层面的成本优化策略描述合理；4. 能对比Serverless与传统架构的成本差异。"
+    },
+    {
+      "id": "27-006",
+      "prompt": "请设计一个高可用的消息队列系统。如何保证消息不丢失且不重复消费？什么是消息积压和死信队列？如何设计消费者的水平扩展策略？如何保证消息的顺序性？",
+      "sub_type": "message_queue_ha",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "消息不丢失通过持久化和ACK确认机制保证，不重复通过幂等消费实现；消息积压时动态扩容消费者，死信队列存放多次消费失败的消息；顺序性通过分区键保证同一Key的消息进入同一分区；需权衡顺序性和并行消费的矛盾",
+      "scoring_rubric": "1. 消息可靠投递的机制描述正确；2. 消息积压和死信队列的处理描述正确；3. 消费者水平扩展策略描述正确；4. 顺序性保证方案描述正确。"
+    },
+    {
+      "id": "27-007",
+      "prompt": "请解释分布式缓存的一致性问题。Cache-Aside模式在并发更新时可能产生什么问题？什么是缓存击穿、缓存穿透和缓存雪崩？如何通过延迟双删和消息队列异步删除解决一致性问题？",
+      "sub_type": "distributed_cache_consistency",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "并发更新时先更新DB再删缓存仍有时间窗口导致脏读；缓存击穿是热点Key过期瞬间大量请求穿透到DB，缓存穿透是查询不存在的数据，缓存雪崩是大量Key同时过期；延迟双删在更新DB后删缓存延时再删一次消除竞态窗口",
+      "scoring_rubric": "1. Cache-Aside并发问题的根因分析正确；2. 三种缓存异常的区别和解决方案描述正确；3. 延迟双删的原理描述正确；4. 消息队列异步删除方案描述正确。"
+    },
+    {
+      "id": "27-008",
+      "prompt": "请解释Kubernetes中的资源管理。什么是Pod的requests和limits？QoS等级（Guaranteed、Burstable、BestEffort）是如何划分的？如何通过监控数据合理设置资源配额？",
+      "sub_type": "kubernetes_resource_management",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "requests是调度依据保证最低资源，limits是运行时上限；Guaranteed的requests等于limits，Burstable的requests小于limits，BestEffort未设置；通过历史监控的P95/P99设置requests，limits设为requests的1.5到2倍预留突发空间",
+      "scoring_rubric": "1. requests和limits的作用和区别描述正确；2. 三种QoS等级的划分规则和回收优先级描述正确；3. 基于监控数据设置配额的方法描述正确；4. 能分析资源过度分配和分配不足的风险。"
+    },
+    {
+      "id": "27-009",
+      "prompt": "请设计一个统一的可观测性平台架构。Metrics、Logs和Traces三大支柱如何关联？如何选择技术栈（如Prometheus、Loki、Tempo）？如何通过TraceID实现跨信号的关联分析？",
+      "sub_type": "observability_platform",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "三大支柱通过TraceID和标签关联：Traces定位链路瓶颈，Logs提供详细上下文，Metrics反映趋势；Prometheus适合指标，Loki轻量级日志，Tempo分布式链路；通过OpenTelemetry统一采集端注入TraceID到日志和指标标签实现跨信号跳转",
+      "scoring_rubric": "1. 三大支柱的职责和关联方式描述正确；2. 技术栈选型的依据描述正确；3. TraceID关联分析的实现方案描述正确；4. 能说明OpenTelemetry在统一采集中的作用。"
+    },
+    {
+      "id": "27-010",
+      "prompt": "请解释容器镜像构建的最佳实践。Dockerfile的多阶段构建有什么作用？什么是Buildpacks？Kaniko和BuildKit分别适用于什么场景？如何优化镜像的构建速度和体积？",
+      "sub_type": "container_image_build",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "多阶段构建将编译和运行分离减小最终镜像体积；Buildpacks自动检测语言并生成镜像无需编写Dockerfile；Kaniko在无Docker守护进程的环境（如CI/CD Pod）中安全构建；BuildKit支持并行构建和缓存挂载；优化包括合理利用层缓存、使用Alpine基础镜像和多架构构建",
+      "scoring_rubric": "1. 多阶段构建的原理和优势描述正确；2. Buildpacks和Kaniko的适用场景描述正确；3. BuildKit的高级特性描述正确；4. 镜像体积和构建速度的优化策略描述正确。"
+    },
+    {
+      "id": "27-011",
+      "prompt": "你的Serverless应用在低峰期首次请求延迟超过3秒，严重影响用户体验。请分析冷启动的根因（包括容器初始化、运行时加载和依赖下载），设计一套综合的冷启动缓解方案，涵盖预置并发、SnapStart、轻量运行时选择和依赖优化四个维度，并对比各方案的成本和效果。",
+      "sub_type": "serverless_cold_start_mitigation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "冷启动根因包括容器实例创建、运行时初始化、代码包下载和依赖加载；预置并发保持热实例但持续计费；SnapStart通过快照恢复跳过初始化；选择轻量运行时（如Rust/Go替代Python/Java）减少初始化时间；依赖优化通过tree-shaking和层缓存减少包体积；需综合权衡延迟目标和成本预算",
+      "scoring_rubric": "1. 冷启动的根因分析全面准确；2. 预置并发的机制和成本影响描述正确；3. SnapStart等快照恢复技术描述正确；4. 运行时选择和依赖优化策略描述合理；5. 各方案的成本-效果权衡分析到位"
+    },
+    {
+      "id": "27-012",
+      "prompt": "你的Kubernetes集群中运行着三个命名空间的微服务：前端、后端和数据库。请设计一套NetworkPolicy方案，要求前端只能访问后端的8080端口，后端只能访问数据库的5432端口，且所有命名空间禁止外部直接访问数据库Pod。请写出YAML配置并解释策略的执行逻辑。",
+      "sub_type": "kubernetes_network_policy_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "NetworkPolicy通过podSelector和namespaceSelector精确控制Pod间通信；默认策略应先设置为deny-all再逐步开放；前端命名空间的egress规则限定目标为后端命名空间的8080端口；后端命名空间的egress规则限定目标为数据库命名空间的5432端口；数据库命名空间的ingress只允许后端命名空间访问；需注意CNI插件需支持NetworkPolicy",
+      "scoring_rubric": "1. deny-all默认策略的设置描述正确；2. 三层命名空间间的访问控制规则设计合理；3. 端口级别的精确控制实现正确；4. CNI插件兼容性说明到位；5. YAML配置语法正确且可执行"
+    },
+    {
+      "id": "27-013",
+      "prompt": "请对比Docker、containerd和CRI-O三种容器运行时的架构差异。为什么Kubernetes从1.24开始移除了dockershim？在安全敏感场景中如何选择容器运行时？如何通过gVisor和Kata Containers实现容器级别的安全隔离？",
+      "sub_type": "container_runtime_comparison",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Docker包含完整的镜像构建和分发功能但K8s只需运行时，containerd是Docker抽取的轻量运行时，CRI-O专为K8s设计；dockershim移除是因为CRI标准成熟无需Docker中间层；gVisor通过用户态内核拦截系统调用实现沙箱，Kata Containers通过轻量虚拟机实现强隔离；安全场景应根据威胁模型选择运行时和沙箱方案",
+      "scoring_rubric": "1. 三种运行时的架构层次差异描述正确；2. dockershim移除的技术原因描述正确；3. gVisor和Kata Containers的隔离原理描述正确；4. 安全场景的选型建议合理"
+    },
+    {
+      "id": "27-014",
+      "prompt": "请设计一个基于GitOps的云原生CI/CD流水线。代码提交后需要经过构建、扫描、测试、镜像推送和环境部署五个阶段。请说明如何用ArgoCD实现声明式部署，如何处理多环境（dev/staging/prod）的promotion流程，以及如何实现部署的自动回滚。",
+      "sub_type": "cloud_native_ci_cd",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "GitOps以Git仓库为单一事实来源，ArgoCD监听Git变更并自动同步到K8s集群；CI阶段负责构建镜像和运行测试，CD阶段负责部署；多环境通过不同分支或目录管理配置，promotion通过PR合并触发；自动回滚通过ArgoCD的健康检查和SyncFail Hook实现，结合K8s的readiness探针判断部署是否成功",
+      "scoring_rubric": "1. GitOps的核心原则描述正确；2. CI和CD阶段的职责划分清晰；3. 多环境promotion流程设计合理；4. 自动回滚机制的实现方案可行；5. ArgoCD的配置和使用方式描述正确"
+    },
+    {
+      "id": "27-015",
+      "prompt": "你的公司需要在三个地域（华北、华东、华南）部署Kubernetes集群，要求实现跨集群的服务发现和流量调度。请设计基于Kubernetes Federation v2或Submariner的多集群方案，说明如何处理跨集群的服务发现、DNS解析和全局负载均衡。",
+      "sub_type": "multi_cluster_federation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "多集群联邦通过Federation Control Plane将资源分发到成员集群；跨集群服务发现通过联邦Service资源在各集群创建对应的Service和Endpoints；DNS解析通过CoreDNS Federation插件将服务名解析到最近集群的IP；全局负载均衡通过GSLB根据地理位置和健康状态路由流量；需处理跨集群网络互通",
+      "scoring_rubric": "1. 多集群联邦的架构描述正确；2. 跨集群服务发现机制描述正确；3. DNS解析和全局负载均衡方案描述合理；4. 跨集群网络互通方案描述正确；5. 能分析多集群管理的复杂性和挑战"
+    },
+    {
+      "id": "27-016",
+      "prompt": "请解释数据网格（Data Mesh）架构的核心原则。数据集中式架构（数据湖/数据仓库）存在什么问题？数据网格的四个原则（领域所有权、数据即产品、自助平台、联邦治理）如何在技术上落地？如何设计数据产品的发现和访问控制机制？",
+      "sub_type": "data_mesh_governance",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "集中式架构存在领域知识丢失、数据质量责任不清和团队瓶颈问题；领域所有权要求各业务团队拥有自己的数据管道和质量；数据即产品要求数据有SLA、可发现、可访问、自描述；自助平台提供标准化的数据基础设施；联邦治理通过策略即代码实现跨域标准；数据发现通过元数据目录实现",
+      "scoring_rubric": "1. 集中式架构的问题分析准确；2. 四个核心原则的技术落地方式描述正确；3. 数据产品的定义和质量要求描述合理；4. 数据发现和访问控制机制设计可行；5. 能分析数据网格的实施挑战和适用条件"
+    },
+    {
+      "id": "27-017",
+      "prompt": "你的AI训练集群需要同时支持多团队共享GPU资源。请设计GPU调度方案，包括如何实现GPU的时分复用和空分复用、如何通过MIG和MPS提高GPU利用率、以及如何设计GPU任务的优先级和抢占策略。",
+      "sub_type": "gpu_cloud_scheduling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "GPU时分复用通过时间片轮转或虚拟GPU实现，空分复用通过MIG将A100/H100划分为独立实例；MPS允许多个进程共享同一GPU的计算资源适合小模型推理；调度策略需考虑GPU显存需求、计算密集度和用户优先级；抢占策略通过检查点保存和恢复实现任务中断续训；还需考虑GPU拓扑感知调度减少跨NVLink通信",
+      "scoring_rubric": "1. GPU时分复用和空分复用的实现方式描述正确；2. MIG和MPS的技术原理和适用场景描述正确；3. 调度优先级和抢占策略设计合理；4. 检查点机制描述正确；5. GPU拓扑感知调度的考量到位"
+    },
+    {
+      "id": "27-018",
+      "prompt": "请设计一个自动化的云成本优化系统。系统需要自动识别闲置资源（如未挂载的EBS卷、空闲的EC2实例）、根据使用模式推荐Reserved Instance或Savings Plan，并实现自动关停非生产环境的资源（如晚间和周末）。请设计系统的架构和各模块的实现方案。",
+      "sub_type": "cloud_finops_automation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "闲置资源识别通过CloudWatch指标（CPU利用率低于5%持续7天）和资源关联检查；RI推荐通过历史使用数据分析稳态工作负载匹配合适的RI类型和期限；自动关停通过标签策略标记非生产资源，使用Lambda和EventBridge定时触发关停和启动；架构包括数据采集层、分析引擎、推荐引擎和执行引擎",
+      "scoring_rubric": "1. 闲置资源识别的指标和规则设计合理；2. RI/Savings Plan推荐的分析方法描述正确；3. 自动关停的标签策略和调度机制描述正确；4. 系统架构各模块职责划分清晰；5. 变更控制和安全机制考虑到位"
+    },
+    {
+      "id": "27-019",
+      "prompt": "你的微服务系统当前使用Spring Cloud技术栈（Eureka、Ribbon、Hystrix），需要迁移到Istio服务网格。请设计渐进式迁移方案，说明如何在迁移过程中保持新旧服务共存，如何将Spring Cloud的熔断、限流和负载均衡能力迁移到Istio的VirtualService和DestinationRule中。",
+      "sub_type": "service_mesh_migration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "渐进式迁移通过Sidecar逐步注入实现：先迁移无状态服务再迁移有状态服务；Eureka的服务发现迁移到K8s Service和Istio ServiceEntry；Ribbon的客户端负载均衡迁移到Istio DestinationRule的负载均衡策略；Hystrix的熔断迁移到Istio的OutlierDetection；限流通过Istio的RateLimit实现",
+      "scoring_rubric": "1. 渐进式迁移的阶段划分合理；2. Spring Cloud组件到Istio的映射关系描述正确；3. 新旧服务共存的兼容方案描述正确；4. 熔断和限流的迁移实现描述正确；5. 迁移风险和回滚策略考虑到位"
+    },
+    {
+      "id": "27-020",
+      "prompt": "请设计一个基于事件编排（Choreography）的电商订单履约流程。订单创建后需要依次触发库存扣减、支付处理、物流分配和通知发送。请使用事件驱动架构设计各服务间的协作方式，说明如何保证事件的可靠投递和最终一致性，以及如何处理某个环节失败时的补偿操作。",
+      "sub_type": "event_driven_choreography",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "各服务通过监听领域事件自主响应：OrderService发布OrderCreated事件，InventoryService监听后扣减库存并发布InventoryReserved事件；事件通过Kafka保证持久化和顺序性；最终一致性通过幂等消费和重试机制保证；补偿操作：支付失败发布PaymentFailed事件触发库存释放，使用Saga模式管理跨服务事务",
+      "scoring_rubric": "1. 事件编排的服务协作流程描述正确；2. 领域事件的定义和流转逻辑清晰；3. 事件可靠投递和最终一致性保证方案描述正确；4. 补偿操作的设计和触发机制描述合理；5. 能对比编排与协调模式的优劣"
+    },
+    {
+      "id": "27-021",
+      "prompt": "你的微服务系统部署在Kubernetes上，部分服务出现间歇性的OOMKilled。请设计一套Pod资源画像方案，通过采集历史CPU和内存指标自动生成requests和limits建议值，并说明如何区分内存泄漏导致的持续增长与正常的突发流量。",
+      "sub_type": "resource_profiling_automation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "资源画像通过Prometheus采集Pod的历史资源指标，使用P95/P99统计生成requests建议值；区分内存泄漏与突发流量：泄漏表现为RSS持续单调增长不回落，突发流量表现为脉冲式上升后回落；可通过PromQL的increase函数检测持续增长趋势；建议值生成后通过Admission Controller自动注入或通过PR提交人工审批",
+      "scoring_rubric": "1. 资源画像的指标采集和统计方法描述正确；2. requests和limits建议值的生成策略合理；3. 内存泄漏与突发流量的区分方法描述正确；4. 自动化注入或审批流程设计可行；5. 能分析过度分配和分配不足的风险"
+    },
+    {
+      "id": "27-022",
+      "prompt": "请设计一个云原生的密钥管理方案。应用需要访问数据库密码、API密钥和TLS证书等敏感信息。请对比Kubernetes Secret、HashiCorp Vault和AWS Secrets Manager的优劣，说明如何实现密钥的自动轮换和审计追踪，以及如何防止密钥在Pod环境变量中被明文暴露。",
+      "sub_type": "secret_management_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "K8s Secret仅base64编码不加密需配合加密后端；Vault提供动态密钥生成和自动轮换；AWS Secrets Manager集成AWS生态但厂商锁定；自动轮换通过Sidecar或CSI Driver定期刷新挂载的密钥；审计追踪记录每次密钥访问的时间、来源和操作；防止明文暴露通过Volume挂载替代环境变量，使用SecretStore CSI Driver从外部密钥管理系统动态获取",
+      "scoring_rubric": "1. 三种密钥管理方案的优劣对比正确；2. 密钥自动轮换的实现机制描述正确；3. 审计追踪的设计方案描述正确；4. 防止密钥暴露的最佳实践描述正确；5. 能分析密钥管理的安全威胁模型"
+    },
+    {
+      "id": "27-023",
+      "prompt": "你的电商平台在大促期间流量激增10倍，需要设计弹性伸缩方案。请基于Kubernetes HPA和KEDA设计多维度的自动扩缩容策略，说明如何处理有状态服务的扩容难点，以及如何实现缩容时的优雅终止避免影响正在处理的订单。",
+      "sub_type": "elastic_scaling_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "HPA基于CPU/内存指标扩容，KEDA支持外部指标（如消息队列深度、自定义Prometheus指标）触发扩容；多维度策略同时考虑请求量、队列深度和响应延迟；有状态服务扩容需处理数据迁移和一致性，通过StatefulSet的有序部署保证；优雅终止通过preStop Hook和terminationGracePeriodSeconds确保正在处理的请求完成；缩容前需检查Pod是否有活跃连接",
+      "scoring_rubric": "1. HPA和KEDA的扩缩容机制描述正确；2. 多维度指标的扩缩容策略设计合理；3. 有状态服务的扩容难点和解决方案描述正确；4. 优雅终止的实现方案描述正确；5. 能分析扩缩容的冷启动和过载风险"
+    },
+    {
+      "id": "27-024",
+      "prompt": "请设计一个基于GitOps的多环境配置管理方案。系统有dev、staging和prod三个环境，每个环境的配置不同。请使用Kustomize或Helm设计配置的分层管理，说明如何实现配置的差异比对和漂移检测，以及如何通过Pull Request流程审批生产环境的配置变更。",
+      "sub_type": "gitops_config_management",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Kustomize通过base和overlay分层管理，base定义通用配置，overlay定义环境差异；Helm通过values文件区分环境；配置漂移检测通过ArgoCD的自动同步检测集群实际状态与Git声明状态的差异；PR审批流程：配置变更通过PR提交，经Code Review和CI验证后合并，ArgoCD自动同步到集群；敏感配置通过Sealed Secrets或SOPS加密存储在Git中",
+      "scoring_rubric": "1. Kustomize或Helm的配置分层方案描述正确；2. 配置差异比对和漂移检测机制描述正确；3. PR审批流程设计合理；4. 敏感配置的处理方案描述正确；5. 能分析GitOps配置管理的局限性"
+    },
+    {
+      "id": "27-025",
+      "prompt": "你的系统需要处理每秒10万次的API请求，请设计一个基于分布式缓存的读加速方案。需要缓存热点数据、会话信息和API响应。请设计缓存的分层架构（本地缓存+分布式缓存），说明缓存预热、缓存失效和缓存穿透的完整解决方案。",
+      "sub_type": "distributed_cache_acceleration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "分层架构：L1使用Caffeine本地缓存热数据减少网络往返，L2使用Redis Cluster分布式缓存全局共享；缓存预热在系统启动时加载热点数据到缓存；缓存失效通过TTL和主动失效结合，数据更新时通过消息通知各节点清除本地缓存；缓存穿透通过布隆过滤器拦截不存在的Key，缓存空值设置较短TTL；缓存一致性通过延迟双删或消息队列异步删除保证",
+      "scoring_rubric": "1. 本地缓存和分布式缓存的分层设计合理；2. 缓存预热方案描述正确；3. 缓存失效和一致性策略描述正确；4. 缓存穿透和击穿的解决方案描述正确；5. 能分析缓存方案的性能和一致性权衡"
+    },
+    {
+      "id": "27-026",
+      "prompt": "请设计一个云平台的多租户网络隔离方案。不同租户的Kubernetes集群需要实现网络层面的完全隔离，包括Pod网络、Service网络和外部访问。请对比VPC隔离、CNI插件策略和Namespace网络策略三种方案的安全性和成本。",
+      "sub_type": "multi_tenant_network_isolation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "VPC隔离最强但成本高，CNI插件策略通过NetworkPolicy实现Pod级隔离成本低，Namespace策略限制命名空间间通信；综合方案：核心租户独立VPC，普通租户共享VPC通过NetworkPolicy隔离；外部访问通过Ingress租户路由分发",
+      "scoring_rubric": "1. 三种网络隔离方案的安全性对比正确；2. 各方案的成本和复杂度分析正确；3. 综合隔离方案的设计合理；4. 外部访问的路由和隔离方案描述正确；5. 能分析跨租户通信的安全控制"
+    },
+    {
+      "id": "27-027",
+      "prompt": "你的数据管道每天需要处理500GB的日志数据，从采集、清洗到存储和分析。请设计基于Apache Flink的实时数据处理方案，说明如何实现Exactly-Once语义、如何处理数据倾斜，以及如何设计检查点和状态后端保证故障恢复。",
+      "sub_type": "stream_processing_architecture",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Flink通过Checkpoint机制实现Exactly-Once语义，Checkpoint将算子状态定期持久化到分布式存储；数据倾斜通过预聚合、两阶段聚合或自定义分区器将热点Key分散到多个并行实例；状态后端选择RocksDB State Backend支持超大状态存储在磁盘；检查点间隔根据业务延迟要求和恢复时间权衡设置；故障恢复从最近成功的Checkpoint恢复算子状态",
+      "scoring_rubric": "1. Flink的Exactly-Once语义实现机制描述正确；2. 数据倾斜的检测和解决方案描述正确；3. 状态后端的选择和配置描述正确；4. 检查点策略的设计描述合理；5. 能分析Flink与Spark Streaming的适用场景差异"
+    },
+    {
+      "id": "27-028",
+      "prompt": "请设计一个跨云的灾备架构。主站部署在阿里云，灾备站点部署在AWS。需要实现数据的实时同步、DNS级别的流量切换和定期的灾备演练。请说明如何处理两个云平台之间的网络互通、数据同步延迟和切换时的脑裂问题。",
+      "sub_type": "cross_cloud_disaster_recovery",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "网络互通通过专线或VPN建立跨云连接；数据同步使用数据库的逻辑复制或CDC工具（如Debezium）将变更实时同步到灾备站点；DNS切换通过全局负载均衡（如AWS Route53或阿里云DNS）的健康检查自动故障转移；脑裂防护通过分布式锁或仲裁节点决定哪个站点为Active；定期灾备演练通过混沌工程工具模拟主站故障验证切换流程",
+      "scoring_rubric": "1. 跨云网络互通方案描述正确；2. 数据实时同步的机制和延迟处理描述正确；3. DNS流量切换和健康检查设计合理；4. 脑裂防护方案描述正确；5. 灾备演练的设计和执行方案描述合理"
+    },
+    {
+      "id": "27-029",
+      "prompt": "你的Kubernetes集群中运行着AI训练任务和在线推理服务。训练任务需要长时间占用GPU资源，在线推理需要低延迟响应。请设计混合负载的调度方案，说明如何通过PriorityClass和抢占机制保证推理服务的优先级，以及如何通过Gang Scheduling优化分布式训练的调度效率。",
+      "sub_type": "hybrid_workload_scheduling",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "PriorityClass定义推理服务为高优先级、训练任务为低优先级；当资源不足时K8s自动抢占低优先级训练Pod释放GPU给推理服务；训练任务通过检查点机制支持中断续训减少抢占损失；Gang Scheduling确保分布式训练的所有Worker同时获得资源才开始执行避免资源浪费；通过Descheduler实现负载再均衡",
+      "scoring_rubric": "1. PriorityClass和抢占机制的配置描述正确；2. 训练任务中断续训的方案描述正确；3. Gang Scheduling的原理和实现描述正确；4. 混合负载的资源隔离策略描述合理；5. 能分析抢占对训练效率的影响"
+    },
+    {
+      "id": "27-030",
+      "prompt": "请设计一个基于WebAssembly的边缘计算平台。用户可以在边缘节点上部署自定义的Wasm函数处理IoT设备数据。请说明Wasm运行时（如Wasmtime、WasmEdge）的选型依据，如何实现Wasm模块的沙箱隔离和资源限制，以及如何设计Wasm函数的冷启动优化方案。",
+      "sub_type": "wasm_edge_computing",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Wasmtime适合通用场景有完善的WASI支持，WasmEdge针对边缘和IoT优化支持AI推理扩展；沙箱隔离通过Wasm的线性内存模型和能力型安全模型限制文件系统和网络访问；资源限制通过Fuel计量限制指令执行数量防止无限循环；冷启动优化通过模块预编译（AOT）和模块实例池化减少初始化时间；通过WASI接口标准化系统调用访问",
+      "scoring_rubric": "1. Wasm运行时的选型依据描述正确；2. 沙箱隔离和安全模型描述正确；3. 资源限制的实现机制描述正确；4. 冷启动优化方案描述合理；5. 能分析Wasm边缘计算与容器化方案的优劣"
+    },
+    {
+      "id": "27-031",
+      "prompt": "请设计一个基于mTLS的服务网格零信任安全方案。微服务间通信需要双向TLS认证，请说明证书的自动签发和轮换机制，如何实现细粒度的授权策略（如A服务只能调用B服务的GET /api/orders），以及如何审计和监控服务间的通信流量。",
+      "sub_type": "service_mesh_zero_trust",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "mTLS通过Sidecar代理自动为每个Pod签发短期证书并定期轮换；授权策略通过Istio AuthorizationPolicy基于服务身份、路径和方法定义；通信审计通过Envoy访问日志记录所有请求的源、目标和结果；监控通过Kiali可视化服务拓扑和流量异常",
+      "scoring_rubric": "1. mTLS证书自动签发和轮换机制描述正确；2. 细粒度授权策略的实现方式描述正确；3. 通信审计和监控方案描述合理；4. 能分析零信任架构对网络性能的影响"
+    },
+    {
+      "id": "27-032",
+      "prompt": "你的Serverless应用需要处理异步事件链：用户上传图片触发压缩、缩略图生成和内容审核三个并行任务，全部完成后再触发通知。请设计基于事件总线的编排方案，说明如何实现并行任务的汇聚等待和部分失败时的处理策略。",
+      "sub_type": "serverless_event_orchestration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "事件总线通过EventBridge或SNS分发事件到三个并行Lambda；汇聚等待通过Step Functions的Parallel状态或DynamoDB计数器实现；部分失败时记录失败任务到死信队列并根据策略决定是否继续通知；超时通过TTL机制自动完成等待",
+      "scoring_rubric": "1. 事件分发和并行处理架构描述正确；2. 任务汇聚等待机制描述正确；3. 部分失败处理策略描述合理；4. 超时和死信队列方案描述正确"
+    },
+    {
+      "id": "27-033",
+      "prompt": "请设计一个云原生的配置热更新方案。应用部署在Kubernetes上，配置存储在ConfigMap和外部配置中心中。请说明如何实现配置变更的实时推送而不重启Pod，如何保证配置更新的原子性和回滚能力，以及如何处理配置更新期间的请求一致性。",
+      "sub_type": "config_hot_reload",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "ConfigMap通过Volume挂载可热更新但需应用监听文件变更；外部配置中心通过长连接推送变更；原子性通过版本号和蓝绿切换保证；回滚通过配置历史版本快速恢复；更新期间通过读写锁或双缓冲保证请求读到一致的配置快照",
+      "scoring_rubric": "1. ConfigMap和配置中心的热更新机制描述正确；2. 原子性和回滚方案描述正确；3. 请求一致性保证策略描述合理；4. 能分析不同配置更新方式的适用场景"
+    },
+    {
+      "id": "27-034",
+      "prompt": "请设计一个基于eBPF的云原生网络可观测性方案。需要在不修改应用代码的情况下采集服务间的网络延迟、连接状态和协议分析。请说明eBPF挂载点的选择、数据采集的性能开销控制，以及如何将eBPF采集的数据与传统的Metrics和Traces关联。",
+      "sub_type": "ebpf_network_observability",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "eBPF挂载点选择kprobe/tracepoint用于TCP连接和send/recv事件，XDP用于高性能包处理；性能开销通过eBPF Map在内核态聚合数据减少用户态拷贝；数据关联通过在eBPF程序中提取PID和容器ID映射到服务名和TraceID；工具选择Cilium Hubble或Pixie",
+      "scoring_rubric": "1. eBPF挂载点的选择和作用描述正确；2. 性能开销控制方案描述正确；3. eBPF数据与传统可观测性数据的关联方案描述合理；4. 能分析eBPF方案相比传统Sidecar代理的优势"
+    },
+    {
+      "id": "27-035",
+      "prompt": "你的多租户SaaS平台需要实现基于Kubernetes的资源配额隔离。不同租户有不同的资源配额，且需要防止租户之间的资源争抢。请设计Namespace级别的ResourceQuota和LimitRange策略，说明如何实现配额的动态调整和超配（Overcommit）管理。",
+      "sub_type": "multi_tenant_resource_quota",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "ResourceQuota限制Namespace的总CPU、内存和对象数量；LimitRange限制单个Pod的资源范围防止租户创建超大Pod；动态调整通过Operator监听配额变更CRD并更新ResourceQuota；超配通过设置requests低于limits实现超额分配但需监控实际使用率防止节点过载",
+      "scoring_rubric": "1. ResourceQuota和LimitRange的配置策略描述正确；2. 动态配额调整的实现方案描述正确；3. 超配管理的风险控制描述合理；4. 能分析资源隔离与利用率的平衡"
+    },
+    {
+      "id": "27-036",
+      "prompt": "请设计一个云成本异常检测系统。系统需要自动识别云资源的异常支出模式（如某服务突然消耗大量计算资源）。请设计基于统计方法和机器学习的异常检测算法，说明如何设置告警阈值和减少误报，以及如何生成可操作的成本优化建议。",
+      "sub_type": "cloud_cost_anomaly_detection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "统计方法使用Z-Score或IQR检测偏离历史均值的异常支出；机器学习方法使用Isolation Forest或LSTM预测正常支出范围；告警阈值通过动态基线而非固定值减少因业务增长导致的误报；优化建议基于资源利用率和Reserved Instance覆盖率自动生成",
+      "scoring_rubric": "1. 统计方法和机器学习方法的异常检测原理描述正确；2. 动态阈值和误报控制策略描述正确；3. 成本优化建议的生成逻辑描述合理；4. 能分析异常检测的时效性和准确率权衡"
+    },
+    {
+      "id": "27-037",
+      "prompt": "请设计一个基于Kubernetes Operator的自定义资源管理系统。业务需要一种自定义资源DatabaseBackup，创建后自动执行数据库备份任务。请设计Operator的Reconciliation Loop，说明如何处理备份失败的重试和状态报告，以及如何实现与Prometheus监控的集成。",
+      "sub_type": "kubernetes_operator_design",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Operator通过Watch监听DatabaseBackup CRD的变更事件；Reconciliation Loop对比期望状态和实际状态决定执行动作（创建Job、更新状态）；备份失败通过指数退避重试并更新Status.Conditions报告进度；Prometheus集成通过自定义指标（备份耗时、成功率）暴露给Prometheus采集",
+      "scoring_rubric": "1. Reconciliation Loop的设计原理描述正确；2. 状态管理和错误处理机制描述正确；3. 重试策略和状态报告方案描述合理；4. Prometheus监控集成方案描述正确"
+    },
+    {
+      "id": "27-038",
+      "prompt": "你的分布式缓存集群需要支持跨区域的缓存同步。主区域使用Redis Cluster，灾备区域需要实时同步缓存数据。请对比Redis Replication、CRDTs和CDC三种跨区域缓存同步方案的优劣，说明如何处理网络分区时的一致性问题。",
+      "sub_type": "cross_region_cache_sync",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Redis Replication延迟低但不支持多主写入；CRDTs允许各区域独立写入自动合并适合高可用场景但数据类型受限；CDC通过Debezium捕获Redis变更事件异步同步到灾备区域；网络分区时CRDTs保证最终一致性，Replication可能丢数据，CDC通过事件重放恢复",
+      "scoring_rubric": "1. 三种同步方案的原理和优劣分析正确；2. 网络分区的一致性处理方案描述正确；3. 各方案的延迟和数据丢失风险分析正确；4. 能分析不同业务场景下的方案选型"
+    },
+    {
+      "id": "27-039",
+      "prompt": "请设计一个基于云原生的消息驱动微服务编排方案。订单创建后需要依次触发库存预留、支付处理和物流分配，每一步都可能失败。请对比事件编排和Saga协调两种模式的实现复杂度和运维成本，说明如何实现补偿操作的幂等性和顺序保证。",
+      "sub_type": "cloud_native_saga_orchestration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "事件编排由各服务自主监听事件响应实现简单但流程分散难以追踪；Saga协调由中心编排器统一管理流程可追踪但增加单点；补偿操作幂等通过操作ID去重实现；顺序保证通过消息分区键和消费者单线程处理；运维成本分析需考虑监控、调试和故障定位的复杂度",
+      "scoring_rubric": "1. 事件编排和Saga协调的实现复杂度对比正确；2. 补偿操作幂等性方案描述正确；3. 消息顺序保证机制描述正确；4. 运维成本和可观测性分析合理"
+    },
+    {
+      "id": "27-040",
+      "prompt": "请设计一个GPU集群的高性能网络方案。AI训练任务需要多节点GPU间高速通信（如AllReduce操作）。请对比InfiniBand、RoCE和传统以太网在AI训练场景的性能差异，说明如何通过NCCL优化GPU通信拓扑，以及如何监控和诊断网络瓶颈。",
+      "sub_type": "gpu_cluster_networking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "InfiniBand提供最低延迟和最高带宽但成本高；RoCE在以太网上实现RDMA性能接近InfiniBand但需无损网络配置；NCCL通过Ring/Tree拓扑优化AllReduce通信；网络瓶颈诊断通过Perf工具分析NCCL通信耗时和网络吞吐；拓扑感知调度将通信密集的任务分配到同一交换机下",
+      "scoring_rubric": "1. 三种网络方案在AI训练场景的性能差异描述正确；2. NCCL通信拓扑优化方案描述正确；3. 网络瓶颈监控和诊断方法描述正确；4. 拓扑感知调度的设计描述合理"
+    },
+    {
+      "id": "27-041",
+      "prompt": "你的Serverless应用在生产环境中频繁出现冷启动超时问题，且日志分散在多个CloudWatch Log Group中难以排查。请设计一个Serverless应用的调试和故障排查方案，说明如何通过X-Ray实现分布式链路追踪、如何聚合多函数的日志流、以及如何设计告警规则自动发现冷启动异常。",
+      "sub_type": "serverless_debugging_strategy",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "X-Ray通过在函数入口注入SDK自动采集调用链路和子服务调用耗时；日志聚合通过订阅各Log Group到统一的Kinesis Data Firehose写入集中存储；冷启动检测通过过滤Init Duration指标设置阈值告警；排查流程：从X-Ray定位慢函数到查看该函数日志分析具体原因；还需结合Provisioned Concurrency指标判断是否需要预置",
+      "scoring_rubric": "1. X-Ray链路追踪的集成方式描述正确；2. 日志聚合的架构方案描述正确；3. 冷启动异常的检测和告警策略描述合理；4. 故障排查流程的设计清晰可操作"
+    },
+    {
+      "id": "27-042",
+      "prompt": "请设计一个基于Kubernetes的多租户虚拟集群方案。不同团队需要独立的控制平面视图但共享底层物理集群。请对比vcluster、Capsule和Namespace-as-a-Service三种方案的隔离级别和资源开销，说明如何实现租户间的API资源隔离和网络隔离。",
+      "sub_type": "virtual_cluster_isolation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "vcluster通过在Namespace中部署虚拟API Server实现控制平面隔离；Capsule通过Tenant CRD将Namespace分组共享API Server；Namespace-as-a-Service最轻量但隔离最弱；网络隔离通过NetworkPolicy限制Pod通信；资源隔离通过ResourceQuota和LimitRange限制；需根据安全需求选择方案",
+      "scoring_rubric": "1. 三种虚拟集群方案的隔离级别对比正确；2. 资源开销分析准确；3. API资源隔离和网络隔离方案描述正确；4. 选型建议合理且考虑了安全需求"
+    },
+    {
+      "id": "27-043",
+      "prompt": "你的分布式数据库需要支持在线Schema变更，包括添加字段、创建索引和修改字段类型。请对比pt-osc、gh-ost和直接DDL三种Schema变更工具的实现原理，说明如何在不停机的情况下完成大规模表的Schema变更，以及如何处理主从复制延迟对Schema变更的影响。",
+      "sub_type": "online_schema_migration",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "pt-osc通过创建影子表、触发器同步数据和原子重命名实现在线变更但触发器有性能开销；gh-ost通过binlog流式同步替代触发器对生产影响更小；直接DDL在MySQL 8.0+支持Instant DDL添加字段几乎无锁但索引创建仍需锁表；主从延迟通过监控复制延迟在低峰期执行或限制变更速度；大规模表变更需分批进行控制影响范围",
+      "scoring_rubric": "1. 三种Schema变更工具的原理对比正确；2. 无停机变更的技术方案描述正确；3. 主从延迟的影响和处理策略描述正确；4. 大规模表变更的分批策略描述合理"
+    },
+    {
+      "id": "27-044",
+      "prompt": "请设计一个基于机器学习的智能运维异常检测系统。系统需要从海量监控指标中自动发现异常并进行根因分析。请对比Isolation Forest、LSTM和变分自编码器三种异常检测算法的适用场景，说明如何设计根因分析的相关性算法。",
+      "sub_type": "aiops_anomaly_detection",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Isolation Forest适合多维度指标的无监督异常检测但对时序特征建模弱；LSTM适合时序指标的异常检测能捕捉时间依赖性但需要大量正常数据训练；变分自编码器通过重构误差检测异常支持多模态数据；根因分析通过计算指标间的Granger因果关系或动态贝叶斯网络推断因果链；告警聚合通过拓扑关联将相关指标的异常归并为同一事件",
+      "scoring_rubric": "1. 三种异常检测算法的适用场景分析正确；2. 时序异常检测的技术方案描述正确；3. 根因分析的算法设计合理；4. 告警聚合的策略描述正确"
+    },
+    {
+      "id": "27-045",
+      "prompt": "请设计一个云原生的混沌工程实验平台。需要支持网络延迟注入、节点故障模拟和资源压力测试。请设计实验的安全边界和爆炸半径控制机制，说明如何实现自动化的实验编排和结果分析。",
+      "sub_type": "chaos_engineering_platform",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "混沌工程工具选择ChaosBlade或LitmusChaos支持多种故障注入类型；安全边界通过定义实验范围（Namespace、Pod标签）和最大影响比例限制爆炸半径；实验编排通过YAML定义实验步骤和检查点，支持串行和并行执行；结果分析通过对比实验前后的SLO指标（延迟、错误率）评估系统韧性；自动终止当SLO违反阈值时立即停止实验恢复环境",
+      "scoring_rubric": "1. 混沌工程工具的选型和集成方案描述正确；2. 安全边界和爆炸半径控制机制设计合理；3. 实验编排的自动化方案描述正确；4. 结果分析和SLO评估方法描述正确"
+    },
+    {
+      "id": "27-046",
+      "prompt": "你的大型分布式系统包含50个微服务，需要进行容量规划以应对业务增长。请设计一个自动化的容量规划方案，说明如何通过压测获取系统容量基线、如何建立容量预测模型、以及如何实现容量不足时的自动扩容建议。",
+      "sub_type": "capacity_planning_automation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "容量基线通过全链路压测获取各服务在不同并发下的QPS和延迟数据；容量预测通过时间序列分析预测业务增长趋势结合资源利用率推算容量缺口；自动扩容建议通过对比当前容量和预测需求生成扩容计划；还需考虑不同服务的弹性系数和依赖关系；容量报告定期生成供决策参考",
+      "scoring_rubric": "1. 压测获取容量基线的方案描述正确；2. 容量预测模型的设计合理；3. 自动扩容建议的生成逻辑描述正确；4. 服务依赖关系的考量到位"
+    },
+    {
+      "id": "27-047",
+      "prompt": "请设计一个跨可用区的高可用架构。应用部署在同一地域的三个可用区，需要在单可用区故障时实现秒级流量切换。请对比DNS切换、负载均衡器健康检查和Anycast三种方案的切换速度和可靠性，说明如何处理切换过程中的数据一致性问题。",
+      "sub_type": "multi_az_high_availability",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "DNS切换通过降低TTL实现分钟级切换但受DNS缓存影响；负载均衡器健康检查实现秒级切换最可靠；Anycast通过BGP路由切换最快但配置复杂；数据一致性通过数据库多AZ部署和同步复制保证；脑裂防护通过分布式锁或仲裁节点决定主可用区；切换策略应先检测故障确认后才切换避免误判",
+      "scoring_rubric": "1. 三种切换方案的速度和可靠性对比正确；2. 数据一致性保证方案描述正确；3. 脑裂防护机制描述正确；4. 误判避免策略描述合理"
+    },
+    {
+      "id": "27-048",
+      "prompt": "请设计一个基于容器安全运行时的多租户隔离方案。不同租户的容器可能运行在同一台宿主机上，需要防止容器逃逸和资源抢占。请对比gVisor和Kata Containers的隔离级别和性能开销，说明如何设计安全策略并集成到Kubernetes调度中。",
+      "sub_type": "container_security_runtime",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "gVisor通过用户态内核拦截系统调用隔离性强但系统调用兼容性有限；Kata Containers通过轻量虚拟机隔离安全性最高但启动开销较大；安全策略通过Pod Security Standards限制容器的特权操作和能力；K8s集成通过RuntimeClass指定不同租户使用不同的运行时；调度策略根据租户安全等级分配到对应运行时的节点",
+      "scoring_rubric": "1. gVisor和Kata Containers的隔离原理和差异描述正确；2. 性能开销的对比分析正确；3. K8s RuntimeClass的集成方案描述正确；4. 安全策略的设计合理"
+    },
+    {
+      "id": "27-049",
+      "prompt": "你的Kubernetes集群中有50个微服务，配置管理混乱，经常出现配置漂移（Git中的配置与集群实际配置不一致）。请设计一个配置漂移检测和自动修复方案，说明如何通过GitOps工具实现持续的配置一致性保证，以及如何处理漂移告警和自动修复的风险。",
+      "sub_type": "config_drift_detection",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "配置漂移检测通过ArgoCD或Flux的持续同步机制对比Git声明状态和集群实际状态；告警通过Prometheus指标（如argocd_app_sync_status）触发；自动修复分为手动审批和自动同步两种模式；风险控制：关键服务配置变更需人工审批，非关键服务可自动修复；修复前需备份当前配置支持回滚；漂移原因分析通过审计日志定位未通过Git的直接变更",
+      "scoring_rubric": "1. GitOps工具的漂移检测机制描述正确；2. 告警和自动修复策略设计合理；3. 风险控制措施描述正确；4. 漂移原因分析方法描述合理"
+    },
+    {
+      "id": "27-050",
+      "prompt": "请设计一个云原生的多集群网络互联方案。企业有多个Kubernetes集群分布在不同地域和云平台，需要实现跨集群的服务发现和安全通信。请对比Submariner、Skupper和Cilium ClusterMesh三种方案的实现原理，说明如何处理跨集群的网络策略同步和服务路由。",
+      "sub_type": "multi_cluster_networking",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Submariner通过建立跨集群的VPN隧道实现Pod网络互通但需处理IP地址冲突；Skupper通过Layer 7代理实现跨集群服务暴露不需要网络层互通更安全；Cilium ClusterMesh通过共享etcd实现跨集群的服务发现和网络策略同步；网络策略同步通过在各集群部署一致的NetworkPolicy实现；服务路由通过全局服务发现将请求路由到最优集群",
+      "scoring_rubric": "1. 三种跨集群方案的实现原理对比正确；2. 网络策略同步方案描述正确；3. 服务路由的最优集群选择策略描述合理；4. 能分析各方案的适用场景和限制"
+    }
+  ]
+}

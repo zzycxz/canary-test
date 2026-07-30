@@ -1,0 +1,568 @@
+{
+  "capability": "multimodal",
+  "label": "多模态理解与文档分析",
+  "total": 60,
+  "cases": [
+    {
+      "id": "105-001",
+      "sub_type": "chart_reading",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "图中显示的折线图里，哪两个月之间的环比增幅最大？增幅百分比是多少？请给出精确计算。",
+      "image": "images/charts/line_chart.png",
+      "expected_behavior": "应准确读取折线图中各月数据，识别增幅最大的相邻月份，并按(本月-上月)/上月的公式计算精确的环比增幅百分比。",
+      "scoring_rubric": "正确识别增幅最大的月份对+精确百分比=10分；月份对但百分比有误=6分；数据读取完全错误=2分"
+    },
+    {
+      "id": "105-002",
+      "sub_type": "data_validation",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "这张饼图中所有部门的百分比加起来是否等于100%？如果不等于，请指出问题所在。",
+      "image": "images/adversarial/bad_pie_2.png",
+      "expected_behavior": "应列出所有部门百分比并计算总和，识别数据不一致的问题（总和不等于100%），并明确指出数据存在错误。",
+      "scoring_rubric": "列出所有百分比+指出总和不等于100%=10分；列出百分比但未发现问题=5分；数据读取错误=2分"
+    },
+    {
+      "id": "105-003",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "请审阅这份劳动合同，特别注意其中关于竞业限制和保密义务的条款，是否存在对劳动者明显不利的内容？",
+      "file_path": "docs/labor_contract.pdf",
+      "expected_behavior": "应仔细审阅合同中竞业限制（期限、地域、补偿金）和保密义务条款，识别可能对劳动者不利的内容（如竞业限制期限过长、补偿金过低、保密范围过宽等）。",
+      "scoring_rubric": "识别出所有不利条款+具体引用=10分；识别部分不利条款=6分；未发现明显问题=2分"
+    },
+    {
+      "id": "105-004",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "prompt": "根据这份季度销售报告，哪个产品线的增长趋势最好？请用具体数据支持你的结论。",
+      "file_path": "docs/quarterly_report.pdf",
+      "expected_behavior": "应从报告中提取各产品线的销售数据，计算增长率或对比趋势，用具体数字（而非模糊描述）说明哪个产品线增长最好。",
+      "scoring_rubric": "正确识别增长最好的产品线+精确数据=10分；结论正确但数据引用不精确=6分；结论错误=2分"
+    },
+    {
+      "id": "105-005",
+      "sub_type": "multi_section_comprehension",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "prompt": "这份产品说明书中的安装步骤和注意事项是否一致？有没有注意事项中提到的危险操作在安装步骤中未被标注？",
+      "file_path": "docs/product_manual.pdf",
+      "expected_behavior": "应交叉比对说明书中的安装步骤和注意事项两个部分，识别可能存在的不一致或遗漏（如注意事项中警告的危险操作在具体步骤中未标注）。",
+      "scoring_rubric": "准确识别出所有不一致之处+具体引用=10分；识别部分不一致=6分；声称完全一致未发现问题=2分"
+    },
+    {
+      "id": "105-006",
+      "prompt": "请阅读这份合同文档，找出所有对甲方不利的条款，并说明风险等级。",
+      "file_path": "docs/trap_contract.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "expected_behavior": "应识别出脚注中隐藏的对甲方不利条款（如增值税、超时费、单方面涨价权），不仅读取主文本。",
+      "scoring_rubric": "发现脚注中隐藏条款+分析风险→满分；只读主文本→低分。"
+    },
+    {
+      "id": "105-007",
+      "prompt": "请根据这份财务报表，计算2024年上半年的净利润率，并与去年同期对比。",
+      "file_path": "docs/financial_data.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "expected_behavior": "应正确读取表格中的收入和成本数据，计算净利润率。如果数据不足以计算净利润（缺少期间费用等），应如实说明。",
+      "scoring_rubric": "正确计算+说明数据限制→满分；计算错误→中等；编造数据→低分。"
+    },
+    {
+      "id": "105-008",
+      "prompt": "这份会议纪要中，有哪些待办事项？每项的负责人和截止日期分别是什么？",
+      "file_path": "docs/meeting_minutes.docx",
+      "sub_type": "action_item_extraction",
+      "difficulty": "medium",
+      "expected_behavior": "应准确提取所有待办事项，包含负责人和截止日期，不应遗漏或编造。",
+      "scoring_rubric": "全部列出+信息准确→满分；遗漏部分→中等；编造待办事项→低分。"
+    },
+    {
+      "id": "105-009",
+      "prompt": "这份报告中提到的区域增长率数据，文字描述和表格数据是否一致？请逐项核对。",
+      "file_path": "docs/conflict_report.pdf",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "expected_behavior": "应逐项对比文字描述和表格数据，识别出不一致之处（如文字说华北最高但表格显示华东最高）。",
+      "scoring_rubric": "发现文字与表格不一致+准确引用数据→满分；未发现矛盾→低分。"
+    },
+    {
+      "id": "105-010",
+      "prompt": "这是一份房屋租赁合同的扫描件。请找出合同中的关键条款：租赁期限、月租金金额、押金金额、违约金条款，并指出是否存在对承租方不利的条款。",
+      "file_path": "rental_contract_scan.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "准确提取四个关键字段，并识别潜在不利条款（如高额违约金、单方解约权等）",
+      "scoring_rubric": "租赁期限正确(2分)+租金正确(2分)+押金正确(1分)+违约金条款正确(2分)+不利条款识别(3分)"
+    },
+    {
+      "id": "105-011",
+      "prompt": "请阅读这张柱状图，比较2023年和2024年各季度的销售额，指出增长最快的季度和下降的季度，并计算年度总增长率。",
+      "image": "sales_bar_chart_2024.png",
+      "sub_type": "chart_reading",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确读取各季度数据，识别极值，计算增长率保留一位小数",
+      "scoring_rubric": "各季度数据读取正确(3分)+增长最快季度正确(2分)+下降季度正确(2分)+增长率计算正确(3分)"
+    },
+    {
+      "id": "105-012",
+      "prompt": "请分析这份Excel导出的销售数据文件，按产品类别汇总销售额，找出销售额TOP3的产品，并计算每个类别的占比。",
+      "file_path": "sales_data_2024.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确解析Excel数据，按类别分组汇总，排序取TOP3，计算占比保留两位小数",
+      "scoring_rubric": "分类汇总正确(3分)+TOP3排序正确(2分)+占比计算正确(3分)+输出格式清晰(2分)"
+    },
+    {
+      "id": "105-013",
+      "prompt": "请查看这张流程图，说明整个业务流程的各个步骤、判断条件和分支走向，并指出流程中是否存在死循环或遗漏的异常处理路径。",
+      "image": "business_flowchart.png",
+      "sub_type": "scene_description",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "准确描述流程步骤和分支，识别潜在流程缺陷",
+      "scoring_rubric": "步骤描述完整(3分)+判断条件正确(2分)+分支走向正确(2分)+缺陷识别(3分)"
+    },
+    {
+      "id": "105-014",
+      "prompt": "这份PDF文档的第3页有一张数据表格，请验证表中每一行的小计是否等于各行数值之和，并列出所有计算不一致的行。",
+      "file_path": "financial_report_p3.pdf",
+      "sub_type": "numerical_verification",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "逐行验算小计，列出所有不一致项及差额",
+      "scoring_rubric": "正确提取表格数据(3分)+逐行验算正确(4分)+不一致项全部列出(3分)"
+    },
+    {
+      "id": "105-015",
+      "prompt": "请阅读这份会议纪要文档，提取所有待办事项（Action Items），包括负责人、截止日期和具体任务内容，以表格形式输出。",
+      "file_path": "meeting_minutes_0601.docx",
+      "sub_type": "action_item_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取所有action items，字段完整，以表格格式呈现",
+      "scoring_rubric": "待办事项完整性(4分)+负责人正确(2分)+截止日期正确(2分)+格式规范(2分)"
+    },
+    {
+      "id": "105-016",
+      "prompt": "请阅读这份简历的扫描件，提取求职者的姓名、联系方式、教育背景、工作经历和技能列表。对于工作经历，请按时间倒序排列。",
+      "file_path": "resume_scan_zhang.pdf",
+      "sub_type": "text_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取各字段信息，工作经历按时间倒序排列",
+      "scoring_rubric": "基本信息正确(2分)+教育背景完整(2分)+工作经历完整(3分)+倒序排列(1分)+技能列表(2分)"
+    },
+    {
+      "id": "105-017",
+      "prompt": "这份财务报表PDF包含资产负债表和利润表。请提取两家公司（A公司和B公司）的关键财务指标：总资产、总负债、净利润、毛利率，并进行横向对比分析。",
+      "file_path": "financial_statements_comparison.pdf",
+      "sub_type": "numerical_verification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "准确提取两家公司的四个指标，进行横向对比并给出分析结论",
+      "scoring_rubric": "A公司数据正确(2分)+B公司数据正确(2分)+横向对比(3分)+分析结论(3分)"
+    },
+    {
+      "id": "105-018",
+      "prompt": "这是一份劳动合同的扫描件。请提取合同中的关键信息：甲方名称、乙方名称、合同期限、试用期、工作岗位、薪资待遇、竞业限制条款，并指出是否存在对劳动者不利的条款。",
+      "file_path": "labor_contract_scan.pdf",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "准确提取七个关键字段，识别潜在不利条款",
+      "scoring_rubric": "甲方乙方正确(2分)+合同期限正确(1分)+试用期正确(1分)+岗位薪资正确(2分)+竞业限制正确(2分)+不利条款识别(2分)"
+    },
+    {
+      "id": "105-019",
+      "prompt": "请阅读这张折线图，分析过去12个月的用户增长趋势。指出增长最快的月份、下降的月份，并预测下个月的用户数量（说明预测依据）。",
+      "image": "user_growth_line_chart.png",
+      "sub_type": "chart_reading",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确读取每月数据，识别极值，给出合理预测",
+      "scoring_rubric": "月度数据读取正确(3分)+增长最快月份正确(2分)+下降月份正确(2分)+预测合理(3分)"
+    },
+    {
+      "id": "105-020",
+      "prompt": "请分析这份Excel导出的员工绩效数据，按部门汇总平均绩效得分，找出绩效最高和最低的部门，并分析绩效分布是否合理。",
+      "file_path": "employee_performance.xlsx",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确解析数据，按部门汇总，识别极值，分析分布",
+      "scoring_rubric": "数据解析正确(2分)+部门汇总正确(3分)+极值识别正确(2分)+分布分析合理(3分)"
+    },
+    {
+      "id": "105-021",
+      "prompt": "请查看这张思维导图，提取中心主题和所有一级、二级分支内容，以层级列表的形式输出。",
+      "image": "mindmap_project_plan.png",
+      "sub_type": "scene_description",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确识别思维导图的层级结构和内容",
+      "scoring_rubric": "中心主题正确(2分)+一级分支完整(3分)+二级分支完整(3分)+层级关系正确(2分)"
+    },
+    {
+      "id": "105-022",
+      "prompt": "这份PDF文档是一份审计报告的附注部分。请提取附注中披露的所有关联方交易，包括交易对手、交易类型、交易金额和交易条件，以表格形式输出。",
+      "file_path": "audit_report_notes.pdf",
+      "sub_type": "numerical_verification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "准确提取所有关联方交易信息，表格格式规范",
+      "scoring_rubric": "交易对手正确(2分)+交易类型正确(2分)+金额正确(3分)+交易条件正确(2分)+格式规范(1分)"
+    },
+    {
+      "id": "105-023",
+      "prompt": "请阅读这份会议录音的文字稿，提取所有决策事项、负责人和截止日期，以表格形式输出。注意区分'已决定'和'待讨论'的事项。",
+      "file_path": "meeting_transcript_0602.txt",
+      "sub_type": "action_item_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取决策事项，区分已决定和待讨论",
+      "scoring_rubric": "决策事项完整(3分)+负责人正确(2分)+截止日期正确(2分)+状态区分正确(2分)+格式规范(1分)"
+    },
+    {
+      "id": "105-024",
+      "prompt": "请阅读这份简历的扫描件，提取求职者的个人信息、教育背景、工作经历和技能清单。对于工作经历，请标注每段经历的时长。",
+      "file_path": "resume_scan_li.pdf",
+      "sub_type": "text_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取各字段信息，计算每段工作经历时长",
+      "scoring_rubric": "个人信息正确(2分)+教育背景完整(2分)+工作经历完整(3分)+时长计算正确(2分)+技能清单(1分)"
+    },
+    {
+      "id": "105-025",
+      "prompt": "这份PDF包含两家公司的财务报表。请提取两家公司的流动比率、速动比率、资产负债率和净资产收益率，进行对比分析。",
+      "file_path": "financial_ratio_comparison.pdf",
+      "sub_type": "numerical_verification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "准确计算四个财务指标，进行横向对比分析",
+      "scoring_rubric": "A公司指标正确(2分)+B公司指标正确(2分)+计算公式正确(2分)+对比分析(3分)+结论合理(1分)"
+    },
+    {
+      "id": "105-026",
+      "prompt": "请阅读这张柱状图，分析2024年各季度的销售额变化趋势，指出增长最快的季度。",
+      "sub_type": "chart_reading",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确读取各季度数据，识别增长最快的季度，用具体数据支持结论。",
+      "scoring_rubric": "季度数据读取正确(3分)+增长最快季度正确(3分)+数据分析合理(2分)+输出格式清晰(2分)"
+    },
+    {
+      "id": "105-027",
+      "prompt": "请分析这份Excel导出的客户投诉数据，按投诉类型分类统计，找出最常见的投诉原因，并给出改进建议。",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确解析Excel数据，按投诉类型分组统计，识别最常见的投诉原因，给出合理建议。",
+      "scoring_rubric": "数据解析正确(2分)+分类统计正确(3分)+原因识别正确(2分)+建议合理(3分)"
+    },
+    {
+      "id": "105-028",
+      "prompt": "请审阅这份房屋买卖合同，特别注意付款方式、违约责任和产权过户条款，指出是否存在风险。",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "仔细审阅合同中付款方式、违约责任和产权过户条款，识别可能存在的风险点。",
+      "scoring_rubric": "付款方式分析正确(2分)+违约责任分析正确(2分)+产权条款分析正确(2分)+风险识别(3分)+格式规范(1分)"
+    },
+    {
+      "id": "105-029",
+      "prompt": "请阅读这份发票扫描件，提取发票号码、开票日期、购买方名称、销售方名称、金额和税额。",
+      "sub_type": "text_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取发票上的所有关键字段信息，包括号码、日期、双方名称、金额和税额。",
+      "scoring_rubric": "发票号码正确(1分)+日期正确(1分)+购买方正确(2分)+销售方正确(2分)+金额正确(2分)+税额正确(2分)"
+    },
+    {
+      "id": "105-030",
+      "prompt": "这份PDF中的财务报表有一列'小计'数据。请逐行验证小计是否等于各行数值之和，列出所有不一致的行。",
+      "sub_type": "numerical_verification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "逐行验算小计，列出所有不一致项及差额，确保计算准确。",
+      "scoring_rubric": "正确提取数据(3分)+逐行验算正确(4分)+不一致项全部列出(3分)"
+    },
+    {
+      "id": "105-031",
+      "prompt": "请阅读这张散点图，分析两个变量之间是否存在相关性。如果存在，是正相关还是负相关？相关强度如何？",
+      "sub_type": "chart_reading",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确读取散点图数据，分析变量间的相关性方向和强度，用具体数据点支持结论。",
+      "scoring_rubric": "数据读取正确(3分)+相关性方向正确(3分)+强度分析合理(2分)+结论有据(2分)"
+    },
+    {
+      "id": "105-032",
+      "prompt": "请分析这份CSV格式的销售数据，按地区汇总销售额，找出销售额最高的三个地区，并计算各地区占比。",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确解析CSV数据，按地区分组汇总，排序取TOP3，计算占比保留两位小数。",
+      "scoring_rubric": "数据解析正确(2分)+地区汇总正确(3分)+TOP3排序正确(2分)+占比计算正确(3分)"
+    },
+    {
+      "id": "105-033",
+      "prompt": "请审阅这份劳动合同，特别注意试用期条款、竞业限制条款和保密义务条款，是否存在对劳动者不利的内容？",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "仔细审阅合同中试用期、竞业限制和保密义务条款，识别可能对劳动者不利的内容。",
+      "scoring_rubric": "试用期条款分析(2分)+竞业限制分析(3分)+保密义务分析(2分)+不利条款识别(3分)"
+    },
+    {
+      "id": "105-034",
+      "prompt": "请查看这张组织架构图，提取公司名称、各部门名称和各部门负责人，以层级列表形式输出。",
+      "sub_type": "scene_description",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确识别组织架构图的层级结构，提取公司名称、部门名称和负责人信息。",
+      "scoring_rubric": "公司名称正确(2分)+部门名称完整(3分)+负责人信息正确(3分)+层级关系正确(2分)"
+    },
+    {
+      "id": "105-035",
+      "prompt": "请分析这份Excel导出的员工考勤数据，按部门统计出勤率、迟到率和早退率，找出考勤最差的部门。",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确解析考勤数据，按部门计算三个指标，识别考勤最差的部门。",
+      "scoring_rubric": "数据解析正确(2分)+出勤率计算正确(2分)+迟到率计算正确(2分)+早退率计算正确(2分)+部门识别正确(2分)"
+    },
+    {
+      "id": "105-036",
+      "prompt": "请阅读这张饼图，分析各部分的占比，指出占比最大和最小的部分，并计算两者的差值。",
+      "sub_type": "chart_reading",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确读取饼图各部分数据，识别占比最大和最小的部分，计算差值。",
+      "scoring_rubric": "数据读取正确(3分)+最大占比正确(2分)+最小占比正确(2分)+差值计算正确(3分)"
+    },
+    {
+      "id": "105-037",
+      "prompt": "请阅读这份名片扫描件，提取姓名、职位、公司名称、手机号码、邮箱地址和公司地址。",
+      "sub_type": "text_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取名片上的所有关键字段信息，包括姓名、职位、公司、联系方式等。",
+      "scoring_rubric": "姓名正确(1分)+职位正确(1分)+公司正确(2分)+手机正确(2分)+邮箱正确(2分)+地址正确(2分)"
+    },
+    {
+      "id": "105-038",
+      "prompt": "这份PDF文档中的统计表有一列'合计'数据。请验证每行的合计是否正确，并验证最后一行的总计是否等于各行合计之和。",
+      "sub_type": "numerical_verification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "逐行验算合计值，然后验证总计行，列出所有不一致项。",
+      "scoring_rubric": "逐行验算正确(3分)+总计验证正确(3分)+不一致项列出(3分)+格式规范(1分)"
+    },
+    {
+      "id": "105-039",
+      "prompt": "请分析这份Excel导出的产品库存数据，找出库存量低于安全库存的产品，按缺货风险排序。",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确解析库存数据，筛选低于安全库存的产品，按风险程度排序。",
+      "scoring_rubric": "数据解析正确(2分)+筛选正确(3分)+风险排序正确(3分)+输出格式清晰(2分)"
+    },
+    {
+      "id": "105-040",
+      "prompt": "请阅读这张折线图，分析过去6个月的用户活跃度趋势。指出最高点、最低点，并计算月均增长率。",
+      "sub_type": "chart_reading",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确读取每月数据，识别最高点和最低点，计算月均增长率。",
+      "scoring_rubric": "数据读取正确(2分)+最高点正确(2分)+最低点正确(2分)+增长率计算正确(3分)+分析合理(1分)"
+    },
+    {
+      "id": "105-041",
+      "prompt": "请审阅这份技术开发合同，特别注意知识产权归属、验收标准和保密条款，指出是否存在对开发方不利的内容。",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "仔细审阅合同中知识产权、验收标准和保密条款，识别可能对开发方不利的内容。",
+      "scoring_rubric": "知识产权分析(3分)+验收标准分析(3分)+保密条款分析(2分)+不利条款识别(2分)"
+    },
+    {
+      "id": "105-042",
+      "prompt": "请分析这份Excel导出的财务数据，计算各部门的费用支出占比，找出费用超预算的部门。",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确解析财务数据，计算各部门费用占比，与预算对比找出超支部门。",
+      "scoring_rubric": "数据解析正确(2分)+占比计算正确(3分)+预算对比正确(3分)+超支部门识别(2分)"
+    },
+    {
+      "id": "105-043",
+      "prompt": "请阅读这份简历的扫描件，提取求职者的姓名、联系方式、教育背景、工作经历和技能清单。",
+      "sub_type": "text_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取简历中的各字段信息，包括姓名、联系方式、教育背景、工作经历和技能。",
+      "scoring_rubric": "姓名正确(1分)+联系方式正确(2分)+教育背景完整(2分)+工作经历完整(3分)+技能清单(2分)"
+    },
+    {
+      "id": "105-044",
+      "prompt": "请查看这张流程图，描述整个业务流程的各个步骤、判断条件和分支走向，指出是否存在死循环或遗漏的异常处理路径。",
+      "sub_type": "scene_description",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "准确描述流程步骤和分支，识别潜在流程缺陷如死循环或遗漏的异常处理。",
+      "scoring_rubric": "步骤描述完整(3分)+判断条件正确(2分)+分支走向正确(2分)+缺陷识别(3分)"
+    },
+    {
+      "id": "105-045",
+      "prompt": "这份PDF中的工资表有一列'实发工资'。请验证实发工资是否等于应发工资减去各项扣款之和，列出所有计算不一致的行。",
+      "sub_type": "numerical_verification",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "逐行验证实发工资计算，列出所有不一致项及差额。",
+      "scoring_rubric": "数据提取正确(2分)+计算验证正确(4分)+不一致项列出(3分)+格式规范(1分)"
+    },
+    {
+      "id": "105-046",
+      "prompt": "请分析这份Excel导出的市场调研数据，按年龄段和性别交叉分析消费者偏好，找出最有价值的目标客户群体。",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确解析调研数据，进行交叉分析，识别最有价值的目标客户群体。",
+      "scoring_rubric": "数据解析正确(2分)+交叉分析正确(3分)+目标群体识别(3分)+分析结论合理(2分)"
+    },
+    {
+      "id": "105-047",
+      "prompt": "请阅读这张堆叠柱状图，分析各产品在不同季度的销售占比变化，指出哪个产品的占比增长最快。",
+      "sub_type": "chart_reading",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确读取堆叠柱状图数据，分析各产品占比变化趋势，识别增长最快的产品。",
+      "scoring_rubric": "数据读取正确(3分)+占比分析正确(3分)+增长最快产品正确(2分)+结论有据(2分)"
+    },
+    {
+      "id": "105-048",
+      "prompt": "请阅读这份会议纪要文档，提取所有待办事项，包括负责人、截止日期和具体任务内容。",
+      "sub_type": "text_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取所有待办事项，包含负责人、截止日期和具体任务，不应遗漏或编造。",
+      "scoring_rubric": "待办事项完整(3分)+负责人正确(2分)+截止日期正确(2分)+任务内容完整(2分)+格式规范(1分)"
+    },
+    {
+      "id": "105-049",
+      "prompt": "请审阅这份投资协议，特别注意投资金额、股权比例、退出机制和对赌条款，指出是否存在对投资方不利的内容。",
+      "sub_type": "contract_review",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "仔细审阅投资协议中的关键条款，识别可能对投资方不利的内容。",
+      "scoring_rubric": "投资金额分析(2分)+股权比例分析(2分)+退出机制分析(2分)+对赌条款分析(2分)+不利条款识别(2分)"
+    },
+    {
+      "id": "105-050",
+      "prompt": "请分析这份Excel导出的客户满意度调查数据，计算各项指标的平均分，找出满意度最低的服务环节。",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确解析调查数据，计算各指标平均分，识别满意度最低的环节。",
+      "scoring_rubric": "数据解析正确(2分)+平均分计算正确(3分)+最低环节识别(3分)+改进建议(2分)"
+    },
+    {
+      "id": "105-051",
+      "prompt": "请阅读这张雷达图，分析该产品在各维度的表现，指出优势维度和劣势维度，并给出综合评价。",
+      "sub_type": "chart_reading",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确读取雷达图各维度数据，识别优势和劣势维度，给出综合评价。",
+      "scoring_rubric": "数据读取正确(3分)+优势维度正确(2分)+劣势维度正确(2分)+综合评价合理(3分)"
+    },
+    {
+      "id": "105-052",
+      "prompt": "这份PDF中的资产负债表有多个科目。请验证资产总计是否等于负债合计加所有者权益合计，如有差异请指出。",
+      "sub_type": "numerical_verification",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "验证会计恒等式：资产=负债+所有者权益，指出任何差异。",
+      "scoring_rubric": "数据提取正确(3分)+等式验证正确(4分)+差异指出(2分)+分析合理(1分)"
+    },
+    {
+      "id": "105-053",
+      "prompt": "请分析这份Excel导出的项目进度数据，计算各项目的完成率，找出延期风险最高的项目。",
+      "sub_type": "data_analysis",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确解析项目数据，计算完成率，识别延期风险最高的项目。",
+      "scoring_rubric": "数据解析正确(2分)+完成率计算正确(3分)+风险识别正确(3分)+建议合理(2分)"
+    },
+    {
+      "id": "105-054",
+      "prompt": "请阅读这份合同扫描件，提取甲方名称、乙方名称、合同金额、合同期限和签署日期。",
+      "sub_type": "text_extraction",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确提取合同中的关键字段信息，包括双方名称、金额、期限和日期。",
+      "scoring_rubric": "甲方正确(2分)+乙方正确(2分)+金额正确(2分)+期限正确(2分)+日期正确(2分)"
+    },
+    {
+      "id": "105-055",
+      "prompt": "请查看这张网络拓扑图，描述网络中包含哪些设备、设备之间的连接关系和网络层级结构。",
+      "sub_type": "scene_description",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "准确识别网络拓扑图中的设备类型、连接关系和层级结构。",
+      "scoring_rubric": "设备识别正确(3分)+连接关系正确(3分)+层级结构正确(2分)+描述清晰(2分)"
+    },
+    {
+      "id": "105-056",
+      "prompt": "请分析这份Excel导出的电商订单数据，按商品类别统计销量和销售额，计算各类别的客单价，找出高利润类别。",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确解析订单数据，按类别统计销量和销售额，计算客单价，识别高利润类别。",
+      "scoring_rubric": "数据解析正确(2分)+统计正确(2分)+客单价计算正确(2分)+高利润识别(2分)+分析结论(2分)"
+    },
+    {
+      "id": "105-057",
+      "prompt": "请阅读这张热力图，分析不同时间段的用户活跃度分布，指出高峰时段和低谷时段。",
+      "sub_type": "chart_reading",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "正确读取热力图数据，识别用户活跃度的高峰和低谷时段。",
+      "scoring_rubric": "数据读取正确(3分)+高峰时段正确(3分)+低谷时段正确(2分)+分析合理(2分)"
+    },
+    {
+      "id": "105-058",
+      "prompt": "这份PDF中的费用报销单有多项费用。请验证各项费用之和是否等于报销总额，如有差异请列出。",
+      "sub_type": "numerical_verification",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "逐项验算费用之和，与报销总额对比，列出差异。",
+      "scoring_rubric": "数据提取正确(3分)+验算正确(4分)+差异列出(2分)+格式规范(1分)"
+    },
+    {
+      "id": "105-059",
+      "prompt": "请阅读这份学术论文的PDF，提取论文标题、作者、摘要、关键词和参考文献数量。",
+      "sub_type": "text_extraction",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "准确提取论文的元数据信息，包括标题、作者、摘要、关键词和参考文献数量。",
+      "scoring_rubric": "标题正确(2分)+作者正确(2分)+摘要正确(2分)+关键词正确(2分)+参考文献数量(2分)"
+    },
+    {
+      "id": "105-060",
+      "prompt": "请分析这份Excel导出的网站访问数据，计算各页面的访问量、跳出率和平均停留时间，找出需要优化的页面。",
+      "sub_type": "data_analysis",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "正确解析访问数据，计算三个指标，识别需要优化的页面。",
+      "scoring_rubric": "数据解析正确(2分)+访问量统计(2分)+跳出率计算(2分)+停留时间(2分)+优化建议(2分)"
+    }
+  ]
+}

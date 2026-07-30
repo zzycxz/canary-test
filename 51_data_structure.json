@@ -1,0 +1,457 @@
+{
+  "capability": "data_structure",
+  "label": "数据结构能力",
+  "total": 50,
+  "cases": [
+    {
+      "id": "51-001",
+      "prompt": "请解释并实现一个支持区间修改和区间查询的数据结构——平衡树（如Splay Tree或Treap）实现的序列。要求：1）支持在任意位置插入和删除元素；2）支持区间翻转操作；3）支持区间求和查询。分析各操作的时间复杂度。",
+      "sub_type": "balanced_tree_sequence",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用隐式Treap（按size索引）维护序列，split和merge操作实现区间操作；区间翻转用懒标记；插入删除O(logn)，区间翻转O(logn)，区间求和O(logn)",
+      "scoring_rubric": "1. 隐式Treap的split和merge实现正确；2. 区间翻转的懒标记传播正确；3. 区间求和查询逻辑正确；4. 各操作的时间复杂度分析正确。"
+    },
+    {
+      "id": "51-002",
+      "prompt": "请解释并实现一个Sparse Table（稀疏表）数据结构，支持静态数组的范围最小值查询（RMQ）。要求：1）预处理时间O(nlogn)；2）查询时间O(1)；3）解释为什么Sparse Table不支持动态更新。与线段树相比有什么优势？",
+      "sub_type": "sparse_table",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "st[i][j]表示从i开始长度为2^j的区间的最小值；查询时取两个重叠的2^k区间覆盖目标区间；O(nlogn)预处理O(1)查询；不支持动态更新因为预处理是静态的",
+      "scoring_rubric": "1. Sparse Table的预处理逻辑正确；2. O(1)查询的原理（区间覆盖）描述正确；3. 不支持动态更新的原因描述正确；4. 与线段树的对比分析正确。"
+    },
+    {
+      "id": "51-003",
+      "prompt": "请解释并实现一个Weight-Balanced Tree（重量平衡树，如BB[α]树）。重量平衡树是如何通过维护子树大小的平衡条件来保证操作效率的？与AVL树和红黑树相比，重量平衡树在持久化数据结构中有什么优势？",
+      "sub_type": "weight_balanced_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "重量平衡树要求每个节点的左子树大小占总大小的比例在[α,1-α]范围内；不平衡时通过旋转恢复；在持久化场景中路径复制更高效因为旋转次数有保证",
+      "scoring_rubric": "1. 重量平衡条件的定义正确；2. 旋转和重平衡逻辑正确；3. 在持久化数据结构中的优势分析正确。"
+    },
+    {
+      "id": "51-004",
+      "prompt": "请解释并实现一个ConcurrentHashMap（并发哈希表），使用读写锁分段（lock striping）策略。要求：1）支持并发读和分段写；2）支持动态扩容时不阻塞读操作；3）分析Java 8中ConcurrentHashMap的改进（从分段锁到CAS+synchronized）。",
+      "sub_type": "concurrent_hash_map",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Java 7用Segment分段锁；Java 8改为对每个桶头节点synchronized+CAS，读操作无锁；扩容时多线程协助迁移（transfer）；链表长度超过阈值转红黑树",
+      "scoring_rubric": "1. 分段锁的实现原理描述正确；2. Java 8的改进（CAS+synchronized）描述正确；3. 并发扩容机制描述正确；4. 链表转红黑树的条件描述正确。"
+    },
+    {
+      "id": "51-005",
+      "prompt": "请解释并实现一个Range Tree（范围树），支持二维平面上的正交范围查询（查询矩形区域内所有点）。Range Tree的构建和查询的时间复杂度和空间复杂度是多少？与KD-Tree相比有什么优劣？",
+      "sub_type": "range_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Range Tree是一维BST的嵌套，每个节点关联一个子范围树；构建O(nlogn)空间O(nlogn)，查询O(log^2n+k)；比KD-Tree查询更稳定但空间更大",
+      "scoring_rubric": "1. Range Tree的嵌套结构描述正确；2. 构建和查询的时间空间复杂度分析正确；3. 与KD-Tree的对比分析正确。"
+    },
+    {
+      "id": "51-006",
+      "prompt": "请解释并实现一个Dynamic Array（动态数组），分析其均摊时间复杂度。动态数组的扩容策略（倍增策略vs固定增量策略）对均摊复杂度有什么影响？为什么倍增策略的均摊插入复杂度是O(1)？请用聚合分析和记账法两种方法证明。",
+      "sub_type": "dynamic_array",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "倍增策略每次扩容2倍，n次插入总拷贝次数为1+2+4+...+n≈2n，均摊O(1)；固定增量策略每次加k，n次插入总拷贝为n^2/(2k)，均摊O(n)；记账法每次插入预付2单位费用",
+      "scoring_rubric": "1. 倍增策略的均摊分析正确（聚合分析）；2. 固定增量策略的问题分析正确；3. 记账法的证明正确。"
+    },
+    {
+      "id": "51-007",
+      "prompt": "请解释并实现一个Adjacency Array（邻接数组）表示的图数据结构。与邻接矩阵和邻接表相比，邻接数组在内存布局和缓存友好性上有什么优势？如何用邻接数组高效实现BFS和Dijkstra算法？",
+      "sub_type": "adjacency_array",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "邻接数组用两个数组存储：edges数组存储所有邻接节点连续排列，offset数组存储每个节点的起始位置；内存连续缓存友好；遍历某节点的所有邻居只需顺序访问",
+      "scoring_rubric": "1. 邻接数组的结构描述正确；2. 与邻接矩阵和邻接表的对比分析正确；3. 在BFS和Dijkstra中的应用描述正确。"
+    },
+    {
+      "id": "51-008",
+      "prompt": "请解释并实现一个Disjoint Sparse Table（不相交稀疏表），支持静态数组的范围查询（满足幂等性的操作如min、max、gcd）。与普通Sparse Table相比，Disjoint Sparse Table有什么优势？预处理和查询的复杂度是多少？",
+      "sub_type": "disjoint_sparse_table",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "按最高位不同的分割点分治构建，每层处理跨越中点的区间；O(nlogn)预处理O(1)查询；优势是支持任何满足结合律的操作（不限于幂等操作）",
+      "scoring_rubric": "1. 分治构建过程描述正确；2. O(1)查询的原理描述正确；3. 与普通Sparse Table的区别（支持结合律操作）描述正确。"
+    },
+    {
+      "id": "51-009",
+      "prompt": "请解释并实现一个XOR Linked List（异或链表）。XOR链表是如何通过存储前后节点地址的异或值来节省内存的？XOR链表的插入、删除和遍历操作如何实现？XOR链表有什么局限性？",
+      "sub_type": "xor_linked_list",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "每个节点存储prev XOR next的值，遍历时用前一个地址和当前存储值异或得到下一个地址；只需一个指针空间实现双向遍历；局限性是不支持随机访问和调试困难",
+      "scoring_rubric": "1. XOR链表的存储原理描述正确；2. 插入和删除操作的实现正确；3. 遍历过程中的异或还原逻辑正确；4. 局限性分析正确。"
+    },
+    {
+      "id": "51-010",
+      "prompt": "请解释并实现一个Count-Min Sketch数据结构，用于流数据的频率估计。Count-Min Sketch如何使用多个哈希函数和计数器数组来估计元素频率？估计值是高估还是低估？如何确定最优的数组宽度和深度？",
+      "sub_type": "count_min_sketch",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用d个哈希函数和d行w列的计数器数组；插入时每个哈希函数对应的计数器加1；查询取所有对应计数器的最小值；估计值总是高估；宽度w=ceil(e/ε)，深度d=ln(1/δ)",
+      "scoring_rubric": "1. Count-Min Sketch的结构和操作描述正确；2. 估计值总是高估的原因描述正确；3. 最优参数的计算公式正确。"
+    },
+    {
+      "id": "51-011",
+      "prompt": "请实现一个KD-Tree（k维树），支持：1）在k维空间中插入点；2）查询距离给定点最近的邻居（最近邻搜索）；3）查询给定超矩形区域内的所有点。分析构建和查询的时间复杂度。",
+      "sub_type": "kd_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "KD-Tree按维度交替分割空间，每个节点在某一维度上二分；最近邻搜索递归查找并剪枝（超球面与分割面的距离判断）；构建O(nlogn)，查询O(logn)平均",
+      "scoring_rubric": "1. KD-Tree的构建逻辑（维度交替分割）正确；2. 最近邻搜索的剪枝逻辑正确；3. 范围查询的递归实现正确；4. 时间复杂度分析正确。"
+    },
+    {
+      "id": "51-012",
+      "prompt": "请实现一个Deque（双端队列），要求：1）使用动态数组实现；2）支持头部和尾部的O(1)均摊插入和删除；3）支持O(1)随机访问；4）分析倍增策略下的均摊时间复杂度。",
+      "sub_type": "deque_array",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用环形数组实现deque，head和tail指针分别管理两端；容量不足时倍增扩容并重新排列元素；均摊O(1)插入删除，O(1)随机访问通过(index+head)%capacity",
+      "scoring_rubric": "1. 环形数组的head/tail指针管理正确；2. 倍增扩容和元素重排逻辑正确；3. 随机访问的索引计算正确；4. 均摊复杂度分析正确。"
+    },
+    {
+      "id": "51-013",
+      "prompt": "请实现一个Trie的增强版本——Aho-Corasick自动机的Trie结构，支持：1）插入多个模式串；2）构建失败指针（failure link）；3）支持输出链接（output link）收集所有匹配。分析构建和匹配的时间复杂度。",
+      "sub_type": "trie_automaton",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "在Trie上BFS构建失败指针（类似KMP的next数组），失败指针指向当前前缀的最长后缀匹配节点；输出链接链接到所有以当前位置为结尾的模式串",
+      "scoring_rubric": "1. Trie的构建逻辑正确；2. 失败指针的BFS构建正确；3. 输出链接的收集逻辑正确；4. 构建O(m)匹配O(n+z)的复杂度分析正确。"
+    },
+    {
+      "id": "51-014",
+      "prompt": "请实现一个Pairing Heap（配对堆），支持：1）插入元素；2）查找最小值；3）删除最小值；4）合并两个配对堆；5）减小某个元素的值（decrease-key）。分析各操作的均摊时间复杂度。",
+      "sub_type": "pairing_heap",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "配对堆是多叉树，根是最小值；插入和合并O(1)；删除最小值时将子树两两配对合并再合并结果；decrease-key通过剪切子树后合并实现；均摊分析较复杂",
+      "scoring_rubric": "1. 配对堆的结构和多路合并逻辑正确；2. 删除最小值的两遍配对合并正确；3. decrease-key的实现正确；4. 各操作的均摊复杂度描述正确。"
+    },
+    {
+      "id": "51-015",
+      "prompt": "请实现一个支持区间操作的平衡树——Splay Tree维护序列，要求：1）支持在任意位置插入和删除元素；2）支持区间翻转操作；3）支持区间求和查询。分析splay操作的均摊复杂度。",
+      "sub_type": "splay_sequence",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用隐式Splay Tree（按size索引）维护序列，splay操作将目标节点旋转到根；区间操作通过split提取区间、打懒标记后merge；均摊O(logn)",
+      "scoring_rubric": "1. 隐式Splay Tree的索引方式正确；2. 区间翻转的懒标记传播正确；3. 区间求和查询逻辑正确；4. 均摊O(logn)的分析正确。"
+    },
+    {
+      "id": "51-016",
+      "prompt": "请实现一个Bloom Filter的变体——Cuckoo Filter（布谷鸟过滤器），支持：1）插入元素；2）查询元素；3）删除元素（Bloom Filter不支持）。分析Cuckoo Filter的误判率和空间效率。",
+      "sub_type": "cuckoo_filter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Cuckoo Filter使用两个哈希桶位置，插入时若两个位置都满则踢出已有元素到其备选位置（可能级联踢出）；支持删除（置空指纹）；误判率约2.5%时每个元素约14位",
+      "scoring_rubric": "1. Cuckoo Filter的插入和踢出逻辑正确；2. 查询和删除操作正确；3. 误判率和空间效率分析正确；4. 与Bloom Filter的对比分析正确。"
+    },
+    {
+      "id": "51-017",
+      "prompt": "请实现一个跳表（Skip List）的变体——Deterministic Skip List（确定性跳表），使用固定的提升规则而非随机化。要求搜索、插入和删除操作均为O(logn)。分析确定性跳表与随机跳表的优劣。",
+      "sub_type": "deterministic_skip_list",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "确定性跳表按固定规则（如每2个或3个节点提升一个到上层）构建，保证O(logn)最坏情况；与随机跳表相比不需要随机数但插入删除时可能需要大量重排",
+      "scoring_rubric": "1. 确定性提升规则的实现正确；2. 插入和删除时的重排逻辑正确；3. O(logn)最坏情况的保证描述正确；4. 与随机跳表的对比分析正确。"
+    },
+    {
+      "id": "51-018",
+      "prompt": "请实现一个前缀和数组（Prefix Sum Array）的二维扩展，支持：1）二维前缀和的预处理；2）O(1)时间查询任意矩形区域的元素和；3）支持单点修改。分析预处理和查询的时间复杂度。",
+      "sub_type": "2d_prefix_sum",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "二维前缀和pre[i][j]表示左上角(1,1)到(i,j)的矩形和；矩形区域求和用容斥原理O(1)；单点修改需更新所有包含该点的前缀和O(nm)或用二维BIT优化",
+      "scoring_rubric": "1. 二维前缀和的预处理逻辑正确；2. 容斥原理的区间求和公式正确；3. 单点修改的影响范围分析正确；4. 时间复杂度分析正确。"
+    },
+    {
+      "id": "51-019",
+      "prompt": "请实现一个Multimap（多重映射）数据结构，支持一个key关联多个value。要求：1）支持插入key-value对；2）支持查询key的所有value；3）支持删除指定key-value对；4）底层使用平衡树或哈希表实现。",
+      "sub_type": "multimap",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用HashMap<K, TreeSet<V>>或TreeMap<K, List<V>>实现；插入时key不存在则创建新集合；删除时移除指定value，集合为空则移除key；查询返回key关联的所有value",
+      "scoring_rubric": "1. Multimap的底层数据结构选择合理；2. 插入和删除操作逻辑正确；3. 查询操作能返回所有关联value；4. 能分析不同底层实现的时间复杂度差异。"
+    },
+    {
+      "id": "51-020",
+      "prompt": "请实现一个区间树（Interval Tree），支持：1）插入区间；2）删除区间；3）查询与给定区间有重叠的所有区间。分析各操作的时间复杂度。区间树与线段树有什么区别？",
+      "sub_type": "interval_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "区间树在平衡BST基础上每个节点存储以该节点为根的子树中所有区间的最大右端点；查询时若左子树最大右端点小于查询区间左端点则跳过左子树；O(logn)插入删除查询",
+      "scoring_rubric": "1. 区间树的结构和最大右端点维护正确；2. 重叠查询的剪枝逻辑正确；3. 插入和删除操作正确；4. 与线段树的区别描述正确。"
+    },
+    {
+      "id": "51-021",
+      "prompt": "请实现一个可持久化线段树（Persistent Segment Tree），支持：1）保留每次修改前的历史版本；2）查询任意历史版本的区间和；3）在指定历史版本上创建新版本。分析时间和空间复杂度。",
+      "sub_type": "persistent_segment_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每次修改只复制受影响的O(logn)个节点，其余节点与旧版本共享；通过版本根数组访问不同版本；单次修改O(logn)时间和O(logn)空间，总空间O(n+mlogn)",
+      "scoring_rubric": "1. 路径复制的节点共享机制正确；2. 版本管理和根数组的使用正确；3. 区间查询在指定版本上正确；4. 时间和空间复杂度分析正确。"
+    },
+    {
+      "id": "51-022",
+      "prompt": "请实现一个左偏树（Leftist Tree/Leftist Heap），支持：1）插入元素；2）查找最小值；3）删除最小值；4）合并两个左偏树。解释左偏树的NPL（零路径长度）性质和为什么合并操作的复杂度为O(logn)。",
+      "sub_type": "leftist_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "左偏树是二叉堆的变体，要求左子树的NPL不小于右子树的NPL；合并时递归合并右子树后维护左偏性质；NPL保证右子树路径长度O(logn)使得合并操作O(logn)",
+      "scoring_rubric": "1. 合并操作的递归逻辑正确；2. NPL的维护和左偏性质的恢复正确；3. 合并O(logn)复杂度的证明正确；4. 与二叉堆和斐波那契堆的对比分析合理。"
+    },
+    {
+      "id": "51-023",
+      "prompt": "请实现一个Trie的双数组Trie（Double-Array Trie）版本。双数组Trie使用哪两个数组（base和check）来表示Trie结构？插入和查询操作如何使用base和check数组？双数组Trie相比链表Trie在空间和时间上有什么优势？",
+      "sub_type": "double_array_trie",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "base[s]+c=t表示从状态s经字符c转移到状态t，check[t]=s验证转移合法性；查询：state=base[state]+c，若check[state]正确则转移成功；空间紧凑、查询O(1)每字符、缓存友好",
+      "scoring_rubric": "1. base和check数组的转移逻辑描述正确；2. 查询和插入操作的实现正确；3. 空间效率和缓存友好性分析正确；4. 与链表Trie的对比分析正确。"
+    },
+    {
+      "id": "51-024",
+      "prompt": "请实现一个Fenwick树（BIT）的扩展版本，支持：1）区间加值和区间求和（两个BIT方法）；2）二维区间加值和区间求和。解释一维扩展到二维的推导过程。",
+      "sub_type": "2d_fenwick_range",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "一维：维护BIT1和BIT2，区间加v时更新四个点，前缀和=query(BIT1,x)*x-query(BIT2,x)；二维：类似地维护四个二维BIT，矩形区域加值更新16个点，矩形求和用容斥组合四个二维前缀和",
+      "scoring_rubric": "1. 一维双BIT的区间加值和求和公式正确；2. 二维扩展的四个BIT维护逻辑正确；3. 容斥原理在二维求和中的应用正确；4. 推导过程清晰。"
+    },
+    {
+      "id": "51-025",
+      "prompt": "请实现一个伸展树（Splay Tree）的Bottom-Up版本。与Top-Down版本相比，Bottom-Up版本的splay操作有什么区别？请实现Bottom-Up splay的zig、zig-zig和zig-zag三种旋转，并分析各自的实现细节。",
+      "sub_type": "splay_bottom_up",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Bottom-Up先找到目标节点再沿路径向上旋转到根；需要两次遍历（向下找+向上旋转）；Top-Down在一次向下遍历中完成旋转效率更高；实现时需维护父子指针确保旋转后关系正确",
+      "scoring_rubric": "1. Bottom-Up splay的两次遍历过程描述正确；2. 三种旋转的指针操作正确；3. 与Top-Down版本的性能差异分析正确；4. 边界情况（根节点、单子节点）处理正确。"
+    },
+    {
+      "id": "51-026",
+      "prompt": "请实现一个支持压缩的并查集变体——带权并查集（Weighted Union-Find）。要求：1）每个节点到父节点有一个权值；2）支持查询两个节点之间的相对关系（如A比B大多少）；3）合并时正确更新权值。分析时间复杂度。",
+      "sub_type": "weighted_union_find",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每个节点维护到父节点的权值dist[x]，路径压缩时更新dist[x]+=dist[parent[x]]；合并A到B时dist[A]=weight-当前权值差；查询A和B的关系：若同根则dist[A]-dist[B]，否则不可知",
+      "scoring_rubric": "1. 路径压缩时的权值更新公式正确；2. 合并操作时的权值计算正确；3. 查询相对关系的逻辑正确；4. 时间复杂度O(α(n))的分析正确。"
+    },
+    {
+      "id": "51-027",
+      "prompt": "请实现一个HyperLogLog数据结构，用于基数估计（估计集合中不同元素的数量）。HyperLogLog如何使用哈希值的前导零数量来估计基数？如何减少估计误差（修正因子和分桶）？",
+      "sub_type": "hyperloglog",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "将元素哈希后按前几位分到m个桶，每个桶记录剩余位的前导零最大值；基数估计用调和平均数公式E=αm^2/Σ2^(-M[i])；修正因子αm消除小基数偏差；m=2^p个桶时标准误差约1.04/√m",
+      "scoring_rubric": "1. 哈希分桶和前导零统计的逻辑正确；2. 基数估计的调和平均数公式正确；3. 修正因子的作用描述正确；4. 标准误差与桶数的关系描述正确。"
+    },
+    {
+      "id": "51-028",
+      "prompt": "请实现一个Ring Buffer（环形缓冲区），要求：1）支持单生产者单消费者的无锁实现；2）使用内存序保证线程安全；3）支持阻塞和非阻塞的读写操作；4）分析环形缓冲区在音频流和日志系统中的应用。",
+      "sub_type": "lock_free_ring_buffer",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用atomic的read_pos和write_pos管理读写位置，空判断read_pos==write_pos，满判断(write_pos+1)%size==read_pos；写用release语义，读用acquire语义保证可见性；音频流和日志系统用环形缓冲区实现生产者-消费者解耦",
+      "scoring_rubric": "1. 无锁的读写位置管理逻辑正确；2. 内存序（acquire/release）的使用正确；3. 空和满的判断逻辑正确；4. 应用场景分析正确。"
+    },
+    {
+      "id": "51-029",
+      "prompt": "请实现一个Bloom Filter的增强版——Scalable Bloom Filter（可扩展布隆过滤器）。当元素数量超过初始容量时如何自动扩展？新层的哈希函数和位数组如何配置？误判率如何随层数增长？",
+      "sub_type": "scalable_bloom_filter",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "当当前层负载因子超过阈值时添加新层，每层有独立的位数组和哈希函数；查询时检查所有层；总误判率P=1-Π(1-p_i)≈Σp_i；通过缩小新层的误判率（如r*p）控制总误判率增长",
+      "scoring_rubric": "1. 层级扩展的触发条件和新层配置正确；2. 多层查询逻辑正确；3. 总误判率的计算和控制方法正确；4. 与固定容量布隆过滤器的对比分析正确。"
+    },
+    {
+      "id": "51-030",
+      "prompt": "请实现一个支持懒删除的红黑树。要求：1）删除操作不立即物理移除节点，而是标记为已删除；2）查询时跳过标记节点；3）在适当时候（如节点数超过阈值）进行批量清理和重建。分析懒删除对查询性能的影响。",
+      "sub_type": "lazy_delete_rbtree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "删除时将节点标记为deleted但保留在树中，查询时遇到标记节点继续搜索；当标记节点占比超过阈值（如50%）时遍历重建新树；懒删除减少频繁删除的旋转开销但增加查询时的无效节点访问",
+      "scoring_rubric": "1. 懒删除的标记和跳过逻辑正确；2. 批量清理的触发条件和重建逻辑正确；3. 对查询性能的影响分析正确；4. 与即时删除红黑树的性能对比合理。"
+    },
+    {
+      "id": "51-031",
+      "prompt": "请实现一个Flajolet-Martin概率计数器，用于流数据的基数估计。Flajolet-Martin算法如何利用哈希值的尾部零位数来估计基数？如何通过多个哈希函数和取中位数减少估计误差？与HyperLogLog相比有什么区别？",
+      "sub_type": "flajolet_martin",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "对每个元素计算哈希值，记录尾部连续零的最大位数R，基数估计为2^R；使用多个哈希函数取中位数减少方差；HyperLogLog使用分桶和调和平均数精度更高",
+      "scoring_rubric": "1. Flajolet-Martin的哈希和尾部零统计逻辑正确；2. 基数估计公式2^R的推导正确；3. 多哈希函数取中位数的误差减少分析正确；4. 与HyperLogLog的对比分析正确。"
+    },
+    {
+      "id": "51-032",
+      "prompt": "请实现一个Fibonacci堆，支持：1）插入元素；2）查找最小值；3）删除最小值（触发级联合并）；4）减小某个元素的值（decrease-key）；5）合并两个Fibonacci堆。分析各操作的均摊时间复杂度。为什么Dijkstra算法使用Fibonacci堆能达到O(VlogV+E)？",
+      "sub_type": "fibonacci_heap",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Fibonacci堆由一组堆有序的树组成，最小值在根链表中；delete-min将最小节点的子树加入根链表后合并相同度数的树；decrease-key通过剪切和级联剪切维护性质；insert和merge O(1)，delete-min O(logn)，decrease-key O(1)均摊",
+      "scoring_rubric": "1. Fibonacci堆的结构和堆序性质描述正确；2. delete-min的级联合并逻辑正确；3. decrease-key的级联剪切逻辑正确；4. Dijkstra使用Fibonacci堆的复杂度分析正确。"
+    },
+    {
+      "id": "51-033",
+      "prompt": "请实现一个VP树（Vantage-Point Tree），用于度量空间中的最近邻搜索。VP树是如何选择分割点和分割半径的？搜索最近邻时如何利用三角不等式进行剪枝？与KD-Tree相比VP树在高维空间中有什么优势？",
+      "sub_type": "vp_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "VP树选择一个参考点（vantage point），计算所有点到参考点的距离，以中位数距离为半径将点集分为内外两部分；搜索时根据查询点到参考点的距离判断在内侧还是外侧递归搜索，利用三角不等式剪枝另一侧",
+      "scoring_rubric": "1. VP树的构建过程（选点、计算距离、分割）正确；2. 最近邻搜索的剪枝逻辑正确；3. 三角不等式的应用描述正确；4. 与KD-Tree在高维空间的对比分析正确。"
+    },
+    {
+      "id": "51-034",
+      "prompt": "请实现一个基于Count-Min Sketch的Top-K频繁元素检测器。结合Count-Min Sketch和最小堆实现：1）流式数据的频率估计；2）维护当前Top-K高频元素；3）分析估计精度与sketch参数的关系；4）对比与精确计数（HashMap）的空间效率。",
+      "sub_type": "topk_with_sketch",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "Count-Min Sketch估计元素频率，最小堆维护Top-K元素；新元素频率超过堆顶则替换；精度取决于sketch的宽度w和深度d；空间O(w*d+K)远小于HashMap的O(n)",
+      "scoring_rubric": "1. Count-Min Sketch的频率估计逻辑正确；2. Top-K维护的最小堆操作逻辑正确；3. sketch参数与精度的关系分析正确；4. 空间效率对比分析正确。"
+    },
+    {
+      "id": "51-035",
+      "prompt": "请实现一个稀疏矩阵的CSR（Compressed Sparse Row）存储格式，支持：1）从稠密矩阵构建CSR表示；2）CSR矩阵与向量的乘法（SpMV）；3）CSR矩阵的转置；4）分析CSR相比COO（Coordinate）格式在行访问上的效率优势。",
+      "sub_type": "sparse_matrix_csr",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "CSR用三个数组：values存储非零元素，col_indices存储列索引，row_ptr存储每行起始位置；SpMV通过row_ptr定位每行的非零元素进行乘加；转置需要重新组织行和列",
+      "scoring_rubric": "1. CSR的三个数组结构描述正确；2. SpMV的实现逻辑正确；3. 转置操作的实现正确；4. 与COO格式的行访问效率对比正确。"
+    },
+    {
+      "id": "51-036",
+      "prompt": "请实现一个支持区间合并的数据结构。给定一系列区间操作：1）插入新区间；2）删除已有区间；3）查询与给定区间有重叠的所有区间；4）合并所有重叠的区间。分析各操作的时间复杂度。",
+      "sub_type": "interval_merge_ds",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "使用有序集合（如std::set）按区间左端点排序；插入时查找重叠区间并合并；删除时拆分被包含的区间；查询重叠通过二分查找定位候选区间后逐个检查",
+      "scoring_rubric": "1. 有序集合的区间排序和查找逻辑正确；2. 插入时的重叠合并逻辑正确；3. 删除时的区间拆分逻辑正确；4. 各操作的时间复杂度分析正确。"
+    },
+    {
+      "id": "51-037",
+      "prompt": "请实现一个循环链表（Circular Linked List），支持：1）在指定位置插入和删除节点；2）支持约瑟夫环问题的求解（n个人围成一圈，从第k个人开始报数，报到m的人出列）；3）分析循环链表相比普通链表在约瑟夫环问题中的优势。",
+      "sub_type": "circular_linked_list",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "循环链表的尾节点指向头节点形成环；约瑟夫环通过从当前位置移动m-1步找到出列节点并删除；循环链表天然适合环形问题无需特殊处理边界",
+      "scoring_rubric": "1. 循环链表的插入和删除逻辑正确；2. 约瑟夫环的模拟过程正确；3. 循环链表相比普通链表的优势分析正确；4. 边界条件（单节点、空链表）处理正确。"
+    },
+    {
+      "id": "51-038",
+      "prompt": "请实现一个自组织列表（Self-Organizing List），支持三种启发式策略：1）移至前端（Move-to-Front）；2）转置（Transpose）；3）计数（Count）。分析三种策略在不同访问模式下的性能表现。自组织列表的均摊复杂度是多少？",
+      "sub_type": "self_organizing_list",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "MTF每次访问后移到头部，Transpose每次访问与前一个交换，Count按访问频率排序；MTF对局部性好的访问模式最优，Transpose更稳定，Count需要额外计数空间；MTF的均摊复杂度为O(2k)其中k是列表长度",
+      "scoring_rubric": "1. 三种启发式策略的实现逻辑正确；2. 不同访问模式下的性能分析正确；3. 均摊复杂度的分析正确；4. 各策略的优劣对比合理。"
+    },
+    {
+      "id": "51-039",
+      "prompt": "请实现一个双端优先队列（Priority Deque），支持：1）在两端插入元素；2）删除最小值和最大值；3）查询最小值和最大值。使用什么数据结构可以同时高效支持这些操作？分析各操作的时间复杂度。",
+      "sub_type": "priority_deque",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用Min-Max堆或双堆结构（一个最小堆一个最大堆）实现；Min-Max堆交替层维护最小和最大堆性质；插入O(logn)，删除最小/最大O(logn)，查询最小/最大O(1)",
+      "scoring_rubric": "1. 数据结构选择合理（Min-Max堆或双堆）；2. 插入和删除操作的逻辑正确；3. 查询最小和最大值的O(1)实现正确；4. 各操作的时间复杂度分析正确。"
+    },
+    {
+      "id": "51-040",
+      "prompt": "请实现一个离线RMQ（Range Minimum Query）的线性时间算法——使用笛卡尔树+LCA方法。如何将静态数组的RMQ问题转化为树上的LCA问题？笛卡尔树的构建时间复杂度是多少？与Sparse Table的O(nlogn)预处理相比有什么优势？",
+      "sub_type": "rmq_cartesian_lca",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用单调栈O(n)构建笛卡尔树，数组最小值为根，左右子树递归构建；RMQ转化为笛卡尔树上的LCA问题；LCA用Tarjan离线算法O(n+q)；总预处理O(n)优于Sparse Table的O(nlogn)",
+      "scoring_rubric": "1. 笛卡尔树的O(n)构建逻辑正确；2. RMQ到LCA的转化原理正确；3. 总时间复杂度O(n+q)的分析正确；4. 与Sparse Table的对比分析正确。"
+    },
+    {
+      "id": "51-041",
+      "prompt": "请实现一个支持持久化操作的Trie树。要求：1）每次插入新字符串时保留旧版本；2）支持查询任意历史版本中是否存在某个前缀；3）使用路径复制控制空间开销；4分析单次插入的时间和空间复杂度。",
+      "sub_type": "persistent_trie",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "每次插入只复制从根到目标节点路径上的节点，其余节点与旧版本共享；通过版本根数组访问不同版本；单次插入O(L)时间和O(L)空间（L为字符串长度）",
+      "scoring_rubric": "1. 路径复制的节点共享机制正确；2. 版本管理和根数组的使用正确；3. 前缀查询在指定版本上的逻辑正确；4. 时间和空间复杂度分析正确。"
+    },
+    {
+      "id": "51-042",
+      "prompt": "请实现一个支持区间操作的分块数据结构（Sqrt Decomposition）。要求：1）支持区间加值和区间求和；2）块大小选择sqrt(n)的理论依据是什么？3）支持单点修改和区间查询；4分析分块与线段树在不同操作频率下的性能权衡。",
+      "sub_type": "sqrt_decomposition",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "将数组分为sqrt(n)块，每块维护懒标记和块内和；区间加值时整块打标记、边界元素暴力更新；块大小sqrt(n)平衡了单点修改O(1)和区间查询O(sqrt(n))",
+      "scoring_rubric": "1. 分块的懒标记和块内和维护正确；2. 区间加值的整块和边界处理正确；3. 块大小sqrt(n)的理论依据正确；4. 与线段树的性能权衡分析正确。"
+    },
+    {
+      "id": "51-043",
+      "prompt": "请实现一个B+树的简化版本。要求：1）支持插入操作（处理节点分裂）；2）支持范围查询（利用叶子节点链表）；3）支持删除操作（处理节点合并）；4分析B+树相比B树在数据库索引中的优势。",
+      "sub_type": "bplus_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "内部节点只存键不存值，叶子节点存键值对并通过链表连接；插入时节点满则分裂为两个节点并向父节点提升中间键；范围查询通过叶子链表顺序扫描",
+      "scoring_rubric": "1. 节点分裂的中间键提升逻辑正确；2. 叶子链表的范围查询实现正确；3. 节点合并的删除处理正确；4. 与B树的对比分析（范围查询效率、空间利用率）正确。"
+    },
+    {
+      "id": "51-044",
+      "prompt": "请实现一个支持合并操作的并查集变体——可持久化并查集。要求：1）支持union和find操作；2）支持回退到任意历史版本；3）使用持久化数组存储parent和rank；4分析持久化并查集在动态图连通性问题中的应用。",
+      "sub_type": "persistent_union_find",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "使用持久化数组（路径复制）存储parent和rank，每次union创建新版本；find操作在指定版本上执行路径压缩；动态图连通性问题中可回答任意时刻的连通性查询",
+      "scoring_rubric": "1. 持久化数组的路径复制实现正确；2. union操作的版本创建逻辑正确；3. find在指定版本上的路径压缩正确；4. 动态图连通性的应用描述正确。"
+    },
+    {
+      "id": "51-045",
+      "prompt": "请实现一个支持批量操作的线段树（Segment Tree with Lazy Propagation增强版）。要求：1）支持区间赋值和区间加值两种懒标记；2）两种标记的下推优先级如何处理？3）支持区间最大值和区间最小值查询；4分析双标记的下推复杂度。",
+      "sub_type": "dual_lazy_segment_tree",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "维护set_tag和add_tag两种标记，赋值操作清除add_tag，加值操作在set_tag上累加；下推时先处理set_tag再处理add_tag；区间最大最小值通过维护子树的max和min实现",
+      "scoring_rubric": "1. 双标记的优先级处理（set优先于add）正确；2. 标记下推的顺序和更新逻辑正确；3. 区间最值查询的维护正确；4. 双标记的下推复杂度分析正确。"
+    },
+    {
+      "id": "51-046",
+      "prompt": "请实现一个基于跳表的有序集合（Sorted Set），支持：1）插入、删除和查找操作均为O(logn)；2）支持排名查询（第k小元素）和反向排名查询；3）支持范围查询（返回[l,r]内的所有元素）；4分析跳表与红黑树在并发场景下的优劣。",
+      "sub_type": "sorted_set_skip_list",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "跳表按层索引实现O(logn)搜索；排名查询通过在每层维护子树大小实现；范围查询从起点开始沿底层链表遍历到终点；跳表在并发场景下比红黑树更容易实现无锁版本",
+      "scoring_rubric": "1. 跳表的插入和删除逻辑正确；2. 排名查询的子树大小维护正确；3. 范围查询的遍历逻辑正确；4. 与红黑树的并发性能对比分析正确。"
+    },
+    {
+      "id": "51-047",
+      "prompt": "请实现一个支持区间翻转和区间求和的Splay Tree。要求：1）用隐式Splay Tree维护序列；2）区间翻转通过懒标记实现；3）区间求和在节点维护子树和；4分析Splay Tree的均摊复杂度证明（势能法）。",
+      "sub_type": "splay_tree_sequence",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "隐式Splay Tree按size索引，split和merge提取区间；翻转标记在splay时下推；子树和在旋转后更新；势能法证明splay操作的均摊O(logn)复杂度",
+      "scoring_rubric": "1. 隐式索引和size维护正确；2. 翻转懒标记的下推逻辑正确；3. 子树和的更新逻辑正确；4. 势能法均摊分析的思路描述正确。"
+    },
+    {
+      "id": "51-048",
+      "prompt": "请实现一个支持近似计数的数据结构——Morris计数器。Morris计数器如何用O(loglogn)的位数估计n的值？多次独立计数取平均如何减少估计误差？与精确计数相比Morris计数器的空间优势是什么？",
+      "sub_type": "morris_counter",
+      "difficulty": "medium",
+      "multi_turn": false,
+      "expected_behavior": "Morris计数器以概率1/2^X递增计数器X，期望值2^X近似等于n；用loglogn位即可计数到n；多次独立运行取几何平均可减少方差；空间远小于精确计数的logn位",
+      "scoring_rubric": "1. 概率递增的数学原理描述正确；2. 期望值2^X的推导正确；3. 多次运行取平均的误差减少分析正确；4. 空间优势的对比分析正确。"
+    },
+    {
+      "id": "51-049",
+      "prompt": "请实现一个支持动态插入和删除的区间覆盖数据结构。给定数轴上的区间集合，支持：1）插入新区间；2）删除已有区间；3）查询某个点被多少个区间覆盖；4查询覆盖次数最多的点。分析各操作的时间复杂度。",
+      "sub_type": "interval_coverage_ds",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "用线段树或差分数组维护覆盖次数；插入区间[l,r]时[l,r]区间计数+1，删除时-1；查询某点覆盖次数O(logn)；最大覆盖次数通过线段树维护区间最大值O(logn)",
+      "scoring_rubric": "1. 差分数组或线段树的区间加值逻辑正确；2. 单点查询的实现正确；3. 最大覆盖次数的查询逻辑正确；4. 各操作的时间复杂度分析正确。"
+    },
+    {
+      "id": "51-050",
+      "prompt": "请实现一个支持合并的平衡树——Treap的合并操作（Merge-based Treap）。要求：1）只使用merge和split两种基本操作；2）支持插入、删除和排名查询；3）支持按值分裂和按排名分裂；4分析merge和split的均摊复杂度。",
+      "sub_type": "merge_split_treap",
+      "difficulty": "hard",
+      "multi_turn": false,
+      "expected_behavior": "split按值或排名将树分为两棵，merge合并两棵树（按优先级比较根节点）；插入通过split+merge实现，删除通过split+merge跳过目标节点；均摊O(logn)期望复杂度",
+      "scoring_rubric": "1. split的递归逻辑正确；2. merge的优先级比较和递归逻辑正确；3. 排名查询的子树大小维护正确；4. 均摊O(logn)的期望复杂度分析正确。"
+    }
+  ]
+}
